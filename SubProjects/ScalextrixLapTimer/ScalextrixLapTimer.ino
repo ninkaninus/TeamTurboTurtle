@@ -150,6 +150,7 @@ void ReadSerial() {
     Serial.println("Press s to read in serial mode");
     Serial.println("Press e to read in external mode");
     Serial.println("Press r to reset data");
+    Serial.println("Press b to se best time");
     Serial.println("Press c to clear best time");
     Serial.println("press v to see debug values");
     Serial.println("press h to see help");
