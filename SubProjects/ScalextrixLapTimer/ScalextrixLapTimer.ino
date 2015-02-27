@@ -7,6 +7,10 @@
 /********************************************/
 
 
+/****************Includes********************/
+
+#include <EEPROM.h>
+
 /*****************Defines********************/
 
 //Define the data output modes
@@ -20,6 +24,8 @@
 #define BYTE_COMPARE_E 101 //ASCII value for e
 #define BYTE_COMPARE_H 104 //ASCII value for h
 #define BYTE_COMPARE_D 100 //ASCII value for d
+#define BYTE_COMPARE_C 99  //ASCII value for c
+#define BYTE_COMPARE_B 98  //ASCII value for b
 
 //Defines for I/O
 #define SENSOR_PIN A0 //The pin where the button is connected. The program is designed for a button with a pulldown configuration.
@@ -38,9 +44,10 @@ unsigned long firstTime;// a place to store the first real time the sensor war t
 boolean firstLap; //a bool to hol if the first run has been preformed
 unsigned long lastTime;// place to store the last time the sensor war trigged
 unsigned long newTime;// place to store the newest time the sensor war trigged
-unsigned long lapTime;//place to store the calculated lap time
+long lapTime;//place to store the calculated lap time
 unsigned long firstlapTime; //place to store time of the first real lap
-unsigned long lapCount; //place to store the number of laps 
+unsigned long lapCount; //place to store the number of laps
+long bestTime;
 
 //Misc
 byte byteRead;// place to store the read byte
@@ -105,6 +112,11 @@ void CountLap() {
       Serial.println(lapTime); // print to serial the lap time 
     }
     lastTime = newTime; //set the newest time to the last time to be ready to store the new time when it comes
+
+  }
+  bestTime = EEPROMReadlong(1);
+  if (lapTime < bestTime){
+    EEPROMWritelong(1,lapTime);
   }
   lapCount ++; //add one to the lap count
   delay(DEBOUNCE_TIME); //delay so we do not track the object more then once  
@@ -126,10 +138,19 @@ void ReadSerial() {
     mode = RAW_MODE;
     break;
 
+  case BYTE_COMPARE_C:
+    clearEEPROM();
+    break;
+
+  case BYTE_COMPARE_B:
+    printBestTime();
+    break;
+
   case BYTE_COMPARE_H:
     Serial.println("Press s to read in serial mode");
     Serial.println("Press e to read in external mode");
     Serial.println("Press r to reset data");
+    Serial.println("Press c to clear best time");
     Serial.println("press v to see debug values");
     Serial.println("press h to see help");
     break;
@@ -149,7 +170,44 @@ void ReadSerial() {
   }
 }
 
+void EEPROMWritelong(int address, unsigned long value)
+{
+  //Decomposition from a long to 4 bytes by using bitshift.
+  //One = Most significant -> Four = Least significant byte
+  byte four = (value & 0xFF);
+  byte three = ((value >> 8) & 0xFF);
+  byte two = ((value >> 16) & 0xFF);
+  byte one = ((value >> 24) & 0xFF);
 
+  //Write the 4 bytes into the eeprom memory.
+  EEPROM.write(address, four);
+  EEPROM.write(address + 1, three);
+  EEPROM.write(address + 2, two);
+  EEPROM.write(address + 3, one);
+}
 
+long EEPROMReadlong(unsigned long address)
+{
+  //Read the 4 bytes from the eeprom memory.
+  long four = EEPROM.read(address);
+  long three = EEPROM.read(address + 1);
+  long two = EEPROM.read(address + 2);
+  long one = EEPROM.read(address + 3);
 
+  //Return the recomposed long by using bitshift.
+  return ((four << 0) & 0xFF) + ((three << 8) & 0xFFFF) + ((two << 16) & 0xFFFFFF) + ((one << 24) & 0xFFFFFFFF);
+}
+
+void clearEEPROM(){
+  for (int i = 0; i < 512; i++){ // write a 0 to all 512 bytes of the EEPROM
+    EEPROM.write(i, 1);
+  }
+  Serial.println("Best time cleared!");
+}
+
+void printBestTime(){
+  bestTime = EEPROMReadlong(1);
+  Serial.print("Best Time:\t");
+  Serial.println(bestTime);
+}
 
