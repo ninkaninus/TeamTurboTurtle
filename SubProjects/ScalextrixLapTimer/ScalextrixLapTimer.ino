@@ -9,7 +9,7 @@
 
 /****************Includes********************/
 
-#include <EEPROM.h>
+#include <EEPROM.h> //Include the EEPROM libarary
 
 /*****************Defines********************/
 
@@ -47,7 +47,7 @@ unsigned long newTime;// place to store the newest time the sensor war trigged
 long lapTime;//place to store the calculated lap time
 unsigned long firstlapTime; //place to store time of the first real lap
 unsigned long lapCount; //place to store the number of laps
-long bestTime;
+long bestTime; //place to store the time of the best lap
 
 //Misc
 byte byteRead;// place to store the read byte
@@ -114,9 +114,9 @@ void CountLap() {
     lastTime = newTime; //set the newest time to the last time to be ready to store the new time when it comes
 
   }
-  bestTime = EEPROMReadlong(1);
-  if (lapTime < bestTime){
-    EEPROMWritelong(1,lapTime);
+  bestTime = EEPROMReadlong(1); //Read bestTime from the EEPROM
+  if (lapTime < bestTime){ //Run if lapTime is faster then bestTime
+    EEPROMWritelong(1,lapTime); //Write bestTime (lapTime) to the EEPROM
   }
   lapCount ++; //add one to the lap count
   delay(DEBOUNCE_TIME); //delay so we do not track the object more then once  
@@ -202,12 +202,12 @@ void clearEEPROM(){
   for (int i = 0; i < 512; i++){ // write a 0 to all 512 bytes of the EEPROM
     EEPROM.write(i, 1);
   }
-  Serial.println("Best time cleared!");
+  Serial.println("Best time cleared!"); // Serial print "Best time cleared!"
 }
 
 void printBestTime(){
-  bestTime = EEPROMReadlong(1);
-  Serial.print("Best Time:\t");
-  Serial.println(bestTime);
+  bestTime = EEPROMReadlong(1);  //Read best time from EEPROM and store in bestTime
+  Serial.print("Best Time:\t"); // Serial print "Best Time:"
+  Serial.println(bestTime);  // Serial print the value of best Time
 }
 
