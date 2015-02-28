@@ -1,5 +1,6 @@
 
 
+
 /********************************************/
 /************Team Turbo Turtle***************/
 /************Proudly Presents****************/
@@ -9,7 +10,7 @@
 
 /****************Includes********************/
 
-#include <EEPROM.h> //Include the EEPROM libarary
+#include <EEPROM.h> //Include the EEPROM library
 
 /*****************Defines********************/
 
@@ -32,64 +33,66 @@
 
 //Defines for time constants
 #define DEBOUNCE_TIME 250 //The time in ms used for debouncing the switch.
-#define BAUD_RATE 115200
+#define BAUD_RATE 115200  //The baudrate at which the serial communication will take place
 
 //Defines for sensor compensation
-#define HALL_HYSTERESE 15
+#define HALL_HYSTERESE 15  //The hysterese value for the hall sensor. Defines how much we have to go over the ambient reading, to tricker a lap count.
 
 /*****************Variables*******************/
 
 //For laptime calculations
-unsigned long firstTime;// a place to store the first real time the sensor war trigged
-boolean firstLap; //a bool to hol if the first run has been preformed
-unsigned long lastTime;// place to store the last time the sensor war trigged
-unsigned long newTime;// place to store the newest time the sensor war trigged
-long lapTime;//place to store the calculated lap time
-unsigned long firstlapTime; //place to store time of the first real lap
-unsigned long lapCount; //place to store the number of laps
-long bestTime; //place to store the time of the best lap
+unsigned long firstTime;   // A place to store the first real time the sensor was triggered.
+boolean firstLap; // This is to check whether or not this is a trigger from the first lap(If we don't check, then the first serial output would be a weird reading)
+unsigned long previousTime;// A place to store the last time the sensor was triggered
+unsigned long newTime;// A place to store the latest time the sensor was triggered
+long lapTime;//A place to store the calculated lap time
+unsigned long firstlapTime; //A place to store time of the first real lap
+unsigned long lapCount; //A place to store the number of laps
+long bestTime; //A place to store the time of the best lap
 
 //Misc
-byte byteRead;// place to store the read byte
-int mode = STARTUP_MODE;
-int hallCompensate = 0;
+byte byteRead;// A place to store the read byte
+int mode = STARTUP_MODE; //What mode is the timer currently working in
+int hallCompensate = 0;  //The value used to compensate for the ambient reading of the hall sensor
 
 /*****************Functions********************/
 
+//This function is automatically run by the arduino at startup
 void setup(){
-  Serial.begin(BAUD_RATE); // start the serial at 115200 baud
-  pinMode(SENSOR_PIN,INPUT); //set the pin to an input
-  Startup();
-  mode = RAW_MODE;
-  hallCompensate = analogRead(SENSOR_PIN);
+  Serial.begin(BAUD_RATE); // Start the serial at 115200 baud
+  pinMode(SENSOR_PIN,INPUT); //Set the defined sensor pin to an input
+  Startup();  //Run the startup function
+  mode = RAW_MODE; //Automatically sets the mode to raw afther a hard reboot
+  hallCompensate = analogRead(SENSOR_PIN); //Set the compensation value to be the current ambient value from the hall sensor
 }
 
 void Startup() {
-  firstLap = true; //set that the first lap has not been run
-  firstlapTime = 0; //set time for the first lap time (used to calculate total time on all laps)
-  lapCount = 0;//zero the lap counter
-  lastTime = millis(); // get the time the arduino started
+  firstLap = true; //Set that the first lap has not been run yet
+  firstlapTime = 0; //Set time for the first lap time (used to calculate total time on all laps)
+  lapCount = 0;//Reset the lap counter
+  previousTime = millis(); // Get the time at which the arduino started
   Serial.write(12);//Clear the terminal
 }
 
 void loop(){
-  if(Serial.available()){ //do this if there is something at the serial port
-    ReadSerial();
+  if(Serial.available()){ //Do this if there is something available in the serial buffer
+    ReadSerial();  //Go to the ReadSerial function
   }
 
-  if ((analogRead(SENSOR_PIN)-hallCompensate) >= HALL_HYSTERESE){ //compare the value to find out if the light is blocked
+  if ((analogRead(SENSOR_PIN)-hallCompensate) >= HALL_HYSTERESE){ //If the value from the hall sensor minus the ambient value, is larger than the hysterese, then count a lap.
     CountLap();  
   }
 }
 
+//This function is used to output the laps to the serial and increment the lap counter
 void CountLap() {
-  newTime = millis(); // store the time the light was blocked
-  if (firstLap == true){  //do this if it is the first lap
-    firstTime = newTime; //store the first time the light gets blocked
+  newTime = millis(); // Store the time at which the light was blocked
+  if (firstLap == true){  //Do this if it is the first lap
+    firstTime = newTime; //Store the first time that the car passed the sensor
   }
 
   if (mode == SERIAL_MODE){
-    lapTime = newTime - lastTime; //calcuate the lap time
+    lapTime = newTime - previousTime; //Calculate the laptime of latest lap
     if (firstLap == true){
       lapTime = firstTime - lapTime;
       firstLap = false; //set the bool to true because now the first lap had been run
@@ -100,18 +103,18 @@ void CountLap() {
       stringOut = String("Lap ") + lapCount + String("\tLap time: ") + lapTime + String("\tTotal Time: ") + firstlapTime;
       Serial.println(stringOut);
     }
-    lastTime = newTime; //set the newest time to the last time to be ready to store the new time when it comes
+    previousTime = newTime; //set the newest time to the last time to be ready to store the new time when it comes
   }
 
   if (mode == RAW_MODE){
-    lapTime = newTime - lastTime; //calcuate the lap time
+    lapTime = newTime - previousTime; //calcuate the lap time
     if (firstLap == true){
       firstLap = false; //set the bool to true because now the first lap had been run
     }
     if (lapCount > 0){
       Serial.println(lapTime); // print to serial the lap time 
     }
-    lastTime = newTime; //set the newest time to the last time to be ready to store the new time when it comes
+    previousTime = newTime; //set the newest time to the last time to be ready to store the new time when it comes
 
   }
   bestTime = EEPROMReadlong(1); //Read bestTime from the EEPROM
@@ -163,7 +166,7 @@ void ReadSerial() {
     Serial.println("Now outputting hall sensor value: ");
     while(!Serial.available()) {
       Serial.println(analogRead(SENSOR_PIN));
-      delay(250);
+      delay(10);
     }
     ReadSerial();
     Startup();
