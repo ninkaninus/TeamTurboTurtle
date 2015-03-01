@@ -179,7 +179,7 @@ void ReadSerial() {
   }
 }
 
-void EEPROMWriteLong(int address, unsigned long value)
+void EEPROMWriteLong(int address, long value)
 {
   //Decomposition from a long to 4 bytes by using bitshift.
   //One = Most significant -> Four = Least significant byte
