@@ -38,6 +38,9 @@
 //Defines for sensor compensation
 #define HALL_HYSTERESE 15  //The hysterese value for the hall sensor. Defines how much we have to go over the ambient reading, to tricker a lap count.
 
+//EEPROM memory address specifications
+#define BEST_TIME 1  //Best time is a long. So the next 3 addresses are used aswell.
+
 /*****************Variables*******************/
 
 //For laptime calculations
@@ -47,7 +50,7 @@ unsigned long newTime = 0;// A place to store the latest time the sensor was tri
 long lapTime = 0;//A place to store the calculated lap time
 unsigned long lapCount = 0; //A place to store the number of laps
 unsigned long totalLapTime = 0;
-long bestTime = 0; //A place to store the time of the best lap
+unsigned long bestTime = 0; //A place to store the time of the best lap
 
 //Misc
 byte byteRead = 0;// A place to store the read byte
@@ -60,15 +63,17 @@ int hallCompensate = 0;  //The value used to compensate for the ambient reading 
 void setup(){
   Serial.begin(BAUD_RATE); // Start the serial at 115200 baud
   pinMode(SENSOR_PIN,INPUT); //Set the defined sensor pin to an input
-  Startup();  //Run the startup function
   mode = RAW_MODE; //Automatically sets the mode to raw afther a hard reboot
   hallCompensate = analogRead(SENSOR_PIN); //Set the compensation value to be the current ambient value from the hall sensor
+  bestTime = EEPROMReadlong(BEST_TIME); //Read bestTime from the EEPROM
+  Restart();  //Run the Restart function to setup values for the first lap
 }
 
-void Startup() {
+void Restart() {
   firstLap = true; //Set that the first lap has not been run yet
   lapCount = 0;//Reset the lap counter
-  previousTime = millis(); // Get the time at which the arduino started
+  totalLapTime = 0; //Reset the total lap time
+  hallCompensate = analogRead(SENSOR_PIN); //Set the compensation value to be the current ambient value from the hall sensor
   Serial.write(12);//Clear the terminal
 }
 
@@ -77,7 +82,7 @@ void loop(){
     ReadSerial();  //Go to the ReadSerial function
   }
 
-  if ((analogRead(SENSOR_PIN)-hallCompensate) >= HALL_HYSTERESE){ //If the value from the hall sensor minus the ambient value, is larger than the hysterese, then count a lap.
+  if ((analogRead(SENSOR_PIN)-hallCompensate) > HALL_HYSTERESE){ //If the value from the hall sensor minus the ambient value, is larger than the hysterese, then count a lap.
     CountLap();  
   }
 }
@@ -91,36 +96,42 @@ void CountLap() {
     delay(DEBOUNCE_TIME); //delay so we do not track the object more then once
     return;  //No further calculations are necessarry since this was the first lap, so jump out of CountLap.
   }
+
+  lapTime = newTime - previousTime; //Calculate the laptime of latest lap
+  totalLapTime += lapTime;
+
+  switch(mode) {
+  case SERIAL_MODE:
+    Serial.print(String("Lap ") + lapCount + String("\tLap time: ") + lapTime + String(" ms") + String("\tTotal Time: ") + totalLapTime + String(" ms"));
+    break;
+
+  case RAW_MODE:
+    Serial.print(lapTime); // print to serial the lap time
+    break;
+  }
+    
+  previousTime = newTime; //set the newest time to the last time to be ready to store the new time when it comes
   
-  if (mode == SERIAL_MODE){
-    lapTime = newTime - previousTime; //Calculate the laptime of latest lap
-    String stringOut = "";
-    stringOut = String("Lap ") + lapCount + String("\tLap time: ") + lapTime + String("\tTotal Time: ") + totalLapTime;
-    Serial.println(stringOut);
-    previousTime = newTime; //set the newest time to the last time to be ready to store the new time when it comes
-  }
-
-  if (mode == RAW_MODE){
-    lapTime = newTime - previousTime; //calcuate the lap time
-    Serial.println(lapTime); // print to serial the lap time 
-    previousTime = newTime; //set the newest time to the last time to be ready to store the new time when it comes
-
-  }
-  totalLapTime += newTime;
-  bestTime = EEPROMReadlong(1); //Read bestTime from the EEPROM
   if (lapTime < bestTime){ //Run if lapTime is faster then bestTime
-    EEPROMWritelong(1,lapTime); //Write bestTime (lapTime) to the EEPROM
+    if(mode == SERIAL_MODE) {
+      Serial.print("\tNew Best Time!"); 
+    }
+    bestTime = lapTime;
+    EEPROMWriteLong(BEST_TIME,lapTime); //Write bestTime (lapTime) to the EEPROM
   }
+  
+  Serial.println();
+  
   lapCount ++; //add one to the lap count
-  delay(DEBOUNCE_TIME); //delay so we do not track the object more then once  
+  delay(DEBOUNCE_TIME); //delay so we do not track the object more than once  
 }
 
 void ReadSerial() {
-  byteRead = Serial.read(); // store the byte send into the serial
+  byteRead = Serial.read(); // Store the received byte
 
   switch(byteRead) {
   case BYTE_COMPARE_R:
-    Startup();
+    Restart();
     break; 
 
   case BYTE_COMPARE_S:
@@ -132,11 +143,13 @@ void ReadSerial() {
     break;
 
   case BYTE_COMPARE_C:
-    clearEEPROM();
+    bestTime = (unsigned long)0xFFFFFFFF;
+    EEPROMWriteLong(BEST_TIME, bestTime); //Write the maximum value to the location in the EEPROM to "reset" the best time.
+    Serial.println("Best Time Cleared");
     break;
 
   case BYTE_COMPARE_B:
-    printBestTime();
+    Serial.println(String("Best Time:\t") + (unsigned long)bestTime + String(" ms")); // Serial print "Best Time:"
     break;
 
   case BYTE_COMPARE_H:
@@ -153,18 +166,20 @@ void ReadSerial() {
     Serial.println("Now in debug mode!");
     Serial.println(String("Hall Compensate Value: ") + hallCompensate);
     Serial.println(String("Hall Hysterese Value: ") + HALL_HYSTERESE);
-    Serial.println("Now outputting hall sensor value: ");
+    Serial.println("Press any button to output sensor value: ");
+    while(!Serial.available());
+    Serial.read();
     while(!Serial.available()) {
-      Serial.println(analogRead(SENSOR_PIN));
-      delay(10);
+      Serial.println(analogRead(SENSOR_PIN) + String("\tPress any button to exit"));
+      delay(50);
     }
     ReadSerial();
-    Startup();
+    Restart();
     break;
   }
 }
 
-void EEPROMWritelong(int address, unsigned long value)
+void EEPROMWriteLong(int address, unsigned long value)
 {
   //Decomposition from a long to 4 bytes by using bitshift.
   //One = Most significant -> Four = Least significant byte
@@ -192,16 +207,12 @@ long EEPROMReadlong(unsigned long address)
   return ((four << 0) & 0xFF) + ((three << 8) & 0xFFFF) + ((two << 16) & 0xFFFFFF) + ((one << 24) & 0xFFFFFFFF);
 }
 
-void clearEEPROM(){
-  for (int i = 0; i < 512; i++){ // write a 0 to all 512 bytes of the EEPROM
-    EEPROM.write(i, 1);
-  }
-  Serial.println("Best time cleared!"); // Serial print "Best time cleared!"
-}
 
-void printBestTime(){
-  bestTime = EEPROMReadlong(1);  //Read best time from EEPROM and store in bestTime
-  Serial.print("Best Time:\t"); // Serial print "Best Time:"
-  Serial.println(bestTime);  // Serial print the value of best Time
-}
+
+
+
+
+
+
+
 
