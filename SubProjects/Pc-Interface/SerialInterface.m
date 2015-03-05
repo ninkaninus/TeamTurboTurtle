@@ -12,7 +12,9 @@ classdef SerialInterface
         Returns: 
         A 1 x n array consisting of the laptimes in order.
         %}
-        function [lapTimes] = ReturnLapTime(COM,BaudRate,lapsToLog) 
+        function [lapTimes] = ReturnLapTimes(COM,BaudRate,lapsToLog) 
+            figure(1);
+            lHandle = line(nan, nan); %# Generate a blank line and return the line handle
             s = serial(COM,'BaudRate',BaudRate);    %Create a serial object with the specified inputs
             lapTimes = zeros([1,lapsToLog]);        %Allocate memory for the amount of values expected to be returned
             fopen(s);                               %Open a serial connection on serial object s
