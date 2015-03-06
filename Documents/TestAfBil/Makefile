@@ -1,10 +1,10 @@
 # Makefile for programming ATmega32 using assembler
 PROJECT=bil_2sem
-PROGRAMMER=-c avrispmkII -P usb # For the large blue AVR MKII
+PROGRAMMER=-c usbasp -P usb # For the large blue AVR MKII
+#PROGRAMMER=-c avrispmkII -P usb # For the large blue AVR MKII
 #PROGRAMMER=-c avrisp -P /dev/ttyUSB0  # For the small green programmer
 
 default:
-	avra $(PROJECT).asm
 	sudo avrdude -p m32 $(PROGRAMMER) -U flash:w:$(PROJECT).hex
 
 fuse:
