@@ -3,7 +3,7 @@ Problemformulering
 - Datastandard overholdes
 - Fysiske krav
 - Elektrofysisk sensor/aktuator
-- Postion på banen skal måles, så bilen kan reagere derefter
+- Position på banen skal måles, så bilen kan reagere derefter
 - Lap sensor
 - Tages højde for strømtab
 - Brian faktor
