@@ -1,0 +1,25 @@
+\section{Teoretisk beskrivelse G-kodes opbygning}
+For at give en forståelse af, hvad der giver robotten informationer om, hvor den skal tegne, er følgende lidt grundlæggende information om det G-kode, der er arbejdet med.\\
+G-kode er en variant af programmeringssproget NC (numerical control) og bruges til at fortælle robotter, hvordan de skal bevæge sig. Dette indebærer blandt andet hvilke bevægelser, der skal udføres hvornår, hastigheden af en bevægelse og hvilken position robotten skal bevæge sig til. G-kode kan eksempelvis bruges til at styre bevægelserne for en robot, man vil have til at udskære et stykke træ (eller andet materiale) til en bestemt form, vha. et værktøj holdt af robotten.\\
+\textbf{Eksempel på format af G-kode:}
+
+\begin{quote}
+N10 G00 X-0.1 Y0.1 Z0.01\\
+N20 G01 X-0.1 Y0.1 Z-0.001\\
+N30 G01 X-0.1 Y-0.1 Z-0.002\\
+N40 G01 X0.1 Y-0.1 Z-0.003\\
+N50 G01 X0.1 Y0.1 Z-0.004\\
+N20 G01 X-0.1 Y0.1 Z-0.005\\
+N60 G98 Z-0.01
+\end{quote}
+
+Kigger man på det fra en ende af, starter koden med et ’N’ efterfulgt af et tal. Tallet angiver linjenummeret, som bestemmer, hvornår den givne kommando skal køres ift. resten af kommandoerne. Disse skal stå i rækkefølge, så N100 f.eks. ikke kommer efter N200. Selve værdien af tallet betyder ikke noget, så længe de står i den rigtige rækkefølge.
+
+Efter linjenummeret kommer selve handlingen/funktionen, som robotten skal udføre. Dette angives med ’G’ efterfulgt af en værdi, der refererer til handlingen. Eksempelvis bruges G00 som regel til en bevægelse fra et punkt til et andet, hvor robottens led bevæger sig med maksimal hastighed. Dette medfører, at den overordnede bevægelse (værktøjets bevægelse fra et punkt A til et andet punkt B) ikke altid er lineær, da ledenes bevægelser som udgangspunkt ikke koordineres med hinanden. G01 bruges, når robotten skal udføre et egentligt arbejde på en overflade. Bevægelserne er mere kontrollerede, da der interpoleres mere mellem koordinaterne for at opnå lineære bevægelser. I forbindelse med tegnerobot projektet bruges der også en G98 kommando, der i dette tilfælde er spidsefunktionen - eller nærmere koordinatet for blyantspidserens placering.
+
+Til sidst skal der angives X-, Y- og Z-koordinater til hver funktion (bortset fra G98, som kun skal bruge Z-koordinatet). Her refererer Z til armens bevægelse i højderetningen, dvs. hvor tæt armen er på overfladen. Afstanden fra overfladen tager udgangspunkt i længden af værktøjet, så ved Z0 rører værktøjet ved papiret, men uden yderligere tryk/pres fra robottens side. I forhold til projektet (hvor værktøjet er en blyant), vil Z0 ikke længere referere til overfladepunktet, efterhånden som blyanten bliver kortere - Z-værdien bliver altså negativ for at tage højde for dette. X- og Y-koordinaterne angiver bredde- og længdekoordinaterne. Alle X-, Y- og Z-koordinater er angivet i meter.
+
+Med denne viden kan man igen kigge på eksemplet på en G-kode, der blev givet tidligere, og på forhånd drage nogle konklusioner for, hvad den vil betyde for robottens bevægelse. G-koden vil producere en kvadratisk firkant med sidelængden 20 cm og til sidst spidse blyanten. Da X- og Y-værdierne er angivet ift. et forudbestemt nulpunkt - hvilket for tegnerobotten er bestemt til midten af det A4 ark, der tegnes på - vil firkanten have centrum i papirets centrum. Der er dog flere ting, der gør, at denne kode ikke vil virke i praksis (bl.a. øges trykket med en millimeter for hvert koordinat (10cm), hvilket ikke er helt realistisk), men for simplicitetens skyld giver det et godt overblik.
+
+\subsection{Fordele og begrænsninger ved G-kode}
+G-kode har nogle få parametre, der kan manipuleres. X-, Y- og Z-koordinaterne giver mulighed for at bevæge værktøjet i tre dimensioner, men man kan eksempelvis ikke rotere værktøjet om sig selv (give det en vinkel). Ift. tegneprojektet er det en fordel ikke at have så mange variable at skulle styre, under forudsætning af at ledene selv sørger for at korrigere sine vinkler, så det hele passer, når X-, Y- og Z-værdierne varieres. For at tegne er det ikke nødvendigt at give blyanten en vinkel, og det er derfor en fordel ikke at skulle bekymre sig om vinklen af blyanten. For G98 funktionen er det ydermere kun Z-koordinatet, der kan manipuleres med, og hvis G98 ikke er defineret til det helt rigtige X- og Y-koordinat, kan det betyde, at værktøjet ikke rammer præcist det punkt, som det er tiltænkt. I afsnittet om fejlkilder senere i rapporten beskrives det, hvorledes dette kan give nogle problemer ift. blyanten og blyantspidseren.

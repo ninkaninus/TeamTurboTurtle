@@ -1,0 +1,19 @@
+\section{Indledning}
+Dette projekt er udført af 5 studerende, der går på SDU Robteklinje på 1. semester. Projektet er udarbejdet på to måneder og svarer til 10 ECTS point. Rapporten afleveres d. 12.12-2014, med tilhørerende DVD indeholdende rapporten, video af robotten mens den tegner samt koden til robotten samt G-kode til robotten.
+ 
+
+\subsection{Projektformulering}
+Dette projekt går ud på, at en robot, som kan ses på figur~\ref{fig:opstilling}, skal tegne et billede med en blyant samt spidse blyanten når det er nødvendigt. 
+Projektet er opdelt i to dele, elektronik til en blyantspidser, da denne skal automatiseres, og programmering af kode til robotten, der skal tegne en illustration. 
+Robotten skal kunne tegne flere slags illustrationer med en blyant, samt fortælle hvornår blyanten skal spidses.  En metode er således udviklet til at konvertere et billede til en illustration, som en robot kan tegne.  Illustrationen er konstrueret af et sprog til robotter kaldet G-kode, som er genereret i CAS-værktøjet Mathematica. G-koden beskriver linjenummer, om robotten skal tegne eller lave luftkoordinater samt giver robotten X-, Y- og Z-koordinater, så den ved, hvor den skal befinde sig. Da der skal kunne laves flere forskellige illustrationer, er der lavet en generel kode, der både kan tegne gråtoner og logoer. Da robotten tegner med en blyant er der i G-koden taget højde for slid på blyanten og længden på blyanten. Foruden dette fortæller G-koden også, hvornår blyanten skal spidses. 
+Spidsningen af blyanten gøres med en blyantspidser, som er modificeret så den automatisk starter, når blyanten sættes i den, og tilsvarende stopper, når blyanten fjernes. \linebreak
+
+\textbf{Valg af robot}\\
+
+Til projektet har to robotter været til rådighed. Den robot, der hovedsagligt er arbejdet med, er en robotarm fra Universal Robots. Robotten har de nødvendige egenskaber for at opnå de bedste resultater. Den anden mulighed var en Panarobot, som havde den fejl, at den tegnede buer mellem hvert punkt, hvilket begrænser, hvor gode resultater, der kan opnås.
+
+\subsection{Opbygning af rapporten}
+Rapporten er bygget op således, at der først er en teoretisk gennemgang af komponenterne i det elektriske kredsløb, efterfulgt af en gennemgang og beskrivelse af de valgte komponenter. Det beskrives, hvorledes de hver især virker, efterfulgt af en forklaring på hvordan de har indflydelse i blyantspidserens elektriske kredsløb. Herefter følger en forklaring på hvordan G-kode virker, samt hvorledes G-koden er konstrueret for at få robotten til at tegne. Her efter diskuteres eventuelle fejl og mangler i den praktiske del af projektet, til sidst kommenteres på resultatet.\\ 
+
+
+
