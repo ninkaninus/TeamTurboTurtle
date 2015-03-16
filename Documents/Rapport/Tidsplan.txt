@@ -1,0 +1,13 @@
+Tidsplan:
+
+Vi mødes for så fremt muligt hver mandag og torsdag i gruppelokalet. Nu da elektronik-undervisningen er færdig.
+
+23/3-2015: Fundet ud af hvordan microcontrolleren interfacer med bluetooth modulet og have opsat et testprogram.
+
+01/4-2015: Alle sensorer skal være overvejede og sensorboardet skal være klar til produktion.
+
+20/5-2015: Bilen SKAL være køreklar og skal som minimum overholde vores kravspecifikation.
+
+27/5-2015: Rapport Aflevering
+
+29/5-2015: Race!
