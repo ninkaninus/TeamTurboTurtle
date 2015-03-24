@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.2.18)  24 MAR 2015 11:41
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.2.18)  24 MAR 2015 12:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -6,10 +6,13 @@ entering extended mode
 (./Master.tex
 LaTeX2e <2011/06/27>
 Babel <3.9h> and hyphenation patterns for 4 languages loaded.
-(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+\@input{Setup/Packages.aux}
+\openout2 = `Setup/Packages.aux'.
+
+(./Setup/Packages.tex (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-(/usr/share/texlive/texmf-dist/tex/latex/base/size11.clo
-File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+(/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
 \c@section=\count80
@@ -572,33 +575,33 @@ Package caption Info: listings package is loaded.
 Package: subcaption 2013/02/03 v1.1-62 Sub-captions (AR)
 \c@subfigure=\count123
 \c@subtable=\count124
-) (./Master.aux)
+)) (./Master.aux)
 \openout1 = `Master.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 19.
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 2.
+LaTeX Font Info:    ... okay on input line 2.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 2.
+LaTeX Font Info:    ... okay on input line 2.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 2.
+LaTeX Font Info:    ... okay on input line 2.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 2.
+LaTeX Font Info:    ... okay on input line 2.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 2.
+LaTeX Font Info:    ... okay on input line 2.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 2.
+LaTeX Font Info:    ... okay on input line 2.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 2.
+LaTeX Font Info:    ... okay on input line 2.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 2.
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
-! Font OT1/ptm/m/n/10.95=ptmr7t at 10.95pt not loadable: Metric (TFM) file not 
-found.
+! Font OT1/ptm/m/n/12=ptmr7t at 12.0pt not loadable: Metric (TFM) file not foun
+d.
 <to be read again> 
                    relax 
-l.19 \begin{document}
-                     
+l.2 \begin{document}
+                    
 I wasn't able to read the size data for this font,
 so I will ignore the font specification.
 [Wizards can fix TFM files using TFtoPL/PLtoTF.]
@@ -624,12 +627,12 @@ e.g., type `I\font<same font id>=<substitute font name>'.
 * \topmargin=-23.91173pt
 * \headheight=12.0pt
 * \headsep=25.0pt
-* \topskip=11.0pt
+* \topskip=12.0pt
 * \footskip=30.0pt
-* \marginparwidth=59.0pt
+* \marginparwidth=44.0pt
 * \marginparsep=10.0pt
 * \columnsep=10.0pt
-* \skip\footins=10.0pt plus 4.0pt minus 2.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
 * \hoffset=0.0pt
 * \voffset=0.0pt
 * \mag=1000
@@ -673,9 +676,9 @@ Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             or
 (lastpage)             http://www.ctan.org/tex-archive/ 
 (lastpage)             install/macros/latex/contrib/pageslts.tds.zip
-(lastpage)             ! on input line 19.
+(lastpage)             ! on input line 2.
 \AtBeginShipoutBox=\box31
-Package hyperref Info: Link coloring OFF on input line 19.
+Package hyperref Info: Link coloring OFF on input line 2.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -685,9 +688,9 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count131
 )
-LaTeX Info: Redefining \ref on input line 19.
-LaTeX Info: Redefining \pageref on input line 19.
-LaTeX Info: Redefining \nameref on input line 19.
+LaTeX Info: Redefining \ref on input line 2.
+LaTeX Info: Redefining \pageref on input line 2.
+LaTeX Info: Redefining \nameref on input line 2.
 
 (./Master.out) (./Master.out)
 \@outlinefile=\write3
@@ -773,68 +776,6 @@ Missing character: There is no t in font nullfont!
 Missing character: There is no t in font nullfont!
 Missing character: There is no e in font nullfont!
 Missing character: There is no n in font nullfont!
-! Font OT1/ptm/m/n/20.74=ptmr7t at 20.74pt not loadable: Metric (TFM) file not 
-found.
-<to be read again> 
-                   relax 
-l.14   \huge
-            
-I wasn't able to read the size data for this font,
-so I will ignore the font specification.
-[Wizards can fix TFM files using TFtoPL/PLtoTF.]
-You might try inserting a different font spec;
-e.g., type `I\font<same font id>=<substitute font name>'.
-
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <20.74> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 15.
-! Font OT1/ptm/bx/n/20.74=ptmb7t at 20.74pt not loadable: Metric (TFM) file not
- found.
-<to be read again> 
-                   relax 
-l.15   \textbf{\textit{GSR1: Gruppe 1}}
-                                        \\
-I wasn't able to read the size data for this font,
-so I will ignore the font specification.
-[Wizards can fix TFM files using TFtoPL/PLtoTF.]
-You might try inserting a different font spec;
-e.g., type `I\font<same font id>=<substitute font name>'.
-
-! Font \OT1/ptm/b/n/20.74=nullfont not loadable: Metric (TFM) file not found.
-<to be read again> 
-                   \relax 
-l.15   \textbf{\textit{GSR1: Gruppe 1}}
-                                        \\
-I wasn't able to read the size data for this font,
-so I will ignore the font specification.
-[Wizards can fix TFM files using TFtoPL/PLtoTF.]
-You might try inserting a different font spec;
-e.g., type `I\font<same font id>=<substitute font name>'.
-
-LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <20.74> not available
-(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 15.
-! Font OT1/ptm/bx/it/20.74=ptmbi7t at 20.74pt not loadable: Metric (TFM) file n
-ot found.
-<to be read again> 
-                   relax 
-l.15   \textbf{\textit{GSR1: Gruppe 1}}
-                                        \\
-I wasn't able to read the size data for this font,
-so I will ignore the font specification.
-[Wizards can fix TFM files using TFtoPL/PLtoTF.]
-You might try inserting a different font spec;
-e.g., type `I\font<same font id>=<substitute font name>'.
-
-! Font \OT1/ptm/b/it/20.74=nullfont not loadable: Metric (TFM) file not found.
-<to be read again> 
-                   \relax 
-l.15   \textbf{\textit{GSR1: Gruppe 1}}
-                                        \\
-I wasn't able to read the size data for this font,
-so I will ignore the font specification.
-[Wizards can fix TFM files using TFtoPL/PLtoTF.]
-You might try inserting a different font spec;
-e.g., type `I\font<same font id>=<substitute font name>'.
-
 Missing character: There is no G in font nullfont!
 Missing character: There is no S in font nullfont!
 Missing character: There is no R in font nullfont!
@@ -847,10 +788,10 @@ Missing character: There is no p in font nullfont!
 Missing character: There is no p in font nullfont!
 Missing character: There is no e in font nullfont!
 Missing character: There is no 1 in font nullfont!
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 19.
-! Font OT1/ptm/bx/n/10.95=ptmb7t at 10.95pt not loadable: Metric (TFM) file not
- found.
+! Font OT1/ptm/bx/n/12=ptmb7t at 12.0pt not loadable: Metric (TFM) file not fou
+nd.
 <to be read again> 
                    relax 
 l.19   \bfseries
@@ -861,7 +802,7 @@ so I will ignore the font specification.
 You might try inserting a different font spec;
 e.g., type `I\font<same font id>=<substitute font name>'.
 
-! Font \OT1/ptm/b/n/10.95=nullfont not loadable: Metric (TFM) file not found.
+! Font \OT1/ptm/b/n/12=nullfont not loadable: Metric (TFM) file not found.
 <to be read again> 
                    \relax 
 l.19   \bfseries
@@ -893,10 +834,10 @@ Missing character: There is no t in font nullfont!
 Missing character: There is no e in font nullfont!
 Missing character: There is no r in font nullfont!
 Missing character: There is no : in font nullfont!
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17.28> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 20.
-! Font OT1/ptm/bx/n/14.4=ptmb7t at 14.4pt not loadable: Metric (TFM) file not f
-ound.
+! Font OT1/ptm/bx/n/17.28=ptmb7t at 17.28pt not loadable: Metric (TFM) file not
+ found.
 <to be read again> 
                    relax 
 l.20   \Large
@@ -907,7 +848,7 @@ so I will ignore the font specification.
 You might try inserting a different font spec;
 e.g., type `I\font<same font id>=<substitute font name>'.
 
-! Font \OT1/ptm/b/n/14.4=nullfont not loadable: Metric (TFM) file not found.
+! Font \OT1/ptm/b/n/17.28=nullfont not loadable: Metric (TFM) file not found.
 <to be read again> 
                    \relax 
 l.20   \Large
@@ -918,8 +859,8 @@ so I will ignore the font specification.
 You might try inserting a different font spec;
 e.g., type `I\font<same font id>=<substitute font name>'.
 
-! Font OT1/ptm/m/n/14.4=ptmr7t at 14.4pt not loadable: Metric (TFM) file not fo
-und.
+! Font OT1/ptm/m/n/17.28=ptmr7t at 17.28pt not loadable: Metric (TFM) file not 
+found.
 <to be read again> 
                    relax 
 l.22   \normalfont
@@ -930,8 +871,8 @@ so I will ignore the font specification.
 You might try inserting a different font spec;
 e.g., type `I\font<same font id>=<substitute font name>'.
 
-! Font OT1/ptm/m/it/14.4=ptmri7t at 14.4pt not loadable: Metric (TFM) file not 
-found.
+! Font OT1/ptm/m/it/17.28=ptmri7t at 17.28pt not loadable: Metric (TFM) file no
+t found.
 <to be read again> 
                    relax 
 l.22 ...font{\textit{Robotteknologi - 1. semester}
@@ -1144,8 +1085,8 @@ File: Billeder/SDU-logo.pdf Graphic file (type pdf)
 Package pdftex.def Info: Billeder/SDU-logo.pdf used on input line 48.
 (pdftex.def)             Requested size: 298.61488pt x 296.42722pt.
 
-! Font OT1/ptm/m/sl/10.95=ptmro7t at 10.95pt not loadable: Metric (TFM) file no
-t found.
+! Font OT1/ptm/m/sl/12=ptmro7t at 12.0pt not loadable: Metric (TFM) file not fo
+und.
 <to be read again> 
                    relax 
 l.52   \textsl{Teknisk Fakultet}
@@ -1195,9 +1136,38 @@ Missing character: There is no t in font nullfont!
 
 
 
+\@setckpt{Setup/Packages}{%
+\setcounter{page}{1}
+\setcounter{equation}{0}
+\setcounter{enumi}{0}
+\setcounter{enumii}{0}
+\setcounter{enumiii}{0}
+\setcounter{enumiv}{0}
+\setcounter{footnote}{0}
+\setcounter{mpfootnote}{0}
+\setcounter{part}{0}
+\setcounter{section}{0}
+\setcounter{subsection}{0}
+\setcounter{subsubsection}{0}
+\setcounter{paragraph}{0}
+\setcounter{subparagraph}{0}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\setcounter{parentequation}{0}
+\setcounter{Item}{0}
+\setcounter{Hfootnote}{0}
+\setcounter{bookmark@seq@number}{0}
+\setcounter{lstnumber}{1}
+\setcounter{IncludeDepth}{1}
+\setcounter{ContinuedFloat}{0}
+\setcounter{subfigure}{0}
+\setcounter{subtable}{0}
+}
 
- <./Billeder/SDU-logo.pdf>]
-No file Master.toc.
+
+
+
+ <./Billeder/SDU-logo.pdf>] (./Master.toc)
 \tf@toc=\write4
 \openout4 = `Master.toc'.
 
@@ -1248,8 +1218,9 @@ Missing character: There is no 0 in font nullfont!
 Missing character: There is no 1 in font nullfont!
 Missing character: There is no 4 in font nullfont!
 
+
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
+ Make it at least 14.49998pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
@@ -1260,7 +1231,7 @@ Missing character: There is no e in font nullfont!
 Missing character: There is no 2 in font nullfont!
 Missing character: There is no a in font nullfont!
 Missing character: There is no f in font nullfont!
-Missing character: There is no 0 in font nullfont!
+Missing character: There is no 2 in font nullfont!
 [2
 
 ]
@@ -1281,34 +1252,28 @@ No file Afsnit/kildeliste/kildeliste.tex.
 No file Afsnit/indhold-paa-DVD/indhold-paa-DVD.tex.
 
 AED: lastpage setting LastPage
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 22.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 22.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 5.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 5.
 (./Master.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 22.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 22.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 5.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 5.
 Package rerunfilecheck Info: File `Master.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 22.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 5.
  ) 
 Here is how much of TeX's memory you used:
- 9225 strings out of 494985
- 136100 string characters out of 6180356
- 228996 words of memory out of 5000000
- 12297 multiletter control sequences out of 15000+600000
- 3940 words of font info for 15 fonts, out of 8000000 for 9000
+ 9227 strings out of 494985
+ 136102 string characters out of 6180356
+ 231669 words of memory out of 5000000
+ 12294 multiletter control sequences out of 15000+600000
+ 3938 words of font info for 15 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 36i,11n,43p,270b,364s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{page.0} has been referenced but does not exist, r
-eplaced by a fixed one
+ 40i,11n,45p,295b,363s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on Master.pdf (2 pages, 18520 bytes).
+Output written on Master.pdf (2 pages, 18506 bytes).
 PDF statistics:
- 23 PDF objects out of 1000 (max. 8388607)
- 17 compressed objects within 1 object stream
- 6 named destinations out of 1000 (max. 500000)
+ 22 PDF objects out of 1000 (max. 8388607)
+ 16 compressed objects within 1 object stream
+ 5 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
