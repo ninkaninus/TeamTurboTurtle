@@ -12,6 +12,7 @@
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Debug/Main.obj</FILE>
@@ -24,8 +25,15 @@
   <FILE>Main.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>18</LINE></Init>
-  <string><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>16</LINE></string>
-  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>25</LINE></Main>
+  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>23</LINE></Init>
+  <I2C_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>23</LINE></I2C_Start>
+  <I2C_Start_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>28</LINE></I2C_Start_Wait>
+  <I2C_Stop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>40</LINE></I2C_Stop>
+  <I2C_Write><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>46</LINE></I2C_Write>
+  <I2C_Write_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>51</LINE></I2C_Write_Wait>
+  <I2C_Read><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>57</LINE></I2C_Read>
+  <I2C_Read_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>61</LINE></I2C_Read_Wait>
+  <I2C_Status><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>69</LINE></I2C_Status>
+  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>37</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>

@@ -30,6 +30,14 @@
 	out	UDR,	R16
 .ENDMACRO
 
+.MACRO USART_Transmit_Var
+USART_Transmit_Var_Start: 
+	; Wait for empty transmit buffer
+	sbis	UCSRA,	UDRE
+	rjmp	USART_Transmit_Var_Start
+	out	UDR,	R16
+.ENDMACRO
+
 .MACRO USART_Receive
 USART_Receive_Start:
 	; Wait for data to be received

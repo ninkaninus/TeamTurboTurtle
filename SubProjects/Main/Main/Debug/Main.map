@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu Mar 26 13:03:39 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu Mar 26 19:11:02 2015
 
 
 EQU  SIGNATURE_000 0000001e
@@ -568,7 +568,19 @@ EQU  ACIaddr      00000024
 EQU  TWIaddr      00000026
 EQU  SPMRaddr     00000028
 EQU  INT_VECTORS_SIZE 0000002a
+EQU  MPU6050_Address_W 000000d1
+EQU  MPU6050_Address_R 000000d0
+EQU  DATA_ADDRESS 0000003c
+DEF  DATA         r19
+CSEG Init         0000001e
 EQU  MOTOR_PIN    00000007
-CSEG Init         00000067
-CSEG string       00000060
-CSEG Main         00000074
+CSEG I2C_Start    00000001
+CSEG I2C_Start_Wait 00000003
+CSEG I2C_Stop     00000008
+CSEG I2C_Write    0000000b
+CSEG I2C_Write_Wait 0000000e
+CSEG I2C_Read     00000013
+CSEG I2C_Read_Wait 00000015
+CSEG I2C_Status   0000001b
+CSEG Main         00000035
+CSEG USART_Transmit_Var_Start@USART_Transmit_Var@1100 00000048

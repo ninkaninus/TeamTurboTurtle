@@ -1,12 +1,13 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu Mar 26 13:03:39 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu Mar 26 19:11:02 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(9): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(10): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(18): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm'
                  
-                 /*
+                 ;
                  
                  ;***** Created: 2011-02-09 12:03 ******* Source: ATmega32A.xml ***********
                  ;*************************************************************************
@@ -822,14 +823,23 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:
                  #endif  /* _M32ADEF_INC_ */
                  
                  
-                  * Main.asm
-                  *
-                  *  Created: 16-03-2015 21:03:12
-                  *   Author: StjerneIdioten
-                  */ 
+                 ;Main.asm
+                 ;
+                 ;Created: 16-03-2015 21:03:12
+                 ;Author: StjerneIdioten
+                 ; 
                  
-                  //Board specific port names
-                  .include "Delay_Macros.asm"
+                 ;Defines
+                 .equ MPU6050_Address_W = 0b11010001
+                 .equ MPU6050_Address_R = 0b11010000
+                 .equ DATA_ADDRESS = 0x3C
+                 .def DATA = R19
+                 
+                 .org 0x0000
+000000 c01d      rjmp Init
+                 
+                 ;Board specific port names
+                 .include "Delay_Macros.asm"
                  
                   * DelayMacros.asm
                   *
@@ -864,7 +874,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:
                  ; Block A: x*(1+B+1+2)-1 = 78313249 at x=250
                  ; Total # of cycles is: 1 + A = 78313250 at x = 250
                  ; Formula for delay: x*(313253) * (1/8,000,000)
-                  .include "Motor_Control.asm"
+                 .include "Motor_Control.asm"
                  
                   * Motor_Control.asm
                   *
@@ -884,21 +894,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:
                   .MACRO Motor_Set 
                  	ldi R16, @0
                  	out OCR2, R16
-                 
-                  .org	0x0000
-000000 c066      	rjmp	Init
-                 
-                  .org	0x60
-000060 6548
-000061 6c6c
-000062 206f
-000063 6f57
-000064 6c72
-000065 2164
-000066 000a       string: .db	'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!', '\n', 0x00 
-                 
-                 Init:
-                 	.include "USART_Library.asm"
+                 .include "USART_Library.asm"
                  
                   * USART_library.asm
                   *
@@ -931,6 +927,14 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:
                  	out	UDR,	R16
                  .ENDMACRO
                  
+                 .MACRO USART_Transmit_Var
+                 USART_Transmit_Var_Start: 
+                 	; Wait for empty transmit buffer
+                 	sbis	UCSRA,	UDRE
+                 	rjmp	USART_Transmit_Var_Start
+                 	out	UDR,	R16
+                 .ENDMACRO
+                 
                  .MACRO USART_Receive
                  USART_Receive_Start:
                  	; Wait for data to be received
@@ -939,25 +943,151 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:
                  	; Get and return received data from buffer
                  	in r16, UDR
                  .ENDMACRO
-000067 e607
-000068 e010
-000069 bd10
-00006a b909
-00006b e108
-00006c b90a
-00006d e806
-00006e bd00      	USART_Init
-00006f e800
-000070 bb01
-000071 e609
-000072 bd05      	Motor_Init
+                 .include "I2C.asm"
                  
-000073 c000      	rjmp	Main
+                  * I2C.asm
+                  *
+                  *  Created: 26-03-2015 17:49:44
+                  *   Author: StjerneIdioten
+                  */ 
+                 
+                  .MACRO I2C_Init
+                 	;Set Prescaler
+                 	ldi R16, 0
+                 	out TWSR, R16
+                 	
+                 	;Set scl to 400 KHz at 16MHz clock
+                 	ldi R16, 12
+                 	out TWBR, R16
+                 
+                 	;Enable it
+                 	ldi R16, (1<<TWEN)
+                 	out TWCR, R16
+                 
+                  .ENDMACRO
+                 
+                 I2C_Start:
+                 	;Send Start condition
+000001 ea04      	ldi r16, (1<<TWINT)|(1<<TWSTA)|(1<<TWEN) 
+000002 bf06      	out TWCR, r16
+                 
+                 I2C_Start_Wait:	
+                 	;Wait for the start condition transmit			
+000003 b706      	in r16,TWCR
+000004 ff07      	sbrs r16,TWINT
+000005 940c 0003 	jmp I2C_Start_Wait
+                 
+                 	/*;Check if the status register is loaded with start
+                 	call I2C_Status
+                 	cpi r16, 0x08
+                 	brne I2C_Error*/
+000007 9508      ret
+                 
+                 I2C_Stop:
+                 	;Send Stop condition
+000008 e904      	ldi r16, (1<<TWINT)|(1<<TWSTO)|(1<<TWEN) 
+000009 bf06      	out TWCR, r16
+00000a 9508      ret
+                 
+                 I2C_Write:
+00000b b903      	out TWDR, r16
+00000c e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
+00000d bf06      	out TWCR, r16
+                 
+                 I2C_Write_Wait:
+00000e b706      	in r16,TWCR
+00000f ff07      	sbrs r16,TWINT
+000010 940c 000e 	jmp I2C_Write_Wait
+000012 9508      ret
+                 
+                 I2C_Read:
+000013 e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
+000014 bf06      	out TWCR, r16
+                 
+                 I2C_Read_Wait:
+000015 b706      	in r16,TWCR
+000016 ff07      	sbrs r16,TWINT
+000017 940c 0015 	jmp I2C_Read_Wait
+                 
+000019 b103      	in R16, TWDR
+00001a 9508      ret
+                 
+                 I2C_Status:
+00001b b101      	in r16,TWSR
+00001c 7f08      	andi r16, 0xF8
+00001d 9508      ret
+                 
+                 .MACRO I2C_Error
+                 I2C_Error_Start:
+                 	ldi R16, 'E'
+                 	USART_Transmit_Var
+                 	rjmp I2C_Error_Start
+                 .ENDMACRO
+                 
+                 Init:
+                 	
+                 	;Initialize the stack
+00001e e50f      	LDI	R16, low(RAMEND)
+00001f bf0d          OUT	SPL, R16
+000020 e008      	LDI	R16, high(RAMEND)
+000021 bf0e          OUT	SPH, R16
+                 
+000022 e607
+000023 e010
+000024 bd10
+000025 b909
+000026 e108
+000027 b90a
+000028 e806
+000029 bd00      	USART_Init
+00002a e800
+00002b bb01
+00002c e609
+00002d bd05      	Motor_Init
+00002e e000
+00002f b901
+000030 e00c
+000031 b900
+000032 e004
+000033 bf06      	I2C_Init
+                 
+000034 c000      	rjmp	Main
                  
                  Main:
-000074 e302
-000075 bd03      	Motor_Set 50
-000076 cffd      rjmp	MAIN
+                 
+000035 940e 0001 	Call I2C_Start
+                 
+000037 ed01      	ldi R16, MPU6050_Address_W
+000038 940e 000b 	Call I2C_Write
+                 	/*Call I2C_Status
+                 	cpi R16, 0x18
+                 	brne I2C_Error*/
+                 
+00003a e30c      	ldi R16, 0x3C
+00003b 940e 000b 	Call I2C_Write
+                 	/*Call I2C_Status
+                 	cpi R16, 0x28
+                 	brne I2C_Error*/
+                 
+00003d 940e 0001 	Call I2C_Start
+                 
+00003f ed00      	ldi R16, MPU6050_Address_R
+000040 940e 000b 	Call I2C_Write
+                 	/*Call I2C_Status
+                 	cpi R16, 0x40
+                 	brne I2C_Error*/
+                 
+000042 940e 0013 	call I2C_Read
+000044 2f30      	mov DATA, R16
+                 	/*call I2C_Status
+                 	cpi R16, 0x58
+                 	brne I2C_Error*/
+000045 940e 0008 	call I2C_Stop
+000047 2f03      	mov R16, DATA
+000048 9b5d
+000049 cffe
+00004a b90c      	USART_Transmit_Var
+00004b cfe9      rjmp	MAIN
                  
 
 
@@ -978,37 +1108,37 @@ counted separately from r26..r31 here.
 "ATmega32A" register use summary:
 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16:  12 r17:   2 r18:   0 r19:   0 r20:   0 r21:   0 r22:   0 r23:   0 
+r16:  44 r17:   2 r18:   0 r19:   2 r20:   0 r21:   0 r22:   0 r23:   0 
 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 r29:   0 r30:   0 r31:   0 
 x  :   0 y  :   0 z  :   0 
-Registers used: 2 out of 35 (5.7%)
+Registers used: 3 out of 35 (8.6%)
 
 "ATmega32A" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
-andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+andi  :   1 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
 brne  :   0 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :   7 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
 cpi   :   0 cpse  :   0 dec   :   0 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   0 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :   7 lds   :   0 lpm   :   0 lsl   :   0 
-lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   7 pop   :   0 
-push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :   3 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   0 
-sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   5 inc   :   0 jmp   :   3 
+ld    :   0 ldd   :   0 ldi   :  18 lds   :   0 lpm   :   0 lsl   :   0 
+lsr   :   0 mov   :   2 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :  17 pop   :   0 
+push  :   0 rcall :   0 ret   :   5 reti  :   0 rjmp  :   4 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   1 
+sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   3 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 3 out of 113 (2.7%)
+Instructions used: 11 out of 113 (9.7%)
 
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0000ee     34     14     48   32768   0.1%
+[.cseg] 0x000000 0x000098    152      0    152   32768   0.5%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
