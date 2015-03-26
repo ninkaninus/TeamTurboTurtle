@@ -1,0 +1,22 @@
+Krav til projektet:
+
+-Bluetooth protokolen overholdes.
+
+-Skal kunne kører banen autonomt.
+
+-Skal kunne registrere og kortlægge banen.
+
+-Skal kunne justere sig selv til at sætte den hurtigste tid ud fra banen udformning.
+
+-Skal have et dynamisk system til at justere bilens downforce, for at få maksimalt vejgreb i sving og maksimal hastighed på lige strækninger.
+
+-Skal kunne opretholde sin funktion ved kortvarige udfald på strømforsyningen(Blackout og Brownout)
+
+-Skal have en elektrofysisk sensor og eller aktuator.
+
+-Der skal laves et monitoreringssuite til pc der kan overvåge bilens performance.
+
+
+
+
+
