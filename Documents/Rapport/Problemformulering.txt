@@ -5,5 +5,5 @@ Den skal selv formå at opmåle banen og derudfra regulere sine egne parametre, me
 Der skal som krav i projektet bruges en atmega32 microcontroller som skal programmeres i assembly. Der skal på en eller anden måde
 også integreres en elektromekansik sensor/og eller aktuator og udover dette skal bilen stadigvæk fremstå som en scalextric bil rent udseendsmæssigt.
 
-
+!
 
