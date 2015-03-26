@@ -1,0 +1,6 @@
+William: 2
+Daniel: 1
+Kristian: 0
+Anders: 0
+Joakim: 0
+Jonas: 2
