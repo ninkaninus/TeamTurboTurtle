@@ -4,14 +4,14 @@
  <WORKING_DIR>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Debug</WORKING_DIR>
  <INCLUDE_PATH>
   <DIR>C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include</DIR>
-  <DIR>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes</DIR>
+  <DIR></DIR>
  </INCLUDE_PATH>
  <SOURCE_FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</SOURCE_FILE>
  <INCLUDED_FILES>
   <FILE>C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc</FILE>
-  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Board_Defines.inc</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm</FILE>
-  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Setup_Io.asm</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Debug/Main.obj</FILE>
@@ -24,11 +24,8 @@
   <FILE>Main.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>21</LINE></Init>
-  <string><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>19</LINE></string>
-  <USART_Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>25</LINE></USART_Init>
-  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>43</LINE></Main>
-  <USART_Transmit><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>54</LINE></USART_Transmit>
-  <RESTART><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>65</LINE></RESTART>
+  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>18</LINE></Init>
+  <string><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>16</LINE></string>
+  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>25</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>

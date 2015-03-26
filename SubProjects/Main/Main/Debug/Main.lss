@@ -1,10 +1,10 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Mon Mar 16 23:47:06 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu Mar 26 13:03:39 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(9): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Board_Defines.inc'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(10): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(22): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Setup_Io.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(9): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(10): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm'
                  
                  /*
                  
@@ -829,14 +829,6 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(22): Including file 'D:
                   */ 
                  
                   //Board specific port names
-                  .include "Board_Defines.inc"
-                 
-                  * BoardSpecific.inc
-                  *
-                  *  Created: 16-03-2015 21:23:37
-                  *   Author: StjerneIdioten
-                  */ 
-                 
                   .include "Delay_Macros.asm"
                  
                   * DelayMacros.asm
@@ -872,9 +864,26 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(22): Including file 'D:
                  ; Block A: x*(1+B+1+2)-1 = 78313249 at x=250
                  ; Total # of cycles is: 1 + A = 78313250 at x = 250
                  ; Formula for delay: x*(313253) * (1/8,000,000)
+                  .include "Motor_Control.asm"
                  
-                  .def COUNT = R20
-                  .equ segmentCount = 13
+                  * Motor_Control.asm
+                  *
+                  *  Created: 26-03-2015 12:49:38
+                  *   Author: StjerneIdioten
+                  */ 
+                 
+                  .EQU	MOTOR_PIN = PD7
+                 
+                  .MACRO Motor_Init
+                 	ldi R16, (1<<PD7)
+                 	out DDRD, R16
+                 	ldi R16, 0b01101001
+                 	out TCCR2, R16 
+                  .ENDMACRO
+                 
+                  .MACRO Motor_Set 
+                 	ldi R16, @0
+                 	out OCR2, R16
                  
                   .org	0x0000
 000000 c066      	rjmp	Init
@@ -889,68 +898,66 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(22): Including file 'D:
 000066 000a       string: .db	'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!', '\n', 0x00 
                  
                  Init:
-                 	.include "Setup_Io.asm"
+                 	.include "USART_Library.asm"
                  
-                  * Setup_Io.asm
+                  * USART_library.asm
                   *
-                  *  Created: 16-03-2015 21:28:57
+                  *  Created: 26-03-2015 12:27:09
                   *   Author: StjerneIdioten
                   */ 
                  
-000067 e040      	ldi COUNT, 0x00
-                 
-                 USART_Init:
+                  .MACRO  USART_Init
                  	;Set Baud Rate to 9600
-000068 e607      	ldi R16,	0b01100111	
-000069 e010      	ldi R17,	0b00000000
+                 	ldi R16,	0b01100111	
+                 	ldi R17,	0b00000000
                  
-00006a bd10      	out	UBRRH,	R17
-00006b b909      	out UBRRL,	R16
+                 	out	UBRRH,	R17
+                 	out UBRRL,	R16
                  
                  	;Enable receiver and transmitter
-00006c e108      	ldi R16,	(1<<RXEN)|(1<<TXEN)
-00006d b90a      	out	UCSRB,	R16
+                 	ldi R16,	(1<<RXEN)|(1<<TXEN)
+                 	out	UCSRB,	R16
                  
                  	; Set frame format: 8data, 2stop bit
-00006e e806      	ldi	R16,	(1<<URSEL)|(3<<UCSZ0)
-00006f bd00      	out	UCSRC,	R16
+                 	ldi	R16,	(1<<URSEL)|(3<<UCSZ0)
+                 	out	UCSRC,	R16
+                  .ENDMACRO
                  
-000070 c000      	rjmp	Main
+                  .MACRO USART_Transmit 
+                 	ldi R16, @0
+                 	; Wait for empty transmit buffer
+                 	sbis	UCSRA,	UDRE
+                 	rjmp	USART_Transmit
+                 	out	UDR,	R16
+                 .ENDMACRO
+                 
+                 .MACRO USART_Receive
+                 USART_Receive_Start:
+                 	; Wait for data to be received
+                 	sbis UCSRA, RXC
+                 	rjmp USART_Receive_Start
+                 	; Get and return received data from buffer
+                 	in r16, UDR
+                 .ENDMACRO
+000067 e607
+000068 e010
+000069 bd10
+00006a b909
+00006b e108
+00006c b90a
+00006d e806
+00006e bd00      	USART_Init
+00006f e800
+000070 bb01
+000071 e609
+000072 bd05      	Motor_Init
+                 
+000073 c000      	rjmp	Main
                  
                  Main:
-                 
-000071 e003
-000072 ef1a
-000073 ef2a
-000074 0000
-000075 952a
-000076 f7e9
-000077 951a
-000078 f7d1
-000079 950a
-00007a f7b9      DELAY 3
-                 
-00007b e0f0      ldi ZH, high(string<<1) ;load in the high byte of the address of the first value in segments.
-00007c ece0      ldi ZL, low(string<<1)  ;load in the low byte of the address of the first value in segments.
-00007d 0fe4      add ZL, COUNT			  ;Add the offset to get the correct segment
-00007e e000      ldi R16, 0				  ;Load 0 into R16
-00007f 1ff0      adc ZH, R16				  ;Add the carry to ZH if there is one from the offset of ZL
-000080 9104      lpm R16, Z
-                 	
-                 USART_Transmit:
-                 	; Wait for empty transmit buffer
-000081 9b5d      	sbis	UCSRA,	UDRE
-000082 cffe      	rjmp	USART_Transmit
-000083 b90c      	out	UDR,	R16
-                 
-000084 e00d      ldi R16, segmentCount	  ;Load in the value of how many segments there are.
-000085 1740      cp COUNT, R16			  ;Check if we have reached the limit of how many segments there are.
-000086 f011      breq	RESTART			  ;Jump to restart the counter if it's time to loop over.
-000087 9543      inc	COUNT				  ;If it was not time to loop over, then increment the counter.
-000088 cfe8      rjmp	MAIN			  ;Jump to main and loop again.
-                 RESTART:					
-000089 e040      ldi COUNT, 0x00			  ;Reset the counter
-00008a cfe6      rjmp	MAIN
+000074 e302
+000075 bd03      	Motor_Set 50
+000076 cffd      rjmp	MAIN
                  
 
 
@@ -971,37 +978,37 @@ counted separately from r26..r31 here.
 "ATmega32A" register use summary:
 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16:  14 r17:   4 r18:   2 r19:   0 r20:   5 r21:   0 r22:   0 r23:   0 
-r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 r29:   0 r30:   2 r31:   2 
-x  :   0 y  :   0 z  :   1 
-Registers used: 7 out of 35 (20.0%)
+r16:  12 r17:   2 r18:   0 r19:   0 r20:   0 r21:   0 r22:   0 r23:   0 
+r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 r29:   0 r30:   0 r31:   0 
+x  :   0 y  :   0 z  :   0 
+Registers used: 2 out of 35 (5.7%)
 
 "ATmega32A" instruction use summary:
-.lds  :   0 .sts  :   0 adc   :   1 add   :   1 adiw  :   0 and   :   0 
+.lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   0 brcs  :   0 break :   0 breq  :   1 brge  :   0 brhc  :   0 
+brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :   3 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brne  :   0 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   1 cpc   :   0 
-cpi   :   0 cpse  :   0 dec   :   3 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   1 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :  13 lds   :   0 lpm   :   2 lsl   :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
+cpi   :   0 cpse  :   0 dec   :   0 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   0 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :   7 lds   :   0 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :   5 pop   :   0 
-push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :   5 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   1 
+neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   7 pop   :   0 
+push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :   3 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 13 out of 113 (11.5%)
+Instructions used: 3 out of 113 (2.7%)
 
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000116     74     14     88   32768   0.3%
+[.cseg] 0x000000 0x0000ee     34     14     48   32768   0.1%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
