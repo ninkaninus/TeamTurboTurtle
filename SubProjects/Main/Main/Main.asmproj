@@ -58,6 +58,9 @@
     <Compile Include="Delay_Macros.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HumidityI2Cv.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="I2C.asm">
       <SubType>Code</SubType>
     </Compile>

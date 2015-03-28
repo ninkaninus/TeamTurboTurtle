@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Fri Mar 27 22:33:33 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Sat Mar 28 23:35:02 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(18): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm'
@@ -830,50 +830,50 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
                  ; 
                  
                  ;Defines
-                 .equ MPU6050_Address_W = 0b11010001
-                 .equ MPU6050_Address_R = 0b11010000
-                 .equ DATA_ADDRESS = 0x3C
-                 .def DATA = R19
+                 .equ I2C_W = 0b11010000
+                 .equ I2C_R = 0b11010001
+                 .def DATA_HIGH = R19
+                 .def DATA_LOW = R20
                  
                  .org 0x0000
-000000 c01d      rjmp Init
+000000 c033      rjmp Init
                  
                  ;Board specific port names
                  .include "Delay_Macros.asm"
                  
-                  * DelayMacros.asm
-                  *
-                  *   Author: jonaa14
-                  *
-                  */
-                  
-                  /*
-                   *THESE MACROS ARE INTENDED FOR USE WITH A MICRO RUNNING AT 8MHZ!!! TIMINGS WILL BE OFF FOR OTHER VALUES!
-                   */
-                   
                  
-                   ;This macro make use of the registers R16, R17, R18
-                   ;About 39.2 ms per step in value as of now. Will tweak it to a more logical value in the future. As of right now the timing isn't essential.
-                 .MACRO	DELAY						; Cycles to execute 
+                 ;These macros are intended for a micro running 16MHZ
+                   
+                 ;Uses R16, R17 and R18
+                 .MACRO	DELAY_MS					; Cycles to execute 
                  	LDI R16, @0 ;					; 1 cycle to execute
-                 	DELAY2: ;------/--------------/
-                 	LDI R17, 250 ;-/              /
-                 	DELAY1:	;------/---------/    /
-                 	LDI R18, 250 ;--/----/    /    /
-                 	DELAY: ;-------/    /    /    /
-                 	NOP ;----------/    /C   /B   /A
-                 	DEC R18 ;------/    /    /    /
-                 	BRNE DELAY ;---/----/    /    /
-                 	DEC R17 ;------/         /    /
-                 	BRNE DELAY1  ;-/---------/    /
-                 	DEC R16 ;------/              /
-                 	BRNE DELAY2 ;--/--------------/
+                 	DELAY_MS_2: ;-----------------/
+                 	LDI R17, 15 ;	              /
+                 	DELAY_MS_1:	;------------/    /
+                 	LDI R18, 177;		     /    /
+                 	DELAY_MS_0: ;-------/    /    /
+                 	NOP ;			    /C   /B   /A
+                 	NOP ;				/	 /	  /
+                 	NOP ;				/	 /	  /
+                 	DEC R18 ;		    /    /    /
+                 	BRNE DELAY_MS_0 ;---/    /    /
+                 	DEC R17 ;		         /    /
+                 	NOP ;					 /	  /
+                 	BRNE DELAY_MS_1 ;--------/    /
+                 	DEC R16 ;		              /
+                 	NOP ;						  /
+                 	NOP ;						  /
+                 	NOP ;						  /
+                 	NOP ;						  /
+                 	NOP ;						  /
+                 	NOP ;						  /
+                 	BRNE DELAY_MS_2 ;-------------/
                  .ENDMACRO
-                 ; Block C: 250*(1+1+1+2)-1 = 1249
-                 ; Block B: 250*(1+C+1+2)-1 = 313249
-                 ; Block A: x*(1+B+1+2)-1 = 78313249 at x=250
-                 ; Total # of cycles is: 1 + A = 78313250 at x = 250
-                 ; Formula for delay: x*(313253) * (1/8,000,000)
+                 ; Block C: 177*(1+1+1+1+2)-1 = 1061
+                 ; Block B: 15*(1+C+1+1+2)-1 = 15990 
+                 ; Block A: x*(1+B+1+1+1+1+1+1+1+2)-1 = x*16000-1
+                 ; Total # of cycles is: 1 + A = x*16000 
+                 ; Formula for delay: x*1ms
                  .include "Motor_Control.asm"
                  
                   * Motor_Control.asm
@@ -919,175 +919,241 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
                  	out	UCSRC,	R16
                   .ENDMACRO
                  
-                  .MACRO USART_Transmit 
-                 	ldi R16, @0
+                  ;Waits for an empty transmit buffer and then moves R16 to the transmit buffer
+                  USART_Transmit: 
+                  USART_Transmit_Start:
                  	; Wait for empty transmit buffer
-                 	sbis	UCSRA,	UDRE
-                 	rjmp	USART_Transmit
-                 	out	UDR,	R16
-                 .ENDMACRO
+000001 9b5d      	sbis	UCSRA,	UDRE
+000002 cffe      	rjmp	USART_Transmit_Start
+000003 b90c      	out	UDR, R16
+000004 9508      ret
                  
-                 .MACRO USART_Transmit_Var
-                 USART_Transmit_Var_Start: 
-                 	; Wait for empty transmit buffer
-                 	sbis	UCSRA,	UDRE
-                 	rjmp	USART_Transmit_Var_Start
-                 	out	UDR,	R16
-                 .ENDMACRO
                  
-                 .MACRO USART_Receive
+                 ;Waits for a byte to be recived and outputs it to R16
+                 USART_Receive:
                  USART_Receive_Start:
                  	; Wait for data to be received
-                 	sbis UCSRA, RXC
-                 	rjmp USART_Receive_Start
+000005 9b5f      	sbis UCSRA, RXC
+000006 cffe      	rjmp USART_Receive_Start
                  	; Get and return received data from buffer
-                 	in r16, UDR
+000007 b10c      	in r16, UDR
+000008 9508      ret
+                 
+                 
+                 ;Outputs a newline to serial. In the format of '\r\n'
+                 .Macro USART_Newline
+                 	ldi R16, 0x0D
+                 	call USART_Transmit 
+                 	ldi R16, 0x0A
+                 	call USART_Transmit 
                  .ENDMACRO
+                 
+                 
+                 ;Outputs the byte in R16 as a string of 8 ascii 1's or 0's
+                 USART_Binary:
+000009 2f10      	mov R17, R16			;Copy R16 to R17
+00000a e020      	ldi R18, 0x00			;Set the counter to zero
+                 USART_Binary_Loop:
+00000b ff17      	sbrs R17, 7				;Skip if bit 7 in R17 is set
+00000c c004      	rjmp USART_Binary_0		;Jump here if the it was 0
+00000d e301      	ldi R16, '1'			;Load in ascii 1 in R16
+00000e 940e 0001 	call USART_Transmit		;Transmit the 1
+000010 c003      	rjmp USART_Binary_End	;Jump to the end
+                 USART_Binary_0:				
+000011 e300      	ldi R16, '0'			;Load in ascii 0 in R16
+000012 940e 0001 	call USART_Transmit
+                 USART_Binary_End:
+000014 0f11      	lsl R17					;Left shift R17
+000015 9523      	inc R18					;Increment R18
+000016 3028      	cpi R18, 0x08			;Check if we have converted and sent an entire byte yet
+000017 f799      	brne USART_Binary_Loop	;Repeat if we haven't
                  .include "I2C.asm"
+000018 9508      
+                 ;I2C communication library 
                  
-                  * I2C.asm
-                  *
-                  *  Created: 26-03-2015 17:49:44
-                  *   Author: StjerneIdioten
-                  */ 
+                  .equ I2C_ACK = 0x01	;Value for ACK used with I2C_Read
+                  .equ I2C_NACK = 0x00	;Value for NACK used with I2C_Read
                  
-                  .MACRO I2C_Init
+                 
+                  .MACRO I2C_Init ;First argument is prescaler, second argument is TWBR
                  	;Set Prescaler
                  	ldi R16, @0
                  	out TWSR, R16
                  	
-                 	;Set scl to 400 KHz at 16MHz clock
+                 	;Set TWBR
                  	ldi R16, @1
                  	out TWBR, R16
                  
-                 	;Enable it
+                 	;Enable I2C module
                  	ldi R16, (1<<TWEN)
                  	out TWCR, R16
                  
                   .ENDMACRO
                  
+                 
+                 ;This function sends a start command
                  I2C_Start:
                  	;Send Start condition
-000001 ea04      	ldi r16, (1<<TWINT)|(1<<TWSTA)|(1<<TWEN) 
-000002 bf06      	out TWCR, r16
+000019 ea04      	ldi r16, (1<<TWINT)|(1<<TWSTA)|(1<<TWEN) 
+00001a bf06      	out TWCR, r16
                  
                  I2C_Start_Wait:	
                  	;Wait for the start condition transmit			
-000003 b706      	in r16,TWCR
-000004 ff07      	sbrs r16,TWINT
-000005 940c 0003 	jmp I2C_Start_Wait
+00001b b706      	in r16,TWCR
+00001c ff07      	sbrs r16,TWINT
+00001d cffd      	rjmp I2C_Start_Wait
+00001e 9508      ret
                  
-                 	/*;Check if the status register is loaded with start
-                 	call I2C_Status
-                 	cpi r16, 0x08
-                 	brne I2C_Error*/
-000007 9508      ret
                  
+                 ;This function sends a stop command
                  I2C_Stop:
                  	;Send Stop condition
-000008 e904      	ldi r16, (1<<TWINT)|(1<<TWSTO)|(1<<TWEN) 
-000009 bf06      	out TWCR, r16
-00000a 9508      ret
+00001f e904      	ldi r16, (1<<TWINT)|(1<<TWSTO)|(1<<TWEN) 
+000020 bf06      	out TWCR, r16
+000021 9508      ret
                  
+                 
+                 ;This function writes the data from R16, onto the I2C data line
                  I2C_Write:
-00000b b903      	out TWDR, r16
-00000c e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
-00000d bf06      	out TWCR, r16
+000022 b903      	out TWDR, r16
+000023 e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
+000024 bf06      	out TWCR, r16
                  
                  I2C_Write_Wait:
-00000e b706      	in r16,TWCR
-00000f ff07      	sbrs r16,TWINT
-000010 940c 000e 	jmp I2C_Write_Wait
-000012 9508      ret
+000025 b706      	in r16,TWCR
+000026 ff07      	sbrs r16,TWINT
+000027 cffd      	rjmp I2C_Write_Wait
+000028 9508      ret
                  
+                 
+                 ;This function reads in data from the I2C data line and stores it in R16.
+                 ;Remember to set R16 to either I2C_ACK or I2C_NACK before calling the function!
+                 ;Failure to do so may result in unwanted behaviour.
                  I2C_Read:
-000013 e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
-000014 bf06      	out TWCR, r16
-                 
+000029 fd00      	sbrc r16,0
+00002a c002      	rjmp I2C_Read_ACK
+00002b e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
+00002c c001      	rjmp I2C_Read_Continue
+                 I2C_Read_ACK:
+00002d ec04      	ldi r16, (1<<TWINT) | (1<<TWEN) | (1<<TWEA)
+                 I2C_Read_Continue:
+00002e bf06      	out TWCR, r16
                  I2C_Read_Wait:
-000015 b706      	in r16,TWCR
-000016 ff07      	sbrs r16,TWINT
-000017 940c 0015 	jmp I2C_Read_Wait
+00002f b706      	in r16,TWCR
+000030 ff07      	sbrs r16,TWINT
+000031 cffd      	rjmp I2C_Read_Wait
                  
-000019 b103      	in R16, TWDR
-00001a 9508      ret
+000032 b103      	in R16, TWDR
+000033 9508      ret
                  
-                 I2C_Status:
-00001b b101      	in r16,TWSR
-00001c 7f08      	andi r16, 0xF8
-00001d 9508      ret
                  
-                 .MACRO I2C_Error
-                 I2C_Error_Start:
-                 	ldi R16, 'E'
-                 	USART_Transmit_Var
-                 	rjmp I2C_Error_Start
-                 .ENDMACRO
                  
                  Init:
                  	
                  	;Initialize the stack
-00001e e50f      	LDI	R16, low(RAMEND)
-00001f bf0d          OUT	SPL, R16
-000020 e008      	LDI	R16, high(RAMEND)
-000021 bf0e          OUT	SPH, R16
+000034 e50f      	LDI	R16, low(RAMEND)
+000035 bf0d          OUT	SPL, R16
+000036 e008      	LDI	R16, high(RAMEND)
+000037 bf0e          OUT	SPH, R16			
+                 	
+000038 e607
+000039 e010
+00003a bd10
+00003b b909
+00003c e108
+00003d b90a
+00003e e806
+00003f bd00      	USART_Init
+000040 e800
+000041 bb01
+000042 e609
+000043 bd05      	Motor_Init
+000044 e000
+000045 b901
+000046 e102
+000047 b900
+000048 e004
+000049 bf06      	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
+00004a e001
+00004b e01f
+00004c eb21
+00004d 0000
+00004e 0000
+00004f 0000
+000050 952a
+000051 f7d9
+000052 951a
+000053 0000
+000054 f7b9
+000055 950a
+000056 0000
+000057 0000
+000058 0000
+000059 0000
+00005a 0000
+00005b 0000
+00005c f771      	DELAY_MS 1			;Give the modules some time to start up
                  
-000022 e607
-000023 e010
-000024 bd10
-000025 b909
-000026 e108
-000027 b90a
-000028 e806
-000029 bd00      	USART_Init
-00002a e800
-00002b bb01
-00002c e609
-00002d bd05      	Motor_Init
-00002e e000
-00002f b901
-000030 e00c
-000031 b900
-000032 e004
-000033 bf06      	I2C_Init 0,12 
-                 
-000034 c000      	rjmp	Main
+00005d c000      	rjmp	Main
                  
                  Main:
+00005e 940e 0019 	call I2C_Start
                  
-000035 940e 0001 	Call I2C_Start
+000060 ed00      	ldi R16, I2C_W
+000061 940e 0022 	call I2C_Write
                  
-000037 ed01      	ldi R16, MPU6050_Address_W
-000038 940e 000b 	Call I2C_Write
-                 	/*Call I2C_Status
-                 	cpi R16, 0x18
-                 	brne I2C_Error*/
+000063 e30b      	ldi R16, 0x3B
+000064 940e 0022 	call I2C_Write
                  
-00003a e30c      	ldi R16, 0x3C
-00003b 940e 000b 	Call I2C_Write
-                 	/*Call I2C_Status
-                 	cpi R16, 0x28
-                 	brne I2C_Error*/
+000066 940e 0019 	call I2C_Start
                  
-00003d 940e 0001 	Call I2C_Start
+000068 ed01      	ldi R16, I2C_R
+000069 940e 0022 	call I2C_Write
                  
-00003f ed00      	ldi R16, MPU6050_Address_R
-000040 940e 000b 	Call I2C_Write
-                 	/*Call I2C_Status
-                 	cpi R16, 0x40
-                 	brne I2C_Error*/
+00006b e001      	ldi R16, I2C_ACK
+00006c 940e 0029 	call I2C_Read
                  
-000042 940e 0013 	call I2C_Read
-000044 2f30      	mov DATA, R16
-                 	/*call I2C_Status
-                 	cpi R16, 0x58
-                 	brne I2C_Error*/
-000045 940e 0008 	call I2C_Stop
-000047 2f03      	mov R16, DATA
-000048 9b5d
-000049 cffe
-00004a b90c      	USART_Transmit_Var
-00004b cfe9      rjmp	MAIN
+00006e 2f30      	mov DATA_HIGH, R16
+                 
+00006f e000      	ldi R16,I2C_NACK
+000070 940e 0029 	call I2C_Read
+                 
+000072 2f40      	mov DATA_LOW, R16
+                 
+000073 940e 001f 	call I2C_Stop
+                 
+000075 2f03      	mov R16, DATA_HIGH
+000076 940e 0009 	call USART_Binary
+                 
+000078 2f04      	mov R16, DATA_LOW
+000079 940e 0009 	call USART_Binary
+                 
+00007b e00d
+00007c 940e 0001
+00007e e00a
+00007f 940e 0001 	USART_Newline
+                 	
+000081 ef0a
+000082 e01f
+000083 eb21
+000084 0000
+000085 0000
+000086 0000
+000087 952a
+000088 f7d9
+000089 951a
+00008a 0000
+00008b f7b9
+00008c 950a
+00008d 0000
+00008e 0000
+00008f 0000
+000090 0000
+000091 0000
+000092 0000
+000093 f771      	DELAY_MS 250
+                 	
+000094 cfc9      rjmp	MAIN
                  
 
 
@@ -1108,37 +1174,37 @@ counted separately from r26..r31 here.
 "ATmega32A" register use summary:
 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16:  44 r17:   2 r18:   0 r19:   2 r20:   0 r21:   0 r22:   0 r23:   0 
+r16:  58 r17:   9 r18:   7 r19:   2 r20:   2 r21:   0 r22:   0 r23:   0 
 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 r29:   0 r30:   0 r31:   0 
 x  :   0 y  :   0 z  :   0 
-Registers used: 3 out of 35 (8.6%)
+Registers used: 5 out of 35 (14.3%)
 
 "ATmega32A" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
-andi  :   1 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :   0 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :   7 cbi   :   0 cbr   :   0 
+brne  :   7 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :  14 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :   0 cpse  :   0 dec   :   0 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   5 inc   :   0 jmp   :   3 
-ld    :   0 ldd   :   0 ldi   :  18 lds   :   0 lpm   :   0 lsl   :   0 
-lsr   :   0 mov   :   2 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :  17 pop   :   0 
-push  :   0 rcall :   0 ret   :   5 reti  :   0 rjmp  :   4 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   1 
-sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   3 sec   :   0 seh   :   0 
+cpi   :   1 cpse  :   0 dec   :   6 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   5 inc   :   1 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :  32 lds   :   0 lpm   :   0 lsl   :   1 
+lsr   :   0 mov   :   5 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :  20 or    :   0 ori   :   0 out   :  17 pop   :   0 
+push  :   0 rcall :   0 ret   :   7 reti  :   0 rjmp  :  12 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   2 
+sbiw  :   0 sbr   :   0 sbrc  :   1 sbrs  :   4 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 11 out of 113 (9.7%)
+Instructions used: 16 out of 113 (14.2%)
 
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000098    152      0    152   32768   0.5%
+[.cseg] 0x000000 0x00012a    298      0    298   32768   0.9%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
