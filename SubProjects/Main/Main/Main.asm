@@ -6,9 +6,9 @@
 ; 
 
 ;Defines
-.equ MPU6050_Address_W = 0b11010001
-.equ MPU6050_Address_R = 0b11010000
-.equ DATA_ADDRESS = 0x3C
+.equ MPU6050_Address_W = 0b01001110
+.equ MPU6050_Address_R = 0b01001111
+.equ DATA_ADDRESS = 
 .def DATA = R19
 
 .org 0x0000
@@ -30,41 +30,11 @@ Init:
 
 	USART_Init
 	Motor_Init
-	I2C_Init
+	I2C_Init 0x00,0x12
 
 	rjmp	Main
 
 Main:
 
-	Call I2C_Start
-
-	ldi R16, MPU6050_Address_W
-	Call I2C_Write
-	/*Call I2C_Status
-	cpi R16, 0x18
-	brne I2C_Error*/
-
-	ldi R16, 0x3C
-	Call I2C_Write
-	/*Call I2C_Status
-	cpi R16, 0x28
-	brne I2C_Error*/
-
-	Call I2C_Start
-
-	ldi R16, MPU6050_Address_R
-	Call I2C_Write
-	/*Call I2C_Status
-	cpi R16, 0x40
-	brne I2C_Error*/
-
-	call I2C_Read
-	mov DATA, R16
-	/*call I2C_Status
-	cpi R16, 0x58
-	brne I2C_Error*/
-	call I2C_Stop
-	mov R16, DATA
-	USART_Transmit_Var
 rjmp	MAIN
 

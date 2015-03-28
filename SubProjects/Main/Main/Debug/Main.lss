@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu Mar 26 19:11:02 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Fri Mar 27 22:33:33 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(18): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm'
@@ -953,11 +953,11 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
                  
                   .MACRO I2C_Init
                  	;Set Prescaler
-                 	ldi R16, 0
+                 	ldi R16, @0
                  	out TWSR, R16
                  	
                  	;Set scl to 400 KHz at 16MHz clock
-                 	ldi R16, 12
+                 	ldi R16, @1
                  	out TWBR, R16
                  
                  	;Enable it
@@ -1049,7 +1049,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
 000030 e00c
 000031 b900
 000032 e004
-000033 bf06      	I2C_Init
+000033 bf06      	I2C_Init 0,12 
                  
 000034 c000      	rjmp	Main
                  

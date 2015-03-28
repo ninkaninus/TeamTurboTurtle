@@ -7,11 +7,11 @@
 
  .MACRO I2C_Init
 	;Set Prescaler
-	ldi R16, 0
+	ldi R16, @0
 	out TWSR, R16
 	
 	;Set scl to 400 KHz at 16MHz clock
-	ldi R16, 12
+	ldi R16, @1
 	out TWBR, R16
 
 	;Enable it
