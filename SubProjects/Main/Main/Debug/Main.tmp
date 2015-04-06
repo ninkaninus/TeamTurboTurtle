@@ -43,6 +43,6 @@
   <I2C_Read_ACK><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>67</LINE></I2C_Read_ACK>
   <I2C_Read_Continue><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>69</LINE></I2C_Read_Continue>
   <I2C_Read_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>71</LINE></I2C_Read_Wait>
-  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>38</LINE></Main>
+  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>70</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>
