@@ -4,11 +4,12 @@
  <WORKING_DIR>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Debug</WORKING_DIR>
  <INCLUDE_PATH>
   <DIR>C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include</DIR>
-  <DIR></DIR>
+  <DIR>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes</DIR>
  </INCLUDE_PATH>
  <SOURCE_FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</SOURCE_FILE>
  <INCLUDED_FILES>
   <FILE>C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.inc</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE>
@@ -25,7 +26,7 @@
   <FILE>Main.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>23</LINE></Init>
+  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>26</LINE></Init>
   <USART_Transmit><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>26</LINE></USART_Transmit>
   <USART_Transmit_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>27</LINE></USART_Transmit_Start>
   <USART_Receive><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>36</LINE></USART_Receive>
@@ -43,6 +44,6 @@
   <I2C_Read_ACK><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>67</LINE></I2C_Read_ACK>
   <I2C_Read_Continue><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>69</LINE></I2C_Read_Continue>
   <I2C_Read_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>71</LINE></I2C_Read_Wait>
-  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>70</LINE></Main>
+  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>50</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>

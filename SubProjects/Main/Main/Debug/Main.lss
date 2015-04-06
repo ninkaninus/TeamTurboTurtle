@@ -1,11 +1,12 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Sun Mar 29 17:30:16 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Tue Apr 07 00:49:00 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(18): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.inc'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(22): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(23): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm'
                  
                  ;
                  
@@ -830,8 +831,9 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
                  ; 
                  
                  ;Defines
-                 .equ I2C_W = 0x3C
-                 .equ I2C_R = 0x3D
+                 
+                 .equ I2C_W = 0b11010000
+                 .equ I2C_R = 0b11010001
                  .def DATA_HIGH = R19
                  .def DATA_LOW = R20
                  
@@ -839,6 +841,117 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
 000000 c033      rjmp Init
                  
                  ;Board specific port names
+                 .include "MPU-6050.inc"
+                 
+                 .equ MPU6050_RA_XG_OFFS_TC = 0x00 //[7] PWR_MODE, [6:1] XG_OFFS_TC, [0] OTP_BNK_VLD
+                 .equ MPU6050_RA_YG_OFFS_TC = 0x01 //[7] PWR_MODE, [6:1] YG_OFFS_TC, [0] OTP_BNK_VLD
+                 .equ MPU6050_RA_ZG_OFFS_TC = 0x02 //[7] PWR_MODE, [6:1] ZG_OFFS_TC, [0] OTP_BNK_VLD
+                 .equ MPU6050_RA_X_FINE_GAIN = 0x03 //[7:0] X_FINE_GAIN
+                 .equ MPU6050_RA_Y_FINE_GAIN = 0x04 //[7:0] Y_FINE_GAIN
+                 .equ MPU6050_RA_Z_FINE_GAIN = 0x05 //[7:0] Z_FINE_GAIN
+                 .equ MPU6050_RA_XA_OFFS_H = 0x06 //[15:0] XA_OFFS
+                 .equ MPU6050_RA_XA_OFFS_L_TC = 0x07
+                 .equ MPU6050_RA_YA_OFFS_H = 0x08 //[15:0] YA_OFFS
+                 .equ MPU6050_RA_YA_OFFS_L_TC = 0x09
+                 .equ MPU6050_RA_ZA_OFFS_H = 0x0A //[15:0] ZA_OFFS
+                 .equ MPU6050_RA_ZA_OFFS_L_TC = 0x0B
+                 .equ MPU6050_RA_XG_OFFS_USRH = 0x13 //[15:0] XG_OFFS_USR
+                 .equ MPU6050_RA_XG_OFFS_USRL = 0x14
+                 .equ MPU6050_RA_YG_OFFS_USRH = 0x15 //[15:0] YG_OFFS_USR
+                 .equ MPU6050_RA_YG_OFFS_USRL = 0x16
+                 .equ MPU6050_RA_ZG_OFFS_USRH = 0x17 //[15:0] ZG_OFFS_USR
+                 .equ MPU6050_RA_ZG_OFFS_USRL = 0x18
+                 .equ MPU6050_RA_SMPLRT_DIV = 0x19
+                 .equ MPU6050_RA_CONFIG = 0x1A
+                 .equ MPU6050_RA_GYRO_CONFIG = 0x1B
+                 .equ MPU6050_RA_ACCEL_CONFIG = 0x1C
+                 .equ MPU6050_RA_FF_THR = 0x1D
+                 .equ MPU6050_RA_FF_DUR = 0x1E
+                 .equ MPU6050_RA_MOT_THR = 0x1F
+                 .equ MPU6050_RA_MOT_DUR = 0x20
+                 .equ MPU6050_RA_ZRMOT_THR = 0x21
+                 .equ MPU6050_RA_ZRMOT_DUR = 0x22
+                 .equ MPU6050_RA_FIFO_EN = 0x23
+                 .equ MPU6050_RA_I2C_MST_CTRL = 0x24
+                 .equ MPU6050_RA_I2C_SLV0_ADDR = 0x25
+                 .equ MPU6050_RA_I2C_SLV0_REG = 0x26
+                 .equ MPU6050_RA_I2C_SLV0_CTRL = 0x27
+                 .equ MPU6050_RA_I2C_SLV1_ADDR = 0x28
+                 .equ MPU6050_RA_I2C_SLV1_REG = 0x29
+                 .equ MPU6050_RA_I2C_SLV1_CTRL = 0x2A
+                 .equ MPU6050_RA_I2C_SLV2_ADDR = 0x2B
+                 .equ MPU6050_RA_I2C_SLV2_REG = 0x2C
+                 .equ MPU6050_RA_I2C_SLV2_CTRL = 0x2D
+                 .equ MPU6050_RA_I2C_SLV3_ADDR = 0x2E
+                 .equ MPU6050_RA_I2C_SLV3_REG = 0x2F
+                 .equ MPU6050_RA_I2C_SLV3_CTRL = 0x30
+                 .equ MPU6050_RA_I2C_SLV4_ADDR = 0x31
+                 .equ MPU6050_RA_I2C_SLV4_REG = 0x32
+                 .equ MPU6050_RA_I2C_SLV4_DO = 0x33
+                 .equ MPU6050_RA_I2C_SLV4_CTRL = 0x34
+                 .equ MPU6050_RA_I2C_SLV4_DI = 0x35
+                 .equ MPU6050_RA_I2C_MST_STATUS = 0x36
+                 .equ MPU6050_RA_INT_PIN_CFG = 0x37
+                 .equ MPU6050_RA_INT_ENABLE = 0x38
+                 .equ MPU6050_RA_DMP_INT_STATUS = 0x39
+                 .equ MPU6050_RA_INT_STATUS = 0x3A
+                 .equ MPU6050_RA_ACCEL_XOUT_H = 0x3B
+                 .equ MPU6050_RA_ACCEL_XOUT_L = 0x3C
+                 .equ MPU6050_RA_ACCEL_YOUT_H = 0x3D
+                 .equ MPU6050_RA_ACCEL_YOUT_L = 0x3E
+                 .equ MPU6050_RA_ACCEL_ZOUT_H = 0x3F
+                 .equ MPU6050_RA_ACCEL_ZOUT_L = 0x40
+                 .equ MPU6050_RA_TEMP_OUT_H = 0x41
+                 .equ MPU6050_RA_TEMP_OUT_L = 0x42
+                 .equ MPU6050_RA_GYRO_XOUT_H = 0x43
+                 .equ MPU6050_RA_GYRO_XOUT_L = 0x44
+                 .equ MPU6050_RA_GYRO_YOUT_H = 0x45
+                 .equ MPU6050_RA_GYRO_YOUT_L = 0x46
+                 .equ MPU6050_RA_GYRO_ZOUT_H = 0x47
+                 .equ MPU6050_RA_GYRO_ZOUT_L = 0x48
+                 .equ MPU6050_RA_EXT_SENS_DATA_00 = 0x49
+                 .equ MPU6050_RA_EXT_SENS_DATA_01 = 0x4A
+                 .equ MPU6050_RA_EXT_SENS_DATA_02 = 0x4B
+                 .equ MPU6050_RA_EXT_SENS_DATA_03 = 0x4C
+                 .equ MPU6050_RA_EXT_SENS_DATA_04 = 0x4D
+                 .equ MPU6050_RA_EXT_SENS_DATA_05 = 0x4E
+                 .equ MPU6050_RA_EXT_SENS_DATA_06 = 0x4F
+                 .equ MPU6050_RA_EXT_SENS_DATA_07 = 0x50
+                 .equ MPU6050_RA_EXT_SENS_DATA_08 = 0x51
+                 .equ MPU6050_RA_EXT_SENS_DATA_09 = 0x52
+                 .equ MPU6050_RA_EXT_SENS_DATA_10 = 0x53
+                 .equ MPU6050_RA_EXT_SENS_DATA_11 = 0x54
+                 .equ MPU6050_RA_EXT_SENS_DATA_12 = 0x55
+                 .equ MPU6050_RA_EXT_SENS_DATA_13 = 0x56
+                 .equ MPU6050_RA_EXT_SENS_DATA_14 = 0x57
+                 .equ MPU6050_RA_EXT_SENS_DATA_15 = 0x58
+                 .equ MPU6050_RA_EXT_SENS_DATA_16 = 0x59
+                 .equ MPU6050_RA_EXT_SENS_DATA_17 = 0x5A
+                 .equ MPU6050_RA_EXT_SENS_DATA_18 = 0x5B
+                 .equ MPU6050_RA_EXT_SENS_DATA_19 = 0x5C
+                 .equ MPU6050_RA_EXT_SENS_DATA_20 = 0x5D
+                 .equ MPU6050_RA_EXT_SENS_DATA_21 = 0x5E
+                 .equ MPU6050_RA_EXT_SENS_DATA_22 = 0x5F
+                 .equ MPU6050_RA_EXT_SENS_DATA_23 = 0x60
+                 .equ MPU6050_RA_MOT_DETECT_STATUS = 0x61
+                 .equ MPU6050_RA_I2C_SLV0_DO = 0x63
+                 .equ MPU6050_RA_I2C_SLV1_DO = 0x64
+                 .equ MPU6050_RA_I2C_SLV2_DO = 0x65
+                 .equ MPU6050_RA_I2C_SLV3_DO = 0x66
+                 .equ MPU6050_RA_I2C_MST_DELAY_CTRL = 0x67
+                 .equ MPU6050_RA_SIGNAL_PATH_RESET = 0x68
+                 .equ MPU6050_RA_MOT_DETECT_CTRL = 0x69
+                 .equ MPU6050_RA_USER_CTRL = 0x6A
+                 .equ MPU6050_RA_PWR_MGMT_1 = 0x6B
+                 .equ MPU6050_RA_PWR_MGMT_2 = 0x6C
+                 .equ MPU6050_RA_BANK_SEL = 0x6D
+                 .equ MPU6050_RA_MEM_START_ADDR = 0x6E
+                 .equ MPU6050_RA_MEM_R_W = 0x6F
+                 .equ MPU6050_RA_DMP_CFG_1 = 0x70
+                 .equ MPU6050_RA_DMP_CFG_2 = 0x71
+                 .equ MPU6050_RA_FIFO_COUNTH = 0x72
+                 .equ MPU6050_RA_FIFO_COUNTL = 0x73
+                 .equ MPU6050_RA_FIFO_R_W = 0x74
                  .include "Delay_Macros.asm"
                  
                  
@@ -1048,6 +1161,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
                  
                  
                  
+                 
                  Init:
                  	
                  	;Initialize the stack
@@ -1056,177 +1170,106 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
 000036 e008      	LDI	R16, high(RAMEND)
 000037 bf0e          OUT	SPH, R16			
                  	
-000038 e000      	ldi R16, (0<<PC0)|(0<<PC1)
-000039 bb04      	out DDRC, R16
-00003a e003      	ldi R16, (1<<PC0)|(1<<PC1)
-00003b bb05      	out PORTC, R16
-                 	
+                 	;Enable internal weak-pullups on sda and scl
+                 	/*
+                 	ldi R16, (0<<PC0)|(0<<PC1)
+                 	out DDRC, R16
+                 	ldi R16, (1<<PC0)|(1<<PC1)
+                 	out PORTC, R16
+                 	*/
                  
-00003c e607
-00003d e010
-00003e bd10
-00003f b909
-000040 e108
-000041 b90a
-000042 e806
-000043 bd00      	USART_Init
-000044 e800
-000045 bb01
-000046 e609
-000047 bd05      	Motor_Init
-000048 e000
-000049 b901
-00004a e102
-00004b b900
-00004c e004
-00004d bf06      	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
-00004e e001
-00004f e01f
-000050 eb21
-000051 0000
-000052 0000
+000038 e607
+000039 e010
+00003a bd10
+00003b b909
+00003c e108
+00003d b90a
+00003e e806
+00003f bd00      	USART_Init
+000040 e800
+000041 bb01
+000042 e609
+000043 bd05      	Motor_Init
+000044 e000
+000045 b901
+000046 e102
+000047 b900
+000048 e004
+000049 bf06      	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
+                 
+00004a e00a
+00004b e01f
+00004c eb21
+00004d 0000
+00004e 0000
+00004f 0000
+000050 952a
+000051 f7d9
+000052 951a
 000053 0000
-000054 952a
-000055 f7d9
-000056 951a
+000054 f7b9
+000055 950a
+000056 0000
 000057 0000
-000058 f7b9
-000059 950a
+000058 0000
+000059 0000
 00005a 0000
 00005b 0000
-00005c 0000
-00005d 0000
-00005e 0000
-00005f 0000
-000060 f771      	DELAY_MS 1			;Give the modules some time to start up
+00005c f771      	DELAY_MS 10			;Give the modules some time to start up
                  
-000061 940e 0019 	call I2C_Start
-                 
-000063 e30c      	ldi R16, I2C_W
-000064 940e 0022 	call I2C_Write
-                 
-000066 e000      	ldi R16, 0x00
-000067 940e 0022 	call I2C_Write
-                 
-000069 e700      	ldi R16, 0x70
-00006a 940e 0022 	call I2C_Write
-                 
-00006c 940e 001f 	call I2C_Stop
-                 
-00006e 940e 0019 	call I2C_Start
-                 
-000070 e30c      	ldi R16, I2C_W
-000071 940e 0022 	call I2C_Write
-                 
-000073 e001      	ldi R16, 0x01
-000074 940e 0022 	call I2C_Write
-                 
-000076 ea00      	ldi R16, 0xA0
-000077 940e 0022 	call I2C_Write
-                 
-000079 940e 001f 	call I2C_Stop
-                 
-00007b c000      	rjmp	Main
+00005d c000      	rjmp	Main
                  
                  Main:
-                 
-00007c 940e 0019 	call I2C_Start
-                 
-00007e e30c      	ldi R16, I2C_W
-00007f 940e 0022 	call I2C_Write
-                 
-000081 e002      	ldi R16, 0x02
-000082 940e 0022 	call I2C_Write
-                 
-000084 e001      	ldi R16, 0x01
-000085 940e 0022 	call I2C_Write
-                 
-000087 940e 001f 	call I2C_Stop
-                 
-000089 e00a
-00008a e01f
-00008b eb21
-00008c 0000
-00008d 0000
-00008e 0000
-00008f 952a
-000090 f7d9
-000091 951a
-000092 0000
-000093 f7b9
-000094 950a
-000095 0000
-000096 0000
-000097 0000
-000098 0000
-000099 0000
-00009a 0000
-00009b f771      	DELAY_MS 10
-                 
-00009c 940e 0019 	call I2C_Start
-                 
-00009e e30d      	ldi R16, I2C_R
-00009f 940e 0022 	call I2C_Write
-                 
-0000a1 e006      	ldi R16, 0x06
-0000a2 940e 0022 	call I2C_Write
-                 
-0000a4 e001      	ldi R16, I2C_ACK
-0000a5 940e 0029 	call I2C_Read
-                 
-0000a7 2f30      	mov DATA_HIGH, R16
-                 
-0000a8 e001      	ldi R16,I2C_ACK
-0000a9 940e 0029 	call I2C_Read
-                 
-0000ab 2f40      	mov DATA_LOW, R16
-                 
-0000ac e001      	ldi R16,I2C_ACK
-0000ad 940e 0029 	call I2C_Read
-                 
-0000af e001      	ldi R16,I2C_ACK
-0000b0 940e 0029 	call I2C_Read
-                 
-0000b2 e001      	ldi R16,I2C_ACK
-0000b3 940e 0029 	call I2C_Read
-                 
-0000b5 e000      	ldi R16,I2C_NACK
-0000b6 940e 0029 	call I2C_Read
-                 
-0000b8 940e 001f 	call I2C_Stop
-                 
-0000ba 2f03      	mov R16, DATA_HIGH
-0000bb 940e 0009 	call USART_Binary
-                 
-0000bd 2f04      	mov R16, DATA_LOW
-0000be 940e 0009 	call USART_Binary
-                 
-0000c0 e00d
-0000c1 940e 0001
-0000c3 e00a
-0000c4 940e 0001 	USART_Newline
                  	
-0000c6 ef0a
-0000c7 e01f
-0000c8 eb21
-0000c9 0000
-0000ca 0000
-0000cb 0000
-0000cc 952a
-0000cd f7d9
-0000ce 951a
-0000cf 0000
-0000d0 f7b9
-0000d1 950a
-0000d2 0000
-0000d3 0000
-0000d4 0000
-0000d5 0000
-0000d6 0000
-0000d7 0000
-0000d8 f771      	DELAY_MS 250
+00005e 940e 0019 	call I2C_Start
+                 
+000060 ed00      	ldi R16, I2C_W
+000061 940e 0022 	call I2C_Write
+                 
+000063 e705      	ldi R16, MPU6050_RA_WHO_AM_I
+000064 940e 0022 	call I2C_Write
+                 
+000066 940e 0019 	call I2C_Start
+                 
+000068 ed01      	ldi R16, I2C_R
+000069 940e 0022 	call I2C_Write
+                 
+00006b e000      	ldi R16,I2C_NACK
+00006c 940e 0029 	call I2C_Read
+                 
+00006e 2f30      	mov DATA_HIGH, R16
+                 
+00006f 940e 001f 	call I2C_Stop
+                 
+000071 2f03      	mov R16, DATA_HIGH
+000072 940e 0009 	call USART_Binary
+                 
+000074 e00d
+000075 940e 0001
+000077 e00a
+000078 940e 0001 	USART_Newline
                  	
-0000d9 cfa2      rjmp	MAIN
+00007a ef0a
+00007b e01f
+00007c eb21
+00007d 0000
+00007e 0000
+00007f 0000
+000080 952a
+000081 f7d9
+000082 951a
+000083 0000
+000084 f7b9
+000085 950a
+000086 0000
+000087 0000
+000088 0000
+000089 0000
+00008a 0000
+00008b 0000
+00008c f771      	DELAY_MS 250
+                 
+00008d cfd0      rjmp	MAIN
                  
 
 
@@ -1247,25 +1290,25 @@ counted separately from r26..r31 here.
 "ATmega32A" register use summary:
 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16:  76 r17:  11 r18:   9 r19:   2 r20:   2 r21:   0 r22:   0 r23:   0 
+r16:  55 r17:   9 r18:   7 r19:   2 r20:   0 r21:   0 r22:   0 r23:   0 
 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 r29:   0 r30:   0 r31:   0 
 x  :   0 y  :   0 z  :   0 
-Registers used: 5 out of 35 (14.3%)
+Registers used: 4 out of 35 (11.4%)
 
 "ATmega32A" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :  10 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :  31 cbi   :   0 cbr   :   0 
+brne  :   7 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :  12 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :   1 cpse  :   0 dec   :   9 eor   :   0 fmul  :   0 fmuls :   0 
+cpi   :   1 cpse  :   0 dec   :   6 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   5 inc   :   1 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :  49 lds   :   0 lpm   :   0 lsl   :   1 
-lsr   :   0 mov   :   5 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :  30 or    :   0 ori   :   0 out   :  19 pop   :   0 
+ld    :   0 ldd   :   0 ldi   :  31 lds   :   0 lpm   :   0 lsl   :   1 
+lsr   :   0 mov   :   3 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :  20 or    :   0 ori   :   0 out   :  17 pop   :   0 
 push  :   0 rcall :   0 ret   :   7 reti  :   0 rjmp  :  12 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   2 
 sbiw  :   0 sbr   :   0 sbrc  :   1 sbrs  :   4 sec   :   0 seh   :   0 
@@ -1277,7 +1320,7 @@ Instructions used: 16 out of 113 (14.2%)
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0001b4    436      0    436   32768   1.3%
+[.cseg] 0x000000 0x00011c    284      0    284   32768   0.9%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
