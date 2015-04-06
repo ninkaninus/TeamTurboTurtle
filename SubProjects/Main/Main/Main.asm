@@ -70,6 +70,7 @@ Main:
 	call I2C_Stop
 
 	mov R16, DATA_HIGH
+	
 	call USART_Binary
 
 	USART_Newline
