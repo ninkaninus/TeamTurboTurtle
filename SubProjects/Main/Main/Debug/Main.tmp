@@ -4,7 +4,7 @@
  <WORKING_DIR>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Debug</WORKING_DIR>
  <INCLUDE_PATH>
   <DIR>C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include</DIR>
-  <DIR></DIR>
+  <DIR>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes</DIR>
  </INCLUDE_PATH>
  <SOURCE_FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</SOURCE_FILE>
  <INCLUDED_FILES>
@@ -12,6 +12,9 @@
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.inc</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Debug/Main.obj</FILE>
@@ -24,8 +27,24 @@
   <FILE>Main.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>18</LINE></Init>
-  <string><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>16</LINE></string>
-  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>25</LINE></Main>
+  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>24</LINE></Init>
+  <USART_Transmit><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>26</LINE></USART_Transmit>
+  <USART_Transmit_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>27</LINE></USART_Transmit_Start>
+  <USART_Receive><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>36</LINE></USART_Receive>
+  <USART_Receive_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>37</LINE></USART_Receive_Start>
+  <USART_Binary><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>56</LINE></USART_Binary>
+  <USART_Binary_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>59</LINE></USART_Binary_Loop>
+  <USART_Binary_0><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>65</LINE></USART_Binary_0>
+  <USART_Binary_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>68</LINE></USART_Binary_End>
+  <I2C_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>26</LINE></I2C_Start>
+  <I2C_Start_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>31</LINE></I2C_Start_Wait>
+  <I2C_Stop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>40</LINE></I2C_Stop>
+  <I2C_Write_Call><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>48</LINE></I2C_Write_Call>
+  <I2C_Write_Call_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>53</LINE></I2C_Write_Call_Wait>
+  <I2C_Read_Call><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>68</LINE></I2C_Read_Call>
+  <I2C_Read_Call_ACK><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>73</LINE></I2C_Read_Call_ACK>
+  <I2C_Read_Call_Continue><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>75</LINE></I2C_Read_Call_Continue>
+  <I2C_Read_Call_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>77</LINE></I2C_Read_Call_Wait>
+  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>42</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>

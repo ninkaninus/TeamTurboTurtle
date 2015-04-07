@@ -45,6 +45,7 @@
         <avrasm.assembler.general.IncludeFile>(%24IncludeFile)</avrasm.assembler.general.IncludeFile>
       </AvrAssembler>
     </ToolchainSettings>
+    <OutputType>Executable</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -57,10 +58,19 @@
     <Compile Include="Delay_Macros.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="I2C.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Main.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Motor_Control.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MPU-6050.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MPU-6050.inc">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="USART_library.asm">
