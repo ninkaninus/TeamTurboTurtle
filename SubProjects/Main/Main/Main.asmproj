@@ -70,6 +70,9 @@
     <Compile Include="Motor_Control.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MPU-6050.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MPU-6050.inc">
       <SubType>Code</SubType>
     </Compile>

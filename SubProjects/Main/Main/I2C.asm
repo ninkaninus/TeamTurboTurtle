@@ -18,6 +18,8 @@
 	ldi R16, (1<<TWEN)
 	out TWCR, R16
 
+	nop
+
  .ENDMACRO
 
 
@@ -44,36 +46,46 @@ ret
 
 
 ;This function writes the data from R16, onto the I2C data line
-I2C_Write:
+I2C_Write_Call:
 	out TWDR, r16
 	ldi r16, (1<<TWINT) | (1<<TWEN)
 	out TWCR, r16
 
-I2C_Write_Wait:
+I2C_Write_Call_Wait:
 	in r16,TWCR
 	sbrs r16,TWINT
-	rjmp I2C_Write_Wait
+	rjmp I2C_Write_Call_Wait
 ret
 
+;This is an easy to use macro of the write function
+.MACRO I2C_Write
+	ldi R16, @0
+	call I2C_Write_Call
+.ENDMACRO
 
 ;This function reads in data from the I2C data line and stores it in R16.
 ;Remember to set R16 to either I2C_ACK or I2C_NACK before calling the function!
 ;Failure to do so may result in unwanted behaviour.
-I2C_Read:
+I2C_Read_Call:
 	sbrc r16,0
-	rjmp I2C_Read_ACK
+	rjmp I2C_Read_Call_ACK
 	ldi r16, (1<<TWINT) | (1<<TWEN)
-	rjmp I2C_Read_Continue
-I2C_Read_ACK:
+	rjmp I2C_Read_Call_Continue
+I2C_Read_Call_ACK:
 	ldi r16, (1<<TWINT) | (1<<TWEN) | (1<<TWEA)
-I2C_Read_Continue:
+I2C_Read_Call_Continue:
 	out TWCR, r16
-I2C_Read_Wait:
+I2C_Read_Call_Wait:
 	in r16,TWCR
 	sbrs r16,TWINT
-	rjmp I2C_Read_Wait
+	rjmp I2C_Read_Call_Wait
 
 	in R16, TWDR
 ret
+
+.MACRO I2C_Read
+	ldi R16, @0
+	call I2C_Read_Call
+.ENDMACRO
 
 
