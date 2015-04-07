@@ -7,8 +7,6 @@
 
 ;Defines
 
-.equ I2C_W = 0b11010000
-.equ I2C_R = 0b11010001
 .def DATA_HIGH = R19
 .def DATA_LOW = R20
 
@@ -45,13 +43,13 @@ Main:
 	
 	call I2C_Start
 
-	I2C_Write I2C_W
+	I2C_Write MPU6050_ADDRESS_W
 
 	I2C_Write MPU6050_RA_GYRO_ZOUT_H
 
 	call I2C_Start
 
-	I2C_Write I2C_R
+	I2C_Write MPU6050_ADDRESS_R
 
 	I2C_Read I2C_Ack
 
@@ -73,7 +71,7 @@ Main:
 
 	USART_Newline
 
-	DELAY_MS 250
+	DELAY_MS 100
 	
 rjmp	MAIN
 

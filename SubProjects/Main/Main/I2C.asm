@@ -4,7 +4,6 @@
  .equ I2C_ACK = 0x01	;Value for ACK used with I2C_Read
  .equ I2C_NACK = 0x00	;Value for NACK used with I2C_Read
 
-
  .MACRO I2C_Init ;First argument is prescaler, second argument is TWBR
 	;Set Prescaler
 	ldi R16, @0
@@ -18,7 +17,7 @@
 	ldi R16, (1<<TWEN)
 	out TWCR, R16
 
-	nop
+	nop ;Important delay to allow the module to start
 
  .ENDMACRO
 
@@ -83,6 +82,7 @@ I2C_Read_Call_Wait:
 	in R16, TWDR
 ret
 
+//Easy to use macro which takes I2C_Ack/I2C_Nack as argument.
 .MACRO I2C_Read
 	ldi R16, @0
 	call I2C_Read_Call

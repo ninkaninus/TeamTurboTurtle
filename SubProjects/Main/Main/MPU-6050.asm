@@ -2,11 +2,12 @@
 ;This library relies on the I2C library made by StjerneIdioten.
 ;This library relies on the "MPU-6050.inc" where all the definitions of registers are defined.
 
+//Setup the MPU-6050
 .MACRO MPU6050_Init
 
 	call I2C_Start
 
-	I2C_Write I2C_W
+	I2C_Write MPU6050_ADDRESS_W
 
 	//Sets sample rate to 8000/1+7 = 1000Hz
 	I2C_Write MPU6050_RA_SMPLRT_DIV
@@ -104,7 +105,7 @@
 	//MPU6050_RA_INT_PIN_CFG, Setup INT pin and AUX I2C pass through
 	call I2C_Start
 
-	I2C_Write I2C_W
+	I2C_Write MPU6050_ADDRESS_W
 
 	I2C_Write MPU6050_RA_INT_PIN_CFG
 
@@ -160,7 +161,7 @@
 	//MPU6050_RA_I2C_SLV0_DO
 	call I2C_Start
 
-	I2C_Write I2C_W
+	I2C_Write MPU6050_ADDRESS_W
 
 	I2C_Write MPU6050_RA_I2C_SLV0_DO
 
@@ -204,7 +205,7 @@
     //Data transfer to and from the FIFO buffer
 	call I2C_Start
 
-	I2C_Write I2C_W
+	I2C_Write MPU6050_ADDRESS_W
 
 	I2C_Write MPU6050_RA_FIFO_R_W
 
@@ -215,16 +216,17 @@
 	call I2C_Stop
 .ENDMACRO
 
+//This macro gets the value stored in the Who_Am_I register in the MPU-6050. This will always return 0x68 independent of AD0! Useful for testing the connection.
 .MACRO MPU6050_Get_Address
 	call I2C_Start
 
-	I2C_Write I2C_W
+	I2C_Write MPU6050_ADDRESS_W
 
 	I2C_Write MPU6050_RA_WHO_AM_I
 
 	call I2C_Start
 	
-	I2C_Write I2C_R
+	I2C_Write MPU6050_ADDRESS_R
 
 	I2C_Read I2C_Nack
 

@@ -1,7 +1,8 @@
 ;Author: Jonas A. L. Andersen
 
 ;These macros are intended for a micro running 16MHZ
-  
+
+;This macro can generate from 1 to 255 ms of delay.  
 ;Uses R16, R17 and R18
 .MACRO	DELAY_MS					; Cycles to execute 
 	LDI R16, @0 ;					; 1 cycle to execute

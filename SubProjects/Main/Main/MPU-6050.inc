@@ -1,4 +1,5 @@
-.equ MPU6050_ADDRESS = 0b11010000 // Address with end write bit
+.equ MPU6050_ADDRESS_W = 0b11010000 // Address with end write bit
+.equ MPU6050_ADDRESS_R = 0b11010001 // Address with end read bit
 .equ MPU6050_RA_XG_OFFS_TC = 0x00 //[7] PWR_MODE, [6:1] XG_OFFS_TC, [0] OTP_BNK_VLD
 .equ MPU6050_RA_YG_OFFS_TC = 0x01 //[7] PWR_MODE, [6:1] YG_OFFS_TC, [0] OTP_BNK_VLD
 .equ MPU6050_RA_ZG_OFFS_TC = 0x02 //[7] PWR_MODE, [6:1] ZG_OFFS_TC, [0] OTP_BNK_VLD

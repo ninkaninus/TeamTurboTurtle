@@ -1,13 +1,13 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Tue Apr 07 16:10:09 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Tue Apr 07 16:31:49 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(22): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(23): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.inc'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(18): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.inc'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(22): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm'
                  
                  ;
                  
@@ -833,8 +833,6 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
                  
                  ;Defines
                  
-                 .equ I2C_W = 0b11010000
-                 .equ I2C_R = 0b11010001
                  .def DATA_HIGH = R19
                  .def DATA_LOW = R20
                  
@@ -846,7 +844,8 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
                  
                  
                  ;These macros are intended for a micro running 16MHZ
-                   
+                 
+                 ;This macro can generate from 1 to 255 ms of delay.  
                  ;Uses R16, R17 and R18
                  .MACRO	DELAY_MS					; Cycles to execute 
                  	LDI R16, @0 ;					; 1 cycle to execute
@@ -977,7 +976,6 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
                   .equ I2C_ACK = 0x01	;Value for ACK used with I2C_Read
                   .equ I2C_NACK = 0x00	;Value for NACK used with I2C_Read
                  
-                 
                   .MACRO I2C_Init ;First argument is prescaler, second argument is TWBR
                  	;Set Prescaler
                  	ldi R16, @0
@@ -991,7 +989,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
                  	ldi R16, (1<<TWEN)
                  	out TWCR, R16
                  
-                 	nop
+                 	nop ;Important delay to allow the module to start
                  
                   .ENDMACRO
                  
@@ -1056,6 +1054,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
 000032 b103      	in R16, TWDR
 000033 9508      ret
                  
+                 //Easy to use macro which takes I2C_Ack/I2C_Nack as argument.
                  .MACRO I2C_Read
                  	ldi R16, @0
                  	call I2C_Read_Call
@@ -1064,6 +1063,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
                  
                  .include "MPU-6050.inc"
                  
+                 .equ MPU6050_ADDRESS_R = 0b11010001 // Address with end read bit
                  .equ MPU6050_RA_XG_OFFS_TC = 0x00 //[7] PWR_MODE, [6:1] XG_OFFS_TC, [0] OTP_BNK_VLD
                  .equ MPU6050_RA_YG_OFFS_TC = 0x01 //[7] PWR_MODE, [6:1] YG_OFFS_TC, [0] OTP_BNK_VLD
                  .equ MPU6050_RA_ZG_OFFS_TC = 0x02 //[7] PWR_MODE, [6:1] ZG_OFFS_TC, [0] OTP_BNK_VLD
@@ -1178,11 +1178,12 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
                  ;This library relies on the I2C library made by StjerneIdioten.
                  ;This library relies on the "MPU-6050.inc" where all the definitions of registers are defined.
                  
+                 //Setup the MPU-6050
                  .MACRO MPU6050_Init
                  
                  	call I2C_Start
                  
-                 	I2C_Write I2C_W
+                 	I2C_Write MPU6050_ADDRESS_W
                  
                  	//Sets sample rate to 8000/1+7 = 1000Hz
                  	I2C_Write MPU6050_RA_SMPLRT_DIV
@@ -1280,7 +1281,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
                  	//MPU6050_RA_INT_PIN_CFG, Setup INT pin and AUX I2C pass through
                  	call I2C_Start
                  
-                 	I2C_Write I2C_W
+                 	I2C_Write MPU6050_ADDRESS_W
                  
                  	I2C_Write MPU6050_RA_INT_PIN_CFG
                  
@@ -1336,7 +1337,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
                  	//MPU6050_RA_I2C_SLV0_DO
                  	call I2C_Start
                  
-                 	I2C_Write I2C_W
+                 	I2C_Write MPU6050_ADDRESS_W
                  
                  	I2C_Write MPU6050_RA_I2C_SLV0_DO
                  
@@ -1380,7 +1381,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
                      //Data transfer to and from the FIFO buffer
                  	call I2C_Start
                  
-                 	I2C_Write I2C_W
+                 	I2C_Write MPU6050_ADDRESS_W
                  
                  	I2C_Write MPU6050_RA_FIFO_R_W
                  
@@ -1391,16 +1392,17 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
                  	call I2C_Stop
                  .ENDMACRO
                  
+                 //This macro gets the value stored in the Who_Am_I register in the MPU-6050. This will always return 0x68 independent of AD0! Useful for testing the connection.
                  .MACRO MPU6050_Get_Address
                  	call I2C_Start
                  
-                 	I2C_Write I2C_W
+                 	I2C_Write MPU6050_ADDRESS_W
                  
                  	I2C_Write MPU6050_RA_WHO_AM_I
                  
                  	call I2C_Start
                  	
-                 	I2C_Write I2C_R
+                 	I2C_Write MPU6050_ADDRESS_R
                  
                  	I2C_Read I2C_Nack
                  
@@ -1557,7 +1559,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
 0000f5 940e 0019 	call I2C_Start
                  
 0000f7 ed00
-0000f8 940e 0022 	I2C_Write I2C_W
+0000f8 940e 0022 	I2C_Write MPU6050_ADDRESS_W
                  
 0000fa e407
 0000fb 940e 0022 	I2C_Write MPU6050_RA_GYRO_ZOUT_H
@@ -1565,7 +1567,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
 0000fd 940e 0019 	call I2C_Start
                  
 0000ff ed01
-000100 940e 0022 	I2C_Write I2C_R
+000100 940e 0022 	I2C_Write MPU6050_ADDRESS_R
                  
 000102 e001
 000103 940e 0029 	I2C_Read I2C_Ack
@@ -1592,7 +1594,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
 000115 e00a
 000116 940e 0001 	USART_Newline
                  
-000118 ef0a
+000118 e604
 000119 e01f
 00011a eb21
 00011b 0000
@@ -1610,7 +1612,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:
 000127 0000
 000128 0000
 000129 0000
-00012a f771      	DELAY_MS 250
+00012a f771      	DELAY_MS 100
                  	
 00012b cfc9      rjmp	MAIN
                  
