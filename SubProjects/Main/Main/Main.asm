@@ -36,6 +36,7 @@ Init:
 	ldi R16, 'D'
 	call USART_Transmit
 	USART_Newline
+	Motor_Set 60
 
 	rjmp	Main
 
@@ -45,7 +46,7 @@ Main:
 
 	I2C_Write MPU6050_ADDRESS_W
 
-	I2C_Write MPU6050_RA_GYRO_ZOUT_H
+	I2C_Write MPU6050_RA_ACCEL_XOUT_H
 
 	call I2C_Start
 

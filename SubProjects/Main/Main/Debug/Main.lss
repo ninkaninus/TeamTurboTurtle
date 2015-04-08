@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Tue Apr 07 16:41:35 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Wed Apr 08 17:25:42 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm'
@@ -1551,70 +1551,72 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(22): Including file 'D:
 0000ef 940e 0001
 0000f1 e00a
 0000f2 940e 0001 	USART_Newline
+0000f4 e30c
+0000f5 bd03      	Motor_Set 60
                  
-0000f4 c000      	rjmp	Main
+0000f6 c000      	rjmp	Main
                  
                  Main:
                  	
-0000f5 940e 0019 	call I2C_Start
+0000f7 940e 0019 	call I2C_Start
                  
-0000f7 ed00
-0000f8 940e 0022 	I2C_Write MPU6050_ADDRESS_W
+0000f9 ed00
+0000fa 940e 0022 	I2C_Write MPU6050_ADDRESS_W
                  
-0000fa e407
-0000fb 940e 0022 	I2C_Write MPU6050_RA_GYRO_ZOUT_H
+0000fc e30b
+0000fd 940e 0022 	I2C_Write MPU6050_RA_ACCEL_XOUT_H
                  
-0000fd 940e 0019 	call I2C_Start
+0000ff 940e 0019 	call I2C_Start
                  
-0000ff ed01
-000100 940e 0022 	I2C_Write MPU6050_ADDRESS_R
+000101 ed01
+000102 940e 0022 	I2C_Write MPU6050_ADDRESS_R
                  
-000102 e001
-000103 940e 0029 	I2C_Read I2C_Ack
+000104 e001
+000105 940e 0029 	I2C_Read I2C_Ack
                  
-000105 2f30      	mov DATA_HIGH, R16
+000107 2f30      	mov DATA_HIGH, R16
                  
-000106 e000
-000107 940e 0029 	I2C_Read I2C_Nack
+000108 e000
+000109 940e 0029 	I2C_Read I2C_Nack
                  
-000109 2f40      	mov DATA_LOW, R16
+00010b 2f40      	mov DATA_LOW, R16
                  
-00010a 940e 001f 	call I2C_Stop
+00010c 940e 001f 	call I2C_Stop
                  	
-00010c 2f03      	mov R16, DATA_HIGH
+00010e 2f03      	mov R16, DATA_HIGH
                  
-00010d 940e 0009 	call USART_Binary
+00010f 940e 0009 	call USART_Binary
                  
-00010f 2f04      	mov R16, DATA_LOW
+000111 2f04      	mov R16, DATA_LOW
                  
-000110 940e 0009 	call USART_Binary
+000112 940e 0009 	call USART_Binary
                  
-000112 e00d
-000113 940e 0001
-000115 e00a
-000116 940e 0001 	USART_Newline
+000114 e00d
+000115 940e 0001
+000117 e00a
+000118 940e 0001 	USART_Newline
                  
-000118 e604
-000119 e01f
-00011a eb21
-00011b 0000
-00011c 0000
+00011a e604
+00011b e01f
+00011c eb21
 00011d 0000
-00011e 952a
-00011f f7d9
-000120 951a
-000121 0000
-000122 f7b9
-000123 950a
-000124 0000
-000125 0000
+00011e 0000
+00011f 0000
+000120 952a
+000121 f7d9
+000122 951a
+000123 0000
+000124 f7b9
+000125 950a
 000126 0000
 000127 0000
 000128 0000
 000129 0000
-00012a f771      	DELAY_MS 100
+00012a 0000
+00012b 0000
+00012c f771      	DELAY_MS 100
                  	
-00012b cfc9      rjmp	MAIN
+00012d cfc9      rjmp	MAIN
                  
 
 
@@ -1635,7 +1637,7 @@ counted separately from r26..r31 here.
 "ATmega32A" register use summary:
 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16: 109 r17:   7 r18:   5 r19:   2 r20:   2 r21:   0 r22:   0 r23:   0 
+r16: 111 r17:   7 r18:   5 r19:   2 r20:   2 r21:   0 r22:   0 r23:   0 
 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 r29:   0 r30:   0 r31:   0 
 x  :   0 y  :   0 z  :   0 
 Registers used: 5 out of 35 (14.3%)
@@ -1651,9 +1653,9 @@ clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
 cpi   :   1 cpse  :   0 dec   :   3 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   5 inc   :   1 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :  82 lds   :   0 lpm   :   0 lsl   :   1 
+ld    :   0 ldd   :   0 ldi   :  83 lds   :   0 lpm   :   0 lsl   :   1 
 lsr   :   0 mov   :   5 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :  11 or    :   0 ori   :   0 out   :  17 pop   :   0 
+neg   :   0 nop   :  11 or    :   0 ori   :   0 out   :  18 pop   :   0 
 push  :   0 rcall :   0 ret   :   7 reti  :   0 rjmp  :  12 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   2 
 sbiw  :   0 sbr   :   0 sbrc  :   1 sbrs  :   4 sec   :   0 seh   :   0 
@@ -1665,7 +1667,7 @@ Instructions used: 16 out of 113 (14.2%)
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000258    600      0    600   32768   1.8%
+[.cseg] 0x000000 0x00025c    604      0    604   32768   1.8%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
