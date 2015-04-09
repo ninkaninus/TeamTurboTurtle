@@ -4,6 +4,9 @@
 *.eep.hex
 *.hex
 *.obj
+*.iss
+*.map
+*.tmp
 *~
  
 # Packages #
