@@ -71,6 +71,100 @@ USART_Binary_End:
 	brne USART_Binary_Loop	;Repeat if we haven't
 ret
 
-USART_Decimal
+
+;Expecs a 16 bit value in R17:R16
+USART_Decimal_S16:
+
+	movw R19:R18, R17:R16
+	sbrs R19, 7
+	rjmp USART_Decimal_S16_Count_10000
+
+USART_Decimal_S16_Signed:
+	ldi R16, '-'
+	call USART_Transmit
+	subi R18, 0x01
+	sbci R19, 0x00
+	com R18
+	com R19
+
+USART_Decimal_S16_Count_10000:
+	clr R20
+	ldi XH, HIGH(10000)
+	ldi XL, LOW(10000)
+USART_Decimal_S16_Count_10000_Loop:
+	inc R20
+	sub R18, XL
+	sbc R19, XH
+	brcc USART_Decimal_S16_Count_10000_Loop
+	dec R20
+	add R18, XL
+	adc R19, XH
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+USART_Decimal_S16_Count_1000:
+	clr R20
+	ldi XH, HIGH(1000)
+	ldi XL, LOW(1000)
+USART_Decimal_S16_Count_1000_Loop:
+	inc R20
+	sub R18, XL
+	sbc R19, XH
+	brcc USART_Decimal_S16_Count_1000_Loop
+	dec R20
+	add R18, XL
+	adc R19, XH
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+USART_Decimal_S16_Count_100:
+	clr R20
+	ldi XH, HIGH(100)
+	ldi XL, LOW(100)
+USART_Decimal_S16_Count_100_Loop:
+	inc R20
+	sub R18, XL
+	sbc R19, XH
+	brcc USART_Decimal_S16_Count_100_Loop
+	dec R20
+	add R18, XL
+	adc R19, XH
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+USART_Decimal_S16_Count_10:
+	clr R20
+	ldi XH, HIGH(10)
+	ldi XL, LOW(10)
+USART_Decimal_S16_Count_10_Loop:
+	inc R20
+	sub R18, XL
+	sbc R19, XH
+	brcc USART_Decimal_S16_Count_10_Loop
+	dec R20
+	add R18, XL
+	adc R19, XH
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+USART_Decimal_S16_Count_1:
+	clr R20
+	ldi XH, HIGH(1)
+	ldi XL, LOW(1)
+USART_Decimal_S16_Count_1_Loop:
+	inc R20
+	sub R18, XL
+	sbc R19, XH
+	brcc USART_Decimal_S16_Count_1_Loop
+	dec R20
+	add R18, XL
+	adc R19, XH
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
 
 ret

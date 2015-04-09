@@ -36,20 +36,16 @@ Init:
 	ldi R16, 'D'
 	call USART_Transmit
 	USART_Newline
-	Motor_Set 60
+	Motor_Set 100
 
 	rjmp	Main
 
 Main:
-	
-
-
-	/*
 	call I2C_Start
 
 	I2C_Write MPU6050_ADDRESS_W
 
-	I2C_Write MPU6050_RA_ACCEL_ZOUT_H
+	I2C_Write MPU6050_RA_ACCEL_YOUT_H
 
 	call I2C_Start
 
@@ -64,19 +60,15 @@ Main:
 	mov DATA_LOW, R16
 
 	call I2C_Stop
-	
-	USART_Newline
 
-	mov R16, DATA_HIGH
-
-	call USART_Binary
+	mov R17, DATA_HIGH
 
 	mov R16, DATA_LOW
 	
-	call USART_Binary
+	call USART_Decimal_S16
 
-	DELAY_MS 250
-	*/
+	USART_Newline
 
+	DELAY_MS 1
 rjmp	MAIN
 

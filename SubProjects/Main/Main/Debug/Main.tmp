@@ -32,10 +32,22 @@
   <USART_Transmit_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>27</LINE></USART_Transmit_Start>
   <USART_Receive><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>36</LINE></USART_Receive>
   <USART_Receive_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>37</LINE></USART_Receive_Start>
-  <USART_Binary><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>56</LINE></USART_Binary>
-  <USART_Binary_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>59</LINE></USART_Binary_Loop>
-  <USART_Binary_0><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>65</LINE></USART_Binary_0>
-  <USART_Binary_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>68</LINE></USART_Binary_End>
+  <USART_Binary><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>55</LINE></USART_Binary>
+  <USART_Binary_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>58</LINE></USART_Binary_Loop>
+  <USART_Binary_0><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>64</LINE></USART_Binary_0>
+  <USART_Binary_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>67</LINE></USART_Binary_End>
+  <USART_Decimal_S16><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>76</LINE></USART_Decimal_S16>
+  <USART_Decimal_S16_Count_10000><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>90</LINE></USART_Decimal_S16_Count_10000>
+  <USART_Decimal_S16_Signed><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>82</LINE></USART_Decimal_S16_Signed>
+  <USART_Decimal_S16_Count_10000_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>94</LINE></USART_Decimal_S16_Count_10000_Loop>
+  <USART_Decimal_S16_Count_1000><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>106</LINE></USART_Decimal_S16_Count_1000>
+  <USART_Decimal_S16_Count_1000_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>110</LINE></USART_Decimal_S16_Count_1000_Loop>
+  <USART_Decimal_S16_Count_100><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>122</LINE></USART_Decimal_S16_Count_100>
+  <USART_Decimal_S16_Count_100_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>126</LINE></USART_Decimal_S16_Count_100_Loop>
+  <USART_Decimal_S16_Count_10><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>138</LINE></USART_Decimal_S16_Count_10>
+  <USART_Decimal_S16_Count_10_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>142</LINE></USART_Decimal_S16_Count_10_Loop>
+  <USART_Decimal_S16_Count_1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>154</LINE></USART_Decimal_S16_Count_1>
+  <USART_Decimal_S16_Count_1_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>158</LINE></USART_Decimal_S16_Count_1_Loop>
   <I2C_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>26</LINE></I2C_Start>
   <I2C_Start_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>31</LINE></I2C_Start_Wait>
   <I2C_Stop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>40</LINE></I2C_Stop>
