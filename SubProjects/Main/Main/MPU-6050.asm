@@ -216,6 +216,28 @@
 	call I2C_Stop
 .ENDMACRO
 
+MPU6050_Get_Data:
+	call I2C_Start
+
+	I2C_Write MPU6050_ADDRESS_W
+
+	I2C_Write MPU6050_RA_GYRO_XOUT_H
+
+	call I2C_Start
+
+	I2C_Write MPU6050_ADDRESS_R
+
+	I2C_Read I2C_Ack
+
+	mov DATA_HIGH, R16
+
+	I2C_Read I2C_Nack
+
+	mov DATA_LOW, R16
+
+	call I2C_Stop
+ret
+
 //This macro gets the value stored in the Who_Am_I register in the MPU-6050. This will always return 0x68 independent of AD0! Useful for testing the connection.
 .MACRO MPU6050_Get_Address
 	call I2C_Start

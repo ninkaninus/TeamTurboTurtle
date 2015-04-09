@@ -42,25 +42,7 @@ Init:
 
 Main:
 	
-	call I2C_Start
-
-	I2C_Write MPU6050_ADDRESS_W
-
-	I2C_Write MPU6050_RA_ACCEL_XOUT_H
-
-	call I2C_Start
-
-	I2C_Write MPU6050_ADDRESS_R
-
-	I2C_Read I2C_Ack
-
-	mov DATA_HIGH, R16
-
-	I2C_Read I2C_Nack
-
-	mov DATA_LOW, R16
-
-	call I2C_Stop
+	rcall MPU6050_Get_Data
 	
 	mov R16, DATA_HIGH
 

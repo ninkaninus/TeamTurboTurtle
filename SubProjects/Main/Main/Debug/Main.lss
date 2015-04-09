@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Wed Apr 08 17:25:42 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu Apr 09 12:10:39 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm'
@@ -837,7 +837,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(22): Including file 'D:
                  .def DATA_LOW = R20
                  
                  .org 0x0000
-000000 c033      rjmp Init
+000000 c04b      rjmp Init
                  
                  ;Board specific port names
                  .include "Delay_Macros.asm"
@@ -1392,6 +1392,33 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(22): Including file 'D:
                  	call I2C_Stop
                  .ENDMACRO
                  
+                 MPU6050_Get_Data:
+000034 940e 0019 	call I2C_Start
+                 
+000036 ed00
+000037 940e 0022 	I2C_Write MPU6050_ADDRESS_W
+                 
+000039 e403
+00003a 940e 0022 	I2C_Write MPU6050_RA_GYRO_XOUT_H
+                 
+00003c 940e 0019 	call I2C_Start
+                 
+00003e ed01
+00003f 940e 0022 	I2C_Write MPU6050_ADDRESS_R
+                 
+000041 e001
+000042 940e 0029 	I2C_Read I2C_Ack
+                 
+000044 2f30      	mov DATA_HIGH, R16
+                 
+000045 e000
+000046 940e 0029 	I2C_Read I2C_Nack
+                 
+000048 2f40      	mov DATA_LOW, R16
+                 
+000049 940e 001f 	call I2C_Stop
+00004b 9508      ret
+                 
                  //This macro gets the value stored in the Who_Am_I register in the MPU-6050. This will always return 0x68 independent of AD0! Useful for testing the connection.
                  .MACRO MPU6050_Get_Address
                  	call I2C_Start
@@ -1416,56 +1443,40 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(22): Including file 'D:
                  Init:
                  	
                  	;Initialize the stack
-000034 e50f      	LDI	R16, low(RAMEND)
-000035 bf0d          OUT	SPL, R16
-000036 e008      	LDI	R16, high(RAMEND)
-000037 bf0e          OUT	SPH, R16			
+00004c e50f      	LDI	R16, low(RAMEND)
+00004d bf0d          OUT	SPL, R16
+00004e e008      	LDI	R16, high(RAMEND)
+00004f bf0e          OUT	SPH, R16			
                  
-000038 e607
-000039 e010
-00003a bd10
-00003b b909
-00003c e108
-00003d b90a
-00003e e806
-00003f bd00      	USART_Init
-000040 e800
-000041 bb01
-000042 e609
-000043 bd05      	Motor_Init
-000044 e000
-000045 b901
-000046 e102
-000047 b900
-000048 e004
-000049 bf06
-00004a 0000      	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
-00004b 940e 0019
-00004d ed00
-00004e 940e 0022
-000050 e109
-000051 940e 0022
-000053 e007
-000054 940e 0022
-000056 e000
-000057 940e 0022
-000059 e008
-00005a 940e 0022
+000050 e607
+000051 e010
+000052 bd10
+000053 b909
+000054 e108
+000055 b90a
+000056 e806
+000057 bd00      	USART_Init
+000058 e800
+000059 bb01
+00005a e609
+00005b bd05      	Motor_Init
 00005c e000
-00005d 940e 0022
-00005f e000
-000060 940e 0022
-000062 e000
-000063 940e 0022
-000065 e000
+00005d b901
+00005e e102
+00005f b900
+000060 e004
+000061 bf06
+000062 0000      	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
+000063 940e 0019
+000065 ed00
 000066 940e 0022
-000068 e000
+000068 e109
 000069 940e 0022
-00006b e000
+00006b e007
 00006c 940e 0022
 00006e e000
 00006f 940e 0022
-000071 e000
+000071 e008
 000072 940e 0022
 000074 e000
 000075 940e 0022
@@ -1503,120 +1514,113 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(22): Including file 'D:
 0000a5 940e 0022
 0000a7 e000
 0000a8 940e 0022
-0000aa 940e 0019
-0000ac ed00
-0000ad 940e 0022
-0000af e307
-0000b0 940e 0022
-0000b2 e000
-0000b3 940e 0022
-0000b5 e000
-0000b6 940e 0022
-0000b8 940e 0019
-0000ba ed00
-0000bb 940e 0022
-0000bd e603
-0000be 940e 0022
-0000c0 e000
-0000c1 940e 0022
-0000c3 e000
-0000c4 940e 0022
-0000c6 e000
-0000c7 940e 0022
-0000c9 e000
-0000ca 940e 0022
-0000cc e000
-0000cd 940e 0022
-0000cf e000
-0000d0 940e 0022
-0000d2 e000
+0000aa e000
+0000ab 940e 0022
+0000ad e000
+0000ae 940e 0022
+0000b0 e000
+0000b1 940e 0022
+0000b3 e000
+0000b4 940e 0022
+0000b6 e000
+0000b7 940e 0022
+0000b9 e000
+0000ba 940e 0022
+0000bc e000
+0000bd 940e 0022
+0000bf e000
+0000c0 940e 0022
+0000c2 940e 0019
+0000c4 ed00
+0000c5 940e 0022
+0000c7 e307
+0000c8 940e 0022
+0000ca e000
+0000cb 940e 0022
+0000cd e000
+0000ce 940e 0022
+0000d0 940e 0019
+0000d2 ed00
 0000d3 940e 0022
-0000d5 e000
+0000d5 e603
 0000d6 940e 0022
-0000d8 e002
+0000d8 e000
 0000d9 940e 0022
 0000db e000
 0000dc 940e 0022
-0000de 940e 0019
-0000e0 ed00
-0000e1 940e 0022
-0000e3 e704
-0000e4 940e 0022
-0000e6 e000
-0000e7 940e 0022
-0000e9 940e 001f 	MPU6050_Init
-0000eb e404      	ldi R16, 'D'
-0000ec 940e 0001 	call USART_Transmit
-0000ee e00d
-0000ef 940e 0001
-0000f1 e00a
-0000f2 940e 0001 	USART_Newline
-0000f4 e30c
-0000f5 bd03      	Motor_Set 60
+0000de e000
+0000df 940e 0022
+0000e1 e000
+0000e2 940e 0022
+0000e4 e000
+0000e5 940e 0022
+0000e7 e000
+0000e8 940e 0022
+0000ea e000
+0000eb 940e 0022
+0000ed e000
+0000ee 940e 0022
+0000f0 e002
+0000f1 940e 0022
+0000f3 e000
+0000f4 940e 0022
+0000f6 940e 0019
+0000f8 ed00
+0000f9 940e 0022
+0000fb e704
+0000fc 940e 0022
+0000fe e000
+0000ff 940e 0022
+000101 940e 001f 	MPU6050_Init
+000103 e404      	ldi R16, 'D'
+000104 940e 0001 	call USART_Transmit
+000106 e00d
+000107 940e 0001
+000109 e00a
+00010a 940e 0001 	USART_Newline
+00010c e30c
+00010d bd03      	Motor_Set 60
                  
-0000f6 c000      	rjmp	Main
+00010e c000      	rjmp	Main
                  
                  Main:
                  	
-0000f7 940e 0019 	call I2C_Start
-                 
-0000f9 ed00
-0000fa 940e 0022 	I2C_Write MPU6050_ADDRESS_W
-                 
-0000fc e30b
-0000fd 940e 0022 	I2C_Write MPU6050_RA_ACCEL_XOUT_H
-                 
-0000ff 940e 0019 	call I2C_Start
-                 
-000101 ed01
-000102 940e 0022 	I2C_Write MPU6050_ADDRESS_R
-                 
-000104 e001
-000105 940e 0029 	I2C_Read I2C_Ack
-                 
-000107 2f30      	mov DATA_HIGH, R16
-                 
-000108 e000
-000109 940e 0029 	I2C_Read I2C_Nack
-                 
-00010b 2f40      	mov DATA_LOW, R16
-                 
-00010c 940e 001f 	call I2C_Stop
+00010f df24      	rcall MPU6050_Get_Data
                  	
-00010e 2f03      	mov R16, DATA_HIGH
+000110 2f03      	mov R16, DATA_HIGH
                  
-00010f 940e 0009 	call USART_Binary
+000111 940e 0009 	call USART_Binary
                  
-000111 2f04      	mov R16, DATA_LOW
+000113 2f04      	mov R16, DATA_LOW
                  
-000112 940e 0009 	call USART_Binary
+000114 940e 0009 	call USART_Binary
                  
-000114 e00d
-000115 940e 0001
-000117 e00a
-000118 940e 0001 	USART_Newline
+000116 e00d
+000117 940e 0001
+000119 e00a
+00011a 940e 0001 	USART_Newline
                  
-00011a e604
-00011b e01f
-00011c eb21
-00011d 0000
-00011e 0000
+00011c e604
+00011d e01f
+00011e eb21
 00011f 0000
-000120 952a
-000121 f7d9
-000122 951a
-000123 0000
-000124 f7b9
-000125 950a
-000126 0000
-000127 0000
+000120 0000
+000121 0000
+000122 952a
+000123 f7d9
+000124 951a
+000125 0000
+000126 f7b9
+000127 950a
 000128 0000
 000129 0000
 00012a 0000
 00012b 0000
-00012c f771      	DELAY_MS 100
+00012c 0000
+00012d 0000
+00012e f771      	DELAY_MS 100
                  	
-00012d cfc9      rjmp	MAIN
+00012f cfdf      rjmp	MAIN
                  
 
 
@@ -1656,18 +1660,18 @@ fmulsu:   0 icall :   0 ijmp  :   0 in    :   5 inc   :   1 jmp   :   0
 ld    :   0 ldd   :   0 ldi   :  83 lds   :   0 lpm   :   0 lsl   :   1 
 lsr   :   0 mov   :   5 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
 neg   :   0 nop   :  11 or    :   0 ori   :   0 out   :  18 pop   :   0 
-push  :   0 rcall :   0 ret   :   7 reti  :   0 rjmp  :  12 rol   :   0 
+push  :   0 rcall :   1 ret   :   8 reti  :   0 rjmp  :  12 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   2 
 sbiw  :   0 sbr   :   0 sbrc  :   1 sbrs  :   4 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 16 out of 113 (14.2%)
+Instructions used: 17 out of 113 (15.0%)
 
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00025c    604      0    604   32768   1.8%
+[.cseg] 0x000000 0x000260    608      0    608   32768   1.9%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
