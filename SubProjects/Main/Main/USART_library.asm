@@ -51,7 +51,6 @@ ret
 	call USART_Transmit 
 .ENDMACRO
 
-
 ;Outputs the byte in R16 as a string of 8 ascii 1's or 0's
 USART_Binary:
 	mov R17, R16			;Copy R16 to R17
@@ -70,4 +69,8 @@ USART_Binary_End:
 	inc R18					;Increment R18
 	cpi R18, 0x08			;Check if we have converted and sent an entire byte yet
 	brne USART_Binary_Loop	;Repeat if we haven't
+ret
+
+USART_Decimal
+
 ret

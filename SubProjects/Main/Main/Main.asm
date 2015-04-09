@@ -42,19 +42,41 @@ Init:
 
 Main:
 	
-	rcall MPU6050_Get_Data
+
+
+	/*
+	call I2C_Start
+
+	I2C_Write MPU6050_ADDRESS_W
+
+	I2C_Write MPU6050_RA_ACCEL_ZOUT_H
+
+	call I2C_Start
+
+	I2C_Write MPU6050_ADDRESS_R
+
+	I2C_Read I2C_Ack
+
+	mov DATA_HIGH, R16
+
+	I2C_Read I2C_Nack
+
+	mov DATA_LOW, R16
+
+	call I2C_Stop
 	
+	USART_Newline
+
 	mov R16, DATA_HIGH
 
 	call USART_Binary
 
 	mov R16, DATA_LOW
-
+	
 	call USART_Binary
 
-	USART_Newline
+	DELAY_MS 250
+	*/
 
-	DELAY_MS 100
-	
 rjmp	MAIN
 
