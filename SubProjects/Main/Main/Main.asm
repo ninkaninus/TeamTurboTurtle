@@ -29,7 +29,7 @@ Init:
 	ldi R16, 'D'
 	call USART_Transmit
 	USART_Newline
-	Motor_Set 100
+	Motor_Set 170
 
 	rjmp	Main
 
@@ -37,14 +37,34 @@ Main:
 
 	call MPU6050_Read_Dataset
 
-	lds R17, GYRO_ZOUT_H
+	lds R17, ACCEL_YOUT_H
 
-	lds R16, GYRO_ZOUT_L
+	lds R16, ACCEL_YOUT_L
 
 	call USART_Decimal_S16
 
 	USART_Newline
 
-	DELAY_MS 100
+	lds R17, ACCEL_YOUT_H
+
+	lds R16, ACCEL_YOUT_L
+
+	cpi R17, HIGH(8191)
+	
+	/*brge Main_Higher
+	cpi R17, LOW(8191)
+	brge Main_Higher
+	Motor_Set 170
+	rjmp Main_End
+
+Main_Higher:
+	Motor_Set 0
+	DELAY_MS 250
+	DELAY_MS 250
+	Motor_Set 100
+
+	*/
+Main_End:
+
 rjmp	MAIN
 
