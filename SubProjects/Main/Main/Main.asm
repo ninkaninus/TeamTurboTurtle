@@ -18,7 +18,10 @@ rjmp Init
 	JMP Timer_Update
 	
 
+;Interrupt vector mapping
+
 ;Board specific port names
+.include "SRAM-Mapping.asm"
 .include "Delay_Macros.asm"
 .include "Motor_Control.asm"
 .include "USART_Library.asm"
