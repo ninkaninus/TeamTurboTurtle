@@ -1,14 +1,10 @@
-/*
- * USART_library.asm
- *
- *  Created: 26-03-2015 12:27:09
- *   Author: StjerneIdioten
- */ 
+ ; USART_library.asm
+ ; Author: StjerneIdioten
 
  .MACRO  USART_Init
 	;Set Baud Rate to 9600
-	ldi R16,	0b01100111	
-	ldi R17,	0b00000000
+	ldi R16,	@1	
+	ldi R17,	@0
 
 	out	UBRRH,	R17
 	out UBRRL,	R16
@@ -50,6 +46,7 @@ ret
 	ldi R16, 0x0A
 	call USART_Transmit 
 .ENDMACRO
+
 
 ;Outputs the byte in R16 as a string of 8 ascii 1's or 0's
 USART_Binary:

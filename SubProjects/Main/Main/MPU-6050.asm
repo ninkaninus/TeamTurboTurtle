@@ -237,3 +237,73 @@
 	mov R16, R17
 
 .ENDMACRO
+
+MPU6050_Read_Dataset:
+	call I2C_Start
+
+	I2C_Write MPU6050_ADDRESS_W
+
+	I2C_Write MPU6050_RA_ACCEL_XOUT_H
+
+	call I2C_Start
+
+	I2C_Write MPU6050_ADDRESS_R
+
+	I2C_Read I2C_Ack
+
+	sts ACCEL_XOUT_H, R16
+
+	I2C_Read I2C_Ack
+
+	sts ACCEL_XOUT_L, R16
+
+	I2C_Read I2C_Ack
+
+	sts ACCEL_YOUT_H, R16
+
+	I2C_Read I2C_Ack
+
+	sts ACCEL_YOUT_L, R16
+
+	I2C_Read I2C_Ack
+
+	sts ACCEL_ZOUT_H, R16
+
+	I2C_Read I2C_Ack
+
+	sts ACCEL_ZOUT_L, R16
+
+	I2C_Read I2C_Ack
+
+	sts TEMP_OUT_H, R16
+
+	I2C_Read I2C_Ack
+
+	sts TEMP_OUT_L, R16
+
+	I2C_Read I2C_Ack
+
+	sts GYRO_XOUT_H, R16
+
+	I2C_Read I2C_Ack
+
+	sts GYRO_XOUT_L, R16
+
+	I2C_Read I2C_Ack
+
+	sts GYRO_YOUT_H, R16
+
+	I2C_Read I2C_Ack
+
+	sts GYRO_YOUT_L, R16
+
+	I2C_Read I2C_Ack
+
+	sts GYRO_ZOUT_H, R16
+
+	I2C_Read I2C_Nack
+
+	sts GYRO_YOUT_L, R16
+
+	call I2C_Stop
+ret
