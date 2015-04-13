@@ -21,7 +21,7 @@
 	I2C_Write 0b00001000
 
 	//MPU6050_RA_ACCEL_CONFIG ,Disable accel self tests, scale of +-16g, no DHPF
-	I2C_Write 0b00010000
+	I2C_Write 0b00001000
 
 	//MPU6050_RA_FF_THR ,Freefall threshold of |0mg|
 	I2C_Write 0x00
