@@ -7,8 +7,11 @@ rjmp Init
 .org 0x0014
 jmp Timer0_Update
 	
+<<<<<<< 510a55301a7ad711f40475321293df3bc26b0858
 
 ;Interrupt vector mapping
+=======
+>>>>>>> 128042dca70df100ec236374809f969a7faafb81
 
 ;Library includes
 .include "SRAM-Mapping.asm"
