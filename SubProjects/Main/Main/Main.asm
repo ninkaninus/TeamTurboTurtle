@@ -1,28 +1,22 @@
 ;Main.asm
 
+;Interrupt vector mapping
 .org 0x0000
 rjmp Init
-<<<<<<< HEAD
-.org 0x0014
-jmp Timer0_Update
-
-;Interrupt vector mapping
-=======
-;Interrupt Vector Table
 
 .org 0x0014
 jmp Timer0_Update
-
-;Interrupt vector mapping
 
 ;Library includes
 .include "SRAM-Mapping.asm"
-.include "Delay_Macros.asm"
+.include "Delays.asm"
 .include "Motor_Control.asm"
 .include "USART_Library.asm"
 .include "I2C.asm"
 .include "MPU-6050.inc"
 .include "MPU-6050.asm"
+.include "Timers.asm"
+.include "Interrupts.asm"
 
 Init:
 	
@@ -43,28 +37,30 @@ Init:
 	call USART_Transmit
 	USART_Newline
 	;Motor_Set 120
+	Interrupts_Init ; Must be the last thing to be enabled!
 	rjmp	Main
 
 Main:
-<<<<<<< HEAD
+	
+	cli
+	ldi R16, 10
+	call Delay_MS
 
-	call MPU6050_Read_Dataset
+	cli
+	Motor_Set 0
+	sei
 
-	lds R17, GYRO_ZOUT_H
+	ldi R16, 250
+	call Delay_MS
 
-	lds R16, GYRO_ZOUT_L
+	cli
+	Motor_Set 255
+	sei
 
-=======
+	lds R16, Timer_1ms_L
+	lds R17, Timer_1ms_M
 
-	call MPU6050_Read_Dataset
-
-	lds R17, GYRO_ZOUT_H
-
-	lds R16, GYRO_ZOUT_L
-
->>>>>>> feature/Timer
 	call USART_Decimal_S16
-
 	USART_Newline
 
 rjmp	MAIN

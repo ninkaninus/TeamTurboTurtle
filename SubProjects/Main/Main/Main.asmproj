@@ -55,10 +55,13 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Delay_Macros.asm">
+    <Compile Include="Delays.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="I2C.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interrupts.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Main.asm">
@@ -80,6 +83,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Testcode-Fast-lap.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Timers.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="USART_library.asm">

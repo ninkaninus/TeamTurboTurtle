@@ -20,3 +20,8 @@
 .equ GYRO_YOUT_L  = 0x006B
 .equ GYRO_ZOUT_H  = 0x006C
 .equ GYRO_ZOUT_L  = 0x006D
+
+;Time0 variables
+.equ Timer_1ms_H  = 0x006E
+.equ Timer_1ms_M  = 0x006F
+.equ Timer_1ms_L  = 0x0070

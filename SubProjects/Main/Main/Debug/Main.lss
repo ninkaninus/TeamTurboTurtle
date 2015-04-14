@@ -1,14 +1,16 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Tue Apr 14 14:02:27 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Tue Apr 14 16:26:56 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(9): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\SRAM-Mapping.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(10): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delay_Macros.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(11): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(12): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(13): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(14): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.inc'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(11): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\SRAM-Mapping.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(12): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delays.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(13): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(14): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(16): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.inc'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(18): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Timers.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Interrupts.asm'
                  
                  ;Main.asm
                  
@@ -827,10 +829,12 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:
                  
                  
                  
-                 .org 0x0000
-000000 c0da      rjmp Init
-                 
                  ;Interrupt vector mapping
+                 .org 0x0000
+000000 c11a      rjmp Init
+                 
+                 .org 0x0014
+000014 940c 0106 jmp Timer0_Update
                  
                  ;Library includes
                  .include "SRAM-Mapping.asm"
@@ -856,28 +860,34 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:
                  .equ GYRO_YOUT_L  = 0x006B
                  .equ GYRO_ZOUT_H  = 0x006C
                  .equ GYRO_ZOUT_L  = 0x006D
-                 .include "Delay_Macros.asm"
+                 
+                 ;Time0 variables
+                 .equ Timer_1ms_H  = 0x006E
+                 .equ Timer_1ms_M  = 0x006F
+                 .equ Timer_1ms_L  = 0x0070
+                 .include "Delays.asm"
                  
                  
+                 ;Requires the Timer library made by Christian! And the SRAM-Mapping.asm
                  ;These macros are intended for a micro running 16MHZ
                  
                  ;This macro can generate from 1 to 255 ms of delay.  
                  ;Uses R16, R17 and R18
-                 .MACRO	DELAY_MS					; Cycles to execute 
+                 .MACRO	DELAY_MS_M					; Cycles to execute 
                  	LDI R16, @0 ;					; 1 cycle to execute
-                 	DELAY_MS_2: ;-----------------/
+                 	DELAY_MS_M_2: ;-----------------/
                  	LDI R17, 15 ;	              /
-                 	DELAY_MS_1:	;------------/    /
+                 	DELAY_MS_M_1:	;------------/    /
                  	LDI R18, 177;		     /    /
-                 	DELAY_MS_0: ;-------/    /    /
+                 	DELAY_MS_M_0: ;-------/    /    /
                  	NOP ;			    /C   /B   /A
                  	NOP ;				/	 /	  /
                  	NOP ;				/	 /	  /
                  	DEC R18 ;		    /    /    /
-                 	BRNE DELAY_MS_0 ;---/    /    /
+                 	BRNE DELAY_MS_M_0 ;---/    /    /
                  	DEC R17 ;		         /    /
                  	NOP ;					 /	  /
-                 	BRNE DELAY_MS_1 ;--------/    /
+                 	BRNE DELAY_MS_M_1 ;--------/    /
                  	DEC R16 ;		              /
                  	NOP ;						  /
                  	NOP ;						  /
@@ -885,15 +895,38 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:
                  	NOP ;						  /
                  	NOP ;						  /
                  	NOP ;						  /
-                 	BRNE DELAY_MS_2 ;-------------/
+                 	BRNE DELAY_MS_M_2 ;-------------/
                  .ENDMACRO
                  ; Block C: 177*(1+1+1+1+2)-1 = 1061
                  ; Block B: 15*(1+C+1+1+2)-1 = 15990 
                  ; Block A: x*(1+B+1+1+1+1+1+1+1+2)-1 = x*16000-1
                  ; Total # of cycles is: 1 + A = x*16000 
                  ; Formula for delay: x*1ms
-                 .include "Motor_Control.asm"
                  
+                 Delay_MS:
+000016 2e90      	mov R9, R16
+000017 9030 0070 	lds R3, Timer_1ms_L
+000019 9040 006f 	lds R4, Timer_1ms_M
+00001b 9050 006e 	lds R5, Timer_1ms_H
+                 
+                 Delay_MS_Loop:
+                 	
+00001d 9478      	sei
+00001e 9060 0070 	lds R6, Timer_1ms_L
+000020 9070 006f 	lds R7, Timer_1ms_M
+000022 9080 006e 	lds R8, Timer_1ms_H
+                 
+000024 94f8      	cli
+000025 1863      	sub R6, R3
+000026 0874      	sbc R7, R4
+000027 0885      	sbc R8, R5
+                 
+000028 1469      	cp R6, R9
+                 
+000029 f398      	brlo Delay_MS_Loop
+00002a 9478      	sei
+                 .include "Motor_Control.asm"
+00002b 9508      
                   ;Author: StjerneIdioten
                  
                   .EQU	MOTOR_PIN = PD7
@@ -932,21 +965,21 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:
                   USART_Transmit: 
                   USART_Transmit_Start:
                  	; Wait for empty transmit buffer
-000001 9b5d      	sbis	UCSRA,	UDRE
-000002 cffe      	rjmp	USART_Transmit_Start
-000003 b90c      	out	UDR, R16
-000004 9508      ret
+00002c 9b5d      	sbis	UCSRA,	UDRE
+00002d cffe      	rjmp	USART_Transmit_Start
+00002e b90c      	out	UDR, R16
+00002f 9508      ret
                  
                  
                  ;Waits for a byte to be recived and outputs it to R16
                  USART_Receive:
                  USART_Receive_Start:
                  	; Wait for data to be received
-000005 9b5f      	sbis UCSRA, RXC
-000006 cffe      	rjmp USART_Receive_Start
+000030 9b5f      	sbis UCSRA, RXC
+000031 cffe      	rjmp USART_Receive_Start
                  	; Get and return received data from buffer
-000007 b10c      	in r16, UDR
-000008 9508      ret
+000032 b10c      	in r16, UDR
+000033 9508      ret
                  
                  
                  ;Outputs a newline to serial. In the format of '\r\n'
@@ -960,121 +993,121 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:
                  
                  ;Outputs the byte in R16 as a string of 8 ascii 1's or 0's
                  USART_Binary:
-000009 2f10      	mov R17, R16			;Copy R16 to R17
-00000a e020      	ldi R18, 0x00			;Set the counter to zero
+000034 2f10      	mov R17, R16			;Copy R16 to R17
+000035 e020      	ldi R18, 0x00			;Set the counter to zero
                  USART_Binary_Loop:
-00000b ff17      	sbrs R17, 7				;Skip if bit 7 in R17 is set
-00000c c004      	rjmp USART_Binary_0		;Jump here if the it was 0
-00000d e301      	ldi R16, '1'			;Load in ascii 1 in R16
-00000e 940e 0001 	call USART_Transmit		;Transmit the 1
-000010 c003      	rjmp USART_Binary_End	;Jump to the end
+000036 ff17      	sbrs R17, 7				;Skip if bit 7 in R17 is set
+000037 c004      	rjmp USART_Binary_0		;Jump here if the it was 0
+000038 e301      	ldi R16, '1'			;Load in ascii 1 in R16
+000039 940e 002c 	call USART_Transmit		;Transmit the 1
+00003b c003      	rjmp USART_Binary_End	;Jump to the end
                  USART_Binary_0:				
-000011 e300      	ldi R16, '0'			;Load in ascii 0 in R16
-000012 940e 0001 	call USART_Transmit
+00003c e300      	ldi R16, '0'			;Load in ascii 0 in R16
+00003d 940e 002c 	call USART_Transmit
                  USART_Binary_End:
-000014 0f11      	lsl R17					;Left shift R17
-000015 9523      	inc R18					;Increment R18
-000016 3028      	cpi R18, 0x08			;Check if we have converted and sent an entire byte yet
-000017 f799      	brne USART_Binary_Loop	;Repeat if we haven't
-000018 9508      ret
+00003f 0f11      	lsl R17					;Left shift R17
+000040 9523      	inc R18					;Increment R18
+000041 3028      	cpi R18, 0x08			;Check if we have converted and sent an entire byte yet
+000042 f799      	brne USART_Binary_Loop	;Repeat if we haven't
+000043 9508      ret
                  
                  
                  ;Expecs a 16 bit value in R17:R16
                  USART_Decimal_S16:
                  
-000019 0198      	movw R19:R18, R17:R16
-00001a ff37      	sbrs R19, 7
-00001b c007      	rjmp USART_Decimal_S16_Count_10000
+000044 0198      	movw R19:R18, R17:R16
+000045 ff37      	sbrs R19, 7
+000046 c007      	rjmp USART_Decimal_S16_Count_10000
                  
                  USART_Decimal_S16_Signed:
-00001c e20d      	ldi R16, '-'
-00001d 940e 0001 	call USART_Transmit
-00001f 5021      	subi R18, 0x01
-000020 4030      	sbci R19, 0x00
-000021 9520      	com R18
-000022 9530      	com R19
+000047 e20d      	ldi R16, '-'
+000048 940e 002c 	call USART_Transmit
+00004a 5021      	subi R18, 0x01
+00004b 4030      	sbci R19, 0x00
+00004c 9520      	com R18
+00004d 9530      	com R19
                  
                  USART_Decimal_S16_Count_10000:
-000023 2744      	clr R20
-000024 e2b7      	ldi XH, HIGH(10000)
-000025 e1a0      	ldi XL, LOW(10000)
+00004e 2744      	clr R20
+00004f e2b7      	ldi XH, HIGH(10000)
+000050 e1a0      	ldi XL, LOW(10000)
                  USART_Decimal_S16_Count_10000_Loop:
-000026 9543      	inc R20
-000027 1b2a      	sub R18, XL
-000028 0b3b      	sbc R19, XH
-000029 f7e0      	brcc USART_Decimal_S16_Count_10000_Loop
-00002a 954a      	dec R20
-00002b 0f2a      	add R18, XL
-00002c 1f3b      	adc R19, XH
-00002d e300      	ldi R16, 0x30
-00002e 0f04      	add R16, R20
-00002f 940e 0001 	call USART_Transmit
+000051 9543      	inc R20
+000052 1b2a      	sub R18, XL
+000053 0b3b      	sbc R19, XH
+000054 f7e0      	brcc USART_Decimal_S16_Count_10000_Loop
+000055 954a      	dec R20
+000056 0f2a      	add R18, XL
+000057 1f3b      	adc R19, XH
+000058 e300      	ldi R16, 0x30
+000059 0f04      	add R16, R20
+00005a 940e 002c 	call USART_Transmit
                  
                  USART_Decimal_S16_Count_1000:
-000031 2744      	clr R20
-000032 e0b3      	ldi XH, HIGH(1000)
-000033 eea8      	ldi XL, LOW(1000)
+00005c 2744      	clr R20
+00005d e0b3      	ldi XH, HIGH(1000)
+00005e eea8      	ldi XL, LOW(1000)
                  USART_Decimal_S16_Count_1000_Loop:
-000034 9543      	inc R20
-000035 1b2a      	sub R18, XL
-000036 0b3b      	sbc R19, XH
-000037 f7e0      	brcc USART_Decimal_S16_Count_1000_Loop
-000038 954a      	dec R20
-000039 0f2a      	add R18, XL
-00003a 1f3b      	adc R19, XH
-00003b e300      	ldi R16, 0x30
-00003c 0f04      	add R16, R20
-00003d 940e 0001 	call USART_Transmit
+00005f 9543      	inc R20
+000060 1b2a      	sub R18, XL
+000061 0b3b      	sbc R19, XH
+000062 f7e0      	brcc USART_Decimal_S16_Count_1000_Loop
+000063 954a      	dec R20
+000064 0f2a      	add R18, XL
+000065 1f3b      	adc R19, XH
+000066 e300      	ldi R16, 0x30
+000067 0f04      	add R16, R20
+000068 940e 002c 	call USART_Transmit
                  
                  USART_Decimal_S16_Count_100:
-00003f 2744      	clr R20
-000040 e0b0      	ldi XH, HIGH(100)
-000041 e6a4      	ldi XL, LOW(100)
+00006a 2744      	clr R20
+00006b e0b0      	ldi XH, HIGH(100)
+00006c e6a4      	ldi XL, LOW(100)
                  USART_Decimal_S16_Count_100_Loop:
-000042 9543      	inc R20
-000043 1b2a      	sub R18, XL
-000044 0b3b      	sbc R19, XH
-000045 f7e0      	brcc USART_Decimal_S16_Count_100_Loop
-000046 954a      	dec R20
-000047 0f2a      	add R18, XL
-000048 1f3b      	adc R19, XH
-000049 e300      	ldi R16, 0x30
-00004a 0f04      	add R16, R20
-00004b 940e 0001 	call USART_Transmit
+00006d 9543      	inc R20
+00006e 1b2a      	sub R18, XL
+00006f 0b3b      	sbc R19, XH
+000070 f7e0      	brcc USART_Decimal_S16_Count_100_Loop
+000071 954a      	dec R20
+000072 0f2a      	add R18, XL
+000073 1f3b      	adc R19, XH
+000074 e300      	ldi R16, 0x30
+000075 0f04      	add R16, R20
+000076 940e 002c 	call USART_Transmit
                  
                  USART_Decimal_S16_Count_10:
-00004d 2744      	clr R20
-00004e e0b0      	ldi XH, HIGH(10)
-00004f e0aa      	ldi XL, LOW(10)
+000078 2744      	clr R20
+000079 e0b0      	ldi XH, HIGH(10)
+00007a e0aa      	ldi XL, LOW(10)
                  USART_Decimal_S16_Count_10_Loop:
-000050 9543      	inc R20
-000051 1b2a      	sub R18, XL
-000052 0b3b      	sbc R19, XH
-000053 f7e0      	brcc USART_Decimal_S16_Count_10_Loop
-000054 954a      	dec R20
-000055 0f2a      	add R18, XL
-000056 1f3b      	adc R19, XH
-000057 e300      	ldi R16, 0x30
-000058 0f04      	add R16, R20
-000059 940e 0001 	call USART_Transmit
+00007b 9543      	inc R20
+00007c 1b2a      	sub R18, XL
+00007d 0b3b      	sbc R19, XH
+00007e f7e0      	brcc USART_Decimal_S16_Count_10_Loop
+00007f 954a      	dec R20
+000080 0f2a      	add R18, XL
+000081 1f3b      	adc R19, XH
+000082 e300      	ldi R16, 0x30
+000083 0f04      	add R16, R20
+000084 940e 002c 	call USART_Transmit
                  
                  USART_Decimal_S16_Count_1:
-00005b 2744      	clr R20
-00005c e0b0      	ldi XH, HIGH(1)
-00005d e0a1      	ldi XL, LOW(1)
+000086 2744      	clr R20
+000087 e0b0      	ldi XH, HIGH(1)
+000088 e0a1      	ldi XL, LOW(1)
                  USART_Decimal_S16_Count_1_Loop:
-00005e 9543      	inc R20
-00005f 1b2a      	sub R18, XL
-000060 0b3b      	sbc R19, XH
-000061 f7e0      	brcc USART_Decimal_S16_Count_1_Loop
-000062 954a      	dec R20
-000063 0f2a      	add R18, XL
-000064 1f3b      	adc R19, XH
-000065 e300      	ldi R16, 0x30
-000066 0f04      	add R16, R20
-000067 940e 0001 	call USART_Transmit
+000089 9543      	inc R20
+00008a 1b2a      	sub R18, XL
+00008b 0b3b      	sbc R19, XH
+00008c f7e0      	brcc USART_Decimal_S16_Count_1_Loop
+00008d 954a      	dec R20
+00008e 0f2a      	add R18, XL
+00008f 1f3b      	adc R19, XH
+000090 e300      	ldi R16, 0x30
+000091 0f04      	add R16, R20
+000092 940e 002c 	call USART_Transmit
                  
-000069 9508      ret
+000094 9508      ret
                  .include "I2C.asm"
                  
                  ;I2C communication library 
@@ -1103,36 +1136,36 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:
                  ;This function sends a start command
                  I2C_Start:
                  	;Send Start condition
-00006a ea04      	ldi r16, (1<<TWINT)|(1<<TWSTA)|(1<<TWEN) 
-00006b bf06      	out TWCR, r16
+000095 ea04      	ldi r16, (1<<TWINT)|(1<<TWSTA)|(1<<TWEN) 
+000096 bf06      	out TWCR, r16
                  
                  I2C_Start_Wait:	
                  	;Wait for the start condition transmit			
-00006c b706      	in r16,TWCR
-00006d ff07      	sbrs r16,TWINT
-00006e cffd      	rjmp I2C_Start_Wait
-00006f 9508      ret
+000097 b706      	in r16,TWCR
+000098 ff07      	sbrs r16,TWINT
+000099 cffd      	rjmp I2C_Start_Wait
+00009a 9508      ret
                  
                  
                  ;This function sends a stop command
                  I2C_Stop:
                  	;Send Stop condition
-000070 e904      	ldi r16, (1<<TWINT)|(1<<TWSTO)|(1<<TWEN) 
-000071 bf06      	out TWCR, r16
-000072 9508      ret
+00009b e904      	ldi r16, (1<<TWINT)|(1<<TWSTO)|(1<<TWEN) 
+00009c bf06      	out TWCR, r16
+00009d 9508      ret
                  
                  
                  ;This function writes the data from R16, onto the I2C data line
                  I2C_Write_Call:
-000073 b903      	out TWDR, r16
-000074 e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
-000075 bf06      	out TWCR, r16
+00009e b903      	out TWDR, r16
+00009f e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
+0000a0 bf06      	out TWCR, r16
                  
                  I2C_Write_Call_Wait:
-000076 b706      	in r16,TWCR
-000077 ff07      	sbrs r16,TWINT
-000078 cffd      	rjmp I2C_Write_Call_Wait
-000079 9508      ret
+0000a1 b706      	in r16,TWCR
+0000a2 ff07      	sbrs r16,TWINT
+0000a3 cffd      	rjmp I2C_Write_Call_Wait
+0000a4 9508      ret
                  
                  ;This is an easy to use macro of the write function
                  .MACRO I2C_Write
@@ -1144,21 +1177,21 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:
                  ;Remember to set R16 to either I2C_ACK or I2C_NACK before calling the function!
                  ;Failure to do so may result in unwanted behaviour.
                  I2C_Read_Call:
-00007a fd00      	sbrc r16,0
-00007b c002      	rjmp I2C_Read_Call_ACK
-00007c e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
-00007d c001      	rjmp I2C_Read_Call_Continue
+0000a5 fd00      	sbrc r16,0
+0000a6 c002      	rjmp I2C_Read_Call_ACK
+0000a7 e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
+0000a8 c001      	rjmp I2C_Read_Call_Continue
                  I2C_Read_Call_ACK:
-00007e ec04      	ldi r16, (1<<TWINT) | (1<<TWEN) | (1<<TWEA)
+0000a9 ec04      	ldi r16, (1<<TWINT) | (1<<TWEN) | (1<<TWEA)
                  I2C_Read_Call_Continue:
-00007f bf06      	out TWCR, r16
+0000aa bf06      	out TWCR, r16
                  I2C_Read_Call_Wait:
-000080 b706      	in r16,TWCR
-000081 ff07      	sbrs r16,TWINT
-000082 cffd      	rjmp I2C_Read_Call_Wait
+0000ab b706      	in r16,TWCR
+0000ac ff07      	sbrs r16,TWINT
+0000ad cffd      	rjmp I2C_Read_Call_Wait
                  
-000083 b103      	in R16, TWDR
-000084 9508      ret
+0000ae b103      	in R16, TWDR
+0000af 9508      ret
                  
                  //Easy to use macro which takes I2C_Ack/I2C_Nack as argument.
                  .MACRO I2C_Read
@@ -1521,457 +1554,535 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:
                  .ENDMACRO
                  
                  MPU6050_Read_Dataset:
-000085 940e 006a 	call I2C_Start
+0000b0 940e 0095 	call I2C_Start
                  
-000087 ed00
-000088 940e 0073 	I2C_Write MPU6050_ADDRESS_W
+0000b2 ed00
+0000b3 940e 009e 	I2C_Write MPU6050_ADDRESS_W
                  
-00008a e30b
-00008b 940e 0073 	I2C_Write MPU6050_RA_ACCEL_XOUT_H
+0000b5 e30b
+0000b6 940e 009e 	I2C_Write MPU6050_RA_ACCEL_XOUT_H
                  
-00008d 940e 006a 	call I2C_Start
+0000b8 940e 0095 	call I2C_Start
                  
-00008f ed01
-000090 940e 0073 	I2C_Write MPU6050_ADDRESS_R
+0000ba ed01
+0000bb 940e 009e 	I2C_Write MPU6050_ADDRESS_R
                  
-000092 e001
-000093 940e 007a 	I2C_Read I2C_Ack
+0000bd e001
+0000be 940e 00a5 	I2C_Read I2C_Ack
                  
-000095 9300 0060 	sts ACCEL_XOUT_H, R16
+0000c0 9300 0060 	sts ACCEL_XOUT_H, R16
                  
-000097 e001
-000098 940e 007a 	I2C_Read I2C_Ack
+0000c2 e001
+0000c3 940e 00a5 	I2C_Read I2C_Ack
                  
-00009a 9300 0061 	sts ACCEL_XOUT_L, R16
+0000c5 9300 0061 	sts ACCEL_XOUT_L, R16
                  
-00009c e001
-00009d 940e 007a 	I2C_Read I2C_Ack
+0000c7 e001
+0000c8 940e 00a5 	I2C_Read I2C_Ack
                  
-00009f 9300 0062 	sts ACCEL_YOUT_H, R16
+0000ca 9300 0062 	sts ACCEL_YOUT_H, R16
                  
-0000a1 e001
-0000a2 940e 007a 	I2C_Read I2C_Ack
+0000cc e001
+0000cd 940e 00a5 	I2C_Read I2C_Ack
                  
-0000a4 9300 0063 	sts ACCEL_YOUT_L, R16
+0000cf 9300 0063 	sts ACCEL_YOUT_L, R16
                  
-0000a6 e001
-0000a7 940e 007a 	I2C_Read I2C_Ack
+0000d1 e001
+0000d2 940e 00a5 	I2C_Read I2C_Ack
                  
-0000a9 9300 0064 	sts ACCEL_ZOUT_H, R16
+0000d4 9300 0064 	sts ACCEL_ZOUT_H, R16
                  
-0000ab e001
-0000ac 940e 007a 	I2C_Read I2C_Ack
+0000d6 e001
+0000d7 940e 00a5 	I2C_Read I2C_Ack
                  
-0000ae 9300 0065 	sts ACCEL_ZOUT_L, R16
+0000d9 9300 0065 	sts ACCEL_ZOUT_L, R16
                  
-0000b0 e001
-0000b1 940e 007a 	I2C_Read I2C_Ack
+0000db e001
+0000dc 940e 00a5 	I2C_Read I2C_Ack
                  
-0000b3 9300 0066 	sts TEMP_OUT_H, R16
+0000de 9300 0066 	sts TEMP_OUT_H, R16
                  
-0000b5 e001
-0000b6 940e 007a 	I2C_Read I2C_Ack
+0000e0 e001
+0000e1 940e 00a5 	I2C_Read I2C_Ack
                  
-0000b8 9300 0067 	sts TEMP_OUT_L, R16
+0000e3 9300 0067 	sts TEMP_OUT_L, R16
                  
-0000ba e001
-0000bb 940e 007a 	I2C_Read I2C_Ack
+0000e5 e001
+0000e6 940e 00a5 	I2C_Read I2C_Ack
                  
-0000bd 9300 0068 	sts GYRO_XOUT_H, R16
+0000e8 9300 0068 	sts GYRO_XOUT_H, R16
                  
-0000bf e001
-0000c0 940e 007a 	I2C_Read I2C_Ack
+0000ea e001
+0000eb 940e 00a5 	I2C_Read I2C_Ack
                  
-0000c2 9300 0069 	sts GYRO_XOUT_L, R16
+0000ed 9300 0069 	sts GYRO_XOUT_L, R16
                  
-0000c4 e001
-0000c5 940e 007a 	I2C_Read I2C_Ack
+0000ef e001
+0000f0 940e 00a5 	I2C_Read I2C_Ack
                  
-0000c7 9300 006a 	sts GYRO_YOUT_H, R16
+0000f2 9300 006a 	sts GYRO_YOUT_H, R16
                  
-0000c9 e001
-0000ca 940e 007a 	I2C_Read I2C_Ack
+0000f4 e001
+0000f5 940e 00a5 	I2C_Read I2C_Ack
                  
-0000cc 9300 006b 	sts GYRO_YOUT_L, R16
+0000f7 9300 006b 	sts GYRO_YOUT_L, R16
                  
-0000ce e001
-0000cf 940e 007a 	I2C_Read I2C_Ack
+0000f9 e001
+0000fa 940e 00a5 	I2C_Read I2C_Ack
                  
-0000d1 9300 006c 	sts GYRO_ZOUT_H, R16
+0000fc 9300 006c 	sts GYRO_ZOUT_H, R16
                  
-0000d3 e000
-0000d4 940e 007a 	I2C_Read I2C_Nack
+0000fe e000
+0000ff 940e 00a5 	I2C_Read I2C_Nack
                  
-0000d6 9300 006b 	sts GYRO_YOUT_L, R16
+000101 9300 006b 	sts GYRO_YOUT_L, R16
                  
-0000d8 940e 0070 	call I2C_Stop
-0000da 9508      
+000103 940e 009b 	call I2C_Stop
+                 .include "Timers.asm"
+000105 9508      
+                 
+                 
+                 
+                 ; Initialize timer0 to generate an output compare interrupt every 1[ms]
+                 .MACRO Timer0_Init
+                 			ldi		R16, 0b00001011			; CTC-mode, 1/64 prescaling -> 250 cycles pr ms.
+                 			out		TCCR0, R16
+                 			ldi		R16, 0x00
+                 			out		TCNT0, R16				; Counter0 initialization
+                 			ldi		R16, 249				; 249+1 cycles = 1[ms] for every output compare match
+                 			out		OCR0, R16
+                 			
+                 			clr		R16
+                 			sts		Timer_1ms_L, R16
+                 			sts		Timer_1ms_M, R16
+                 			sts		Timer_1ms_H, R16	
+                 .ENDMACRO
+                 
+                 ; Timer subroutines
+                 
+                 Timer0_Update:
+                 			
+000106 e041      			ldi		R20, 0x01
+000107 9000 0070 			lds		R0, Timer_1ms_L
+000109 0e04      			add		R0, R20	
+00010a 9200 0070 			sts		Timer_1ms_L, R0	
+00010c f468      			brcc	Timer_Update_End
+                 			
+00010d e040      			ldi		R20, 0x00
+00010e 9010 006f 			lds		R1, Timer_1ms_M
+000110 1e14      			adc		R1, R20
+000111 9210 006f 			sts		Timer_1ms_M, R1	
+000113 f430      			brcc	Timer_Update_End
+                 			
+000114 9020 006e 			lds		R2, Timer_1ms_H
+000116 1e24      			adc		R2, R20
+000117 9220 006e 			sts		Timer_1ms_H, R2
+000119 f400      			brcc	Timer_Update_End
+                 			
+                 Timer_Update_End:	
+                 		
+00011a 9518      			reti
+                 .include "Interrupts.asm"
+                 
+                 
+                 .MACRO Interrupts_Init
+                 			ldi		R16, (1<<OCIE0)			; enable interrupt on output compare match for timer0
+                 			out		TIMSK, R16				; timer/interrupt masking register
+                 			sei								; enable global interrupt
+                 .ENDMACRO
+                 
                  Init:
                  	
                  	;Initialize the stack
-0000db e50f      	LDI	R16, low(RAMEND)
-0000dc bf0d          OUT	SPL, R16
-0000dd e008      	LDI	R16, high(RAMEND)
-0000de bf0e          OUT	SPH, R16			
+00011b e50f      	LDI	R16, low(RAMEND)
+00011c bf0d          OUT	SPL, R16
+00011d e008      	LDI	R16, high(RAMEND)
+00011e bf0e          OUT	SPH, R16			
                  
-0000df e008
-0000e0 e010
-0000e1 bd10
-0000e2 b909
-0000e3 e108
-0000e4 b90a
-0000e5 e806
-0000e6 bd00      	USART_Init 0b00000000,0b00001000 
-0000e7 9a8f
-0000e8 e609
-0000e9 bd05      	Motor_Init
-0000ea e000
-0000eb b901
-0000ec e102
-0000ed b900
-0000ee e004
-0000ef bf06
-0000f0 0000      	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
-0000f1 940e 006a
-0000f3 ed00
-0000f4 940e 0073
-0000f6 e109
-0000f7 940e 0073
-0000f9 e007
-0000fa 940e 0073
-0000fc e000
-0000fd 940e 0073
-0000ff e008
-000100 940e 0073
-000102 e008
-000103 940e 0073
-000105 e000
-000106 940e 0073
-000108 e000
-000109 940e 0073
-00010b e000
-00010c 940e 0073
-00010e e000
-00010f 940e 0073
-000111 e000
-000112 940e 0073
-000114 e000
-000115 940e 0073
-000117 e000
-000118 940e 0073
-00011a e000
-00011b 940e 0073
-00011d e000
-00011e 940e 0073
-000120 e000
-000121 940e 0073
-000123 e000
-000124 940e 0073
-000126 e000
-000127 940e 0073
-000129 e000
-00012a 940e 0073
-00012c e000
-00012d 940e 0073
-00012f e000
-000130 940e 0073
-000132 e000
-000133 940e 0073
-000135 e000
-000136 940e 0073
-000138 e000
-000139 940e 0073
-00013b e000
-00013c 940e 0073
-00013e e000
-00013f 940e 0073
-000141 e000
-000142 940e 0073
-000144 e000
-000145 940e 0073
-000147 e000
-000148 940e 0073
-00014a e000
-00014b 940e 0073
-00014d e000
-00014e 940e 0073
-000150 940e 006a
-000152 ed00
-000153 940e 0073
-000155 e307
-000156 940e 0073
+00011f e008
+000120 e010
+000121 bd10
+000122 b909
+000123 e108
+000124 b90a
+000125 e806
+000126 bd00      	USART_Init 0b00000000,0b00001000 
+000127 9a8f
+000128 e609
+000129 bd05      	Motor_Init
+00012a e000
+00012b b901
+00012c e102
+00012d b900
+00012e e004
+00012f bf06
+000130 0000      	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
+000131 e00b
+000132 bf03
+000133 e000
+000134 bf02
+000135 ef09
+000136 bf0c
+000137 2700
+000138 9300 0070
+00013a 9300 006f
+00013c 9300 006e 	Timer0_Init
+00013e 940e 0095
+000140 ed00
+000141 940e 009e
+000143 e109
+000144 940e 009e
+000146 e007
+000147 940e 009e
+000149 e000
+00014a 940e 009e
+00014c e008
+00014d 940e 009e
+00014f e008
+000150 940e 009e
+000152 e000
+000153 940e 009e
+000155 e000
+000156 940e 009e
 000158 e000
-000159 940e 0073
+000159 940e 009e
 00015b e000
-00015c 940e 0073
-00015e 940e 006a
-000160 ed00
-000161 940e 0073
-000163 e603
-000164 940e 0073
-000166 e000
-000167 940e 0073
-000169 e000
-00016a 940e 0073
-00016c e000
-00016d 940e 0073
-00016f e000
-000170 940e 0073
-000172 e000
-000173 940e 0073
-000175 e000
-000176 940e 0073
-000178 e000
-000179 940e 0073
-00017b e000
-00017c 940e 0073
-00017e e002
-00017f 940e 0073
-000181 e000
-000182 940e 0073
-000184 940e 006a
-000186 ed00
-000187 940e 0073
-000189 e704
-00018a 940e 0073
-00018c e000
-00018d 940e 0073
-00018f 940e 0070 	MPU6050_Init
-000191 940e 006a
-000193 ed00
-000194 940e 0073
-000196 e109
-000197 940e 0073
-000199 e007
-00019a 940e 0073
-00019c e000
-00019d 940e 0073
-00019f e008
-0001a0 940e 0073
-0001a2 e008
-0001a3 940e 0073
+00015c 940e 009e
+00015e e000
+00015f 940e 009e
+000161 e000
+000162 940e 009e
+000164 e000
+000165 940e 009e
+000167 e000
+000168 940e 009e
+00016a e000
+00016b 940e 009e
+00016d e000
+00016e 940e 009e
+000170 e000
+000171 940e 009e
+000173 e000
+000174 940e 009e
+000176 e000
+000177 940e 009e
+000179 e000
+00017a 940e 009e
+00017c e000
+00017d 940e 009e
+00017f e000
+000180 940e 009e
+000182 e000
+000183 940e 009e
+000185 e000
+000186 940e 009e
+000188 e000
+000189 940e 009e
+00018b e000
+00018c 940e 009e
+00018e e000
+00018f 940e 009e
+000191 e000
+000192 940e 009e
+000194 e000
+000195 940e 009e
+000197 e000
+000198 940e 009e
+00019a e000
+00019b 940e 009e
+00019d 940e 0095
+00019f ed00
+0001a0 940e 009e
+0001a2 e307
+0001a3 940e 009e
 0001a5 e000
-0001a6 940e 0073
+0001a6 940e 009e
 0001a8 e000
-0001a9 940e 0073
-0001ab e000
-0001ac 940e 0073
-0001ae e000
-0001af 940e 0073
-0001b1 e000
-0001b2 940e 0073
-0001b4 e000
-0001b5 940e 0073
-0001b7 e000
-0001b8 940e 0073
-0001ba e000
-0001bb 940e 0073
-0001bd e000
-0001be 940e 0073
-0001c0 e000
-0001c1 940e 0073
-0001c3 e000
-0001c4 940e 0073
-0001c6 e000
-0001c7 940e 0073
-0001c9 e000
-0001ca 940e 0073
-0001cc e000
-0001cd 940e 0073
-0001cf e000
-0001d0 940e 0073
-0001d2 e000
-0001d3 940e 0073
-0001d5 e000
-0001d6 940e 0073
-0001d8 e000
-0001d9 940e 0073
-0001db e000
-0001dc 940e 0073
-0001de e000
-0001df 940e 0073
-0001e1 e000
-0001e2 940e 0073
-0001e4 e000
-0001e5 940e 0073
-0001e7 e000
-0001e8 940e 0073
-0001ea e000
-0001eb 940e 0073
-0001ed e000
-0001ee 940e 0073
-0001f0 940e 006a
-0001f2 ed00
-0001f3 940e 0073
-0001f5 e307
-0001f6 940e 0073
+0001a9 940e 009e
+0001ab 940e 0095
+0001ad ed00
+0001ae 940e 009e
+0001b0 e603
+0001b1 940e 009e
+0001b3 e000
+0001b4 940e 009e
+0001b6 e000
+0001b7 940e 009e
+0001b9 e000
+0001ba 940e 009e
+0001bc e000
+0001bd 940e 009e
+0001bf e000
+0001c0 940e 009e
+0001c2 e000
+0001c3 940e 009e
+0001c5 e000
+0001c6 940e 009e
+0001c8 e000
+0001c9 940e 009e
+0001cb e002
+0001cc 940e 009e
+0001ce e000
+0001cf 940e 009e
+0001d1 940e 0095
+0001d3 ed00
+0001d4 940e 009e
+0001d6 e704
+0001d7 940e 009e
+0001d9 e000
+0001da 940e 009e
+0001dc 940e 009b 	MPU6050_Init
+0001de 940e 0095
+0001e0 ed00
+0001e1 940e 009e
+0001e3 e109
+0001e4 940e 009e
+0001e6 e007
+0001e7 940e 009e
+0001e9 e000
+0001ea 940e 009e
+0001ec e008
+0001ed 940e 009e
+0001ef e008
+0001f0 940e 009e
+0001f2 e000
+0001f3 940e 009e
+0001f5 e000
+0001f6 940e 009e
 0001f8 e000
-0001f9 940e 0073
+0001f9 940e 009e
 0001fb e000
-0001fc 940e 0073
-0001fe 940e 006a
-000200 ed00
-000201 940e 0073
-000203 e603
-000204 940e 0073
-000206 e000
-000207 940e 0073
-000209 e000
-00020a 940e 0073
-00020c e000
-00020d 940e 0073
-00020f e000
-000210 940e 0073
-000212 e000
-000213 940e 0073
-000215 e000
-000216 940e 0073
-000218 e000
-000219 940e 0073
-00021b e000
-00021c 940e 0073
-00021e e002
-00021f 940e 0073
-000221 e000
-000222 940e 0073
-000224 940e 006a
-000226 ed00
-000227 940e 0073
-000229 e704
-00022a 940e 0073
-00022c e000
-00022d 940e 0073
-00022f 940e 0070 	MPU6050_Init
-000231 940e 006a
-000233 ed00
-000234 940e 0073
-000236 e109
-000237 940e 0073
-000239 e007
-00023a 940e 0073
-00023c e000
-00023d 940e 0073
-00023f e008
-000240 940e 0073
-000242 e008
-000243 940e 0073
+0001fc 940e 009e
+0001fe e000
+0001ff 940e 009e
+000201 e000
+000202 940e 009e
+000204 e000
+000205 940e 009e
+000207 e000
+000208 940e 009e
+00020a e000
+00020b 940e 009e
+00020d e000
+00020e 940e 009e
+000210 e000
+000211 940e 009e
+000213 e000
+000214 940e 009e
+000216 e000
+000217 940e 009e
+000219 e000
+00021a 940e 009e
+00021c e000
+00021d 940e 009e
+00021f e000
+000220 940e 009e
+000222 e000
+000223 940e 009e
+000225 e000
+000226 940e 009e
+000228 e000
+000229 940e 009e
+00022b e000
+00022c 940e 009e
+00022e e000
+00022f 940e 009e
+000231 e000
+000232 940e 009e
+000234 e000
+000235 940e 009e
+000237 e000
+000238 940e 009e
+00023a e000
+00023b 940e 009e
+00023d 940e 0095
+00023f ed00
+000240 940e 009e
+000242 e307
+000243 940e 009e
 000245 e000
-000246 940e 0073
+000246 940e 009e
 000248 e000
-000249 940e 0073
-00024b e000
-00024c 940e 0073
-00024e e000
-00024f 940e 0073
-000251 e000
-000252 940e 0073
-000254 e000
-000255 940e 0073
-000257 e000
-000258 940e 0073
-00025a e000
-00025b 940e 0073
-00025d e000
-00025e 940e 0073
-000260 e000
-000261 940e 0073
-000263 e000
-000264 940e 0073
-000266 e000
-000267 940e 0073
-000269 e000
-00026a 940e 0073
-00026c e000
-00026d 940e 0073
-00026f e000
-000270 940e 0073
-000272 e000
-000273 940e 0073
-000275 e000
-000276 940e 0073
-000278 e000
-000279 940e 0073
-00027b e000
-00027c 940e 0073
-00027e e000
-00027f 940e 0073
-000281 e000
-000282 940e 0073
-000284 e000
-000285 940e 0073
-000287 e000
-000288 940e 0073
-00028a e000
-00028b 940e 0073
-00028d e000
-00028e 940e 0073
-000290 940e 006a
-000292 ed00
-000293 940e 0073
-000295 e307
-000296 940e 0073
+000249 940e 009e
+00024b 940e 0095
+00024d ed00
+00024e 940e 009e
+000250 e603
+000251 940e 009e
+000253 e000
+000254 940e 009e
+000256 e000
+000257 940e 009e
+000259 e000
+00025a 940e 009e
+00025c e000
+00025d 940e 009e
+00025f e000
+000260 940e 009e
+000262 e000
+000263 940e 009e
+000265 e000
+000266 940e 009e
+000268 e000
+000269 940e 009e
+00026b e002
+00026c 940e 009e
+00026e e000
+00026f 940e 009e
+000271 940e 0095
+000273 ed00
+000274 940e 009e
+000276 e704
+000277 940e 009e
+000279 e000
+00027a 940e 009e
+00027c 940e 009b 	MPU6050_Init
+00027e 940e 0095
+000280 ed00
+000281 940e 009e
+000283 e109
+000284 940e 009e
+000286 e007
+000287 940e 009e
+000289 e000
+00028a 940e 009e
+00028c e008
+00028d 940e 009e
+00028f e008
+000290 940e 009e
+000292 e000
+000293 940e 009e
+000295 e000
+000296 940e 009e
 000298 e000
-000299 940e 0073
+000299 940e 009e
 00029b e000
-00029c 940e 0073
-00029e 940e 006a
-0002a0 ed00
-0002a1 940e 0073
-0002a3 e603
-0002a4 940e 0073
-0002a6 e000
-0002a7 940e 0073
-0002a9 e000
-0002aa 940e 0073
-0002ac e000
-0002ad 940e 0073
-0002af e000
-0002b0 940e 0073
-0002b2 e000
-0002b3 940e 0073
-0002b5 e000
-0002b6 940e 0073
-0002b8 e000
-0002b9 940e 0073
-0002bb e000
-0002bc 940e 0073
-0002be e002
-0002bf 940e 0073
-0002c1 e000
-0002c2 940e 0073
-0002c4 940e 006a
-0002c6 ed00
-0002c7 940e 0073
-0002c9 e704
-0002ca 940e 0073
-0002cc e000
-0002cd 940e 0073
-0002cf 940e 0070 	MPU6050_Init
-0002d1 e404      	ldi R16, 'D'
-0002d2 940e 0001 	call USART_Transmit
-0002d4 e00d
-0002d5 940e 0001
-0002d7 e00a
-0002d8 940e 0001 	USART_Newline
+00029c 940e 009e
+00029e e000
+00029f 940e 009e
+0002a1 e000
+0002a2 940e 009e
+0002a4 e000
+0002a5 940e 009e
+0002a7 e000
+0002a8 940e 009e
+0002aa e000
+0002ab 940e 009e
+0002ad e000
+0002ae 940e 009e
+0002b0 e000
+0002b1 940e 009e
+0002b3 e000
+0002b4 940e 009e
+0002b6 e000
+0002b7 940e 009e
+0002b9 e000
+0002ba 940e 009e
+0002bc e000
+0002bd 940e 009e
+0002bf e000
+0002c0 940e 009e
+0002c2 e000
+0002c3 940e 009e
+0002c5 e000
+0002c6 940e 009e
+0002c8 e000
+0002c9 940e 009e
+0002cb e000
+0002cc 940e 009e
+0002ce e000
+0002cf 940e 009e
+0002d1 e000
+0002d2 940e 009e
+0002d4 e000
+0002d5 940e 009e
+0002d7 e000
+0002d8 940e 009e
+0002da e000
+0002db 940e 009e
+0002dd 940e 0095
+0002df ed00
+0002e0 940e 009e
+0002e2 e307
+0002e3 940e 009e
+0002e5 e000
+0002e6 940e 009e
+0002e8 e000
+0002e9 940e 009e
+0002eb 940e 0095
+0002ed ed00
+0002ee 940e 009e
+0002f0 e603
+0002f1 940e 009e
+0002f3 e000
+0002f4 940e 009e
+0002f6 e000
+0002f7 940e 009e
+0002f9 e000
+0002fa 940e 009e
+0002fc e000
+0002fd 940e 009e
+0002ff e000
+000300 940e 009e
+000302 e000
+000303 940e 009e
+000305 e000
+000306 940e 009e
+000308 e000
+000309 940e 009e
+00030b e002
+00030c 940e 009e
+00030e e000
+00030f 940e 009e
+000311 940e 0095
+000313 ed00
+000314 940e 009e
+000316 e704
+000317 940e 009e
+000319 e000
+00031a 940e 009e
+00031c 940e 009b 	MPU6050_Init
+00031e e404      	ldi R16, 'D'
+00031f 940e 002c 	call USART_Transmit
+000321 e00d
+000322 940e 002c
+000324 e00a
+000325 940e 002c 	USART_Newline
                  	;Motor_Set 120
-0002da c000      	rjmp	Main
+000327 e002
+000328 bf09
+000329 9478      	Interrupts_Init ; Must be the last thing to be enabled!
+00032a c000      	rjmp	Main
                  
                  Main:
+                 	
+00032b 94f8      	cli
+00032c e00a      	ldi R16, 10
+00032d 940e 0016 	call Delay_MS
                  
-0002db 940e 0085 	call MPU6050_Read_Dataset
+00032f 94f8      	cli
+000330 e000
+000331 bd03      	Motor_Set 0
+000332 9478      	sei
                  
-0002dd 9110 006c 	lds R17, GYRO_ZOUT_H
+000333 ef0a      	ldi R16, 250
+000334 940e 0016 	call Delay_MS
                  
-0002df 9100 006d 	lds R16, GYRO_ZOUT_L
+000336 94f8      	cli
+000337 ef0f
+000338 bd03      	Motor_Set 255
+000339 9478      	sei
                  
-0002e1 940e 0019 	call USART_Decimal_S16
+00033a 9100 0070 	lds R16, Timer_1ms_L
+00033c 9110 006f 	lds R17, Timer_1ms_M
                  
-0002e3 e00d
-0002e4 940e 0001
-0002e6 e00a
-0002e7 940e 0001 	USART_Newline
+00033e 940e 0044 	call USART_Decimal_S16
+000340 e00d
+000341 940e 002c
+000343 e00a
+000344 940e 002c 	USART_Newline
                  
-0002e9 cff1      rjmp	MAIN
+000346 cfe4      rjmp	MAIN
                  
 
 
@@ -1990,39 +2101,39 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega32A" register use summary:
-r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
-r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16: 240 r17:   7 r18:  16 r19:  14 r20:  20 r21:   0 r22:   0 r23:   0 
+r0 :   3 r1 :   3 r2 :   3 r3 :   2 r4 :   2 r5 :   2 r6 :   3 r7 :   2 
+r8 :   2 r9 :   2 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
+r16: 259 r17:   7 r18:  16 r19:  14 r20:  25 r21:   0 r22:   0 r23:   0 
 r24:   0 r25:   0 r26:  15 r27:  15 r28:   0 r29:   0 r30:   0 r31:   0 
 x  :   0 y  :   0 z  :   0 
-Registers used: 7 out of 35 (20.0%)
+Registers used: 17 out of 35 (48.6%)
 
 "ATmega32A" instruction use summary:
-.lds  :   0 .sts  :   0 adc   :   5 add   :  10 adiw  :   0 and   :   0 
+.lds  :   0 .sts  :   0 adc   :   7 add   :  11 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   5 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
-brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
+brcc  :   8 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
+brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
 brne  :   1 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  : 200 cbi   :   0 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   5 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   2 cp    :   0 cpc   :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  : 201 cbi   :   0 cbr   :   0 
+clc   :   0 clh   :   0 cli   :   4 cln   :   0 clr   :   6 cls   :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   2 cp    :   1 cpc   :   0 
 cpi   :   1 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   5 inc   :   6 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   : 206 lds   :   2 lpm   :   0 lsl   :   1 
-lsr   :   0 mov   :   1 movw  :   1 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :  16 pop   :   0 
-push  :   0 rcall :   0 ret   :   9 reti  :   0 rjmp  :  13 rol   :   0 
-ror   :   0 sbc   :   5 sbci  :   1 sbi   :   1 sbic  :   0 sbis  :   2 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   5 inc   :   6 jmp   :   1 
+ld    :   0 ldd   :   0 ldi   : 216 lds   :  11 lpm   :   0 lsl   :   1 
+lsr   :   0 mov   :   2 movw  :   1 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :  22 pop   :   0 
+push  :   0 rcall :   0 ret   :  10 reti  :   1 rjmp  :  13 rol   :   0 
+ror   :   0 sbc   :   7 sbci  :   1 sbi   :   1 sbic  :   0 sbis  :   2 
 sbiw  :   0 sbr   :   0 sbrc  :   1 sbrs  :   5 sec   :   0 seh   :   0 
-sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
-sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  14 
-sub   :   5 subi  :   1 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 29 out of 113 (25.7%)
+sei   :   5 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
+sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  20 
+sub   :   6 subi  :   1 swap  :   0 tst   :   0 wdr   :   0 
+Instructions used: 35 out of 113 (31.0%)
 
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0005d4   1492      0   1492   32768   4.6%
+[.cseg] 0x000000 0x00068e   1640      0   1640   32768   5.0%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
