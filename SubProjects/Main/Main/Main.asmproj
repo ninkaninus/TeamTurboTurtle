@@ -79,6 +79,9 @@
     <Compile Include="SRAM-Mapping.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Testcode-Fast-lap.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="USART_library.asm">
       <SubType>Code</SubType>
     </Compile>

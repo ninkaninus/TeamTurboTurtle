@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Tue Apr 14 13:51:29 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Tue Apr 14 14:02:27 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(9): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\SRAM-Mapping.asm'
@@ -1953,95 +1953,25 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:
 0002d5 940e 0001
 0002d7 e00a
 0002d8 940e 0001 	USART_Newline
-0002da e708
-0002db bd03      	Motor_Set 120
-                 
-0002dc c000      	rjmp	Main
+                 	;Motor_Set 120
+0002da c000      	rjmp	Main
                  
                  Main:
-                 	 /*
-                 	call MPU6050_Read_Dataset
                  
-                 	lds R17, GYRO_ZOUT_H
+0002db 940e 0085 	call MPU6050_Read_Dataset
                  
-                 	lds R16, GYRO_ZOUT_L
+0002dd 9110 006c 	lds R17, GYRO_ZOUT_H
                  
-                 	call USART_Decimal_S16
+0002df 9100 006d 	lds R16, GYRO_ZOUT_L
                  
-                 	USART_Newline
-                 	*/
+0002e1 940e 0019 	call USART_Decimal_S16
                  
-                 	.equ NUMB = 1000
+0002e3 e00d
+0002e4 940e 0001
+0002e6 e00a
+0002e7 940e 0001 	USART_Newline
                  
-0002dd 940e 0085 	call MPU6050_Read_Dataset
-                 
-0002df 9110 006c 	lds R17, GYRO_ZOUT_H
-                 
-0002e1 9100 006d 	lds R16, GYRO_ZOUT_L
-                 
-0002e3 940e 0019 	call USART_Decimal_S16
-                 
-0002e5 e00d
-0002e6 940e 0001
-0002e8 e00a
-0002e9 940e 0001 	USART_Newline
-                 
-                 
-0002eb 9110 006c 	lds R17, GYRO_ZOUT_H
-                 
-0002ed 9100 006d 	lds R16, GYRO_ZOUT_L
-                 
-0002ef ff17      	sbrs R17, 7
-0002f0 c004      	rjmp COMPUTE
-                 
-0002f1 5001      	subi R16, 0x01
-0002f2 4010      	sbci R17, 0x00
-0002f3 9500      	com R16
-0002f4 9510      	com R17
-                 
-                 COMPUTE:
-                 
-0002f5 3013      	cpi R17, HIGH(NUMB) ; 00011111 01000001 
-                 	
-0002f6 f08c      	brlt LOWER
-                 
-                 	;Higher
-                 
-0002f7 3013      	cpi R17, HIGH(NUMB)
-0002f8 f061      	breq LOWER_CHECK
-                 
-                 	HIGHER:
-                 
-0002f9 e604
-0002fa bd03      	Motor_Set 100 ;100
-                 
-0002fb e408      	ldi R16, 'H'
-0002fc 940e 0001 	call USART_Transmit
-0002fe e00d
-0002ff 940e 0001
-000301 e00a
-000302 940e 0001 	USART_Newline
-000304 c00f      	rjmp Main_End
-                 	
-                 	LOWER_CHECK:
-000305 3e08      	cpi R16, LOW(NUMB)
-000306 f008      	brlo LOWER
-000307 cff1      	rjmp HIGHER
-                 
-                 	LOWER:
-000308 eb04
-000309 bd03      		Motor_Set 180 ;185
-00030a e40c      		ldi R16, 'L'
-00030b 940e 0001 		call USART_Transmit
-00030d e00d
-00030e 940e 0001
-000310 e00a
-000311 940e 0001 		USART_Newline
-000313 c000      		rjmp Main_End
-                 
-                 Main_End:
-                 
-000314 cfc8      rjmp	MAIN
+0002e9 cff1      rjmp	MAIN
                  
 
 
@@ -2062,7 +1992,7 @@ counted separately from r26..r31 here.
 "ATmega32A" register use summary:
 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16: 256 r17:  13 r18:  16 r19:  14 r20:  20 r21:   0 r22:   0 r23:   0 
+r16: 240 r17:   7 r18:  16 r19:  14 r20:  20 r21:   0 r22:   0 r23:   0 
 r24:   0 r25:   0 r26:  15 r27:  15 r28:   0 r29:   0 r30:   0 r31:   0 
 x  :   0 y  :   0 z  :   0 
 Registers used: 7 out of 35 (20.0%)
@@ -2070,29 +2000,29 @@ Registers used: 7 out of 35 (20.0%)
 "ATmega32A" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   5 add   :  10 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   5 brcs  :   0 break :   0 breq  :   1 brge  :   0 brhc  :   0 
-brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   1 brmi  :   0 
+brcc  :   5 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
+brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
 brne  :   1 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  : 206 cbi   :   0 cbr   :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  : 200 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   5 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   4 cp    :   0 cpc   :   0 
-cpi   :   4 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   2 cp    :   0 cpc   :   0 
+cpi   :   1 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   5 inc   :   6 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   : 215 lds   :   4 lpm   :   0 lsl   :   1 
+ld    :   0 ldd   :   0 ldi   : 206 lds   :   2 lpm   :   0 lsl   :   1 
 lsr   :   0 mov   :   1 movw  :   1 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :  19 pop   :   0 
-push  :   0 rcall :   0 ret   :   9 reti  :   0 rjmp  :  17 rol   :   0 
-ror   :   0 sbc   :   5 sbci  :   2 sbi   :   1 sbic  :   0 sbis  :   2 
-sbiw  :   0 sbr   :   0 sbrc  :   1 sbrs  :   6 sec   :   0 seh   :   0 
+neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :  16 pop   :   0 
+push  :   0 rcall :   0 ret   :   9 reti  :   0 rjmp  :  13 rol   :   0 
+ror   :   0 sbc   :   5 sbci  :   1 sbi   :   1 sbic  :   0 sbis  :   2 
+sbiw  :   0 sbr   :   0 sbrc  :   1 sbrs  :   5 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  14 
-sub   :   5 subi  :   2 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 32 out of 113 (28.3%)
+sub   :   5 subi  :   1 swap  :   0 tst   :   0 wdr   :   0 
+Instructions used: 29 out of 113 (25.7%)
 
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00062a   1578      0   1578   32768   4.8%
+[.cseg] 0x000000 0x0005d4   1492      0   1492   32768   4.6%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 

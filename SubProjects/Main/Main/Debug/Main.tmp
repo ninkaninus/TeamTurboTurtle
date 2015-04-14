@@ -59,11 +59,6 @@
   <I2C_Read_Call_Continue><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>75</LINE></I2C_Read_Call_Continue>
   <I2C_Read_Call_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>77</LINE></I2C_Read_Call_Wait>
   <MPU6050_Read_Dataset><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm</FILE><LINE>241</LINE></MPU6050_Read_Dataset>
-  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>38</LINE></Main>
-  <COMPUTE><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>76</LINE></COMPUTE>
-  <LOWER><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>101</LINE></LOWER>
-  <LOWER_CHECK><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>96</LINE></LOWER_CHECK>
-  <HIGHER><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>87</LINE></HIGHER>
-  <Main_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>108</LINE></Main_End>
+  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>37</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>
