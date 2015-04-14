@@ -1,6 +1,6 @@
 William: 6
-Daniel: 3
-Kristian: 0
+Daniel: 4
+Kristian: 1
 Anders: 0
 Joakim: 0
 Jonas: 2
