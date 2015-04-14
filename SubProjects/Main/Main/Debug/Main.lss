@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Tue Apr 14 16:26:56 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Tue Apr 14 16:34:44 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(11): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\SRAM-Mapping.asm'
@@ -2057,7 +2057,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:
                  Main:
                  	
 00032b 94f8      	cli
-00032c e00a      	ldi R16, 10
+00032c e604      	ldi R16, 100
 00032d 940e 0016 	call Delay_MS
                  
 00032f 94f8      	cli

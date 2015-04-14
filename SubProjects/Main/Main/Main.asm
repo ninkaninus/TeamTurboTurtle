@@ -43,7 +43,7 @@ Init:
 Main:
 	
 	cli
-	ldi R16, 10
+	ldi R16, 100
 	call Delay_MS
 
 	cli
