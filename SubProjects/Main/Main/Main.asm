@@ -26,44 +26,85 @@ Init:
 	Motor_Init
 	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
 	MPU6050_Init
+	MPU6050_Init
+	MPU6050_Init
 	ldi R16, 'D'
 	call USART_Transmit
 	USART_Newline
-	Motor_Set 170
+	Motor_Set 120
 
 	rjmp	Main
 
 Main:
+	 /*
+	call MPU6050_Read_Dataset
+
+	lds R17, GYRO_ZOUT_H
+
+	lds R16, GYRO_ZOUT_L
+
+	call USART_Decimal_S16
+
+	USART_Newline
+	*/
+
+	.equ NUMB = 1000
 
 	call MPU6050_Read_Dataset
 
-	lds R17, ACCEL_YOUT_H
+	lds R17, GYRO_ZOUT_H
 
-	lds R16, ACCEL_YOUT_L
+	lds R16, GYRO_ZOUT_L
 
 	call USART_Decimal_S16
 
 	USART_Newline
 
-	lds R17, ACCEL_YOUT_H
 
-	lds R16, ACCEL_YOUT_L
+	lds R17, GYRO_ZOUT_H
 
-	cpi R17, HIGH(8191)
+	lds R16, GYRO_ZOUT_L
+
+	sbrs R17, 7
+	rjmp COMPUTE
+
+	subi R16, 0x01
+	sbci R17, 0x00
+	com R16
+	com R17
+
+COMPUTE:
+
+	cpi R17, HIGH(NUMB) ; 00011111 01000001 
 	
-	/*brge Main_Higher
-	cpi R17, LOW(8191)
-	brge Main_Higher
-	Motor_Set 170
+	brlt LOWER
+
+	;Higher
+
+	cpi R17, HIGH(NUMB)
+	breq LOWER_CHECK
+
+	HIGHER:
+
+	Motor_Set 100 ;100
+
+	ldi R16, 'H'
+	call USART_Transmit
+	USART_Newline
 	rjmp Main_End
+	
+	LOWER_CHECK:
+	cpi R16, LOW(NUMB)
+	brlo LOWER
+	rjmp HIGHER
 
-Main_Higher:
-	Motor_Set 0
-	DELAY_MS 250
-	DELAY_MS 250
-	Motor_Set 100
+	LOWER:
+		Motor_Set 180 ;185
+		ldi R16, 'L'
+		call USART_Transmit
+		USART_Newline
+		rjmp Main_End
 
-	*/
 Main_End:
 
 rjmp	MAIN
