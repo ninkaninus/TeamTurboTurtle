@@ -12,6 +12,11 @@
 
 .org 0x0000
 rjmp Init
+;Interrupt Vector Table
+
+.org 0x0014
+	JMP Timer_Update
+	
 
 ;Board specific port names
 .include "Delay_Macros.asm"
