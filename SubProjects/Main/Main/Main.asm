@@ -2,6 +2,14 @@
 
 .org 0x0000
 rjmp Init
+<<<<<<< HEAD
+.org 0x0014
+jmp Timer0_Update
+
+;Interrupt vector mapping
+=======
+;Interrupt Vector Table
+
 .org 0x0014
 jmp Timer0_Update
 
@@ -38,6 +46,7 @@ Init:
 	rjmp	Main
 
 Main:
+<<<<<<< HEAD
 
 	call MPU6050_Read_Dataset
 
@@ -45,6 +54,15 @@ Main:
 
 	lds R16, GYRO_ZOUT_L
 
+=======
+
+	call MPU6050_Read_Dataset
+
+	lds R17, GYRO_ZOUT_H
+
+	lds R16, GYRO_ZOUT_L
+
+>>>>>>> feature/Timer
 	call USART_Decimal_S16
 
 	USART_Newline
