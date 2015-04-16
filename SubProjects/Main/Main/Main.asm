@@ -41,21 +41,9 @@ Init:
 	rjmp	Main
 
 Main:
-	
-	cli
+
 	ldi R16, 100
 	call Delay_MS
-
-	cli
-	Motor_Set 0
-	sei
-
-	ldi R16, 250
-	call Delay_MS
-
-	cli
-	Motor_Set 255
-	sei
 
 	lds R16, Timer_1ms_L
 	lds R17, Timer_1ms_M

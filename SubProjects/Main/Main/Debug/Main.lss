@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Tue Apr 14 16:34:44 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu Apr 16 10:53:15 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(11): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\SRAM-Mapping.asm'
@@ -2055,34 +2055,20 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:
 00032a c000      	rjmp	Main
                  
                  Main:
-                 	
-00032b 94f8      	cli
-00032c e604      	ldi R16, 100
-00032d 940e 0016 	call Delay_MS
                  
-00032f 94f8      	cli
-000330 e000
-000331 bd03      	Motor_Set 0
-000332 9478      	sei
+00032b e604      	ldi R16, 100
+00032c 940e 0016 	call Delay_MS
                  
-000333 ef0a      	ldi R16, 250
-000334 940e 0016 	call Delay_MS
+00032e 9100 0070 	lds R16, Timer_1ms_L
+000330 9110 006f 	lds R17, Timer_1ms_M
                  
-000336 94f8      	cli
-000337 ef0f
-000338 bd03      	Motor_Set 255
-000339 9478      	sei
+000332 940e 0044 	call USART_Decimal_S16
+000334 e00d
+000335 940e 002c
+000337 e00a
+000338 940e 002c 	USART_Newline
                  
-00033a 9100 0070 	lds R16, Timer_1ms_L
-00033c 9110 006f 	lds R17, Timer_1ms_M
-                 
-00033e 940e 0044 	call USART_Decimal_S16
-000340 e00d
-000341 940e 002c
-000343 e00a
-000344 940e 002c 	USART_Newline
-                 
-000346 cfe4      rjmp	MAIN
+00033a cff0      rjmp	MAIN
                  
 
 
@@ -2103,7 +2089,7 @@ counted separately from r26..r31 here.
 "ATmega32A" register use summary:
 r0 :   3 r1 :   3 r2 :   3 r3 :   2 r4 :   2 r5 :   2 r6 :   3 r7 :   2 
 r8 :   2 r9 :   2 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16: 259 r17:   7 r18:  16 r19:  14 r20:  25 r21:   0 r22:   0 r23:   0 
+r16: 254 r17:   7 r18:  16 r19:  14 r20:  25 r21:   0 r22:   0 r23:   0 
 r24:   0 r25:   0 r26:  15 r27:  15 r28:   0 r29:   0 r30:   0 r31:   0 
 x  :   0 y  :   0 z  :   0 
 Registers used: 17 out of 35 (48.6%)
@@ -2114,18 +2100,18 @@ andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0
 brcc  :   8 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
 brne  :   1 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  : 201 cbi   :   0 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   4 cln   :   0 clr   :   6 cls   :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  : 200 cbi   :   0 cbr   :   0 
+clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   6 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   2 cp    :   1 cpc   :   0 
 cpi   :   1 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   5 inc   :   6 jmp   :   1 
-ld    :   0 ldd   :   0 ldi   : 216 lds   :  11 lpm   :   0 lsl   :   1 
+ld    :   0 ldd   :   0 ldi   : 213 lds   :  11 lpm   :   0 lsl   :   1 
 lsr   :   0 mov   :   2 movw  :   1 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :  22 pop   :   0 
+neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :  20 pop   :   0 
 push  :   0 rcall :   0 ret   :  10 reti  :   1 rjmp  :  13 rol   :   0 
 ror   :   0 sbc   :   7 sbci  :   1 sbi   :   1 sbic  :   0 sbis  :   2 
 sbiw  :   0 sbr   :   0 sbrc  :   1 sbrs  :   5 sec   :   0 seh   :   0 
-sei   :   5 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
+sei   :   3 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  20 
 sub   :   6 subi  :   1 swap  :   0 tst   :   0 wdr   :   0 
 Instructions used: 35 out of 113 (31.0%)
@@ -2133,7 +2119,7 @@ Instructions used: 35 out of 113 (31.0%)
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00068e   1640      0   1640   32768   5.0%
+[.cseg] 0x000000 0x000676   1616      0   1616   32768   4.9%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
