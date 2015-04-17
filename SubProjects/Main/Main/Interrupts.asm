@@ -6,6 +6,8 @@
 			
 			ldi		R16, (1<<INT1)			; enable external interrupt INT1
 			out		GICR, R16				; global interrupt register
+			cbi		DDRD, 3					; PD3(INT1) = input
+			sbi		PORTD, 3				; enable pull-up resistor
 			
 			sei								; enable global interrupt
 .ENDMACRO

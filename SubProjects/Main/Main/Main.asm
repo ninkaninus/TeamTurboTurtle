@@ -3,7 +3,8 @@
 ;Interrupt vector mapping
 .org 0x0000
 rjmp Init
-
+.org 0x04
+jmp Lap_Time
 .org 0x0014
 jmp Timer0_Update
 
