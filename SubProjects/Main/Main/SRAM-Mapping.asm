@@ -26,7 +26,12 @@
 .equ Timer_1ms_M  = 0x006F
 .equ Timer_1ms_L  = 0x0070
 
-;Last lap time
-.equ Lap_time_H	  = 0x0071
-.equ Lap_time_M	  = 0x0072
-.equ Lap_time_L   = 0x0073
+;Finish line time stamp
+.equ Time_Stamp_H = 0x0071
+.equ Time_Stamp_M = 0x0072
+.equ Time_Stamp_L = 0x0073
+
+;Latest lap time
+.equ Lap_time_L   = 0x0074
+.equ Lap_time_M	  = 0x0075
+.equ Lap_time_H	  = 0x0076
