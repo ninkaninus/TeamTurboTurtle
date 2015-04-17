@@ -3,5 +3,9 @@
 .MACRO Interrupts_Init
 			ldi		R16, (1<<OCIE0)			; enable interrupt on output compare match for timer0
 			out		TIMSK, R16				; timer/interrupt masking register
+			
+			ldi		R16, (1<<INT1)			; enable external interrupt INT1
+			out		GICR, R16				; global interrupt register
+			
 			sei								; enable global interrupt
 .ENDMACRO

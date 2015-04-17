@@ -15,6 +15,10 @@
 			sts		Timer_1ms_L, R16
 			sts		Timer_1ms_M, R16
 			sts		Timer_1ms_H, R16	
+			
+			sts		Lap_time_L, R16
+			sts		Lap_time_M, R16
+			sts		Lap_time_H, R16
 .ENDMACRO
 
 ; Timer subroutines
@@ -41,3 +45,40 @@ Timer0_Update:
 Timer_Update_End:	
 		
 			reti
+			
+Lap_Time:	lds		R0, Timer_1ms_L				; current time since startup in ms
+			lds		R1, Timer_1ms_M				
+			lds		R2, Timer_1ms_H				 
+			
+			lds		R3, Lap_time_L				; time stamp at start of lap
+			lds		R4, Lap_time_M
+			lds		R5, Lap_time_H
+			
+			sts		Lap_time_L, R0				; new time stamp for next lap
+			sts		Lap_time_M, R1				
+			sts		Lap_time_H, R2	
+			
+			sub		R0, R3						; difference between current time and last time stamp
+			sbc		R1, R4
+			sbc		R2, R5
+			
+			mov		R0, lapL
+			mov		R1, lapM
+			mov		R2, lapH
+			
+			com		lapL
+			com		lapM
+			com		lapH
+			
+			ldi		R16, (0<<INT1)			; disable external interrupt INT1
+			out		GICR, R16				; global interrupt register
+			
+			sei								; enable global interrupt							
+			call 	delay250ms
+			cli								; disable global interrupt
+			
+			ldi		R16, (1<<INT1)			; enable external interrupt INT1
+			out		GICR, R16				; global interrupt register
+
+			reti			
+
