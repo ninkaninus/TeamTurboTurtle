@@ -6,15 +6,24 @@ Report Written:     Monday, April 20, 2015
 Design Path:        D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard.pcb
 Design Title:       
 Created:            20-04-2015 14:04:38
-Last Saved:         20-04-2015 14:23:55
-Editing Time:       22 min
+Last Saved:         20-04-2015 15:50:50
+Editing Time:       109 min
 Units:              mm (precision 4)
 
 
 Checking integrity of Schematic "D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard.sch" with PCB "D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard.pcb"
 ================================================================================================================================================================================
 
-The designs are the same.
+The PCB and Schematic designs do not match.
+To bring them into line, you will need to make the following changes to the PCB design:
+
+Add Net "N0042"
+Add Net "N0043"
+
+Connect Pin U3-1 to Net "N0043"
+Connect Pin U3-2 to Net "N0042"
+Connect Pin U7-1 to Net "N0043"
+Connect Pin U7-2 to Net "N0042"
 
 
 End Of Report.

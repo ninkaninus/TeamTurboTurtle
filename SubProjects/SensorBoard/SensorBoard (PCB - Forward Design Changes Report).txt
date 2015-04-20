@@ -6,15 +6,17 @@ Report Written:     Monday, April 20, 2015
 Design Path:        D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard.pcb
 Design Title:       
 Created:            20-04-2015 14:04:38
-Last Saved:         20-04-2015 14:16:38
-Editing Time:       18 min
+Last Saved:         20-04-2015 15:50:50
+Editing Time:       109 min
 Units:              mm (precision 4)
 
-Disconnected pin "U3-1" from net "+5V".
-Disconnected pin "U3-2" from net "GND".
-Disconnected pin "U7-1" from net "+5V".
-Disconnected pin "U7-2" from net "GND".
-Disconnected pin "U7-10" from net "GND".
+Added net "N0042".
+Added net "N0043".
+
+Connected pin "U3-1" to net "N0043".
+Connected pin "U3-2" to net "N0042".
+Connected pin "U7-1" to net "N0043".
+Connected pin "U7-2" to net "N0042".
 
 
 End Of Report.
