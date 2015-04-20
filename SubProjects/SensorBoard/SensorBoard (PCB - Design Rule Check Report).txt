@@ -1,0 +1,90 @@
+Design Rule Check Report
+------------------------
+
+Report File:        D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard (PCB - Design Rule Check Report).txt
+Report Written:     Monday, April 20, 2015
+Design Path:        D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard.pcb
+Design Title:       
+Created:            20-04-2015 14:04:38
+Last Saved:         20-04-2015 14:16:38
+Editing Time:       18 min
+Units:              mm (precision 4)
+
+
+Results
+=======
+
+Gap in Net "+3V3" between (2.3700,51.6662) and (2.3700,55.4762) 
+    +3V3.
+Gap in Net "+3V3" between (2.3700,55.4762) and (12.2100,65.4330) 
+    +3V3.
+Gap in Net "+3V3" between (12.2100,65.4330) and (28.7200,65.4330) 
+    +3V3.
+Gap in Net "+3V3" between (28.7200,65.4330) and (56.6600,52.8600) 
+    +3V3.
+Gap in Net "+5V" between (28.7200,55.2730) and (28.7200,58.0670) 
+    +5V.
+Gap in Net "N0022" between (4.2700,55.4762) and (12.2100,63.1470) 
+    N0022.
+Gap in Net "N0022" between (4.2700,55.4762) and (12.2100,47.7581) 
+    N0022.
+Gap in Net "N0023" between (4.2700,51.6662) and (14.7500,47.7581) 
+    N0023.
+Gap in Net "N0023" between (14.7500,47.7581) and (28.7200,63.1470) 
+    N0023.
+Gap in Net "N0033" between (3.3200,57.8638) and (28.7200,60.3530) 
+    N0033.
+Gap in Net "N0033" between (28.7200,60.3530) and (36.8300,3.7500) 
+    N0033.
+Gap in Net "N0034" between (3.3200,54.0538) and (28.7200,52.9870) 
+    N0034.
+Gap in Net "N0034" between (28.7200,52.9870) and (39.3700,3.7500) 
+    N0034.
+
+Number of errors found : 13
+
+
+Settings
+========
+
+
+Spacings
+
+=========
+
+Tracks        Yes
+Pads and Vias Yes
+Shapes        Yes
+Text          Yes
+Board         Yes
+Drills        Yes
+Components    No
+
+
+Manufacturing
+
+==============
+
+Drill Breakout                  No
+Drill Backoff                   No
+Silkscreen Overlap              No
+Copper Text In Board            No
+Min Track Width                 No
+Min Annular Ring                No
+Min Paste Size                  No
+Vias In Pads                    No
+Unplated Vias                   No
+Unplated Pads With Inner Tracks No
+
+
+Nets
+
+=====
+
+Net Completion               Yes
+Dangling Tracks              Yes
+Net Track Length Differences No
+
+
+
+End Of Report.

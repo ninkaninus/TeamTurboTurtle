@@ -1,0 +1,20 @@
+Schematic and PCB Check Report
+------------------------------
+
+Report File:        D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard (PCB - Schematic and PCB Check Report).txt
+Report Written:     Monday, April 20, 2015
+Design Path:        D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard.pcb
+Design Title:       
+Created:            20-04-2015 14:04:38
+Last Saved:         20-04-2015 14:23:55
+Editing Time:       22 min
+Units:              mm (precision 4)
+
+
+Checking integrity of Schematic "D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard.sch" with PCB "D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard.pcb"
+================================================================================================================================================================================
+
+The designs are the same.
+
+
+End Of Report.
