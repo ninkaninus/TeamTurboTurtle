@@ -16,6 +16,8 @@
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.inc</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Timers.asm</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Interrupts.asm</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Debug/Main.obj</FILE>
@@ -28,7 +30,9 @@
   <FILE>Main.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>17</LINE></Init>
+  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>25</LINE></Init>
+  <Timer0_Update><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Timers.asm</FILE><LINE>30</LINE></Timer0_Update>
+  <Lap_Time><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Timers.asm</FILE><LINE>53</LINE></Lap_Time>
   <Delay_MS><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delays.asm</FILE><LINE>38</LINE></Delay_MS>
   <Delay_MS_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delays.asm</FILE><LINE>44</LINE></Delay_MS_Loop>
   <USART_Transmit><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>22</LINE></USART_Transmit>
@@ -61,11 +65,7 @@
   <I2C_Read_Call_Continue><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>75</LINE></I2C_Read_Call_Continue>
   <I2C_Read_Call_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>77</LINE></I2C_Read_Call_Wait>
   <MPU6050_Read_Dataset><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm</FILE><LINE>241</LINE></MPU6050_Read_Dataset>
-  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>38</LINE></Main>
-  <COMPUTE><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>65</LINE></COMPUTE>
-  <LOWER><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>90</LINE></LOWER>
-  <LOWER_CHECK><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>85</LINE></LOWER_CHECK>
-  <HIGHER><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>76</LINE></HIGHER>
-  <Main_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>97</LINE></Main_End>
+  <Timer_Update_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Timers.asm</FILE><LINE>49</LINE></Timer_Update_End>
+  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>51</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>

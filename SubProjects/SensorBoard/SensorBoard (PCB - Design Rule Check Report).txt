@@ -6,42 +6,24 @@ Report Written:     Monday, April 20, 2015
 Design Path:        D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard.pcb
 Design Title:       
 Created:            20-04-2015 14:04:38
-Last Saved:         20-04-2015 14:16:38
-Editing Time:       18 min
+Last Saved:         20-04-2015 16:54:38
+Editing Time:       172 min
 Units:              mm (precision 4)
 
 
 Results
 =======
 
-Gap in Net "+3V3" between (2.3700,51.6662) and (2.3700,55.4762) 
+Gap in Net "+3V3" between (34.7980,24.1300) and (32.7050,21.5138) 
     +3V3.
-Gap in Net "+3V3" between (2.3700,55.4762) and (12.2100,65.4330) 
-    +3V3.
-Gap in Net "+3V3" between (12.2100,65.4330) and (28.7200,65.4330) 
-    +3V3.
-Gap in Net "+3V3" between (28.7200,65.4330) and (56.6600,52.8600) 
-    +3V3.
-Gap in Net "+5V" between (28.7200,55.2730) and (28.7200,58.0670) 
+Gap in Net "+5V" between (31.2420,29.8450) and (31.2420,14.6050) 
     +5V.
-Gap in Net "N0022" between (4.2700,55.4762) and (12.2100,63.1470) 
-    N0022.
-Gap in Net "N0022" between (4.2700,55.4762) and (12.2100,47.7581) 
-    N0022.
-Gap in Net "N0023" between (4.2700,51.6662) and (14.7500,47.7581) 
-    N0023.
-Gap in Net "N0023" between (14.7500,47.7581) and (28.7200,63.1470) 
-    N0023.
-Gap in Net "N0033" between (3.3200,57.8638) and (28.7200,60.3530) 
-    N0033.
-Gap in Net "N0033" between (28.7200,60.3530) and (36.8300,3.7500) 
-    N0033.
-Gap in Net "N0034" between (3.3200,54.0538) and (28.7200,52.9870) 
+Gap in Net "N0034" between (33.6550,19.1262) and (33.5280,14.6050) 
     N0034.
-Gap in Net "N0034" between (28.7200,52.9870) and (39.3700,3.7500) 
+Gap in Net "N0034" between (33.5280,14.6050) and (39.3700,3.7500) 
     N0034.
 
-Number of errors found : 13
+Number of errors found : 4
 
 
 Settings

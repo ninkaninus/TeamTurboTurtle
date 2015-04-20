@@ -3,12 +3,13 @@
 ;Interrupt vector mapping
 .org 0x0000
 rjmp Init
-;INT 1 interrupt
-.org 0x04
-jmp Lap_Time
 ;Timer0 CTC interrupt
 .org 0x0014
 jmp Timer0_Update
+;Comparator interrupt
+.org 0x24
+jmp Lap_Time
+
 
 ;Library includes
 .include "SRAM-Mapping.asm"
@@ -33,9 +34,13 @@ Init:
 	Motor_Init
 	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
 	Timer0_Init
-	MPU6050_Init
-	MPU6050_Init
-	MPU6050_Init
+	;MPU6050_Init
+	;MPU6050_Init
+	;MPU6050_Init
+
+	cbi DDRB, 2
+	cbi DDRB, 3
+
 	ldi R16, 'D'
 	call USART_Transmit
 	USART_Newline
@@ -48,8 +53,8 @@ Main:
 	ldi R16, 100
 	call Delay_MS
 
-	lds R16, Timer_1ms_L
-	lds R17, Timer_1ms_M
+	lds R16, Lap_Time_L
+	lds R17, Lap_Time_M
 
 	call USART_Decimal_S16
 	USART_Newline
