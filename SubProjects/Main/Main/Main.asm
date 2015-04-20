@@ -3,8 +3,10 @@
 ;Interrupt vector mapping
 .org 0x0000
 rjmp Init
+;INT 1 interrupt
 .org 0x04
 jmp Lap_Time
+;Timer0 CTC interrupt
 .org 0x0014
 jmp Timer0_Update
 
