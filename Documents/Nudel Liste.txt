@@ -1,4 +1,4 @@
-William: 6
+William: 8
 Daniel: 8
 Kristian: 1
 Anders: 0
