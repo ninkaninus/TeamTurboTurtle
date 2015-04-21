@@ -7,8 +7,9 @@
 .def	R19=Hastighed_D			;Forøgelsen af hastighed
 .def	R20=lystest				;Værdi fra lysdioden
 .def	R21=Længde				;Længden af vejstykket
-.def	R22=Type				;Type af vejstykket
-.def	R23=check				;checker om den første tur er begyndt.
+.def	R22=Antal				;Antal skift
+.def	R23=Type				;Type af vejstykket
+.def	R24=check				;checker om den første tur er begyndt.
 
 ;Stack Initialize
 
@@ -27,9 +28,14 @@ out		SPH,STACK
 
 %% Første omgang
 INITIAL_ROUND:
+;Initialize først
 		ldi		check,			0
 		ldi		Hastighed_out,	50
 		ldi		Hastighed_D,	0
+		ldi		Antal,			0
+		clr		R27
+		ldi		R26,			Map_start	;Første Ram hukommelse tildelt til mapping
+		
 		out		OCR2,			Hastighed_out
 
 		in		lystest,	lysdiode		;Tester om den første lap er begyndt
@@ -124,21 +130,33 @@ rjmp	LEFT_TURN2
 
 SKIFT:
 
-Gem Type og Længde
+		inc		Antal					;Forøg antal med en enkelt - Bruges til at checke hvor lang listen er
+		st		X+,			Længde		;Sæt længden ind først-
+		st		X+,			Type		;og derefter vejtypen.
 
 jmp		SKIFT_TEST
 
 
 HALL_INTERRUPT:
 
+		cpi		check,		0			;Check om den første runde er begyndt
+		brne	HALL1
+		ret
+		
+HALL1:
+
+		cpi		check,		1			;Check om den første runde er færdig
+		brne	HALL2
+
 		inc		Længde
 		in		Hastighed,	timer
 		cpi		Hastighed_set,	Hastighed
-		brlo	LOW
+		brlo	LOW						;Checker om hastigheden er for høj eller for lav
 		
 		inc		Hastighed_out
 		add		Hastighed_out,	Hastighed_D
 		out		OCR2,		Hastighed_out
+		
 ret
 
 LOW:
@@ -149,14 +167,18 @@ LOW:
 
 ret
 
+HALL2:
+
+
+
+ret
+
 LAP_INTERRUPT:
 
 		inc		Hastighed_D
-
-
-
-
-
+		ldi		check,		2
+		clr		R27
+		ldi		R26,			Map_start
 
 ret
 
