@@ -30,7 +30,7 @@ INITIAL_ROUND:
 		ldi		check,			0
 		ldi		Hastighed_out,	50
 		ldi		Hastighed_D,	0
-		out		PWM,			Hastighed_out
+		out		OCR2,			Hastighed_out
 
 		in		lystest,	lysdiode		;Tester om den første lap er begyndt
 		cpi		lystest,		0
@@ -138,14 +138,14 @@ HALL_INTERRUPT:
 		
 		inc		Hastighed_out
 		add		Hastighed_out,	Hastighed_D
-		out		PWM,		Hastighed_out
+		out		OCR2,		Hastighed_out
 ret
 
 LOW:
 
 		dec		Hastighed_out
 		add		Hastighed_out,	Hastighed_D
-		out		PWM,		Hastighed_out
+		out		OCR2,		Hastighed_out
 
 ret
 
