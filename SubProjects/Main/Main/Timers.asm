@@ -70,15 +70,23 @@ Lap_Time:	lds		R0, Timer_1ms_L
 			sts		Lap_time_M, R1				; Latest lap time
 			sts		Lap_time_H, R2
 			
-			ldi		R16, 0x00					; Disable external interrupt INT1
+			ldi		R16, 0x40					; Disable external interrupt INT1
 			out		ACSR, R16					; Global interrupt register
 			
-			ldi		R16, 250
+			
+			ldi		R16, 50
 			call 	Delay_MS
 			cli									; Disable global interrupt
 			
-			ldi		R16, 0b00001000				; Enable external interrupt INT1
+			
+			ldi		R16, 0b01011000				; Enable external interrupt INT1
 			out		ACSR, R16					; Global interrupt register
+
+			/*
+			ldi R16, 'G'
+			call USART_Transmit
+			USART_Newline
+			*/
 
 			reti			
 

@@ -79,6 +79,9 @@
     <Compile Include="MPU-6050.inc">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Setup_Io.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SRAM-Mapping.asm">
       <SubType>Code</SubType>
     </Compile>

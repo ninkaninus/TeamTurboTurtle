@@ -38,18 +38,17 @@ Init:
 	;MPU6050_Init
 	;MPU6050_Init
 
-	cbi DDRB, 2
-	cbi DDRB, 3
+	ldi R16, (0<<PB3)
 
 	ldi R16, 'D'
 	call USART_Transmit
 	USART_Newline
-	;Motor_Set 120
+	Motor_Set 115
 	Interrupts_Init ; Must be the last thing to be enabled!
 	rjmp	Main
 
 Main:
-
+	
 	ldi R16, 100
 	call Delay_MS
 
@@ -58,6 +57,7 @@ Main:
 
 	call USART_Decimal_S16
 	USART_Newline
+
 
 rjmp	MAIN
 

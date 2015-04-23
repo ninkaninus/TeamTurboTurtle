@@ -66,6 +66,6 @@
   <I2C_Read_Call_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>77</LINE></I2C_Read_Call_Wait>
   <MPU6050_Read_Dataset><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm</FILE><LINE>241</LINE></MPU6050_Read_Dataset>
   <Timer_Update_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Timers.asm</FILE><LINE>49</LINE></Timer_Update_End>
-  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>51</LINE></Main>
+  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>50</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>
