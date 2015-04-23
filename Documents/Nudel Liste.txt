@@ -1,5 +1,5 @@
 William: 8
-Daniel: 8
+Daniel: 10
 Kristian: 1
 Anders: 1
 Joakim: 0
