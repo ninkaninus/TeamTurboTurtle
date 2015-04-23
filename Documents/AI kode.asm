@@ -27,7 +27,7 @@ out		SPH,STACK
 
 
 %% Første omgang
-INITIAL_ROUND:
+
 ;Initialize først
 		ldi		check,			0
 		ldi		Hastighed_out,	50
@@ -37,23 +37,11 @@ INITIAL_ROUND:
 		ldi		R26,			Map_start	;Første Ram hukommelse tildelt til mapping
 		
 		out		OCR2,			Hastighed_out
+TOMT:
+		nop
+rjmp	TOMT
 
-		in		lystest,	lysdiode		;Tester om den første lap er begyndt
-		cpi		lystest,		0
-		breq	INITIAL_ROUND
-	
-		in		lystest,	lysdiode		;Tester om bilen stadig er på målstregen
-		cpi		lystest,		0xFF
-		brne	FIRST_ROUND
-		
 FIRST_ROUND:
-
-		ldi		check,			1				;viser at den første tur er begyndt.
-
-
-
-
-
 
 
 ;		in		Accel_prior, accelerometer
@@ -136,6 +124,19 @@ SKIFT:
 
 jmp		SKIFT_TEST
 
+RUN_TIME:
+		nop
+rjmp	RUN_TIME
+
+
+
+
+
+
+
+
+
+
 
 HALL_INTERRUPT:
 
@@ -168,23 +169,76 @@ LOW:
 ret
 
 HALL2:
+		cpi		Længde,		0			;Først checkes om der er noget af længden tilbage.
+		brne	RUN
+		ld		Længde,		x+			;Ellers indlæses det næste stykke
+		ld		Type,		x+
+RUN:
 
+		cpi		Type,		1			;Check om lille højre
+		breq	RUN_H1
+		cpi		Type,		2			;Check om lille venstre
+		breq	RUN_V1
+		cpi		Type,		3			;Check om stor højre
+		breq	RUN_H2
+		cpi		Type,		4			;Check om stor venstre
+		breq	RUN_V2
+
+		ldi		Hastighed_out,	100
+		add		Hastighed_out,	Hastighed_D
+		out		OCR2,			Hastighed_out
+
+RUN_H1:
+		ldi		Hastighed_out,	50
+		add		Hastighed_out,	Hastighed_D
+		out		OCR2,			Hastighed_out
+rjmp	RUN_DONE
+
+RUN_V1:
+		ldi		Hastighed_out,	50
+		add		Hastighed_out,	Hastighed_D
+		out		OCR2,			Hastighed_out
+rjmp	RUN_DONE
+
+RUN_H2:
+		ldi		Hastighed_out,	75
+		add		Hastighed_out,	Hastighed_D
+		out		OCR2,			Hastighed_out
+rjmp	RUN_DONE
+
+RUN_V2:
+		ldi		Hastighed_out,	75
+		add		Hastighed_out,	Hastighed_D
+		out		OCR2,			Hastighed_out
+rjmp	RUN_DONE
+
+RUN_DONE:
+		dec		Længde
+ret
 
 
 ret
 
 LAP_INTERRUPT:
+		inc		check,
+		cpi		check,		1
+		brne	TEST_PASS
+jmp		FIRST_ROUND
 
-		inc		Hastighed_D
-		ldi		check,		2
+TEST_PASS:
+		cpi		check,		2
+		brne	TEST_PASS2
 		clr		R27
 		ldi		R26,			Map_start
-
-ret
-
-
-
-
+jmp		FIRST_ROUND
+TEST_PASS2:
+		inc		Hastighed_D
+		clr		R27
+		ldi		R26,			Map_start
+		ldi		check,		2
+		ld		Længde,		x+
+		ld		Type,		x+
+jmp		RUN_TIME
 
 
 
