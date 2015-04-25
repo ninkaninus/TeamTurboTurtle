@@ -1,31 +1,31 @@
-Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = 23-04-2015 13:18:42
+Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = 25-04-2015 23:47:59
 
 BeginCmp
 TimeStamp = /5536E349;
 Reference = P1;
 ValeurCmp = ToyRaceCar_V2_REV3_J4;
-IdModule  = Socket_Strips:Socket_Strip_Straight_1x10;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
 EndCmp
 
 BeginCmp
 TimeStamp = /5536E214;
 Reference = P2;
 ValeurCmp = ToyRaceCar_V2_REV3_J3;
-IdModule  = Socket_Strips:Socket_Strip_Straight_1x10;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
 EndCmp
 
 BeginCmp
 TimeStamp = /5536E168;
 Reference = P3;
 ValeurCmp = ToyRaceCar_V2_REV3_J2;
-IdModule  = Socket_Strips:Socket_Strip_Straight_1x10;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
 EndCmp
 
 BeginCmp
 TimeStamp = /55381BB2;
 Reference = P4;
 ValeurCmp = ToyRaceCar_V2_REV3_J1;
-IdModule  = Socket_Strips:Socket_Strip_Straight_1x06;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x06;
 EndCmp
 
 BeginCmp
@@ -39,7 +39,14 @@ BeginCmp
 TimeStamp = /55381BE9;
 Reference = P6;
 ValeurCmp = ToyRaceCar_V2_REV3_J5;
-IdModule  = Socket_Strips:Socket_Strip_Straight_1x04;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x04;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538F827;
+Reference = P7;
+ValeurCmp = CNY70;
+IdModule  = Sensorboard:KK254;
 EndCmp
 
 BeginCmp
@@ -81,6 +88,20 @@ BeginCmp
 TimeStamp = /553823F8;
 Reference = R4;
 ValeurCmp = 10K;
+IdModule  = Resistors_SMD:R_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553C6C67;
+Reference = R5;
+ValeurCmp = 22K;
+IdModule  = Resistors_SMD:R_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553C6BF8;
+Reference = R6;
+ValeurCmp = 560R;
 IdModule  = Resistors_SMD:R_0603_HandSoldering;
 EndCmp
 
