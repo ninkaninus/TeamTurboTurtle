@@ -1,11 +1,14 @@
 ;Main.asm
 
 ;Interrupt vector mapping
-.org 0x0000
+.org 0x00
 rjmp Init
 ;Timer0 CTC interrupt
-.org 0x0014
+.org 0x14
 jmp Timer0_Update
+;USART received interrupt
+.org 0x1A
+jmp USART_Received
 ;Comparator interrupt
 .org 0x24
 jmp Lap_Time
@@ -30,34 +33,24 @@ Init:
 	LDI	R16, high(RAMEND)
     OUT	SPH, R16			
 
-	USART_Init 0b00000000,0b00001000 
-	Motor_Init
-	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
-	Timer0_Init
+	USART_Init 0b00000000,0b00110011 ;9600 baud, 8MHz clock(from test board)
+	;Motor_Init
+	;I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
+	;Timer0_Init
 	;MPU6050_Init
 	;MPU6050_Init
 	;MPU6050_Init
 
-	ldi R16, (0<<PB3)
+	;ldi R16, (0<<PB3)
 
 	ldi R16, 'D'
 	call USART_Transmit
 	USART_Newline
-	Motor_Set 115
+	;Motor_Set 115
 	Interrupts_Init ; Must be the last thing to be enabled!
 	rjmp	Main
 
 Main:
-	
-	ldi R16, 100
-	call Delay_MS
-
-	lds R16, Lap_Time_L
-	lds R17, Lap_Time_M
-
-	call USART_Decimal_S16
-	USART_Newline
-
 
 rjmp	MAIN
 

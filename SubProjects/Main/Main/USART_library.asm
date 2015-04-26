@@ -10,10 +10,10 @@
 	out UBRRL,	R16
 
 	;Enable receiver and transmitter
-	ldi R16,	(1<<RXEN)|(1<<TXEN)
+	ldi R16,	(1<<RXEN)|(1<<TXEN)|(1<<RXCIE)
 	out	UCSRB,	R16
 
-	; Set frame format: 8data, 2stop bit
+	; Set frame format: 8data, 1stop bit
 	ldi	R16,	(1<<URSEL)|(3<<UCSZ0)
 	out	UCSRC,	R16
  .ENDMACRO
@@ -165,3 +165,9 @@ USART_Decimal_S16_Count_1_Loop:
 	call USART_Transmit
 
 ret
+
+USART_Received:
+	in R16, UDR
+	call USART_Transmit
+	USART_Newline
+reti
