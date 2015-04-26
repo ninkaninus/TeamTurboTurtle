@@ -165,9 +165,3 @@ USART_Decimal_S16_Count_1_Loop:
 	call USART_Transmit
 
 ret
-
-USART_Received:
-	in R16, UDR
-	call USART_Transmit
-	USART_Newline
-reti

@@ -8,7 +8,7 @@ rjmp Init
 jmp Timer0_Update
 ;USART received interrupt
 .org 0x1A
-jmp USART_Received
+jmp Comm_Received
 ;Comparator interrupt
 .org 0x24
 jmp Lap_Time
@@ -23,6 +23,7 @@ jmp Lap_Time
 .include "MPU-6050.inc"
 .include "MPU-6050.asm"
 .include "Timers.asm"
+.include "Communication_Protocol.asm"
 .include "Interrupts.asm"
 
 Init:
@@ -34,6 +35,7 @@ Init:
     OUT	SPH, R16			
 
 	USART_Init 0b00000000,0b00110011 ;9600 baud, 8MHz clock(from test board)
+	Comm_Init
 	;Motor_Init
 	;I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
 	;Timer0_Init

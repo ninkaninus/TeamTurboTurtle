@@ -35,3 +35,8 @@
 .equ Lap_time_L   = 0x0074
 .equ Lap_time_M	  = 0x0075
 .equ Lap_time_H	  = 0x0076
+
+.equ Comm_Received_Byte_Num = 0x0077
+.equ Comm_Received_Byte_1 = 0x0078
+.equ Comm_Received_Byte_2 = 0x0079
+.equ Comm_Received_Byte_3 = 0x007A
