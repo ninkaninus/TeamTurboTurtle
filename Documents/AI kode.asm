@@ -26,26 +26,26 @@ out		SPH,STACK
 
 
 
-%% Første omgang
 
 ;Initialize først
-		ldi		check,			0
-		ldi		Hastighed_out,	50
-		ldi		Hastighed_D,	0
-		ldi		Antal,			0
-		clr		R27
-		ldi		R26,			Map_start	;Første Ram hukommelse tildelt til mapping
+		ldi		check,			0				;Sætter check til 0 - initial omgang indtil målstregen rammes
+		ldi		Hastighed_out,	50				;Sætter hastigheden til 50, så bilen langsomt bevæger sig mod målstregen uden problemer
+		ldi		Hastighed_D,	0				;Den passive hastighedsforøgelse bliver sat til 0. Hver gang bilen passerer målstregen efter den første vil denne blive forøget med 1.
+		ldi		Antal,			0				;Antal skift mellem banetyper - starter i 0 så der kan tælles op.
+		clr		R27								;Clear MSB del af X
+		ldi		R26,			Map_start		;Første Ram hukommelse tildelt til mapping
 		
-		out		OCR2,			Hastighed_out
+		out		OCR2,			Hastighed_out	;Outputter hastigheden til motoren
 TOMT:
-		nop
+		cpi		check,			0				;Indtil den første omgang er færdig skal der ikke ske noget
+		brne	FIRST_ROUND
 rjmp	TOMT
 
-FIRST_ROUND:
+FIRST_ROUND:		;Den første omgang begynder. Der er plads til at indsætte kode der skal bearbejdes før vejtypen checkes.
 
 
-;		in		Accel_prior, accelerometer
-SKIFT_TEST:
+
+SKIFT_TEST:								;Dette loop påbegyndes når der skiftes mellem banetyperne. Den benytter acceleration til at bestemme hvilken banetype bilen befinder sig på
 
 		ldi		Længde		0			;Start på et nyt stykke
 		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
@@ -57,7 +57,9 @@ SKIFT_TEST:
 		brsh	LEFT_TURN
 
 
-LIGEUD:
+LIGEUD:									;Hvis banetypen bestemmes til at være et lige stykke starter dette kontinuære loop,
+;										som checker om accelerometeret angiver et sving. Når bilen kommer ind i et sving
+;										hopper den til skift
 
 		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 		ldi		Type,		0			;Sætter vejtypen til ligeud
@@ -70,7 +72,9 @@ LIGEUD:
 
 rjmp	LIGEUD
 
-RIGHT_TURN:
+RIGHT_TURN:								;Hvis banetypen bestemmes til at være et højre sving starter dette kontinuære loop,
+;										som checker om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
+;										hopper den til skift
 
 		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 		cpi		Accel,		25			;juster værdi, Værdi for acceleration ved stort højre sving
@@ -83,7 +87,9 @@ RIGHT_TURN:
 
 rjmp	RIGHT_TURN
 
-LEFT_TURN:
+LEFT_TURN:								;Hvis banetypen bestemmes til at være et venstre sving starter dette kontinuære loop,
+;										som checker om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
+;										hopper den til skift
 
 		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 		cpi		Accel,		15			;juster værdi, Værdi for acceleration ved stort venstre sving
@@ -96,7 +102,9 @@ LEFT_TURN:
 
 rjmp	LEFT_TURN
 
-RIGHT_TURN2:
+RIGHT_TURN2:							;Hvis banetypen bestemmes til at være et stort højre sving starter dette kontinuære loop,
+;										som checker om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
+;										hopper den til skift
 
 		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 		cpi		Accel,		20			;juster værdi, Værdi for acceleration ved lille højre sving
@@ -106,7 +114,9 @@ RIGHT_TURN2:
 		
 rjmp	RIGHT_TURN2
 
-LEFT_TURN2:
+LEFT_TURN2:								;Hvis banetypen bestemmes til at være et stort venstre sving starter dette kontinuære loop,
+;										som checker om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
+;										hopper den til skift
 
 		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 		cpi		Accel,		10			;juster værdi, Værdi for acceleration ved lille venstre sving
@@ -116,7 +126,7 @@ LEFT_TURN2:
 		
 rjmp	LEFT_TURN2
 
-SKIFT:
+SKIFT:									;Indlæser vejtypen og længden, hvorefter der hoppes tilbage til skift_test
 
 		inc		Antal					;Forøg antal med en enkelt - Bruges til at checke hvor lang listen er
 		st		X+,			Længde		;Sæt længden ind først-
@@ -125,7 +135,7 @@ SKIFT:
 jmp		SKIFT_TEST
 
 RUN_TIME:
-		nop
+		nop								;Hvis der skal ske noget mens bilen kører de øvrige baner skal det skrives her
 rjmp	RUN_TIME
 
 
@@ -138,37 +148,42 @@ rjmp	RUN_TIME
 
 
 
-HALL_INTERRUPT:
+HALL_INTERRUPT:							;Interrupt fra hall sensoren der fungerer som et tachometer
 
-		cpi		check,		0			;Check om den første runde er begyndt
+		cpi		check,		0			;Check om den første runde er begyndt, ellers skal der ikke ske noget
 		brne	HALL1
 		ret
 		
-HALL1:
+HALL1:									;I den første runde skal der blot måles op, så her laver hall interruptet ikke andet end at
+;										måle "afstanden" og justerer hastigheden så accelerometeret får gode resultater.
 
-		cpi		check,		1			;Check om den første runde er færdig
+		cpi		check,		1			;Check om den første runde er færdig.
 		brne	HALL2
 
 		inc		Længde
 		in		Hastighed,	timer
-		cpi		Hastighed_set,	Hastighed
-		brlo	LOW						;Checker om hastigheden er for høj eller for lav
+		cpi		Hastighed,	Hastighed_set
+		brlo	LOW						;Checker om hastigheden er for høj eller for lav7
 		
+										;Hvis det bliver nødvendigt, så benyt resultatet fra skift test til at ændre "Hastighed_set"
+										
+		dec		Hastighed_out			;Hvis hastigheden er for høj sættes den lidt ned
+		add		Hastighed_out,	Hastighed_D
+		out		OCR2,		Hastighed_out
+		
+ret
+
+LOW:									;Hvis hastigheden er for lav sættes den lidt op
+
 		inc		Hastighed_out
 		add		Hastighed_out,	Hastighed_D
 		out		OCR2,		Hastighed_out
-		
-ret
-
-LOW:
-
-		dec		Hastighed_out
-		add		Hastighed_out,	Hastighed_D
-		out		OCR2,		Hastighed_out
 
 ret
 
-HALL2:
+HALL2:									;Hvis den første omgang er færdig skal Hall interruptet stadig måle op
+;										og justerer hastigheden. Den skal dog yderligere skifte mellem de målte banestykker
+
 		cpi		Længde,		0			;Først checkes om der er noget af længden tilbage.
 		brne	RUN
 		ld		Længde,		x+			;Ellers indlæses det næste stykke
@@ -183,60 +198,61 @@ RUN:
 		breq	RUN_H2
 		cpi		Type,		4			;Check om stor venstre
 		breq	RUN_V2
-
-		ldi		Hastighed_out,	100
+										;Hvis alle checks fejler må der være tale om et lige stykke
+		ldi		Hastighed_out,	100		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
 		add		Hastighed_out,	Hastighed_D
 		out		OCR2,			Hastighed_out
+rjmp	RUN_DONE						;Hop til run_done når hastigheden er sat
 
 RUN_H1:
-		ldi		Hastighed_out,	50
+		ldi		Hastighed_out,	50		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
 		add		Hastighed_out,	Hastighed_D
 		out		OCR2,			Hastighed_out
 rjmp	RUN_DONE
 
 RUN_V1:
-		ldi		Hastighed_out,	50
+		ldi		Hastighed_out,	50		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
 		add		Hastighed_out,	Hastighed_D
 		out		OCR2,			Hastighed_out
 rjmp	RUN_DONE
 
 RUN_H2:
-		ldi		Hastighed_out,	75
+		ldi		Hastighed_out,	75		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
 		add		Hastighed_out,	Hastighed_D
 		out		OCR2,			Hastighed_out
 rjmp	RUN_DONE
 
 RUN_V2:
-		ldi		Hastighed_out,	75
+		ldi		Hastighed_out,	75		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
 		add		Hastighed_out,	Hastighed_D
 		out		OCR2,			Hastighed_out
 rjmp	RUN_DONE
 
 RUN_DONE:
-		dec		Længde
+		dec		Længde					;Sætter den tilbageværende "længde" ned med en.
 ret
 
 
 ret
 
-LAP_INTERRUPT:
+LAP_INTERRUPT:							;Lap interrupt skifter fra initial runden til den første runde til alle resterende.
 		inc		check,
 		cpi		check,		1
 		brne	TEST_PASS
-jmp		FIRST_ROUND
+jmp		FIRST_ROUND						;Hopper til den første runde
 
 TEST_PASS:
 		cpi		check,		2
 		brne	TEST_PASS2
-		clr		R27
+		clr		R27						;Nulstiller X
 		ldi		R26,			Map_start
 jmp		FIRST_ROUND
 TEST_PASS2:
 		inc		Hastighed_D
-		clr		R27
+		clr		R27						;Nulstiller X
 		ldi		R26,			Map_start
 		ldi		check,		2
-		ld		Længde,		x+
+		ld		Længde,		x+			;Indlæser den første del af af det gemte map.
 		ld		Type,		x+
 jmp		RUN_TIME
 
