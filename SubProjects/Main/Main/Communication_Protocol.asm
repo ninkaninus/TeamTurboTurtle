@@ -19,6 +19,7 @@
 
 ;Implemetation of the required communication protocol
 Comm_Received:
+
 	lds R16, Comm_Received_Byte_Num			;What byte # did we receive
 
 	cpi R16, 0x01							;If it was the first
@@ -34,6 +35,7 @@ Comm_Received:
 
 ;Received a type
 Comm_Received_Type:
+
 	ldi R16, 0x02							;Set the counter to two
 	sts Comm_Received_Byte_Num, R16			;Store it
 
@@ -43,6 +45,7 @@ Comm_Received_Type:
 
 ;Received a command
 Comm_Received_Command:
+
 	ldi R16, 0x03							;Set the counter to three
 	sts Comm_Received_Byte_Num, R16			;Store it
 
@@ -52,6 +55,7 @@ Comm_Received_Command:
 
 ;Execute the telegram received
 Comm_Received_Execute:
+
 	in r16, UDR								;Read in the received parameter
 	sts Comm_Received_Byte_3, R16			;Store it
 	
@@ -62,14 +66,14 @@ Comm_Received_Execute:
 ;Types
 ;---------------------------------------------------------------------------------------------------------------------
 
+	lds R16, Comm_Received_Byte_1			;Load in the Type
+
 	;SET
-	lds R16, Comm_Received_Byte_1			;Check if we received a SET and branch if it was
-	cpi R16, Comm_Type_SET					;
+	cpi R16, Comm_Type_SET					;Check if we received a SET and branch if it was
 	breq Comm_Received_Type_Set				;
 
 	;GET
-	lds R16, Comm_Received_Byte_1			;Check if we received a GET and branch if it was
-	cpi R16, Comm_Type_GET					;
+	cpi R16, Comm_Type_GET					;Check if we received a GET and branch if it was
 	breq Comm_Received_Type_Get				;
 
 
@@ -78,12 +82,14 @@ Comm_Received_Execute:
 ;---------------------------------------------------------------------------------------------------------------------
 
 Comm_Received_Type_Set:
-	lds R16, Comm_Received_Byte_2			;Load in the second byte
-	cpi R16, Comm_Command_Start				;Check if we received a Start command
-	breq Comm_Received_Type_Set				;
 
-	cpi R16, Comm_Command_Start				;Check if we received a Stop command
-	breq Comm_Received_Type_Set				;
+	lds R16, Comm_Received_Byte_2			;Load in the second byte
+
+	cpi R16, Comm_Command_Start				;Check if we received a Start command
+	breq Comm_Received_Command_Start		;
+
+	cpi R16, Comm_Command_Stop				;Check if we received a Stop command
+	breq Comm_Received_Command_Stop			;
 
 	reti									;Do nothing if it was not a legit code
 
@@ -109,4 +115,5 @@ Comm_Received_Command_Stop:
 ;---------------------------------------------------------------------------------------------------------------------
 
 Comm_Received_Type_Get:	
+
 	reti									;Do nothing if it was not a legit code

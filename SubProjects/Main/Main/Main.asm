@@ -34,9 +34,9 @@ Init:
 	LDI	R16, high(RAMEND)
     OUT	SPH, R16			
 
-	USART_Init 0b00000000,0b01100111 ;9600 baud, 16MHz clock
-	;Comm_Init
-	;Motor_Init
+	USART_Init 0b00000000,0b01100111  ;9600 baud, 16MHz clock
+	Comm_Init
+	Motor_Init
 	;I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
 	;Timer0_Init
 	;MPU6050_Init
@@ -47,14 +47,13 @@ Init:
 
 	;Motor_Set 115
 
-	;ldi R16, 0x01
-	;sts Program_Running, R16
+	ldi R16, 0x01
+	sts Program_Running, R16
 
-	;Interrupts_Init ; Must be the last thing to be enabled!
+	Interrupts_Init ; Must be the last thing to be enabled!
 	rjmp	Main
 
 Main:
-
 	/*
 	;Check if the program should be running
 	lds R16, Program_Running			
@@ -62,12 +61,6 @@ Main:
 	brne MAIN
 	*/
 
-	ldi R16, 'D'
-	call USART_Transmit
-
-	;DELAY_MS_M 50
-
 	;Insert program kode here
 
 rjmp Main
-
