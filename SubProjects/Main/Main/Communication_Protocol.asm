@@ -8,13 +8,15 @@
 .ENDMACRO
 
 
-;Define types
+;Define Types
 .equ Comm_Type_SET = 0x55
 .equ Comm_Type_GET = 0xAA
 
-;Define commands
+;Define Set Commands
 .equ Comm_Command_Start = 0x10
 .equ Comm_Command_Stop = 0x11
+
+;Define Get Commands
 
 
 ;Implemetation of the required communication protocol
