@@ -37,15 +37,13 @@ Init:
 	USART_Init 0b00000000,0b01100111  ;9600 baud, 16MHz clock
 	Comm_Init
 	Motor_Init
-	;I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
-	;Timer0_Init
+	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
+	Timer0_Init
 	;MPU6050_Init
 	;MPU6050_Init
 	;MPU6050_Init
 
-	;ldi R16, (0<<PB3)
-
-	;Motor_Set 115
+	ldi R16, (0<<PB3)
 
 	ldi R16, 0x01
 	sts Program_Running, R16
@@ -54,13 +52,11 @@ Init:
 	rjmp	Main
 
 Main:
-	/*
 	;Check if the program should be running
 	lds R16, Program_Running			
 	cpi R16, 0x01
 	brne MAIN
-	*/
 
-	;Insert program kode here
+	;Insert program code here
 
 rjmp Main

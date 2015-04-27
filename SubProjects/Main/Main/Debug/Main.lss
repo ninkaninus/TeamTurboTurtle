@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Mon Apr 27 17:13:54 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Mon Apr 27 17:19:44 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(18): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\SRAM-Mapping.asm'
@@ -1880,7 +1880,6 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(27): Including file 'D:
 000184 9518      
                  
                  .MACRO Interrupts_Init
-                 			/*
                  			ldi		R16, (1<<OCIE0)			; enable interrupt on output compare match for timer0
                  			out		TIMSK, R16				; timer/interrupt masking register
                  			
@@ -1889,7 +1888,6 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(27): Including file 'D:
                  
                  			ldi R16, (0<<ACME)				; disable comparator multiplexer (AIN1 = inverting input for comparator)
                  			out SFIOR, R16
-                 			*/
                  
                  			sei								; enable global interrupt
                  .ENDMACRO
@@ -1919,33 +1917,56 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(27): Including file 'D:
 00019b 9a8f
 00019c e609
 00019d bd05      	Motor_Init
-                 	;I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
-                 	;Timer0_Init
+00019e e000
+00019f b901
+0001a0 e102
+0001a1 b900
+0001a2 e004
+0001a3 bf06
+0001a4 0000      	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
+0001a5 e00b
+0001a6 bf03
+0001a7 e000
+0001a8 bf02
+0001a9 ef09
+0001aa bf0c
+0001ab 2700
+0001ac 9300 0070
+0001ae 9300 006f
+0001b0 9300 006e
+0001b2 9300 0073
+0001b4 9300 0072
+0001b6 9300 0071
+0001b8 9300 0074
+0001ba 9300 0075
+0001bc 9300 0076 	Timer0_Init
                  	;MPU6050_Init
                  	;MPU6050_Init
                  	;MPU6050_Init
                  
-                 	;ldi R16, (0<<PB3)
+0001be e000      	ldi R16, (0<<PB3)
                  
-                 	;Motor_Set 115
+0001bf e001      	ldi R16, 0x01
+0001c0 9300 007b 	sts Program_Running, R16
                  
-00019e e001      	ldi R16, 0x01
-00019f 9300 007b 	sts Program_Running, R16
-                 
-0001a1 9478      	Interrupts_Init ; Must be the last thing to be enabled!
-0001a2 c000      	rjmp	Main
+0001c2 e002
+0001c3 bf09
+0001c4 e408
+0001c5 b908
+0001c6 e000
+0001c7 bf00
+0001c8 9478      	Interrupts_Init ; Must be the last thing to be enabled!
+0001c9 c000      	rjmp	Main
                  
                  Main:
-                 	/*
                  	;Check if the program should be running
-                 	lds R16, Program_Running			
-                 	cpi R16, 0x01
-                 	brne MAIN
-                 	*/
+0001ca 9100 007b 	lds R16, Program_Running			
+0001cc 3001      	cpi R16, 0x01
+0001cd f7e1      	brne MAIN
                  
-                 	;Insert program kode here
+                 	;Insert program code here
                  
-0001a3 cfff      rjmp Main
+0001ce cffb      rjmp Main
 
 
 RESOURCE USE INFORMATION
@@ -1965,7 +1986,7 @@ counted separately from r26..r31 here.
 "ATmega32A" register use summary:
 r0 :   7 r1 :   7 r2 :   7 r3 :   4 r4 :   4 r5 :   4 r6 :   3 r7 :   2 
 r8 :   2 r9 :   2 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16: 121 r17:   6 r18:  16 r19:  14 r20:  25 r21:   0 r22:   0 r23:   0 
+r16: 152 r17:   6 r18:  16 r19:  14 r20:  25 r21:   0 r22:   0 r23:   0 
 r24:   0 r25:   0 r26:  15 r27:  15 r28:   0 r29:   0 r30:   0 r31:   0 
 x  :   0 y  :   0 z  :   0 
 Registers used: 17 out of 35 (48.6%)
@@ -1975,27 +1996,27 @@ Registers used: 17 out of 35 (48.6%)
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   8 brcs  :   0 break :   0 breq  :   6 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
-brne  :   1 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brne  :   2 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 call  :  29 cbi   :   0 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   2 cln   :   0 clr   :   6 cls   :   0 
+clc   :   0 clh   :   0 cli   :   2 cln   :   0 clr   :   7 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   2 cp    :   1 cpc   :   0 
-cpi   :   7 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
+cpi   :   8 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   8 inc   :   6 jmp   :   3 
-ld    :   0 ldd   :   0 ldi   :  61 lds   :  19 lpm   :   0 lsl   :   1 
+ld    :   0 ldd   :   0 ldi   :  71 lds   :  20 lpm   :   0 lsl   :   1 
 lsr   :   0 mov   :   2 movw  :   1 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :  17 pop   :   0 
+neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :  26 pop   :   0 
 push  :   0 rcall :   0 ret   :  10 reti  :   8 rjmp  :  14 rol   :   0 
 ror   :   0 sbc   :   9 sbci  :   1 sbi   :   1 sbic  :   0 sbis  :   2 
 sbiw  :   0 sbr   :   0 sbrc  :   1 sbrs  :   5 sec   :   0 seh   :   0 
 sei   :   3 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
-sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  36 
+sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  45 
 sub   :   7 subi  :   1 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 35 out of 113 (31.0%)
+Instructions used: 36 out of 113 (31.9%)
 
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000348    778      0    778   32768   2.4%
+[.cseg] 0x000000 0x00039e    864      0    864   32768   2.6%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
