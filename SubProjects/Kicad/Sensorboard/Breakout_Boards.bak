@@ -13,6 +13,7 @@ $FPLIST
  Pin_Header_Angled_1X04
  Socket_Strip_Straight_1X04
  Socket_Strip_Angled_1X04
+ KK254
 $ENDFPLIST
 DRAW
 S -50 -145 10 -155 0 1 0 N

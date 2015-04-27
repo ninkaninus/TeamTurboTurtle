@@ -82,12 +82,12 @@ $EndComp
 $Comp
 L ToyRaceCar_V2_REV3_J1 P4
 U 1 1 55381BB2
-P 2350 2300
-F 0 "P4" H 2350 2650 50  0000 C CNN
-F 1 "ToyRaceCar_V2_REV3_J1" V 2750 2300 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x06" H 2350 2300 60  0001 C CNN
-F 3 "" H 2350 2300 60  0000 C CNN
-	1    2350 2300
+P 3800 2750
+F 0 "P4" H 3800 3100 50  0000 C CNN
+F 1 "ToyRaceCar_V2_REV3_J1" V 4200 2750 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x06" H 3800 2750 60  0001 C CNN
+F 3 "" H 3800 2750 60  0000 C CNN
+	1    3800 2750
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -199,7 +199,6 @@ NoConn ~ 900  1400
 NoConn ~ 900  1500
 NoConn ~ 900  1600
 NoConn ~ 900  1700
-NoConn ~ 900  1800
 NoConn ~ 2150 1100
 NoConn ~ 2150 1200
 NoConn ~ 2150 1300
@@ -211,10 +210,9 @@ NoConn ~ 2150 1800
 NoConn ~ 3050 950 
 NoConn ~ 3050 1050
 NoConn ~ 3050 1150
-NoConn ~ 2150 2250
-NoConn ~ 2150 2350
-NoConn ~ 2150 2450
-NoConn ~ 2150 2550
+NoConn ~ 3600 2700
+NoConn ~ 3600 2900
+NoConn ~ 3600 3000
 NoConn ~ 900  2650
 NoConn ~ 900  2550
 NoConn ~ 900  2450
@@ -224,7 +222,7 @@ NoConn ~ 3600 4300
 NoConn ~ 3600 4400
 NoConn ~ 3600 4500
 NoConn ~ 3600 4600
-Text Label 1850 2050 0    60   ~ 0
+Text Label 3300 2500 0    60   ~ 0
 +3.3V
 $Comp
 L CNY70 P7
@@ -239,7 +237,7 @@ F 3 "" H 3800 3400 60  0000 C CNN
 $EndComp
 Text Label 700  2950 0    60   ~ 0
 GND
-Text Label 1850 2150 0    60   ~ 0
+Text Label 3300 2600 0    60   ~ 0
 GND
 Text Label 2800 1250 0    60   ~ 0
 GND
@@ -294,15 +292,14 @@ Wire Wire Line
 	900  2050 700  2050
 Wire Wire Line
 	900  2150 700  2150
-Connection ~ 800  2050
 Wire Wire Line
 	1000 4900 1650 4900
 Wire Wire Line
-	2150 2050 1850 2050
+	3600 2500 3300 2500
 Wire Wire Line
 	900  2950 700  2950
 Wire Wire Line
-	2150 2150 1850 2150
+	3600 2600 3300 2600
 Wire Wire Line
 	3050 1250 2800 1250
 Wire Wire Line
@@ -346,4 +343,55 @@ Wire Wire Line
 	900  2850 550  2850
 Wire Wire Line
 	900  2750 550  2750
+Wire Wire Line
+	3600 3450 3350 3450
+Wire Wire Line
+	3600 3350 3350 3350
+Text Label 3350 3350 0    60   ~ 0
++5V
+Text Label 3350 3450 0    60   ~ 0
++5V
+$Comp
+L R R6
+U 1 1 553C6BF8
+P 3400 3550
+F 0 "R6" V 3480 3550 50  0000 C CNN
+F 1 "560R" V 3400 3550 50  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 3330 3550 30  0001 C CNN
+F 3 "" H 3400 3550 30  0000 C CNN
+	1    3400 3550
+	0    1    1    0   
+$EndComp
+$Comp
+L R R5
+U 1 1 553C6C67
+P 3250 3250
+F 0 "R5" V 3330 3250 50  0000 C CNN
+F 1 "22K" V 3250 3250 50  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 3180 3250 30  0001 C CNN
+F 3 "" H 3250 3250 30  0000 C CNN
+	1    3250 3250
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	3600 3550 3550 3550
+Wire Wire Line
+	3250 3550 3050 3550
+Text Label 3050 3550 0    60   ~ 0
+GND
+Wire Wire Line
+	900  1800 700  1800
+Text Label 700  1800 0    60   ~ 0
+VIN
+Wire Wire Line
+	3600 2800 3500 2800
+Wire Wire Line
+	3500 2800 3500 3250
+Wire Wire Line
+	3400 3250 3600 3250
+Connection ~ 3500 3250
+Wire Wire Line
+	3100 3250 2950 3250
+Text Label 2950 3250 0    60   ~ 0
+GND
 $EndSCHEMATC

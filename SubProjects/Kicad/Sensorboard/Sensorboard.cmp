@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = 25-04-2015 23:47:59
+Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = 27-04-2015 12:16:11
 
 BeginCmp
 TimeStamp = /5536E349;
@@ -46,7 +46,14 @@ BeginCmp
 TimeStamp = /5538F827;
 Reference = P7;
 ValeurCmp = CNY70;
-IdModule  = Sensorboard:KK254;
+IdModule  = Sensorboard:KK254-4;
+EndCmp
+
+BeginCmp
+TimeStamp = /553E0EE3;
+Reference = P8;
+ValeurCmp = SS495A;
+IdModule  = Sensorboard:KK254-3;
 EndCmp
 
 BeginCmp
