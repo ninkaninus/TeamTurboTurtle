@@ -40,3 +40,5 @@
 .equ Comm_Received_Byte_1 = 0x0078
 .equ Comm_Received_Byte_2 = 0x0079
 .equ Comm_Received_Byte_3 = 0x007A
+
+.equ Program_Running = 0x007B
