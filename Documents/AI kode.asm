@@ -11,6 +11,15 @@
 .def	R23=Type				;Type af vejstykket
 .def	R24=check				;checker om den første tur er begyndt.
 
+;Konstanter
+.equ	Accel_v1=10				;Disse værdier skal justeres
+.equ	Accel_v2=15
+.equ	Accel_h1=20
+.equ	Accel_h2=25
+.equ	Hastighed_l=100			;Hastigheden når vi kører ligeud
+.equ	Hastighed_s2=50			;-- stort sving
+.equ	Hastighed_s1=70			;-- lille sving
+
 ;Stack Initialize
 
 ldi		STACK,LOW(RAMEND)
@@ -50,10 +59,10 @@ SKIFT_TEST:								;Dette loop påbegyndes når der skiftes mellem banetyperne. 
 		ldi		Længde		0			;Start på et nyt stykke
 		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 
-		cpi		Accel,		20			;juster værdi, Værdi for acceleration ved lille højre sving
+		cpi		Accel,		Accel_h1		;juster værdi, Værdi for acceleration ved lille højre sving
 		brsh	RIGHT_TURN
 		
-		cpi		Accel,		10			;juster værdi, Værdi for acceleration ved lille venstre sving
+		cpi		Accel,		Accel_v1		;juster værdi, Værdi for acceleration ved lille venstre sving
 		brsh	LEFT_TURN
 
 
@@ -64,10 +73,10 @@ LIGEUD:									;Hvis banetypen bestemmes til at være et lige stykke starter de
 		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 		ldi		Type,		0			;Sætter vejtypen til ligeud
 
-		cpi		Accel,		20			;juster værdi, Værdi for acceleration ved lille højre sving
+		cpi		Accel,		Accel_h1	;juster værdi, Værdi for acceleration ved lille højre sving
 		brsh	SKIFT
 		
-		cpi		Accel,		10			;juster værdi, Værdi for acceleration ved lille venstre sving
+		cpi		Accel,		Accel_v1	;juster værdi, Værdi for acceleration ved lille venstre sving
 		brsh	SKIFT
 
 rjmp	LIGEUD
@@ -77,10 +86,10 @@ RIGHT_TURN:								;Hvis banetypen bestemmes til at være et højre sving starte
 ;										hopper den til skift
 
 		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
-		cpi		Accel,		25			;juster værdi, Værdi for acceleration ved stort højre sving
+		cpi		Accel,		Accel_h2	;juster værdi, Værdi for acceleration ved stort højre sving
 		brsh	RIGHT_TURN2
 		
-		cpi		Accel,		20			;juster værdi, Værdi for acceleration ved lille højre sving
+		cpi		Accel,		Accel_h1	;juster værdi, Værdi for acceleration ved lille højre sving
 		brlo	SKIFT
 
 		ldi		Type,		1			;Sætter vejtypen til lille højre
@@ -92,10 +101,10 @@ LEFT_TURN:								;Hvis banetypen bestemmes til at være et venstre sving starte
 ;										hopper den til skift
 
 		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
-		cpi		Accel,		15			;juster værdi, Værdi for acceleration ved stort venstre sving
+		cpi		Accel,		Accel_v2	;juster værdi, Værdi for acceleration ved stort venstre sving
 		brsh	LEFT_TURN2
 		
-		cpi		Accel,		10			;juster værdi, Værdi for acceleration ved lille venstre sving
+		cpi		Accel,		Accel_v1	;juster værdi, Værdi for acceleration ved lille venstre sving
 		brlo	SKIFT
 
 		ldi		Type,		2			;Sætter vejtypen til lille venstre
@@ -107,7 +116,7 @@ RIGHT_TURN2:							;Hvis banetypen bestemmes til at være et stort højre sving 
 ;										hopper den til skift
 
 		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
-		cpi		Accel,		20			;juster værdi, Værdi for acceleration ved lille højre sving
+		cpi		Accel,		Accel_h1	;juster værdi, Værdi for acceleration ved lille højre sving
 		brlo	SKIFT
 		
 		ldi		Type,		3			;Sætter vejtypen til stort højre
@@ -119,7 +128,7 @@ LEFT_TURN2:								;Hvis banetypen bestemmes til at være et stort venstre sving
 ;										hopper den til skift
 
 		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
-		cpi		Accel,		10			;juster værdi, Værdi for acceleration ved lille venstre sving
+		cpi		Accel,		Accel_v1	;juster værdi, Værdi for acceleration ved lille venstre sving
 		brlo	SKIFT
 
 		ldi		Type,		4			;Sætter vejtypen til stort venstre
@@ -191,42 +200,34 @@ HALL2:									;Hvis den første omgang er færdig skal Hall interruptet stadig 
 RUN:
 
 		cpi		Type,		1			;Check om lille højre
-		breq	RUN_H1
+		breq	RUN_S1
 		cpi		Type,		2			;Check om lille venstre
-		breq	RUN_V1
+		breq	RUN_S1
 		cpi		Type,		3			;Check om stor højre
-		breq	RUN_H2
+		breq	RUN_S2
 		cpi		Type,		4			;Check om stor venstre
-		breq	RUN_V2
+		breq	RUN_S2
 										;Hvis alle checks fejler må der være tale om et lige stykke
-		ldi		Hastighed_out,	100		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
+		ldi		Hastighed_out,	Hastighed_l		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
 		add		Hastighed_out,	Hastighed_D
 		out		OCR2,			Hastighed_out
-rjmp	RUN_DONE						;Hop til run_done når hastigheden er sat
+rjmp	RUN_DONE								;Hop til run_done når hastigheden er sat
 
-RUN_H1:
-		ldi		Hastighed_out,	50		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
+RUN_S1:
+		ldi		Hastighed_out,	Hastighed_s1	;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
 		add		Hastighed_out,	Hastighed_D
 		out		OCR2,			Hastighed_out
 rjmp	RUN_DONE
 
-RUN_V1:
-		ldi		Hastighed_out,	50		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
+
+
+RUN_S2:
+		ldi		Hastighed_out,	Hastighed_s2	;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
 		add		Hastighed_out,	Hastighed_D
 		out		OCR2,			Hastighed_out
 rjmp	RUN_DONE
 
-RUN_H2:
-		ldi		Hastighed_out,	75		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
-		add		Hastighed_out,	Hastighed_D
-		out		OCR2,			Hastighed_out
-rjmp	RUN_DONE
 
-RUN_V2:
-		ldi		Hastighed_out,	75		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
-		add		Hastighed_out,	Hastighed_D
-		out		OCR2,			Hastighed_out
-rjmp	RUN_DONE
 
 RUN_DONE:
 		dec		Længde					;Sætter den tilbageværende "længde" ned med en.
@@ -270,45 +271,3 @@ jmp		RUN_TIME
 
 
 
-
-Skift:
-		in		Hall, Hsensor
-		kø		Længde, Hall
-		
-			com		Accel, lige
-			Skip if not equal
-			kø		vejtype, 0
-		
-			com		Accel, lille sving
-			Skip if not equal
-			kø		vejtype, 1
-		
-			com		Accel, stort sving
-			Skip if not equal
-			kø		vejtype, 2
-		
-		in		Accel-prior
-		
-		in		lystest, lysdiode
-		cpi		lystest, 1
-		breq	sidste strækning
-		
-rjmp			Skift test
-		
-sidste strækning:
-
-		kø		Længde, Hall
-		
-			com		Accel, lige
-			Skip if not equal
-			kø		vejtype, 0
-		
-			com		Accel, lille sving
-			Skip if not equal
-			kø		vejtype, 1
-		
-			com		Accel, stort sving
-			Skip if not equal
-			kø		vejtype, 2
-
-Andre omgange:
