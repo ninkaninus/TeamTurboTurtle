@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Mon Apr 27 17:19:44 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Wed Apr 29 22:23:06 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(18): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\SRAM-Mapping.asm'
@@ -1940,33 +1940,365 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(27): Including file 'D:
 0001b8 9300 0074
 0001ba 9300 0075
 0001bc 9300 0076 	Timer0_Init
-                 	;MPU6050_Init
-                 	;MPU6050_Init
-                 	;MPU6050_Init
+0001be 940e 00a5
+0001c0 ed00
+0001c1 940e 00ae
+0001c3 e109
+0001c4 940e 00ae
+0001c6 e007
+0001c7 940e 00ae
+0001c9 e000
+0001ca 940e 00ae
+0001cc e008
+0001cd 940e 00ae
+0001cf e008
+0001d0 940e 00ae
+0001d2 e000
+0001d3 940e 00ae
+0001d5 e000
+0001d6 940e 00ae
+0001d8 e000
+0001d9 940e 00ae
+0001db e000
+0001dc 940e 00ae
+0001de e000
+0001df 940e 00ae
+0001e1 e000
+0001e2 940e 00ae
+0001e4 e000
+0001e5 940e 00ae
+0001e7 e000
+0001e8 940e 00ae
+0001ea e000
+0001eb 940e 00ae
+0001ed e000
+0001ee 940e 00ae
+0001f0 e000
+0001f1 940e 00ae
+0001f3 e000
+0001f4 940e 00ae
+0001f6 e000
+0001f7 940e 00ae
+0001f9 e000
+0001fa 940e 00ae
+0001fc e000
+0001fd 940e 00ae
+0001ff e000
+000200 940e 00ae
+000202 e000
+000203 940e 00ae
+000205 e000
+000206 940e 00ae
+000208 e000
+000209 940e 00ae
+00020b e000
+00020c 940e 00ae
+00020e e000
+00020f 940e 00ae
+000211 e000
+000212 940e 00ae
+000214 e000
+000215 940e 00ae
+000217 e000
+000218 940e 00ae
+00021a e000
+00021b 940e 00ae
+00021d 940e 00a5
+00021f ed00
+000220 940e 00ae
+000222 e307
+000223 940e 00ae
+000225 e000
+000226 940e 00ae
+000228 e000
+000229 940e 00ae
+00022b 940e 00a5
+00022d ed00
+00022e 940e 00ae
+000230 e603
+000231 940e 00ae
+000233 e000
+000234 940e 00ae
+000236 e000
+000237 940e 00ae
+000239 e000
+00023a 940e 00ae
+00023c e000
+00023d 940e 00ae
+00023f e000
+000240 940e 00ae
+000242 e000
+000243 940e 00ae
+000245 e000
+000246 940e 00ae
+000248 e000
+000249 940e 00ae
+00024b e002
+00024c 940e 00ae
+00024e e000
+00024f 940e 00ae
+000251 940e 00a5
+000253 ed00
+000254 940e 00ae
+000256 e704
+000257 940e 00ae
+000259 e000
+00025a 940e 00ae
+00025c 940e 00ab 	MPU6050_Init
+00025e 940e 00a5
+000260 ed00
+000261 940e 00ae
+000263 e109
+000264 940e 00ae
+000266 e007
+000267 940e 00ae
+000269 e000
+00026a 940e 00ae
+00026c e008
+00026d 940e 00ae
+00026f e008
+000270 940e 00ae
+000272 e000
+000273 940e 00ae
+000275 e000
+000276 940e 00ae
+000278 e000
+000279 940e 00ae
+00027b e000
+00027c 940e 00ae
+00027e e000
+00027f 940e 00ae
+000281 e000
+000282 940e 00ae
+000284 e000
+000285 940e 00ae
+000287 e000
+000288 940e 00ae
+00028a e000
+00028b 940e 00ae
+00028d e000
+00028e 940e 00ae
+000290 e000
+000291 940e 00ae
+000293 e000
+000294 940e 00ae
+000296 e000
+000297 940e 00ae
+000299 e000
+00029a 940e 00ae
+00029c e000
+00029d 940e 00ae
+00029f e000
+0002a0 940e 00ae
+0002a2 e000
+0002a3 940e 00ae
+0002a5 e000
+0002a6 940e 00ae
+0002a8 e000
+0002a9 940e 00ae
+0002ab e000
+0002ac 940e 00ae
+0002ae e000
+0002af 940e 00ae
+0002b1 e000
+0002b2 940e 00ae
+0002b4 e000
+0002b5 940e 00ae
+0002b7 e000
+0002b8 940e 00ae
+0002ba e000
+0002bb 940e 00ae
+0002bd 940e 00a5
+0002bf ed00
+0002c0 940e 00ae
+0002c2 e307
+0002c3 940e 00ae
+0002c5 e000
+0002c6 940e 00ae
+0002c8 e000
+0002c9 940e 00ae
+0002cb 940e 00a5
+0002cd ed00
+0002ce 940e 00ae
+0002d0 e603
+0002d1 940e 00ae
+0002d3 e000
+0002d4 940e 00ae
+0002d6 e000
+0002d7 940e 00ae
+0002d9 e000
+0002da 940e 00ae
+0002dc e000
+0002dd 940e 00ae
+0002df e000
+0002e0 940e 00ae
+0002e2 e000
+0002e3 940e 00ae
+0002e5 e000
+0002e6 940e 00ae
+0002e8 e000
+0002e9 940e 00ae
+0002eb e002
+0002ec 940e 00ae
+0002ee e000
+0002ef 940e 00ae
+0002f1 940e 00a5
+0002f3 ed00
+0002f4 940e 00ae
+0002f6 e704
+0002f7 940e 00ae
+0002f9 e000
+0002fa 940e 00ae
+0002fc 940e 00ab 	MPU6050_Init
+0002fe 940e 00a5
+000300 ed00
+000301 940e 00ae
+000303 e109
+000304 940e 00ae
+000306 e007
+000307 940e 00ae
+000309 e000
+00030a 940e 00ae
+00030c e008
+00030d 940e 00ae
+00030f e008
+000310 940e 00ae
+000312 e000
+000313 940e 00ae
+000315 e000
+000316 940e 00ae
+000318 e000
+000319 940e 00ae
+00031b e000
+00031c 940e 00ae
+00031e e000
+00031f 940e 00ae
+000321 e000
+000322 940e 00ae
+000324 e000
+000325 940e 00ae
+000327 e000
+000328 940e 00ae
+00032a e000
+00032b 940e 00ae
+00032d e000
+00032e 940e 00ae
+000330 e000
+000331 940e 00ae
+000333 e000
+000334 940e 00ae
+000336 e000
+000337 940e 00ae
+000339 e000
+00033a 940e 00ae
+00033c e000
+00033d 940e 00ae
+00033f e000
+000340 940e 00ae
+000342 e000
+000343 940e 00ae
+000345 e000
+000346 940e 00ae
+000348 e000
+000349 940e 00ae
+00034b e000
+00034c 940e 00ae
+00034e e000
+00034f 940e 00ae
+000351 e000
+000352 940e 00ae
+000354 e000
+000355 940e 00ae
+000357 e000
+000358 940e 00ae
+00035a e000
+00035b 940e 00ae
+00035d 940e 00a5
+00035f ed00
+000360 940e 00ae
+000362 e307
+000363 940e 00ae
+000365 e000
+000366 940e 00ae
+000368 e000
+000369 940e 00ae
+00036b 940e 00a5
+00036d ed00
+00036e 940e 00ae
+000370 e603
+000371 940e 00ae
+000373 e000
+000374 940e 00ae
+000376 e000
+000377 940e 00ae
+000379 e000
+00037a 940e 00ae
+00037c e000
+00037d 940e 00ae
+00037f e000
+000380 940e 00ae
+000382 e000
+000383 940e 00ae
+000385 e000
+000386 940e 00ae
+000388 e000
+000389 940e 00ae
+00038b e002
+00038c 940e 00ae
+00038e e000
+00038f 940e 00ae
+000391 940e 00a5
+000393 ed00
+000394 940e 00ae
+000396 e704
+000397 940e 00ae
+000399 e000
+00039a 940e 00ae
+00039c 940e 00ab 	MPU6050_Init
                  
-0001be e000      	ldi R16, (0<<PB3)
+00039e e000      	ldi R16, (0<<PB3)
                  
-0001bf e001      	ldi R16, 0x01
-0001c0 9300 007b 	sts Program_Running, R16
+00039f e001      	ldi R16, 0x01
+0003a0 9300 007b 	sts Program_Running, R16
                  
-0001c2 e002
-0001c3 bf09
-0001c4 e408
-0001c5 b908
-0001c6 e000
-0001c7 bf00
-0001c8 9478      	Interrupts_Init ; Must be the last thing to be enabled!
-0001c9 c000      	rjmp	Main
+0003a2 e002
+0003a3 bf09
+0003a4 e408
+0003a5 b908
+0003a6 e000
+0003a7 bf00
+0003a8 9478      	Interrupts_Init ; Must be the last thing to be enabled!
+0003a9 c000      	rjmp	Main
                  
                  Main:
                  	;Check if the program should be running
-0001ca 9100 007b 	lds R16, Program_Running			
-0001cc 3001      	cpi R16, 0x01
-0001cd f7e1      	brne MAIN
+0003aa 94f8      	cli
+0003ab 9100 007b 	lds R16, Program_Running			
+0003ad 3001      	cpi R16, 0x01
+0003ae f7d9      	brne MAIN
+0003af 9478      	sei
+                 
+0003b0 ec08      	ldi R16, 200
+0003b1 940e 0026 	call Delay_MS
+                 
+0003b3 94f8      	cli
+                 	
+0003b4 940e 00c0 	call MPU6050_Read_Dataset
+                 
+0003b6 9100 0065 	lds R16, ACCEL_ZOUT_L
+0003b8 9110 0064 	lds R17, ACCEL_ZOUT_H
+0003ba 940e 0054 	call USART_Decimal_S16
+0003bc e00d
+0003bd 940e 003c
+0003bf e00a
+0003c0 940e 003c 	USART_Newline
+                 
+0003c2 9478      	sei
+                 
                  
                  	;Insert program code here
                  
-0001ce cffb      rjmp Main
+0003c3 cfe6      rjmp Main
 
 
 RESOURCE USE INFORMATION
@@ -1986,7 +2318,7 @@ counted separately from r26..r31 here.
 "ATmega32A" register use summary:
 r0 :   7 r1 :   7 r2 :   7 r3 :   4 r4 :   4 r5 :   4 r6 :   3 r7 :   2 
 r8 :   2 r9 :   2 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16: 152 r17:   6 r18:  16 r19:  14 r20:  25 r21:   0 r22:   0 r23:   0 
+r16: 306 r17:   7 r18:  16 r19:  14 r20:  25 r21:   0 r22:   0 r23:   0 
 r24:   0 r25:   0 r26:  15 r27:  15 r28:   0 r29:   0 r30:   0 r31:   0 
 x  :   0 y  :   0 z  :   0 
 Registers used: 17 out of 35 (48.6%)
@@ -1997,18 +2329,18 @@ andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0
 brcc  :   8 brcs  :   0 break :   0 breq  :   6 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
 brne  :   2 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :  29 cbi   :   0 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   2 cln   :   0 clr   :   7 cls   :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  : 199 cbi   :   0 cbr   :   0 
+clc   :   0 clh   :   0 cli   :   4 cln   :   0 clr   :   7 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   2 cp    :   1 cpc   :   0 
 cpi   :   8 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   8 inc   :   6 jmp   :   3 
-ld    :   0 ldd   :   0 ldi   :  71 lds   :  20 lpm   :   0 lsl   :   1 
+ld    :   0 ldd   :   0 ldi   : 224 lds   :  22 lpm   :   0 lsl   :   1 
 lsr   :   0 mov   :   2 movw  :   1 mul   :   0 muls  :   0 mulsu :   0 
 neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :  26 pop   :   0 
 push  :   0 rcall :   0 ret   :  10 reti  :   8 rjmp  :  14 rol   :   0 
 ror   :   0 sbc   :   9 sbci  :   1 sbi   :   1 sbic  :   0 sbis  :   2 
 sbiw  :   0 sbr   :   0 sbrc  :   1 sbrs  :   5 sec   :   0 seh   :   0 
-sei   :   3 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
+sei   :   5 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  45 
 sub   :   7 subi  :   1 swap  :   0 tst   :   0 wdr   :   0 
 Instructions used: 36 out of 113 (31.9%)
@@ -2016,7 +2348,7 @@ Instructions used: 36 out of 113 (31.9%)
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00039e    864      0    864   32768   2.6%
+[.cseg] 0x000000 0x000788   1866      0   1866   32768   5.7%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 

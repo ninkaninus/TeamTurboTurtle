@@ -39,9 +39,9 @@ Init:
 	Motor_Init
 	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
 	Timer0_Init
-	;MPU6050_Init
-	;MPU6050_Init
-	;MPU6050_Init
+	MPU6050_Init
+	MPU6050_Init
+	MPU6050_Init
 
 	ldi R16, (0<<PB3)
 
@@ -53,9 +53,26 @@ Init:
 
 Main:
 	;Check if the program should be running
+	cli
 	lds R16, Program_Running			
 	cpi R16, 0x01
 	brne MAIN
+	sei
+
+	ldi R16, 200
+	call Delay_MS
+
+	cli
+	
+	call MPU6050_Read_Dataset
+
+	lds R16, ACCEL_ZOUT_L
+	lds R17, ACCEL_ZOUT_H
+	call USART_Decimal_S16
+	USART_Newline
+
+	sei
+
 
 	;Insert program code here
 
