@@ -216,11 +216,9 @@ NoConn ~ 3600 3000
 NoConn ~ 3600 5500
 NoConn ~ 3600 5400
 NoConn ~ 3600 5300
-NoConn ~ 3600 5200
 NoConn ~ 3600 4300
 NoConn ~ 3600 4400
 NoConn ~ 3600 4500
-NoConn ~ 3600 4600
 Text Label 3300 2500 0    60   ~ 0
 +3.3V
 $Comp
@@ -602,4 +600,10 @@ Text Label 850  4650 3    60   ~ 0
 +5V
 Text Label 750  4650 3    60   ~ 0
 GND
+Wire Wire Line
+	3600 4600 3250 4600
+Wire Wire Line
+	3250 4600 3250 5200
+Wire Wire Line
+	3250 5200 3600 5200
 $EndSCHEMATC
