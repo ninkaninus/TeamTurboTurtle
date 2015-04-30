@@ -1,7 +1,7 @@
 ; This library deals with the setup of interrupts
 
 .MACRO Interrupts_Init
-			ldi		R16, (1<<OCIE0)			; enable interrupt on output compare match for timer0
+			ldi		R16, (1<<OCIE0)|(1<<TICIE1)		; enable interrupt on output compare match for timer0
 			out		TIMSK, R16				; timer/interrupt masking register
 			
 			ldi R16, 0x48					; initialize comparator with bandgap reference and enable interrupt

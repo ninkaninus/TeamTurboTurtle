@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu Apr 23 18:14:11 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu Apr 30 14:29:21 2015
 
 
 EQU  SIGNATURE_000 0000001e
@@ -568,8 +568,10 @@ EQU  ACIaddr      00000024
 EQU  TWIaddr      00000026
 EQU  SPMRaddr     00000028
 EQU  INT_VECTORS_SIZE 0000002a
-CSEG Init         0000014f
+CSEG Init         000001a6
+CSEG Input_Capture 0000014d
 CSEG Timer0_Update 00000116
+CSEG Comm_Received 00000170
 CSEG Lap_Time     0000012b
 EQU  ACCEL_XOUT_H 00000060
 EQU  ACCEL_XOUT_L 00000061
@@ -594,6 +596,16 @@ EQU  Time_Stamp_L 00000073
 EQU  Lap_time_L   00000074
 EQU  Lap_time_M   00000075
 EQU  Lap_time_H   00000076
+EQU  Edge1_L      00000077
+EQU  Edge1_H      00000078
+EQU  Pulse_Time_L 00000079
+EQU  Pulse_Time_H 0000007a
+EQU  SREG_1       0000007b
+EQU  Comm_Received_Byte_Num 0000007c
+EQU  Comm_Received_Byte_1 0000007d
+EQU  Comm_Received_Byte_2 0000007e
+EQU  Comm_Received_Byte_3 0000007f
+EQU  Program_Running 00000080
 CSEG Delay_MS     00000026
 CSEG Delay_MS_Loop 0000002d
 EQU  MOTOR_PIN    00000007
@@ -742,4 +754,18 @@ EQU  MPU6050_RA_FIFO_R_W 00000074
 EQU  MPU6050_RA_WHO_AM_I 00000075
 CSEG MPU6050_Read_Dataset 000000c0
 CSEG Timer_Update_End 0000012a
-CSEG Main         00000192
+CSEG Lap_Time_End 0000014c
+CSEG EDGE2        0000015b
+CSEG EDGE1        00000151
+EQU  Comm_Type_SET 00000055
+EQU  Comm_Type_GET 000000aa
+EQU  Comm_Command_Start 00000010
+EQU  Comm_Command_Stop 00000011
+CSEG Comm_Received_Type 00000177
+CSEG Comm_Received_Command 0000017e
+CSEG Comm_Received_Execute 00000185
+CSEG Comm_Received_Type_Set 00000191
+CSEG Comm_Received_Type_Get 000001a5
+CSEG Comm_Received_Command_Start 00000198
+CSEG Comm_Received_Command_Stop 0000019f
+CSEG Main         000003d4

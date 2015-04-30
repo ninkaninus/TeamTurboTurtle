@@ -13,7 +13,7 @@
 			
 			ldi		R16, 0x00
 			out		TCCR1A, R16
-			ldi		R16, 0b10000101			; Falling edge triggered, 1/1024 prescaling
+			ldi		R16, 0b10000010			; Falling edge triggered, 1/1024 prescaling
 			out		TCCR1B, R16	
 			
 			clr		R16
@@ -74,6 +74,9 @@ Lap_Time:	lds		R0, Timer_1ms_L
 			sbc		R1, R4						; Difference between current time and last time stamp
 			sbc		R2, R5
 			
+			tst R1
+			breq Lap_Time_End
+
 			sts		Lap_time_L, R0				
 			sts		Lap_time_M, R1				; Latest lap time
 			sts		Lap_time_H, R2
@@ -81,11 +84,11 @@ Lap_Time:	lds		R0, Timer_1ms_L
 			ldi		R16, 0x40					; Disable Comparator interrupt
 			out		ACSR, R16					; Global interrupt register
 			
-			
+			/*
 			ldi		R16, 50
 			call 	Delay_MS
 			cli									; Disable global interrupt
-			
+			*/
 			
 			ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
 			out		ACSR, R16					; Global interrupt register
@@ -95,6 +98,7 @@ Lap_Time:	lds		R0, Timer_1ms_L
 			call USART_Transmit
 			USART_Newline
 			*/
+Lap_Time_End:
 
 			reti			
 

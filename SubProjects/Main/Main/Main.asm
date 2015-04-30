@@ -57,11 +57,11 @@ Init:
 
 Main:
 	;Check if the program should be running
+	sei
 	cli
 	lds R16, Program_Running			
 	cpi R16, 0x01
 	brne MAIN
-	sei
 
 	ldi R16, 200
 	call Delay_MS

@@ -55,6 +55,9 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Communication_Protocol.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Delays.asm">
       <SubType>Code</SubType>
     </Compile>
