@@ -93,11 +93,11 @@ Lap_Time:	lds		R0, Timer_1ms_L
 			ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
 			out		ACSR, R16					; Global interrupt register
 
-			/*
+			
 			ldi R16, 'G'
 			call USART_Transmit
 			USART_Newline
-			*/
+			
 Lap_Time_End:
 
 			reti			

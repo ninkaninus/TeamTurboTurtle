@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu Apr 30 14:29:21 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu Apr 30 14:35:20 2015
 
 
 EQU  SIGNATURE_000 0000001e
@@ -568,10 +568,10 @@ EQU  ACIaddr      00000024
 EQU  TWIaddr      00000026
 EQU  SPMRaddr     00000028
 EQU  INT_VECTORS_SIZE 0000002a
-CSEG Init         000001a6
-CSEG Input_Capture 0000014d
+CSEG Init         000001b0
+CSEG Input_Capture 00000156
 CSEG Timer0_Update 00000116
-CSEG Comm_Received 00000170
+CSEG Comm_Received 00000179
 CSEG Lap_Time     0000012b
 EQU  ACCEL_XOUT_H 00000060
 EQU  ACCEL_XOUT_L 00000061
@@ -754,18 +754,18 @@ EQU  MPU6050_RA_FIFO_R_W 00000074
 EQU  MPU6050_RA_WHO_AM_I 00000075
 CSEG MPU6050_Read_Dataset 000000c0
 CSEG Timer_Update_End 0000012a
-CSEG Lap_Time_End 0000014c
-CSEG EDGE2        0000015b
-CSEG EDGE1        00000151
+CSEG Lap_Time_End 00000155
+CSEG EDGE2        00000164
+CSEG EDGE1        0000015a
 EQU  Comm_Type_SET 00000055
 EQU  Comm_Type_GET 000000aa
 EQU  Comm_Command_Start 00000010
 EQU  Comm_Command_Stop 00000011
-CSEG Comm_Received_Type 00000177
-CSEG Comm_Received_Command 0000017e
-CSEG Comm_Received_Execute 00000185
-CSEG Comm_Received_Type_Set 00000191
-CSEG Comm_Received_Type_Get 000001a5
-CSEG Comm_Received_Command_Start 00000198
-CSEG Comm_Received_Command_Stop 0000019f
-CSEG Main         000003d4
+CSEG Comm_Received_Type 00000180
+CSEG Comm_Received_Command 00000187
+CSEG Comm_Received_Execute 0000018e
+CSEG Comm_Received_Type_Set 0000019b
+CSEG Comm_Received_Type_Get 000001af
+CSEG Comm_Received_Command_Start 000001a2
+CSEG Comm_Received_Command_Stop 000001a9
+CSEG Main         000003de

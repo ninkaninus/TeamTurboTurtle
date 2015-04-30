@@ -61,23 +61,10 @@ Main:
 	cli
 	lds R16, Program_Running			
 	cpi R16, 0x01
-	brne MAIN
-
-	ldi R16, 200
-	call Delay_MS
-
-	cli
-	
-	call MPU6050_Read_Dataset
-
-	lds R16, ACCEL_ZOUT_L
-	lds R17, ACCEL_ZOUT_H
-	call USART_Decimal_S16
-	USART_Newline
-
-	sei
+	brne Main
 
 
 	;Insert program code here
+	sei
 
 rjmp Main
