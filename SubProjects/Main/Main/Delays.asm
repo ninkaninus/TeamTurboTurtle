@@ -1,6 +1,6 @@
 ;Author: Jonas A. L. Andersen
 
-;Requires the Timer library made by Christian! And the SRAM-Mapping.asm
+;Requires the Timer library made by Kristian! And the SRAM-Mapping.asm
 ;These macros are intended for a micro running 16MHZ
 
 ;This macro can generate from 1 to 255 ms of delay.  

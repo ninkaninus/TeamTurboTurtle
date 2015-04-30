@@ -1,14 +1,19 @@
 ; This library deals with the setup of interrupts
 
 .MACRO Interrupts_Init
-			ldi		R16, (1<<OCIE0)|(1<<TICIE1)		; enable interrupt on output compare match for timer0
-			out		TIMSK, R16				; timer/interrupt masking register
+
+			;Timer0
+			ldi		R16, (1<<OCIE0)|(1<<TICIE1)		;Enable interrupt on output compare match for timer0
+			out		TIMSK, R16						;Timer/interrupt masking register
 			
-			ldi R16, 0x48					; initialize comparator with bandgap reference and enable interrupt
-			out ACSR, R16
+			;Comparator
+			ldi R16, 0x48							;Initialize comparator with bandgap reference and enable interrupt
+			out ACSR, R16							;
 
-			ldi R16, (0<<ACME)				; disable comparator multiplexer (AIN1 = inverting input for comparator)
-			out SFIOR, R16
+			in R16, SFIOR							;
+			andi R16, ~(1<<ACME)					;Disable comparator multiplexer (AIN1 = inverting input for comparator)
+			out SFIOR, R16							;
 
-			sei								; enable global interrupt
+			;Global interrupt
+			sei										;Enable global interrupt
 .ENDMACRO

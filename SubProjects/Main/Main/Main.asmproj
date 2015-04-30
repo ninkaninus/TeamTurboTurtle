@@ -70,9 +70,6 @@
     <Compile Include="Main.asm">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Math.asm">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Motor_Control.asm">
       <SubType>Code</SubType>
     </Compile>
@@ -86,9 +83,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SRAM-Mapping.asm">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Testcode-Fast-lap.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Timers.asm">
