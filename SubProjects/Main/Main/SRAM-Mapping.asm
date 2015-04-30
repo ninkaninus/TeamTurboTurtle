@@ -37,10 +37,18 @@
 .equ Lap_time_H	  = 0x0076
 
 ;Pulse Stuphs
-.equ		Edge1_L			= 0x77
-.equ		Edge1_H			= 0x78
-.equ		Pulse_Time_L	= 0x79
-.equ		Pulse_Time_H	= 0x7A
+.equ		Edge1_L			= 0x0077
+.equ		Edge1_H			= 0x0078
+.equ		Pulse_Time_L	= 0x0079
+.equ		Pulse_Time_H	= 0x007A
 
 ;Status Register
-.equ		SREG_1			= 0x7B
+.equ		SREG_1			= 0x007B
+
+.equ Comm_Received_Byte_Num = 0x007C
+.equ Comm_Received_Byte_1 = 0x007D
+.equ Comm_Received_Byte_2 = 0x007E
+.equ Comm_Received_Byte_3 = 0x007F
+
+.equ Program_Running = 0x0080
+
