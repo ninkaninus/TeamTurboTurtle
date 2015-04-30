@@ -38,8 +38,8 @@ out		SPH,STACK
 
 ;Initialize først
 		ldi		check,			0				;Sætter check til 0 - initial omgang indtil målstregen rammes
-		ldi		Hastighed_out,	50				;Sætter hastigheden til 50, så bilen langsomt bevæger sig mod målstregen uden problemer
-		ldi		Hastighed_set,	20
+		ldi		Hastighed_out,	80				;Sætter hastigheden til 50, så bilen langsomt bevæger sig mod målstregen uden problemer
+		ldi		Hastighed_set,	100
 		ldi		Hastighed_D,	0				;Den passive hastighedsforøgelse bliver sat til 0. Hver gang bilen passerer målstregen efter den første vil denne blive forøget med 1.
 		ldi		Antal,			0				;Antal skift mellem banetyper - starter i 0 så der kan tælles op.
 		
