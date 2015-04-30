@@ -5,9 +5,9 @@
 .def	R17=Hastighed_out		;Den outputtede hastighed
 .def	R18=Hastighed_set		;Den ønskede hastighed
 .def	R19=Hastighed_D			;Forøgelsen af hastighed
-.def	R20=lystest				;Værdi fra lysdioden
+;.def	R20=lystest				;Værdi fra lysdioden
 .def	R21=Længde				;Længden af vejstykket
-.def	R22=Antal				;Antal skift
+;.def	R22=Antal				;Antal skift
 .def	R23=Type				;Type af vejstykket
 .def	R24=check				;checker om den første tur er begyndt.
 
@@ -39,8 +39,12 @@ out		SPH,STACK
 ;Initialize først
 		ldi		check,			0				;Sætter check til 0 - initial omgang indtil målstregen rammes
 		ldi		Hastighed_out,	50				;Sætter hastigheden til 50, så bilen langsomt bevæger sig mod målstregen uden problemer
+		ldi		Hastighed_set,	20
 		ldi		Hastighed_D,	0				;Den passive hastighedsforøgelse bliver sat til 0. Hver gang bilen passerer målstregen efter den første vil denne blive forøget med 1.
 		ldi		Antal,			0				;Antal skift mellem banetyper - starter i 0 så der kan tælles op.
+		
+		ldi		Accel,			0
+		
 		clr		R27								;Clear MSB del af X
 		ldi		R26,			Map_start		;Første Ram hukommelse tildelt til mapping
 		
@@ -57,7 +61,7 @@ FIRST_ROUND:		;Den første omgang begynder. Der er plads til at indsætte kode d
 SKIFT_TEST:								;Dette loop påbegyndes når der skiftes mellem banetyperne. Den benytter acceleration til at bestemme hvilken banetype bilen befinder sig på
 
 		ldi		Længde		0			;Start på et nyt stykke
-		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
+;		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 
 		cpi		Accel,		Accel_h1		;juster værdi, Værdi for acceleration ved lille højre sving
 		brsh	RIGHT_TURN
@@ -70,7 +74,7 @@ LIGEUD:									;Hvis banetypen bestemmes til at være et lige stykke starter de
 ;										som checker om accelerometeret angiver et sving. Når bilen kommer ind i et sving
 ;										hopper den til skift
 
-		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
+;		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 		ldi		Type,		0			;Sætter vejtypen til ligeud
 
 		cpi		Accel,		Accel_h1	;juster værdi, Værdi for acceleration ved lille højre sving
@@ -85,7 +89,7 @@ RIGHT_TURN:								;Hvis banetypen bestemmes til at være et højre sving starte
 ;										som checker om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
 ;										hopper den til skift
 
-		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
+;		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 		cpi		Accel,		Accel_h2	;juster værdi, Værdi for acceleration ved stort højre sving
 		brsh	RIGHT_TURN2
 		
@@ -100,7 +104,7 @@ LEFT_TURN:								;Hvis banetypen bestemmes til at være et venstre sving starte
 ;										som checker om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
 ;										hopper den til skift
 
-		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
+;		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 		cpi		Accel,		Accel_v2	;juster værdi, Værdi for acceleration ved stort venstre sving
 		brsh	LEFT_TURN2
 		
@@ -115,7 +119,7 @@ RIGHT_TURN2:							;Hvis banetypen bestemmes til at være et stort højre sving 
 ;										som checker om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
 ;										hopper den til skift
 
-		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
+;		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 		cpi		Accel,		Accel_h1	;juster værdi, Værdi for acceleration ved lille højre sving
 		brlo	SKIFT
 		
@@ -127,7 +131,7 @@ LEFT_TURN2:								;Hvis banetypen bestemmes til at være et stort venstre sving
 ;										som checker om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
 ;										hopper den til skift
 
-		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
+;		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 		cpi		Accel,		Accel_v1	;juster værdi, Værdi for acceleration ved lille venstre sving
 		brlo	SKIFT
 
