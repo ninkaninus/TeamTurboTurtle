@@ -1,0 +1,72 @@
+Design Rule Check Report
+------------------------
+
+Report File:        D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard (PCB - Design Rule Check Report).txt
+Report Written:     Monday, April 20, 2015
+Design Path:        D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard.pcb
+Design Title:       
+Created:            20-04-2015 14:04:38
+Last Saved:         20-04-2015 16:54:38
+Editing Time:       172 min
+Units:              mm (precision 4)
+
+
+Results
+=======
+
+Gap in Net "+3V3" between (34.7980,24.1300) and (32.7050,21.5138) 
+    +3V3.
+Gap in Net "+5V" between (31.2420,29.8450) and (31.2420,14.6050) 
+    +5V.
+Gap in Net "N0034" between (33.6550,19.1262) and (33.5280,14.6050) 
+    N0034.
+Gap in Net "N0034" between (33.5280,14.6050) and (39.3700,3.7500) 
+    N0034.
+
+Number of errors found : 4
+
+
+Settings
+========
+
+
+Spacings
+
+=========
+
+Tracks        Yes
+Pads and Vias Yes
+Shapes        Yes
+Text          Yes
+Board         Yes
+Drills        Yes
+Components    No
+
+
+Manufacturing
+
+==============
+
+Drill Breakout                  No
+Drill Backoff                   No
+Silkscreen Overlap              No
+Copper Text In Board            No
+Min Track Width                 No
+Min Annular Ring                No
+Min Paste Size                  No
+Vias In Pads                    No
+Unplated Vias                   No
+Unplated Pads With Inner Tracks No
+
+
+Nets
+
+=====
+
+Net Completion               Yes
+Dangling Tracks              Yes
+Net Track Length Differences No
+
+
+
+End Of Report.

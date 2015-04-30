@@ -28,42 +28,67 @@
     <eraseonlaunchrule>1</eraseonlaunchrule>
     <AsfFrameworkConfig>
       <framework-data xmlns="">
-  <options />
-  <configurations />
-  <files />
-  <documentation help="" />
-  <offline-documentation help="" />
-  <dependencies>
-    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.21.0" />
-  </dependencies>
-</framework-data>
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.21.0" />
+        </dependencies>
+      </framework-data>
     </AsfFrameworkConfig>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <AvrAssembler>
-  <avrasm.assembler.general.IncludeFile>(%24IncludeFile)</avrasm.assembler.general.IncludeFile>
-</AvrAssembler>
+        <avrasm.assembler.general.IncludeFile>(%24IncludeFile)</avrasm.assembler.general.IncludeFile>
+      </AvrAssembler>
     </ToolchainSettings>
+    <OutputType>Executable</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
       <AvrAssembler>
-  <avrasm.assembler.general.IncludeFile>(%24IncludeFile)</avrasm.assembler.general.IncludeFile>
-</AvrAssembler>
+        <avrasm.assembler.general.IncludeFile>(%24IncludeFile)</avrasm.assembler.general.IncludeFile>
+      </AvrAssembler>
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Board_Defines.inc">
+    <Compile Include="Communication_Protocol.asm">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Delay_Macros.asm">
+    <Compile Include="Delays.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="I2C.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interrupts.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Main.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Motor_Control.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MPU-6050.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MPU-6050.inc">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Setup_Io.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SRAM-Mapping.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Timers.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="USART_library.asm">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
