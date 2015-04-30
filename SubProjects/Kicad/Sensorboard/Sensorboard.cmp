@@ -1,0 +1,171 @@
+Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = 28-04-2015 13:53:36
+
+BeginCmp
+TimeStamp = /5536E349;
+Reference = P1;
+ValeurCmp = ToyRaceCar_V2_REV3_J4;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
+EndCmp
+
+BeginCmp
+TimeStamp = /5536E214;
+Reference = P2;
+ValeurCmp = ToyRaceCar_V2_REV3_J3;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
+EndCmp
+
+BeginCmp
+TimeStamp = /5536E168;
+Reference = P3;
+ValeurCmp = ToyRaceCar_V2_REV3_J2;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
+EndCmp
+
+BeginCmp
+TimeStamp = /55381BB2;
+Reference = P4;
+ValeurCmp = ToyRaceCar_V2_REV3_J1;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x06;
+EndCmp
+
+BeginCmp
+TimeStamp = /55381C69;
+Reference = P5;
+ValeurCmp = MPU-6050;
+IdModule  = Sensorboard:MPU-6050;
+EndCmp
+
+BeginCmp
+TimeStamp = /55381BE9;
+Reference = P6;
+ValeurCmp = ToyRaceCar_V2_REV3_J5;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x04;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538F827;
+Reference = P7;
+ValeurCmp = CNY70;
+IdModule  = Sensorboard:KK254-4;
+EndCmp
+
+BeginCmp
+TimeStamp = /553F7F60;
+Reference = P8;
+ValeurCmp = SS495A;
+IdModule  = Pin_Headers:Pin_Header_Angled_1x03;
+EndCmp
+
+BeginCmp
+TimeStamp = /55382588;
+Reference = Q1;
+ValeurCmp = BSS138;
+IdModule  = Housings_SOT-23_SOT-143_TSOT-6:SOT-23_Handsoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553825E4;
+Reference = Q2;
+ValeurCmp = BSS138;
+IdModule  = Housings_SOT-23_SOT-143_TSOT-6:SOT-23_Handsoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538245D;
+Reference = R1;
+ValeurCmp = 10K;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553824EF;
+Reference = R2;
+ValeurCmp = 10K;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55382378;
+Reference = R3;
+ValeurCmp = 10K;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553823F8;
+Reference = R4;
+ValeurCmp = 10K;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553C6C67;
+Reference = R5;
+ValeurCmp = 22K;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553C6BF8;
+Reference = R6;
+ValeurCmp = 560R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5540394A;
+Reference = R7;
+ValeurCmp = 5K;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55403A82;
+Reference = R8;
+ValeurCmp = 20K;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55403A1C;
+Reference = R9;
+ValeurCmp = 6K;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553FD89B;
+Reference = R10;
+ValeurCmp = 3K3;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /554039C3;
+Reference = R11;
+ValeurCmp = 10K;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553FE324;
+Reference = RV1;
+ValeurCmp = POT;
+IdModule  = Potentiometers:Potentiometer_Bourns_3006P_Angular_ScrewFront;
+EndCmp
+
+BeginCmp
+TimeStamp = /553F98F8;
+Reference = U1;
+ValeurCmp = AD623AN;
+IdModule  = Housings_DIP:DIP-8__300;
+EndCmp
+
+BeginCmp
+TimeStamp = /554008E9;
+Reference = U2;
+ValeurCmp = LM311N;
+IdModule  = Housings_DIP:DIP-8__300;
+EndCmp
+
+EndListe
