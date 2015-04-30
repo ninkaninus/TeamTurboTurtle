@@ -35,3 +35,12 @@
 .equ Lap_time_L   = 0x0074
 .equ Lap_time_M	  = 0x0075
 .equ Lap_time_H	  = 0x0076
+
+;Pulse Stuphs
+.equ		Edge1_L			= 0x77
+.equ		Edge1_H			= 0x78
+.equ		Pulse_Time_L	= 0x79
+.equ		Pulse_Time_H	= 0x7A
+
+;Status Register
+.equ		SREG_1			= 0x7B

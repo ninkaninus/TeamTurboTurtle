@@ -3,6 +3,9 @@
 ;Interrupt vector mapping
 .org 0x0000
 rjmp Init
+;Timer1 Input Capture interrupt
+.org	0x0C
+jmp	Input_Capture
 ;Timer0 CTC interrupt
 .org 0x0014
 jmp Timer0_Update
@@ -39,6 +42,7 @@ Init:
 	;MPU6050_Init
 
 	ldi R16, (0<<PB3)
+	out	DDRB, R16
 
 	ldi R16, 'D'
 	call USART_Transmit
