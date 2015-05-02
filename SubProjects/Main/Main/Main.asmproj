@@ -64,6 +64,9 @@
     <Compile Include="I2C.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interrupt_Mapping.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="LapCounter.asm">
       <SubType>Code</SubType>
     </Compile>

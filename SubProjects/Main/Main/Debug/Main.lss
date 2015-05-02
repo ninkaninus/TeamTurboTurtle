@@ -1,21 +1,22 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Sat May 02 02:12:55 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Sat May 02 02:18:57 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Setup.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(22): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\SRAM-Mapping.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(23): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delays.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(24): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(25): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(26): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(27): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.inc'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(28): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(29): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(30): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(31): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(32): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(2): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Interrupt_Mapping.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(5): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Setup.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(6): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\SRAM-Mapping.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(7): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delays.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(8): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(9): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(10): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(11): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.inc'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(12): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(13): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(14): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(16): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm'
                  
-                 ;Main.asm
+                 ;Mapping of all the interrupts, must be the first include!
                  
                  ;***** Created: 2011-02-09 12:03 ******* Source: ATmega32A.xml ***********
                  ;*************************************************************************
@@ -831,8 +832,8 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(32): Including file 'D:
                  #endif  /* _M32ADEF_INC_ */
                  
                  
+                 .include "Interrupt_Mapping.asm"
                  
-                 ;Interrupt vector mapping
                  .org 0x00
 000000 c1b0      rjmp Init
                  ;Timer1 Input Capture interrupt
@@ -846,9 +847,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(32): Including file 'D:
 00001a 940c 017a jmp Comm_Received
                  ;Comparator interrupt
                  .org 0x24
-000024 940c 014f jmp Lap_Time
-                 
-                 
+000024 940c 014f 
                  ;Library includes
                  .include "Setup.asm"
                  
@@ -868,11 +867,6 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(32): Including file 'D:
                  	MPU6050_Init						;Initialize the MPU6050 3 times to make sure it writes the values(We should make some kind of check instead)
                  	MPU6050_Init						;
                  	MPU6050_Init						;
-                 
-                 	;R16, (0<<PB3)
-                 	;out	DDRB, R16
-                 
-                 	cbi DDRB,PB3
                  
                  	ldi R16, 0x01
                  	sts Program_Running, R16
@@ -1815,9 +1809,11 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(32): Including file 'D:
                  	ori R16, 0x48						;Initialize comparator with bandgap reference and enable interrupt
                  	out ACSR, R16						;
                  
-                 	in R16, SFIOR							;
-                 	andi R16, ~(1<<ACME)					;Disable comparator multiplexer (AIN1 = inverting input for comparator)
-                 	out SFIOR, R16							;
+                 	in R16, SFIOR						;
+                 	andi R16, ~(1<<ACME)				;Disable comparator multiplexer (AIN1 = inverting input for comparator)
+                 	out SFIOR, R16						;
+                 
+                 	cbi DDRB,PB3						;Make PB3 input for the comparator
                  
                  .ENDMACRO
                  
@@ -1992,7 +1988,6 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(32): Including file 'D:
                  
 0001b0 9518      
                  Init:
-                 	
 0001b1 e50f
 0001b2 bf0d
 0001b3 e008
@@ -2058,327 +2053,326 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(32): Including file 'D:
 0001fe b700
 0001ff 7f07
 000200 bf00
-000201 940e 00a6
-000203 ed00
-000204 940e 00af
-000206 e109
-000207 940e 00af
-000209 e007
-00020a 940e 00af
-00020c e000
-00020d 940e 00af
-00020f e008
-000210 940e 00af
-000212 e008
-000213 940e 00af
-000215 e000
-000216 940e 00af
-000218 e000
-000219 940e 00af
-00021b e000
-00021c 940e 00af
-00021e e000
-00021f 940e 00af
-000221 e000
-000222 940e 00af
-000224 e000
-000225 940e 00af
-000227 e000
-000228 940e 00af
-00022a e000
-00022b 940e 00af
-00022d e000
-00022e 940e 00af
-000230 e000
-000231 940e 00af
-000233 e000
-000234 940e 00af
-000236 e000
-000237 940e 00af
-000239 e000
-00023a 940e 00af
-00023c e000
-00023d 940e 00af
-00023f e000
-000240 940e 00af
-000242 e000
-000243 940e 00af
-000245 e000
-000246 940e 00af
-000248 e000
-000249 940e 00af
-00024b e000
-00024c 940e 00af
-00024e e000
-00024f 940e 00af
-000251 e000
-000252 940e 00af
-000254 e000
-000255 940e 00af
-000257 e000
-000258 940e 00af
-00025a e000
-00025b 940e 00af
-00025d e000
-00025e 940e 00af
-000260 940e 00a6
-000262 ed00
-000263 940e 00af
-000265 e307
-000266 940e 00af
-000268 e000
-000269 940e 00af
-00026b e000
-00026c 940e 00af
-00026e 940e 00a6
-000270 ed00
-000271 940e 00af
-000273 e603
-000274 940e 00af
-000276 e000
-000277 940e 00af
-000279 e000
-00027a 940e 00af
-00027c e000
-00027d 940e 00af
-00027f e000
-000280 940e 00af
-000282 e000
-000283 940e 00af
-000285 e000
-000286 940e 00af
-000288 e000
-000289 940e 00af
-00028b e000
-00028c 940e 00af
-00028e e002
-00028f 940e 00af
-000291 e000
-000292 940e 00af
-000294 940e 00a6
-000296 ed00
-000297 940e 00af
-000299 e704
-00029a 940e 00af
-00029c e000
-00029d 940e 00af
-00029f 940e 00ac
-0002a1 940e 00a6
-0002a3 ed00
-0002a4 940e 00af
-0002a6 e109
-0002a7 940e 00af
-0002a9 e007
-0002aa 940e 00af
-0002ac e000
-0002ad 940e 00af
-0002af e008
-0002b0 940e 00af
-0002b2 e008
-0002b3 940e 00af
-0002b5 e000
-0002b6 940e 00af
-0002b8 e000
-0002b9 940e 00af
-0002bb e000
-0002bc 940e 00af
-0002be e000
-0002bf 940e 00af
-0002c1 e000
-0002c2 940e 00af
-0002c4 e000
-0002c5 940e 00af
-0002c7 e000
-0002c8 940e 00af
-0002ca e000
-0002cb 940e 00af
-0002cd e000
-0002ce 940e 00af
-0002d0 e000
-0002d1 940e 00af
-0002d3 e000
-0002d4 940e 00af
-0002d6 e000
-0002d7 940e 00af
-0002d9 e000
-0002da 940e 00af
-0002dc e000
-0002dd 940e 00af
-0002df e000
-0002e0 940e 00af
-0002e2 e000
-0002e3 940e 00af
-0002e5 e000
-0002e6 940e 00af
-0002e8 e000
-0002e9 940e 00af
-0002eb e000
-0002ec 940e 00af
-0002ee e000
-0002ef 940e 00af
-0002f1 e000
-0002f2 940e 00af
-0002f4 e000
-0002f5 940e 00af
-0002f7 e000
-0002f8 940e 00af
-0002fa e000
-0002fb 940e 00af
-0002fd e000
-0002fe 940e 00af
-000300 940e 00a6
-000302 ed00
-000303 940e 00af
-000305 e307
-000306 940e 00af
-000308 e000
-000309 940e 00af
-00030b e000
-00030c 940e 00af
-00030e 940e 00a6
-000310 ed00
-000311 940e 00af
-000313 e603
-000314 940e 00af
-000316 e000
-000317 940e 00af
-000319 e000
-00031a 940e 00af
-00031c e000
-00031d 940e 00af
-00031f e000
-000320 940e 00af
-000322 e000
-000323 940e 00af
-000325 e000
-000326 940e 00af
-000328 e000
-000329 940e 00af
-00032b e000
-00032c 940e 00af
-00032e e002
-00032f 940e 00af
-000331 e000
-000332 940e 00af
-000334 940e 00a6
-000336 ed00
-000337 940e 00af
-000339 e704
-00033a 940e 00af
-00033c e000
-00033d 940e 00af
-00033f 940e 00ac
-000341 940e 00a6
-000343 ed00
-000344 940e 00af
-000346 e109
-000347 940e 00af
-000349 e007
-00034a 940e 00af
-00034c e000
-00034d 940e 00af
-00034f e008
-000350 940e 00af
-000352 e008
-000353 940e 00af
-000355 e000
-000356 940e 00af
-000358 e000
-000359 940e 00af
-00035b e000
-00035c 940e 00af
-00035e e000
-00035f 940e 00af
-000361 e000
-000362 940e 00af
-000364 e000
-000365 940e 00af
-000367 e000
-000368 940e 00af
-00036a e000
-00036b 940e 00af
-00036d e000
-00036e 940e 00af
-000370 e000
-000371 940e 00af
-000373 e000
-000374 940e 00af
-000376 e000
-000377 940e 00af
-000379 e000
-00037a 940e 00af
-00037c e000
-00037d 940e 00af
-00037f e000
-000380 940e 00af
-000382 e000
-000383 940e 00af
-000385 e000
-000386 940e 00af
-000388 e000
-000389 940e 00af
-00038b e000
-00038c 940e 00af
-00038e e000
-00038f 940e 00af
-000391 e000
-000392 940e 00af
-000394 e000
-000395 940e 00af
-000397 e000
-000398 940e 00af
-00039a e000
-00039b 940e 00af
-00039d e000
-00039e 940e 00af
-0003a0 940e 00a6
-0003a2 ed00
-0003a3 940e 00af
-0003a5 e307
-0003a6 940e 00af
-0003a8 e000
-0003a9 940e 00af
-0003ab e000
-0003ac 940e 00af
-0003ae 940e 00a6
-0003b0 ed00
-0003b1 940e 00af
-0003b3 e603
-0003b4 940e 00af
-0003b6 e000
-0003b7 940e 00af
-0003b9 e000
-0003ba 940e 00af
-0003bc e000
-0003bd 940e 00af
-0003bf e000
-0003c0 940e 00af
-0003c2 e000
-0003c3 940e 00af
-0003c5 e000
-0003c6 940e 00af
-0003c8 e000
-0003c9 940e 00af
-0003cb e000
-0003cc 940e 00af
-0003ce e002
-0003cf 940e 00af
-0003d1 e000
-0003d2 940e 00af
-0003d4 940e 00a6
-0003d6 ed00
-0003d7 940e 00af
-0003d9 e704
-0003da 940e 00af
-0003dc e000
-0003dd 940e 00af
-0003df 940e 00ac
-0003e1 98bb
+000201 98bb
+000202 940e 00a6
+000204 ed00
+000205 940e 00af
+000207 e109
+000208 940e 00af
+00020a e007
+00020b 940e 00af
+00020d e000
+00020e 940e 00af
+000210 e008
+000211 940e 00af
+000213 e008
+000214 940e 00af
+000216 e000
+000217 940e 00af
+000219 e000
+00021a 940e 00af
+00021c e000
+00021d 940e 00af
+00021f e000
+000220 940e 00af
+000222 e000
+000223 940e 00af
+000225 e000
+000226 940e 00af
+000228 e000
+000229 940e 00af
+00022b e000
+00022c 940e 00af
+00022e e000
+00022f 940e 00af
+000231 e000
+000232 940e 00af
+000234 e000
+000235 940e 00af
+000237 e000
+000238 940e 00af
+00023a e000
+00023b 940e 00af
+00023d e000
+00023e 940e 00af
+000240 e000
+000241 940e 00af
+000243 e000
+000244 940e 00af
+000246 e000
+000247 940e 00af
+000249 e000
+00024a 940e 00af
+00024c e000
+00024d 940e 00af
+00024f e000
+000250 940e 00af
+000252 e000
+000253 940e 00af
+000255 e000
+000256 940e 00af
+000258 e000
+000259 940e 00af
+00025b e000
+00025c 940e 00af
+00025e e000
+00025f 940e 00af
+000261 940e 00a6
+000263 ed00
+000264 940e 00af
+000266 e307
+000267 940e 00af
+000269 e000
+00026a 940e 00af
+00026c e000
+00026d 940e 00af
+00026f 940e 00a6
+000271 ed00
+000272 940e 00af
+000274 e603
+000275 940e 00af
+000277 e000
+000278 940e 00af
+00027a e000
+00027b 940e 00af
+00027d e000
+00027e 940e 00af
+000280 e000
+000281 940e 00af
+000283 e000
+000284 940e 00af
+000286 e000
+000287 940e 00af
+000289 e000
+00028a 940e 00af
+00028c e000
+00028d 940e 00af
+00028f e002
+000290 940e 00af
+000292 e000
+000293 940e 00af
+000295 940e 00a6
+000297 ed00
+000298 940e 00af
+00029a e704
+00029b 940e 00af
+00029d e000
+00029e 940e 00af
+0002a0 940e 00ac
+0002a2 940e 00a6
+0002a4 ed00
+0002a5 940e 00af
+0002a7 e109
+0002a8 940e 00af
+0002aa e007
+0002ab 940e 00af
+0002ad e000
+0002ae 940e 00af
+0002b0 e008
+0002b1 940e 00af
+0002b3 e008
+0002b4 940e 00af
+0002b6 e000
+0002b7 940e 00af
+0002b9 e000
+0002ba 940e 00af
+0002bc e000
+0002bd 940e 00af
+0002bf e000
+0002c0 940e 00af
+0002c2 e000
+0002c3 940e 00af
+0002c5 e000
+0002c6 940e 00af
+0002c8 e000
+0002c9 940e 00af
+0002cb e000
+0002cc 940e 00af
+0002ce e000
+0002cf 940e 00af
+0002d1 e000
+0002d2 940e 00af
+0002d4 e000
+0002d5 940e 00af
+0002d7 e000
+0002d8 940e 00af
+0002da e000
+0002db 940e 00af
+0002dd e000
+0002de 940e 00af
+0002e0 e000
+0002e1 940e 00af
+0002e3 e000
+0002e4 940e 00af
+0002e6 e000
+0002e7 940e 00af
+0002e9 e000
+0002ea 940e 00af
+0002ec e000
+0002ed 940e 00af
+0002ef e000
+0002f0 940e 00af
+0002f2 e000
+0002f3 940e 00af
+0002f5 e000
+0002f6 940e 00af
+0002f8 e000
+0002f9 940e 00af
+0002fb e000
+0002fc 940e 00af
+0002fe e000
+0002ff 940e 00af
+000301 940e 00a6
+000303 ed00
+000304 940e 00af
+000306 e307
+000307 940e 00af
+000309 e000
+00030a 940e 00af
+00030c e000
+00030d 940e 00af
+00030f 940e 00a6
+000311 ed00
+000312 940e 00af
+000314 e603
+000315 940e 00af
+000317 e000
+000318 940e 00af
+00031a e000
+00031b 940e 00af
+00031d e000
+00031e 940e 00af
+000320 e000
+000321 940e 00af
+000323 e000
+000324 940e 00af
+000326 e000
+000327 940e 00af
+000329 e000
+00032a 940e 00af
+00032c e000
+00032d 940e 00af
+00032f e002
+000330 940e 00af
+000332 e000
+000333 940e 00af
+000335 940e 00a6
+000337 ed00
+000338 940e 00af
+00033a e704
+00033b 940e 00af
+00033d e000
+00033e 940e 00af
+000340 940e 00ac
+000342 940e 00a6
+000344 ed00
+000345 940e 00af
+000347 e109
+000348 940e 00af
+00034a e007
+00034b 940e 00af
+00034d e000
+00034e 940e 00af
+000350 e008
+000351 940e 00af
+000353 e008
+000354 940e 00af
+000356 e000
+000357 940e 00af
+000359 e000
+00035a 940e 00af
+00035c e000
+00035d 940e 00af
+00035f e000
+000360 940e 00af
+000362 e000
+000363 940e 00af
+000365 e000
+000366 940e 00af
+000368 e000
+000369 940e 00af
+00036b e000
+00036c 940e 00af
+00036e e000
+00036f 940e 00af
+000371 e000
+000372 940e 00af
+000374 e000
+000375 940e 00af
+000377 e000
+000378 940e 00af
+00037a e000
+00037b 940e 00af
+00037d e000
+00037e 940e 00af
+000380 e000
+000381 940e 00af
+000383 e000
+000384 940e 00af
+000386 e000
+000387 940e 00af
+000389 e000
+00038a 940e 00af
+00038c e000
+00038d 940e 00af
+00038f e000
+000390 940e 00af
+000392 e000
+000393 940e 00af
+000395 e000
+000396 940e 00af
+000398 e000
+000399 940e 00af
+00039b e000
+00039c 940e 00af
+00039e e000
+00039f 940e 00af
+0003a1 940e 00a6
+0003a3 ed00
+0003a4 940e 00af
+0003a6 e307
+0003a7 940e 00af
+0003a9 e000
+0003aa 940e 00af
+0003ac e000
+0003ad 940e 00af
+0003af 940e 00a6
+0003b1 ed00
+0003b2 940e 00af
+0003b4 e603
+0003b5 940e 00af
+0003b7 e000
+0003b8 940e 00af
+0003ba e000
+0003bb 940e 00af
+0003bd e000
+0003be 940e 00af
+0003c0 e000
+0003c1 940e 00af
+0003c3 e000
+0003c4 940e 00af
+0003c6 e000
+0003c7 940e 00af
+0003c9 e000
+0003ca 940e 00af
+0003cc e000
+0003cd 940e 00af
+0003cf e002
+0003d0 940e 00af
+0003d2 e000
+0003d3 940e 00af
+0003d5 940e 00a6
+0003d7 ed00
+0003d8 940e 00af
+0003da e704
+0003db 940e 00af
+0003dd e000
+0003de 940e 00af
+0003e0 940e 00ac
 0003e2 e001
 0003e3 9300 0080
-0003e5 9478      	Setup
-                 
-0003e6 c000      	rjmp	Main
+0003e5 9478      	Setup			
+0003e6 c000      	rjmp Main
                  
                  Main:
                  	;Check if the program should be running
@@ -2387,7 +2381,6 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(32): Including file 'D:
 0003e9 9100 0080 	lds R16, Program_Running			
 0003eb 3001      	cpi R16, 0x01
 0003ec f7d1      	brne Main
-                 
                  
                  	;Insert program code here
 0003ed 9478      	sei
