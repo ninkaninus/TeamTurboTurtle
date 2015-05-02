@@ -34,8 +34,5 @@ Motor_Set_Percentage_Out:
 
 	call Motor_Set							;Set the duty cycle of the motor pwn as the % of 255
 
-	call USART_Decimal_16
-	USART_Newline
-
 Motor_Set_Percentage_End:
  ret
