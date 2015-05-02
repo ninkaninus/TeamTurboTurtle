@@ -101,11 +101,12 @@ Comm_Received_Type_Set:
 Comm_Received_Command_Start:
 	ldi R16, 0x01							;Set the flag which determines if the main program should run
 	sts Program_Running, R16				;
+
 	lds R16, Comm_Received_Byte_3			;Load in the third(Parameter) byte
 
-	;Insert percentage calculating code here
+	call Motor_Set_Percentage
 
-	out OCR2, R16							;And set the pwm duty cycle of the motor.
+Comm_Received_Command_Start_End:
 	reti									;Return from interrupt
 
 ;Stop

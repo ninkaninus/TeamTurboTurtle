@@ -73,6 +73,9 @@
     <Compile Include="Main.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Math.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Motor_Control.asm">
       <SubType>Code</SubType>
     </Compile>
