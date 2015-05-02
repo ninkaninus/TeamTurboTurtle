@@ -44,11 +44,13 @@
 
 ;Status Register
 .equ		SREG_1			= 0x007B
+.equ Program_Running = 0x0080
 
+;Communication Protocol stuff
 .equ Comm_Received_Byte_Num = 0x007C
 .equ Comm_Received_Byte_1 = 0x007D
 .equ Comm_Received_Byte_2 = 0x007E
 .equ Comm_Received_Byte_3 = 0x007F
 
-.equ Program_Running = 0x0080
+
 

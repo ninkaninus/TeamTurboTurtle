@@ -1,7 +1,7 @@
  ; USART_library.asm
  ; Author: StjerneIdioten
 
- .MACRO  USART_Init
+.MACRO  USART_Init
 	;Set Baud Rate to 9600
 	ldi R16,	@1	
 	ldi R17,	@0
@@ -13,10 +13,10 @@
 	ldi R16,	(1<<RXEN)|(1<<TXEN)|(1<<RXCIE)
 	out	UCSRB,	R16
 
-	; Set frame format: 8data, 1stop bit
+	;Set frame format: 8data, 1stop bit
 	ldi	R16,	(1<<URSEL)|(3<<UCSZ0)
 	out	UCSRC,	R16
- .ENDMACRO
+.ENDMACRO
 
  ;Waits for an empty transmit buffer and then moves R16 to the transmit buffer
  USART_Transmit: 
