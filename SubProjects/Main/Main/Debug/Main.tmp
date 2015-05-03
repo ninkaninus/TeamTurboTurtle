@@ -78,7 +78,7 @@
   <Delay_MS_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delays.asm</FILE><LINE>44</LINE></Delay_MS_Loop>
   <Motor_Set><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>12</LINE></Motor_Set>
   <Motor_Set_Percentage><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>16</LINE></Motor_Set_Percentage>
-  <Motor_Set_Percentage_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>40</LINE></Motor_Set_Percentage_End>
+  <Motor_Set_Percentage_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>37</LINE></Motor_Set_Percentage_End>
   <Motor_Set_Percentage_Out><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>33</LINE></Motor_Set_Percentage_Out>
   <I2C_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>26</LINE></I2C_Start>
   <I2C_Start_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>31</LINE></I2C_Start_Wait>
