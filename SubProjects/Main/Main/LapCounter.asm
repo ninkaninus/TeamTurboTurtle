@@ -52,9 +52,9 @@ Lap_Time:
 	out		ACSR, R16					; Global interrupt register
 
 	
-	ldi R16, 'G'
-	call USART_Transmit
-	USART_Newline
+	;ldi R16, 'G'
+	;call USART_Transmit
+	;USART_Newline
 	
 
 Lap_Time_End:

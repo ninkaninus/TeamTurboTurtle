@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Sun May 03 14:12:23 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Sun May 03 23:28:30 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(2): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Interrupt_Mapping.asm'
@@ -836,7 +836,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
                  .include "Interrupt_Mapping.asm"
                  
                  .org 0x00
-000000 c217      rjmp Init
+000000 c211      rjmp Init
                  ;Timer1 Input Capture interrupt
                  .org	0x0C
 00000c 940c 0192 jmp	Input_Capture
@@ -845,7 +845,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
 000014 940c 017d jmp Timer0_Update
                  ;USART received interrupt
                  .org 0x1A
-00001a 940c 01e0 jmp Comm_Received
+00001a 940c 01d7 jmp Comm_Received
                  ;Comparator interrupt
                  .org 0x24
 000024 940c 01b5 
@@ -1945,7 +1945,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
 0001c9 0825      	sbc		R2, R5
                  			
 0001ca 2011      	tst R1
-0001cb f099      	breq Lap_Time_End
+0001cb f051      	breq Lap_Time_End
                  
 0001cc 9200 0074 	sts		Lap_time_L, R0				
 0001ce 9210 0075 	sts		Lap_time_M, R1				; Latest lap time
@@ -1958,18 +1958,15 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
 0001d5 b908      	out		ACSR, R16					; Global interrupt register
                  
                  	
-0001d6 e407      	ldi R16, 'G'
-0001d7 940e 0034 	call USART_Transmit
-0001d9 e00d
-0001da 940e 0034
-0001dc e00a
-0001dd 940e 0034 	USART_Newline
+                 	;ldi R16, 'G'
+                 	;call USART_Transmit
+                 	;USART_Newline
                  	
                  
                  Lap_Time_End:
                  
                  .include "Communication_Protocol.asm"
-0001df 9518      
+0001d6 9518      
                  	ldi R16, 0x01							;Initialize the counter as being the first byte
                  	sts Comm_Received_Byte_Num, R16			;
                  	clr R16									;Clear all of the SRAM-values used
@@ -1993,100 +1990,102 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
                  ;Implemetation of the required communication protocol
                  Comm_Received:
                  
-0001e0 9100 007c 	lds R16, Comm_Received_Byte_Num			;What byte # did we receive
+0001d7 9100 007c 	lds R16, Comm_Received_Byte_Num			;What byte # did we receive
                  
-0001e2 3001      	cpi R16, 0x01							;If it was the first
-0001e3 f019      	breq Comm_Received_Type					;Set the type
+0001d9 3001      	cpi R16, 0x01							;If it was the first
+0001da f019      	breq Comm_Received_Type					;Set the type
                  
-0001e4 3002      	cpi R16, 0x02							;If it was the second
-0001e5 f041      	breq Comm_Received_Command				;Set the command
+0001db 3002      	cpi R16, 0x02							;If it was the second
+0001dc f041      	breq Comm_Received_Command				;Set the command
                  
                  	;Working under the assumption that if it was not the first or second byte, then it must be the third.
                  
-0001e6 c00e      	rjmp Comm_Received_Execute				;Go to the execution of the received telegram
+0001dd c00e      	rjmp Comm_Received_Execute				;Go to the execution of the received telegram
                  
                  
                  ;Received a type
                  Comm_Received_Type:
                  
-0001e7 e002      	ldi R16, 0x02							;Set the counter to two
-0001e8 9300 007c 	sts Comm_Received_Byte_Num, R16			;Store it
+0001de e002      	ldi R16, 0x02							;Set the counter to two
+0001df 9300 007c 	sts Comm_Received_Byte_Num, R16			;Store it
                  
-0001ea b10c      	in r16, UDR								;Store the received type in SRAM
-0001eb 9300 007d 	sts Comm_Received_Byte_1, R16			;	
-0001ed 9518      	reti									;Return from interrupt
+0001e1 b10c      	in r16, UDR								;Store the received type in SRAM
+0001e2 9300 007d 	sts Comm_Received_Byte_1, R16			;	
+0001e4 9518      	reti									;Return from interrupt
                  
                  ;Received a command
                  Comm_Received_Command:
                  
-0001ee e003      	ldi R16, 0x03							;Set the counter to three
-0001ef 9300 007c 	sts Comm_Received_Byte_Num, R16			;Store it
+0001e5 e003      	ldi R16, 0x03							;Set the counter to three
+0001e6 9300 007c 	sts Comm_Received_Byte_Num, R16			;Store it
                  
-0001f1 b10c      	in r16, UDR								;Store the received command in SRAM
-0001f2 9300 007e 	sts Comm_Received_Byte_2, R16			;
-0001f4 9518      	reti									;Return from interrupt
+0001e8 b10c      	in r16, UDR								;Store the received command in SRAM
+0001e9 9300 007e 	sts Comm_Received_Byte_2, R16			;
+0001eb 9518      	reti									;Return from interrupt
                  
                  ;Execute the telegram received
                  Comm_Received_Execute:
                  
-0001f5 b10c      	in r16, UDR								;Read in the received parameter
-0001f6 9300 007f 	sts Comm_Received_Byte_3, R16			;Store it in SRAM
+0001ec b10c      	in r16, UDR								;Read in the received parameter
+0001ed 9300 007f 	sts Comm_Received_Byte_3, R16			;Store it in SRAM
                  	
-0001f8 e001      	ldi R16, 0x01							;Reset the counter
-0001f9 9300 007c 	sts Comm_Received_Byte_Num, R16			;Store it in SRAM
+0001ef e001      	ldi R16, 0x01							;Reset the counter
+0001f0 9300 007c 	sts Comm_Received_Byte_Num, R16			;Store it in SRAM
                  
                  ;---------------------------------------------------------------------------------------------------------------------
                  ;Types
                  ;---------------------------------------------------------------------------------------------------------------------
                  
-0001fb 9100 007d 	lds R16, Comm_Received_Byte_1			;Load in the first(Type) byte
+0001f2 9100 007d 	lds R16, Comm_Received_Byte_1			;Load in the first(Type) byte
                  
                  	;SET
-0001fd 3505      	cpi R16, Comm_Type_SET					;Check if we received a SET and branch if it was
-0001fe f019      	breq Comm_Received_Type_Set				;
+0001f4 3505      	cpi R16, Comm_Type_SET					;Check if we received a SET and branch if it was
+0001f5 f019      	breq Comm_Received_Type_Set				;
                  
                  	;GET
-0001ff 3a0a      	cpi R16, Comm_Type_GET					;Check if we received a GET and branch if it was
-000200 f0b1      	breq Comm_Received_Type_Get				;
+0001f6 3a0a      	cpi R16, Comm_Type_GET					;Check if we received a GET and branch if it was
+0001f7 f0c9      	breq Comm_Received_Type_Get				;
                  
-000201 9518      	reti
+0001f8 9518      	reti
                  ;---------------------------------------------------------------------------------------------------------------------
                  ;SET's
                  ;---------------------------------------------------------------------------------------------------------------------
                  
                  Comm_Received_Type_Set:
                  
-000202 9100 007e 	lds R16, Comm_Received_Byte_2			;Load in the second(Command) byte
+0001f9 9100 007e 	lds R16, Comm_Received_Byte_2			;Load in the second(Command) byte
                  
-000204 3100      	cpi R16, Comm_Command_Start				;Check if we received a Start command
-000205 f019      	breq Comm_Received_Command_Start		;
+0001fb 3100      	cpi R16, Comm_Command_Start				;Check if we received a Start command
+0001fc f019      	breq Comm_Received_Command_Start		;
                  
-000206 3101      	cpi R16, Comm_Command_Stop				;Check if we received a Stop command
-000207 f049      	breq Comm_Received_Command_Stop			;
+0001fd 3101      	cpi R16, Comm_Command_Stop				;Check if we received a Stop command
+0001fe f049      	breq Comm_Received_Command_Stop			;
                  
                  	;Insert error handling here
                  
-000208 9518      	reti									;Do nothing if it was not a legit code
+0001ff 9518      	reti									;Do nothing if it was not a legit code
                  
                  ;Start
                  Comm_Received_Command_Start:
-000209 e001      	ldi R16, 0x01							;Set the flag which determines if the main program should run
-00020a 9300 0080 	sts Program_Running, R16				;
+000200 e001      	ldi R16, 0x01							;Set the flag which determines if the main program should run
+000201 9300 0080 	sts Program_Running, R16				;
                  
-00020c 9100 007f 	lds R16, Comm_Received_Byte_3			;Load in the third(Parameter) byte
+000203 9100 007f 	lds R16, Comm_Received_Byte_3			;Load in the third(Parameter) byte
                  
-00020e 940e 00fd 	call Motor_Set_Percentage
+000205 940e 00fd 	call Motor_Set_Percentage
                  
                  Comm_Received_Command_Start_End:
-000210 9518      	reti									;Return from interrupt
+000207 9518      	reti									;Return from interrupt
                  
                  ;Stop
                  Comm_Received_Command_Stop:
-000211 e000      	ldi R16, 0x00							;Clear the flag which determines if the main program should run
-000212 9300 0080 	sts Program_Running, R16				;
-000214 e000      	ldi R16, 0x00							;Load in 0x00
-000215 bd03      	out OCR2, R16							;And set the pwm duty cycle to nothing to stop the motor.
-000216 9518      	reti
+000208 e000      	ldi R16, 0x00							;Clear the flag which determines if the main program should run
+000209 9300 0080 	sts Program_Running, R16				;
+00020b e000      	ldi R16, 0x00							;Load in 0x00
+00020c bd03      	out OCR2, R16							;And set the pwm duty cycle to nothing to stop the motor.
+00020d e404      	ldi R16, 'D'
+00020e 940e 0034 	call USART_Transmit
+000210 9518      	reti
                  
                  
                  ;---------------------------------------------------------------------------------------------------------------------
@@ -2098,7 +2097,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
                  	;Insert error handling here
                  
                  .include "Setup.asm"
-000217 9518      
+000211 9518      
                  	;Initialize the stack
                  	LDI	R16, low(RAMEND)
                      OUT	SPL, R16
@@ -2124,85 +2123,89 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
                  .ENDMACRO
                  
                  Init:
-000218 e50f
-000219 bf0d
-00021a e008
-00021b bf0e
-00021c e607
-00021d e010
-00021e bd10
-00021f b909
-000220 e908
-000221 b90a
-000222 e806
-000223 bd00
-000224 e001
-000225 9300 007c
-000227 2700
-000228 9300 007d
-00022a 9300 007e
-00022c 9300 007f
-00022e b301
-00022f 6800
-000230 bb01
-000231 e609
-000232 bd05
-000233 e000
-000234 b901
-000235 e102
-000236 b900
-000237 e004
-000238 bf06
-000239 0000
-00023a e00b
-00023b bf03
-00023c e000
-00023d bf02
-00023e ef09
-00023f bf0c
-000240 2700
-000241 9300 0070
-000243 9300 006f
-000245 9300 006e
-000247 b709
-000248 6002
-000249 bf09
-00024a e000
-00024b bd0f
-00024c e802
-00024d bd0e
-00024e 2700
-00024f 9300 0077
-000251 9300 0078
-000253 b709
-000254 6200
-000255 bf09
-000256 2700
-000257 9300 0073
-000259 9300 0072
-00025b 9300 0071
-00025d 9300 0074
-00025f 9300 0075
-000261 9300 0076
-000263 b108
-000264 6408
-000265 b908
-000266 b700
-000267 7f07
-000268 bf00
-000269 98bb
-00026a 940e 010c
-00026c ed00
+000212 e50f
+000213 bf0d
+000214 e008
+000215 bf0e
+000216 e607
+000217 e010
+000218 bd10
+000219 b909
+00021a e908
+00021b b90a
+00021c e806
+00021d bd00
+00021e e001
+00021f 9300 007c
+000221 2700
+000222 9300 007d
+000224 9300 007e
+000226 9300 007f
+000228 b301
+000229 6800
+00022a bb01
+00022b e609
+00022c bd05
+00022d e000
+00022e b901
+00022f e102
+000230 b900
+000231 e004
+000232 bf06
+000233 0000
+000234 e00b
+000235 bf03
+000236 e000
+000237 bf02
+000238 ef09
+000239 bf0c
+00023a 2700
+00023b 9300 0070
+00023d 9300 006f
+00023f 9300 006e
+000241 b709
+000242 6002
+000243 bf09
+000244 e000
+000245 bd0f
+000246 e802
+000247 bd0e
+000248 2700
+000249 9300 0077
+00024b 9300 0078
+00024d b709
+00024e 6200
+00024f bf09
+000250 2700
+000251 9300 0073
+000253 9300 0072
+000255 9300 0071
+000257 9300 0074
+000259 9300 0075
+00025b 9300 0076
+00025d b108
+00025e 6408
+00025f b908
+000260 b700
+000261 7f07
+000262 bf00
+000263 98bb
+000264 940e 010c
+000266 ed00
+000267 940e 0115
+000269 e109
+00026a 940e 0115
+00026c e007
 00026d 940e 0115
-00026f e109
+00026f e000
 000270 940e 0115
-000272 e007
+000272 e008
 000273 940e 0115
-000275 e000
+000275 e008
 000276 940e 0115
-000278 e008
+000278 e000
 000279 940e 0115
-00027b e008
+00027b e000
 00027c 940e 0115
 00027e e000
 00027f 940e 0115
@@ -2250,23 +2253,23 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
 0002be 940e 0115
 0002c0 e000
 0002c1 940e 0115
-0002c3 e000
-0002c4 940e 0115
-0002c6 e000
-0002c7 940e 0115
-0002c9 940e 010c
-0002cb ed00
+0002c3 940e 010c
+0002c5 ed00
+0002c6 940e 0115
+0002c8 e307
+0002c9 940e 0115
+0002cb e000
 0002cc 940e 0115
-0002ce e307
+0002ce e000
 0002cf 940e 0115
-0002d1 e000
-0002d2 940e 0115
-0002d4 e000
-0002d5 940e 0115
-0002d7 940e 010c
-0002d9 ed00
+0002d1 940e 010c
+0002d3 ed00
+0002d4 940e 0115
+0002d6 e603
+0002d7 940e 0115
+0002d9 e000
 0002da 940e 0115
-0002dc e603
+0002dc e000
 0002dd 940e 0115
 0002df e000
 0002e0 940e 0115
@@ -2280,34 +2283,34 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
 0002ec 940e 0115
 0002ee e000
 0002ef 940e 0115
-0002f1 e000
+0002f1 e002
 0002f2 940e 0115
 0002f4 e000
 0002f5 940e 0115
-0002f7 e002
-0002f8 940e 0115
-0002fa e000
-0002fb 940e 0115
-0002fd 940e 010c
-0002ff ed00
+0002f7 940e 010c
+0002f9 ed00
+0002fa 940e 0115
+0002fc e704
+0002fd 940e 0115
+0002ff e000
 000300 940e 0115
-000302 e704
-000303 940e 0115
-000305 e000
-000306 940e 0115
-000308 940e 0112
-00030a 940e 010c
-00030c ed00
+000302 940e 0112
+000304 940e 010c
+000306 ed00
+000307 940e 0115
+000309 e109
+00030a 940e 0115
+00030c e007
 00030d 940e 0115
-00030f e109
+00030f e000
 000310 940e 0115
-000312 e007
+000312 e008
 000313 940e 0115
-000315 e000
+000315 e008
 000316 940e 0115
-000318 e008
+000318 e000
 000319 940e 0115
-00031b e008
+00031b e000
 00031c 940e 0115
 00031e e000
 00031f 940e 0115
@@ -2355,23 +2358,23 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
 00035e 940e 0115
 000360 e000
 000361 940e 0115
-000363 e000
-000364 940e 0115
-000366 e000
-000367 940e 0115
-000369 940e 010c
-00036b ed00
+000363 940e 010c
+000365 ed00
+000366 940e 0115
+000368 e307
+000369 940e 0115
+00036b e000
 00036c 940e 0115
-00036e e307
+00036e e000
 00036f 940e 0115
-000371 e000
-000372 940e 0115
-000374 e000
-000375 940e 0115
-000377 940e 010c
-000379 ed00
+000371 940e 010c
+000373 ed00
+000374 940e 0115
+000376 e603
+000377 940e 0115
+000379 e000
 00037a 940e 0115
-00037c e603
+00037c e000
 00037d 940e 0115
 00037f e000
 000380 940e 0115
@@ -2385,34 +2388,34 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
 00038c 940e 0115
 00038e e000
 00038f 940e 0115
-000391 e000
+000391 e002
 000392 940e 0115
 000394 e000
 000395 940e 0115
-000397 e002
-000398 940e 0115
-00039a e000
-00039b 940e 0115
-00039d 940e 010c
-00039f ed00
+000397 940e 010c
+000399 ed00
+00039a 940e 0115
+00039c e704
+00039d 940e 0115
+00039f e000
 0003a0 940e 0115
-0003a2 e704
-0003a3 940e 0115
-0003a5 e000
-0003a6 940e 0115
-0003a8 940e 0112
-0003aa 940e 010c
-0003ac ed00
+0003a2 940e 0112
+0003a4 940e 010c
+0003a6 ed00
+0003a7 940e 0115
+0003a9 e109
+0003aa 940e 0115
+0003ac e007
 0003ad 940e 0115
-0003af e109
+0003af e000
 0003b0 940e 0115
-0003b2 e007
+0003b2 e008
 0003b3 940e 0115
-0003b5 e000
+0003b5 e008
 0003b6 940e 0115
-0003b8 e008
+0003b8 e000
 0003b9 940e 0115
-0003bb e008
+0003bb e000
 0003bc 940e 0115
 0003be e000
 0003bf 940e 0115
@@ -2460,23 +2463,23 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
 0003fe 940e 0115
 000400 e000
 000401 940e 0115
-000403 e000
-000404 940e 0115
-000406 e000
-000407 940e 0115
-000409 940e 010c
-00040b ed00
+000403 940e 010c
+000405 ed00
+000406 940e 0115
+000408 e307
+000409 940e 0115
+00040b e000
 00040c 940e 0115
-00040e e307
+00040e e000
 00040f 940e 0115
-000411 e000
-000412 940e 0115
-000414 e000
-000415 940e 0115
-000417 940e 010c
-000419 ed00
+000411 940e 010c
+000413 ed00
+000414 940e 0115
+000416 e603
+000417 940e 0115
+000419 e000
 00041a 940e 0115
-00041c e603
+00041c e000
 00041d 940e 0115
 00041f e000
 000420 940e 0115
@@ -2490,40 +2493,36 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
 00042c 940e 0115
 00042e e000
 00042f 940e 0115
-000431 e000
+000431 e002
 000432 940e 0115
 000434 e000
 000435 940e 0115
-000437 e002
-000438 940e 0115
-00043a e000
-00043b 940e 0115
-00043d 940e 010c
-00043f ed00
+000437 940e 010c
+000439 ed00
+00043a 940e 0115
+00043c e704
+00043d 940e 0115
+00043f e000
 000440 940e 0115
-000442 e704
-000443 940e 0115
-000445 e000
-000446 940e 0115
-000448 940e 0112
-00044a e001
-00044b 9300 0080
-00044d 9478      	Setup			
-00044e c000      	rjmp Main
+000442 940e 0112
+000444 e001
+000445 9300 0080
+000447 9478      	Setup			
+000448 c000      	rjmp Main
                  
                  Main:
                  	;Check if the program should be running
-00044f 9478      	sei
-000450 0000      	nop
-000451 94f8      	cli
-000452 9100 0080 	lds R16, Program_Running			
-000454 3001      	cpi R16, 0x01
-000455 f7c9      	brne Main
+000449 9478      	sei
+00044a 0000      	nop
+00044b 94f8      	cli
+00044c 9100 0080 	lds R16, Program_Running			
+00044e 3001      	cpi R16, 0x01
+00044f f7c9      	brne Main
                  
                  	;Insert program code here
-000456 9478      	sei
+000450 9478      	sei
                  
-000457 cff7      rjmp Main
+000451 cff7      rjmp Main
 
 
 RESOURCE USE INFORMATION
@@ -2543,7 +2542,7 @@ counted separately from r26..r31 here.
 "ATmega32A" register use summary:
 r0 :  12 r1 :  13 r2 :  10 r3 :   7 r4 :   4 r5 :   4 r6 :   3 r7 :   2 
 r8 :   2 r9 :   2 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16: 350 r17:  13 r18:  33 r19:  26 r20:  45 r21:   0 r22:   0 r23:   0 
+r16: 348 r17:  13 r18:  33 r19:  26 r20:  45 r21:   0 r22:   0 r23:   0 
 r24:   0 r25:   0 r26:  30 r27:  30 r28:   0 r29:   0 r30:   4 r31:   4 
 x  :   0 y  :   0 z  :   0 
 Registers used: 19 out of 35 (54.3%)
@@ -2554,12 +2553,12 @@ andi  :   1 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0
 brcc  :  14 brcs  :   0 break :   0 breq  :   7 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   2 brlt  :   0 brmi  :   0 
 brne  :   2 brpl  :   0 brsh  :   1 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  : 204 cbi   :   1 cbr   :   1 
+brvs  :   0 bset  :   0 bst   :   0 call  : 202 cbi   :   1 cbr   :   1 
 clc   :   0 clh   :   0 cli   :   2 cln   :   0 clr   :  16 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   2 cp    :   1 cpc   :   0 
 cpi   :  10 cpse  :   0 dec   :  10 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :  17 inc   :  12 jmp   :   4 
-ld    :   0 ldd   :   0 ldi   : 239 lds   :  24 lpm   :   0 lsl   :   1 
+ld    :   0 ldd   :   0 ldi   : 237 lds   :  24 lpm   :   0 lsl   :   1 
 lsr   :   0 mov   :   5 movw  :   3 mul   :   1 muls  :   0 mulsu :   0 
 neg   :   0 nop   :   2 or    :   0 ori   :   4 out   :  32 pop   :   0 
 push  :   0 rcall :   0 ret   :  15 reti  :  11 rjmp  :  15 rol   :   0 
@@ -2573,7 +2572,7 @@ Instructions used: 45 out of 113 (39.8%)
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0008b0   2166      0   2166   32768   6.6%
+[.cseg] 0x000000 0x0008a4   2154      0   2154   32768   6.6%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 

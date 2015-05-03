@@ -115,6 +115,8 @@ Comm_Received_Command_Stop:
 	sts Program_Running, R16				;
 	ldi R16, 0x00							;Load in 0x00
 	out OCR2, R16							;And set the pwm duty cycle to nothing to stop the motor.
+	ldi R16, 'D'
+	call USART_Transmit
 	reti
 
 
