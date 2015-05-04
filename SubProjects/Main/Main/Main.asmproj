@@ -55,13 +55,19 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Communication_Protocol.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Delays.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="I2C.asm">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Interrupts.asm">
+    <Compile Include="Interrupt_Mapping.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LapCounter.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Main.asm">
@@ -79,16 +85,19 @@
     <Compile Include="MPU-6050.inc">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Setup.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SRAM-Mapping.asm">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Testcode-Fast-lap.asm">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Timers.asm">
+    <Compile Include="Time.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="USART_library.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WheelSpeed.asm">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

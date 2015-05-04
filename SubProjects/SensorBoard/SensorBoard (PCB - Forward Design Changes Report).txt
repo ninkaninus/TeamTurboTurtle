@@ -1,0 +1,17 @@
+Forward Design Changes Report
+-----------------------------
+
+Report File:        D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard (PCB - Forward Design Changes Report).txt
+Report Written:     Monday, April 20, 2015
+Design Path:        D:\Github\TeamTurboTurtle\SubProjects\SensorBoard\SensorBoard.pcb
+Design Title:       
+Created:            20-04-2015 14:04:38
+Last Saved:         20-04-2015 16:51:10
+Editing Time:       166 min
+Units:              mm (precision 4)
+
+Connected pin "R1-1" to net "+5V".
+Connected pin "R2-2" to net "+5V".
+
+
+End Of Report.

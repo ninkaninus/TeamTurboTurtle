@@ -36,8 +36,28 @@
 .equ Lap_time_M	  = 0x0075
 .equ Lap_time_H	  = 0x0076
 
+;Pulse Stuphs
+.equ Edge1_L			= 0x0077
+.equ Edge1_H			= 0x0078
+.equ Pulse_Time_L	= 0x0079
+.equ Pulse_Time_H	= 0x007A
+
+;Status Register
+.equ SREG_1			= 0x007B
+.equ Program_Running = 0x0080
+
+;Communication Protocol stuff
+.equ Comm_Received_Byte_Num = 0x007C
+.equ Comm_Received_Byte_1 = 0x007D
+.equ Comm_Received_Byte_2 = 0x007E
+.equ Comm_Received_Byte_3 = 0x007F
+
+;Wheel Speed
+.equ Wheel_speed_L = 0x0081
+.equ Wheel_speed_H = 0x0082
 
 
 
 ;Mapping start -- Alt herefter skal holdes frit
 .equ Map_Start	  = 0x00C8
+

@@ -1,7 +1,7 @@
  ; USART_library.asm
  ; Author: StjerneIdioten
 
- .MACRO  USART_Init
+.MACRO  USART_Init
 	;Set Baud Rate to 9600
 	ldi R16,	@1	
 	ldi R17,	@0
@@ -10,13 +10,13 @@
 	out UBRRL,	R16
 
 	;Enable receiver and transmitter
-	ldi R16,	(1<<RXEN)|(1<<TXEN)
+	ldi R16,	(1<<RXEN)|(1<<TXEN)|(1<<RXCIE)
 	out	UCSRB,	R16
 
-	; Set frame format: 8data, 2stop bit
+	;Set frame format: 8data, 1stop bit
 	ldi	R16,	(1<<URSEL)|(3<<UCSZ0)
 	out	UCSRC,	R16
- .ENDMACRO
+.ENDMACRO
 
  ;Waits for an empty transmit buffer and then moves R16 to the transmit buffer
  USART_Transmit: 
@@ -67,6 +67,7 @@ USART_Binary_End:
 	cpi R18, 0x08			;Check if we have converted and sent an entire byte yet
 	brne USART_Binary_Loop	;Repeat if we haven't
 ret
+
 
 
 ;Expecs a 16 bit value in R17:R16
@@ -157,6 +158,94 @@ USART_Decimal_S16_Count_1_Loop:
 	sub R18, XL
 	sbc R19, XH
 	brcc USART_Decimal_S16_Count_1_Loop
+	dec R20
+	add R18, XL
+	adc R19, XH
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+ret
+
+
+;Expecs a 16 bit value in R17:R16
+USART_Decimal_16:
+
+	movw R19:R18, R17:R16
+
+USART_Decimal_16_Count_10000:
+	clr R20
+	ldi XH, HIGH(10000)
+	ldi XL, LOW(10000)
+USART_Decimal_16_Count_10000_Loop:
+	inc R20
+	sub R18, XL
+	sbc R19, XH
+	brcc USART_Decimal_16_Count_10000_Loop
+	dec R20
+	add R18, XL
+	adc R19, XH
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+USART_Decimal_16_Count_1000:
+	clr R20
+	ldi XH, HIGH(1000)
+	ldi XL, LOW(1000)
+USART_Decimal_16_Count_1000_Loop:
+	inc R20
+	sub R18, XL
+	sbc R19, XH
+	brcc USART_Decimal_16_Count_1000_Loop
+	dec R20
+	add R18, XL
+	adc R19, XH
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+USART_Decimal_16_Count_100:
+	clr R20
+	ldi XH, HIGH(100)
+	ldi XL, LOW(100)
+USART_Decimal_16_Count_100_Loop:
+	inc R20
+	sub R18, XL
+	sbc R19, XH
+	brcc USART_Decimal_16_Count_100_Loop
+	dec R20
+	add R18, XL
+	adc R19, XH
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+USART_Decimal_16_Count_10:
+	clr R20
+	ldi XH, HIGH(10)
+	ldi XL, LOW(10)
+USART_Decimal_16_Count_10_Loop:
+	inc R20
+	sub R18, XL
+	sbc R19, XH
+	brcc USART_Decimal_16_Count_10_Loop
+	dec R20
+	add R18, XL
+	adc R19, XH
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+USART_Decimal_16_Count_1:
+	clr R20
+	ldi XH, HIGH(1)
+	ldi XL, LOW(1)
+USART_Decimal_16_Count_1_Loop:
+	inc R20
+	sub R18, XL
+	sbc R19, XH
+	brcc USART_Decimal_16_Count_1_Loop
 	dec R20
 	add R18, XL
 	adc R19, XH
