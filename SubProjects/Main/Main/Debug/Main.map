@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Sat May 02 14:33:43 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Mon May 04 16:05:17 2015
 
 
 EQU  SIGNATURE_000 0000001e
@@ -568,11 +568,11 @@ EQU  ACIaddr      00000024
 EQU  TWIaddr      00000026
 EQU  SPMRaddr     00000028
 EQU  INT_VECTORS_SIZE 0000002a
-CSEG Init         00000220
-CSEG Input_Capture 0000019a
-CSEG Timer0_Update 00000185
-CSEG Comm_Received 000001e8
-CSEG Lap_Time     000001bd
+CSEG Init         00000219
+CSEG Input_Capture 00000192
+CSEG Timer0_Update 0000017d
+CSEG Comm_Received 000001e1
+CSEG Lap_Time     000001b5
 CSEG Sum_16       00000026
 CSEG Div16_8      00000029
 CSEG Div16_8_Loop 0000002b
@@ -609,6 +609,8 @@ EQU  Comm_Received_Byte_Num 0000007c
 EQU  Comm_Received_Byte_1 0000007d
 EQU  Comm_Received_Byte_2 0000007e
 EQU  Comm_Received_Byte_3 0000007f
+EQU  Wheel_speed_L 00000081
+EQU  Wheel_speed_H 00000082
 CSEG USART_Transmit 00000034
 CSEG USART_Transmit_Start 00000034
 CSEG USART_Receive 00000038
@@ -645,19 +647,19 @@ CSEG Delay_MS_Loop 000000ec
 EQU  MOTOR_PIN    00000007
 CSEG Motor_Set    000000fb
 CSEG Motor_Set_Percentage 000000fd
-CSEG Motor_Set_Percentage_End 00000113
+CSEG Motor_Set_Percentage_End 0000010b
 CSEG Motor_Set_Percentage_Out 00000109
 EQU  I2C_ACK      00000001
 EQU  I2C_NACK     00000000
-CSEG I2C_Start    00000114
-CSEG I2C_Start_Wait 00000116
-CSEG I2C_Stop     0000011a
-CSEG I2C_Write_Call 0000011d
-CSEG I2C_Write_Call_Wait 00000120
-CSEG I2C_Read_Call 00000124
-CSEG I2C_Read_Call_ACK 00000128
-CSEG I2C_Read_Call_Continue 00000129
-CSEG I2C_Read_Call_Wait 0000012a
+CSEG I2C_Start    0000010c
+CSEG I2C_Start_Wait 0000010e
+CSEG I2C_Stop     00000112
+CSEG I2C_Write_Call 00000115
+CSEG I2C_Write_Call_Wait 00000118
+CSEG I2C_Read_Call 0000011c
+CSEG I2C_Read_Call_ACK 00000120
+CSEG I2C_Read_Call_Continue 00000121
+CSEG I2C_Read_Call_Wait 00000122
 EQU  MPU6050_ADDRESS_W 000000d0
 EQU  MPU6050_ADDRESS_R 000000d1
 EQU  MPU6050_RA_XG_OFFS_TC 00000000
@@ -770,21 +772,21 @@ EQU  MPU6050_RA_FIFO_COUNTH 00000072
 EQU  MPU6050_RA_FIFO_COUNTL 00000073
 EQU  MPU6050_RA_FIFO_R_W 00000074
 EQU  MPU6050_RA_WHO_AM_I 00000075
-CSEG MPU6050_Read_Dataset 0000012f
-CSEG Timer_Update_End 00000199
-CSEG EDGE2        000001a8
-CSEG EDGE1        0000019e
-CSEG Lap_Time_End 000001e7
+CSEG MPU6050_Read_Dataset 00000127
+CSEG Timer_Update_End 00000191
+CSEG EDGE2        000001a0
+CSEG EDGE1        00000196
+CSEG Lap_Time_End 000001e0
 EQU  Comm_Type_SET 00000055
 EQU  Comm_Type_GET 000000aa
 EQU  Comm_Command_Start 00000010
 EQU  Comm_Command_Stop 00000011
-CSEG Comm_Received_Type 000001ef
-CSEG Comm_Received_Command 000001f6
-CSEG Comm_Received_Execute 000001fd
-CSEG Comm_Received_Type_Set 0000020a
-CSEG Comm_Received_Type_Get 0000021f
-CSEG Comm_Received_Command_Start 00000211
-CSEG Comm_Received_Command_Stop 00000219
-CSEG Comm_Received_Command_Start_End 00000218
-CSEG Main         00000457
+CSEG Comm_Received_Type 000001e8
+CSEG Comm_Received_Command 000001ef
+CSEG Comm_Received_Execute 000001f6
+CSEG Comm_Received_Type_Set 00000203
+CSEG Comm_Received_Type_Get 00000218
+CSEG Comm_Received_Command_Start 0000020a
+CSEG Comm_Received_Command_Stop 00000212
+CSEG Comm_Received_Command_Start_End 00000211
+CSEG Main         00000446
