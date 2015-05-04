@@ -18,12 +18,12 @@
 .include "AI.asm"
 
 Init:
-	Setup
-	cli
-	ldi R16, 75
-	call Motor_Set
-	sei
-				
+	Setup	
+	
+	ldi R16, 80
+	out OCR2, R16
+
+	sei					;Enable global interrupt	
 	rjmp Main
 
 Main:

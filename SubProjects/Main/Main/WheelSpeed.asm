@@ -22,7 +22,6 @@
 			call	Div16_8
 			sts		Wheel_speed_L, R16
 			sts		Wheel_speed_H, R17
-
 .ENDMACRO
 
 Input_Capture:
@@ -61,10 +60,12 @@ EDGE2:		lds		R0, Edge1_L
 			out		TCNT1H, R16						; Temp = R16
 			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp
 			
-			WheelSpeed_Calc
+			
+			;WheelSpeed_Calc
 			
 			lds		R16, SREG_1
 			cbr		R16, 0b00000001					; clear bit 0 in R16 (performs logical AND with complement of operand)
 			sts		SREG_1, R16
 			
+
 			reti

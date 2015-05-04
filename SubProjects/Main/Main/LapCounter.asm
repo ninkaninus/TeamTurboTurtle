@@ -22,6 +22,7 @@
 .ENDMACRO
 
 Lap_Time:	
+
 	lds		R0, Timer_1ms_L				
 	lds		R1, Timer_1ms_M				; Current time since startup in ms
 	lds		R2, Timer_1ms_H				 
@@ -37,9 +38,10 @@ Lap_Time:
 	sub		R0, R3						
 	sbc		R1, R4						; Difference between current time and last time stamp
 	sbc		R2, R5
-			
-	tst R1
-	breq Lap_Time_End
+		
+	ldi R16, 2		
+	cp R1, R16
+	brlo Lap_Time_End
 
 	sts		Lap_time_L, R0				
 	sts		Lap_time_M, R1				; Latest lap time
@@ -51,13 +53,7 @@ Lap_Time:
 	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
 	out		ACSR, R16					; Global interrupt register
 
-	ldi R16, 'D'
-	call USART_Transmit
-	USART_Newline
-
-	;call AI_LAP_INTERRUPT
-
-	ldi R16, 'R'
+	ldi R16, 'G'
 	call USART_Transmit
 	USART_Newline
 
