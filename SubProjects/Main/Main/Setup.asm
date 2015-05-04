@@ -15,7 +15,7 @@
 	MPU6050_Init						;Initialize the MPU6050 3 times to make sure it writes the values(We should make some kind of check instead)
 	MPU6050_Init						;
 	MPU6050_Init						;
-	AI_Init
+	;AI_Init
 
 	ldi R16, 0x01
 	sts Program_Running, R16
