@@ -45,13 +45,10 @@ Lap_Time:
 	sts		Lap_time_M, R1				; Latest lap time
 	sts		Lap_time_H, R2
 			
-	ldi		R16, 0x40					; Disable Comparator interrupt
-	out		ACSR, R16					; Global interrupt register
-			
 	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
 	out		ACSR, R16					; Global interrupt register
-
 	
+
 	;ldi R16, 'G'
 	;call USART_Transmit
 	;USART_Newline
