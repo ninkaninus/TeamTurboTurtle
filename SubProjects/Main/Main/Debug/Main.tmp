@@ -23,6 +23,7 @@
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Setup.asm</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Debug/Main.obj</FILE>
@@ -35,8 +36,8 @@
   <FILE>Main.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>19</LINE></Init>
-  <Input_Capture><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>18</LINE></Input_Capture>
+  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>20</LINE></Init>
+  <Input_Capture><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>28</LINE></Input_Capture>
   <Timer0_Update><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm</FILE><LINE>26</LINE></Timer0_Update>
   <Comm_Received><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>23</LINE></Comm_Received>
   <Lap_Time><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>24</LINE></Lap_Time>
@@ -78,7 +79,7 @@
   <Delay_MS_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delays.asm</FILE><LINE>44</LINE></Delay_MS_Loop>
   <Motor_Set><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>12</LINE></Motor_Set>
   <Motor_Set_Percentage><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>16</LINE></Motor_Set_Percentage>
-  <Motor_Set_Percentage_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>40</LINE></Motor_Set_Percentage_End>
+  <Motor_Set_Percentage_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>37</LINE></Motor_Set_Percentage_End>
   <Motor_Set_Percentage_Out><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>33</LINE></Motor_Set_Percentage_Out>
   <I2C_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>26</LINE></I2C_Start>
   <I2C_Start_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>31</LINE></I2C_Start_Wait>
@@ -91,9 +92,9 @@
   <I2C_Read_Call_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>77</LINE></I2C_Read_Call_Wait>
   <MPU6050_Read_Dataset><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm</FILE><LINE>233</LINE></MPU6050_Read_Dataset>
   <Timer_Update_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm</FILE><LINE>45</LINE></Timer_Update_End>
-  <EDGE2><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>38</LINE></EDGE2>
-  <EDGE1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>27</LINE></EDGE1>
-  <Lap_Time_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>60</LINE></Lap_Time_End>
+  <EDGE2><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>48</LINE></EDGE2>
+  <EDGE1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>37</LINE></EDGE1>
+  <Lap_Time_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>64</LINE></Lap_Time_End>
   <Comm_Received_Type><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>39</LINE></Comm_Received_Type>
   <Comm_Received_Command><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>49</LINE></Comm_Received_Command>
   <Comm_Received_Execute><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>59</LINE></Comm_Received_Execute>
@@ -102,6 +103,12 @@
   <Comm_Received_Command_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>101</LINE></Comm_Received_Command_Start>
   <Comm_Received_Command_Stop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>113</LINE></Comm_Received_Command_Stop>
   <Comm_Received_Command_Start_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>109</LINE></Comm_Received_Command_Start_End>
-  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>23</LINE></Main>
+  <AI_Preround><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>32</LINE></AI_Preround>
+  <FIRST_ROUND><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>42</LINE></FIRST_ROUND>
+  <RUN_TIME><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>145</LINE></RUN_TIME>
+  <AI_LAP_INTERRUPT><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>228</LINE></AI_LAP_INTERRUPT>
+  <TEST_PASS><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>234</LINE></TEST_PASS>
+  <TEST_PASS2><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>245</LINE></TEST_PASS2>
+  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>29</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>

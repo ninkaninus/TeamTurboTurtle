@@ -51,11 +51,15 @@ Lap_Time:
 	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
 	out		ACSR, R16					; Global interrupt register
 
-	
-	ldi R16, 'G'
+	ldi R16, 'D'
 	call USART_Transmit
 	USART_Newline
-	
+
+	;call AI_LAP_INTERRUPT
+
+	ldi R16, 'R'
+	call USART_Transmit
+	USART_Newline
 
 Lap_Time_End:
 

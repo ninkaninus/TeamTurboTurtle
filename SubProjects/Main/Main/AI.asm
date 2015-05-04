@@ -1,13 +1,11 @@
-
-
 ;Addresser
-.def	R19=Hastighed			;Den målte hastighed
-.def	R20=Hastighed_out		;Den outputtede hastighed
-.def	R21=Hastighed_set		;Den ønskede hastighed
-.def	R22=Hastighed_D			;Forøgelsen af hastighed
-.def	R23=Længde				;Længden af vejstykket
-.def	R24=Type				;Type af vejstykket
-.def	R25=check				;checker om den første tur er begyndt.
+.def	Hastighed = R19 		;Den målte hastighed
+.def	Hastighed_out = R20		;Den outputtede hastighed
+.def	Hastighed_set = R21		;Den ønskede hastighed
+.def	Hastighed_D = R22		;Forøgelsen af hastighed
+.def	Laengde = R23			;Laengden af vejstykket
+.def	Type = R24				;Type af vejstykket
+.def	check = R25				;checker om den første tur er begyndt.
 
 ;Konstanter
 .equ	Accel_v1=10				;Disse værdier skal justeres
@@ -18,47 +16,38 @@
 .equ	Hastighed_s2=50			;-- stort sving
 .equ	Hastighed_s1=70			;-- lille sving
 
-;Stack Initialize
-
-ldi		STACK,LOW(RAMEND)
-out		SPL,STACK
-ldi		STACK,HIGH(RAMEND)
-out		SPH,STACK
-
-;Input
-;lysdiode						;inputtet fra lap sensor
-;timer							;inputtet fra timeren der checker hastigheden
-
-
-
-
-
-
 ;Initialize først
+.MACRO AI_Init
 		ldi		check,			0				;Sætter check til 0 - initial omgang indtil målstregen rammes
 		ldi		Hastighed_out,	80				;Sætter hastigheden til 80, så bilen langsomt bevæger sig mod målstregen uden problemer
 		ldi		Hastighed_set,	100
 		ldi		Hastighed_D,	0				;Den passive hastighedsforøgelse bliver sat til 0. Hver gang bilen passerer målstregen efter den første vil denne blive forøget med 1.
-		ldi		Antal,			0				;Antal skift mellem banetyper - starter i 0 så der kan tælles op.
-		
-		ldi		Accel,			0
 		
 		clr		R27								;Clear MSB del af X
 		ldi		R26,			Map_start		;Første Ram hukommelse tildelt til mapping
 		
-		out		OCR2,			Hastighed_out	;Outputter hastigheden til motoren
-TOMT:
+		;out		OCR2,			Hastighed_out	;Outputter hastigheden til motoren
+.ENDMACRO
+
+AI_Preround:
+		cli	
 		cpi		check,			0				;Indtil den første omgang er færdig skal der ikke ske noget
 		brne	FIRST_ROUND
-rjmp	TOMT
+		ldi R16, 'P'
+		call USART_Transmit
+
+		sei
+rjmp	AI_Preround
 
 FIRST_ROUND:		;Den første omgang begynder. Der er plads til at indsætte kode der skal bearbejdes før vejtypen checkes.
+		ldi R16, 'D'
+		call USART_Transmit
+		rjmp FIRST_ROUND
 
-
-
+		/*
 SKIFT_TEST:								;Dette loop påbegyndes når der skiftes mellem banetyperne. Den benytter acceleration til at bestemme hvilken banetype bilen befinder sig på
 
-		ldi		Længde		0			;Start på et nyt stykke
+		ldi		Laengde		0			;Start på et nyt stykke
 ;		in		Accel, accelerometer	;Indlæs værdien for accelerometeret
 
 		cpi		Accel,		80
@@ -143,13 +132,15 @@ LEFT_TURN2:								;Hvis banetypen bestemmes til at være et stort venstre sving
 		
 rjmp	LEFT_TURN2
 
-SKIFT:									;Indlæser vejtypen og længden, hvorefter der hoppes tilbage til skift_test
+SKIFT:									;Indlæser vejtypen og Laengden, hvorefter der hoppes tilbage til skift_test
 
 		inc		Antal					;Forøg antal med en enkelt - Bruges til at checke hvor lang listen er
-		st		X+,			Længde		;Sæt længden ind først-
+		st		X+,			Laengde		;Sæt Laengden ind først-
 		st		X+,			Type		;og derefter vejtypen.
 
 jmp		SKIFT_TEST
+
+*/
 
 RUN_TIME:
 		nop								;Hvis der skal ske noget mens bilen kører de øvrige baner skal det skrives her
@@ -157,15 +148,8 @@ rjmp	RUN_TIME
 
 
 
-
-
-
-
-
-
-
-
-HALL_INTERRUPT:							;Interrupt fra hall sensoren der fungerer som et tachometer
+/*
+AI_HALL_INTERRUPT:							;Interrupt fra hall sensoren der fungerer som et tachometer
 
 		cpi		check,		0			;Check om den første runde er begyndt, ellers skal der ikke ske noget
 		brne	HALL1
@@ -177,7 +161,7 @@ HALL1:									;I den første runde skal der blot måles op, så her laver hall 
 		cpi		check,		1			;Check om den første runde er færdig.
 		brne	HALL2
 
-		inc		Længde
+		inc		Laengde
 		ld		Hastighed,	Pulse_Time_L
 		cp		Hastighed,	Hastighed_set
 		brlo	LOW						;Checker om hastigheden er for høj eller for lav
@@ -200,9 +184,9 @@ ret
 HALL2:									;Hvis den første omgang er færdig skal Hall interruptet stadig måle op
 ;										og justerer hastigheden. Den skal dog yderligere skifte mellem de målte banestykker
 
-		cpi		Længde,		0			;Først checkes om der er noget af længden tilbage.
+		cpi		Laengde,		0			;Først checkes om der er noget af Laengden tilbage.
 		brne	RUN
-		ld		Længde,		x+			;Ellers indlæses det næste stykke
+		ld		Laengde,		x+			;Ellers indlæses det næste stykke
 		ld		Type,		x+
 RUN:
 
@@ -237,32 +221,40 @@ rjmp	RUN_DONE
 
 
 RUN_DONE:
-		dec		Længde					;Sætter den tilbageværende "længde" ned med en.
+		dec		Laengde					;Sætter den tilbageværende "Laengde" ned med en.
 ret
+*/
 
-
-ret
-
-LAP_INTERRUPT:							;Lap interrupt skifter fra initial runden til den første runde til alle resterende.
-		inc		check,
+AI_LAP_INTERRUPT:							;Lap interrupt skifter fra initial runden til den første runde til alle resterende.
+		inc		check
 		cpi		check,		1
 		brne	TEST_PASS
-jmp		FIRST_ROUND						;Hopper til den første runde
+		ret						;Hopper til den første runde
 
 TEST_PASS:
 		cpi		check,		2
 		brne	TEST_PASS2
+
+		ldi R16, 'T'
+		call USART_Transmit
+
 		clr		R27						;Nulstiller X
 		ldi		R26,			Map_start
-jmp		FIRST_ROUND
+		ret
+
 TEST_PASS2:
+
+		ldi R16, 'C'
+		call USART_Transmit
+		/*
 		inc		Hastighed_D
 		clr		R27						;Nulstiller X
 		ldi		R26,			Map_start
 		ldi		check,		2
-		ld		Længde,		x+			;Indlæser den første del af af det gemte map.
+		ld		Laengde,		x+			;Indlæser den første del af af det gemte map.
 		ld		Type,		x+
-jmp		RUN_TIME
+		*/
+		ret
 
 
 

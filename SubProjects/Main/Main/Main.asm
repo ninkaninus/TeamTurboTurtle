@@ -15,12 +15,19 @@
 .include "LapCounter.asm"
 .include "Communication_Protocol.asm"
 .include "Setup.asm"
+.include "AI.asm"
 
 Init:
-	Setup			
+	Setup
+	cli
+	ldi R16, 75
+	call Motor_Set
+	sei
+				
 	rjmp Main
 
 Main:
+	/*
 	;Check if the program should be running
 	sei
 	nop
@@ -31,5 +38,6 @@ Main:
 
 	;Insert program code here
 	sei
+	*/
 
 rjmp Main
