@@ -15,6 +15,16 @@
 
 .ENDMACRO
 
+.MACRO WheelSpeed_Calc
+			lds		R18, Pulse_Time_L
+			sbr		R16, 0xFF
+			sbr		R17, 0xFF
+			call	Div16_8
+			sts		Wheel_speed_L, R16
+			sts		Wheel_speed_H, R17
+
+.ENDMACRO
+
 Input_Capture:
 
 			;ldi R16, 'D'
@@ -51,6 +61,7 @@ EDGE2:		lds		R0, Edge1_L
 			out		TCNT1H, R16						; Temp = R16
 			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp
 			
+			WheelSpeed_Calc
 			
 			lds		R16, SREG_1
 			cbr		R16, 0b00000001					; clear bit 0 in R16 (performs logical AND with complement of operand)
