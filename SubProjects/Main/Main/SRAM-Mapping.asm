@@ -35,3 +35,9 @@
 .equ Lap_time_L   = 0x0074
 .equ Lap_time_M	  = 0x0075
 .equ Lap_time_H	  = 0x0076
+
+
+
+
+;Mapping start -- Alt herefter skal holdes frit
+.equ Map_Start	  = 0x00C8
