@@ -18,9 +18,6 @@
 
 Init:
 	Setup	
-	
-	ldi R16, 80
-	out OCR2, R16
 
 	sei					;Enable global interrupt	
 	rjmp Main

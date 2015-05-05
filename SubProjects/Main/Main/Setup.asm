@@ -10,7 +10,7 @@
 	Motor_Init							;Initialize the motor pwm
 	I2C_Init 0x00,0x12					;Initialize the TWI module with Prescaler 4 and TWBR 12
 	Time_Init							;Initialize the timer associated with timekeeping
-	;WheelSpeed_Init					;Initialize the wheel speed sensor
+	WheelSpeed_Init						;Initialize the wheel speed sensor
 	LapCounter_Init						;Initialize the lap counter
 	MPU6050_Init						;Initialize the MPU6050 3 times to make sure it writes the values(We should make some kind of check instead)
 	MPU6050_Init						;
