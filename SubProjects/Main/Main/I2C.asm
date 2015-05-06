@@ -82,7 +82,7 @@ I2C_Read_Call_Wait:
 	in R16, TWDR
 ret
 
-//Easy to use macro which takes I2C_Ack/I2C_Nack as argument.
+;Easy to use macro which takes I2C_Ack/I2C_Nack as argument.
 .MACRO I2C_Read
 	ldi R16, @0
 	call I2C_Read_Call

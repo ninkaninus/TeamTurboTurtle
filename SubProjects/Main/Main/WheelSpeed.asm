@@ -59,8 +59,8 @@ Input_Capture:
 			in		R16, SREG
 			push	R16
 
-			;ldi R16, 'D'
-			;call USART_Transmit
+			ldi R16, 'D'
+			call USART_Transmit
 
 			lds		R16, SREG_1			
 			sbrc	R16, 0							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
@@ -77,7 +77,7 @@ EDGE1:		in		R0, ICR1L
 			sts		SREG_1, R16
 			
 			pop		R16
-			out		SREG
+			out		SREG, R16
 			pop		R16
 			pop		R3
 			pop		R2
@@ -117,6 +117,10 @@ EDGE2:		lds		R0, Edge1_L
 			lds		R2, Pulse_Time_L2
 			lds		R3, Pulse_Time_H2
 			
+.def	Threshold = R16
+
+			ldi		Threshold, high(6000)
+			
 			cp		R1, R3							; compares high bytes to see if Pulse1_H < Pulse2_H
 			brlo	P1_LO
 			
@@ -130,7 +134,7 @@ EDGE2:		lds		R0, Edge1_L
 P1_LO:		sub		R2, R0
 			sbc		R3, R1
 			
-			cpi		R3, high(6000)
+			cp		R3, Threshold
 			brlo	NO_GO
 			
 			rjmp	GO
@@ -139,7 +143,7 @@ P1_LO:		sub		R2, R0
 P2_LO:		sub		R0, R2
 			sbc		R1, R3
 			
-			cpi		R1, high(6000)
+			cp		R1, Threshold
 			brlo	NO_GO
 			
 Go:			lds		R2, Pulse_Time_L2								; Latest pulse time is considered valid and stored for use
@@ -160,21 +164,6 @@ end:
 			lds R16, Pulse_Time_L
 			lds R17, Pulse_Time_H
 
-			/*
-			tst R17
-			brne end
-
-			tst R16
-			brne end
-
-			call USART_Decimal_16
-			ldi R16, 'E'
-			call USART_Transmit
-			USART_Newline
-			rjmp end1
-
-			end:
-			*/
 			call USART_Decimal_16
 			USART_Newline
 
