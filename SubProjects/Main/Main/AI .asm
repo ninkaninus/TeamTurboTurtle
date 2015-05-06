@@ -211,6 +211,15 @@ RUN:
 		cpi		Type,		4			;Check om stor venstre
 		breq	RUN_S2
 										;Hvis alle checks fejler må der være tale om et lige stykke
+
+
+
+
+
+
+
+
+
 		ldi		R20,		Hastighed_l		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
 		lds		R21,		Hastighed_D
 		add		R20,		R21

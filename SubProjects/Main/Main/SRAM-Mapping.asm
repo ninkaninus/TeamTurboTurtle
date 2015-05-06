@@ -56,8 +56,12 @@
 .equ Wheel_speed_L = 0x0081
 .equ Wheel_speed_H = 0x0082
 
-
+;AI Hastighed
+.equ Check		= 0x0083
+.equ Hastighed_out	= 0x0084
+.equ Hastighed_set	= 0x0085
+.equ Hastighed_D	= 0x0086
 
 ;Mapping start -- Alt herefter skal holdes frit
-.equ Map_Start	  = 0x00C8
+.equ Map_Start		= 0x00C8
 
