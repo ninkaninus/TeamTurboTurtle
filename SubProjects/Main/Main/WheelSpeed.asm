@@ -13,9 +13,6 @@
 			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
 			out		TIMSK, R16				;Timer/interrupt masking register
 
-			ldi R16, 'P'
-			call USART_Transmit
-			USART_Newline
 
 .ENDMACRO
 
@@ -73,7 +70,7 @@ EDGE1:		in		R0, ICR1L
 			sts		SREG_1, R16
 			
 			pop		R16
-			out		SREG
+			out		SREG, R16
 			pop		R16
 			pop		R3
 			pop		R2
@@ -122,13 +119,14 @@ EDGE2:		lds		R0, Edge1_L
 
 			end:
 			*/
-			call USART_Decimal_16
-			USART_Newline
+
+			;call USART_Decimal_16
+			;USART_Newline
 
 			end1:
 
 			pop		R16
-			out		SREG
+			out		SREG, R16
 			pop		R16
 			pop		R3
 			pop		R2

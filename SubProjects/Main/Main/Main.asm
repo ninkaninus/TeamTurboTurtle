@@ -36,5 +36,6 @@ Main:
 	;Insert program code here
 	sei
 	*/
+	jmp AI_START
 
 rjmp Main

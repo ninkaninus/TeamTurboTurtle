@@ -23,7 +23,6 @@
 
 Lap_Time:	
 
-<<<<<<< HEAD
 	push	R0
 	push	R1
 	push	R2
@@ -63,18 +62,13 @@ Lap_Time:
 			
 	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
 	out		ACSR, R16					; Global interrupt register
-
-	/*, Lap_time_L
-	lds R17, Lap_time_M
-
-	call USART_Decimal_16
-	USART_Newline
-	*/
+	
+	call AI_LAP_INTERRUPT
 
 Lap_Time_End:
 
 	pop		R16
-	out		SREG
+	out		SREG, R16
 	pop		R16
 	pop		R5
 	pop		R4
