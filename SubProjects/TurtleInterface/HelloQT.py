@@ -1,44 +1,56 @@
-__author__ = 'StjerneIdioten'
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
+"""
+ZetCode PyQt5 tutorial 
+
+In this example, we determine the event sender
+object.
+
+author: Jan Bodnar
+website: zetcode.com 
+last edited: January 2015
+"""
+
 import sys
-from PyQt5.QtWidgets import (QWidget, QToolTip,
-    QPushButton, QApplication)
-from PyQt5.QtGui import QFont
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QApplication
 
-class Example(QWidget):
 
+class Example(QMainWindow):
+    
     def __init__(self):
         super().__init__()
-
+        
         self.initUI()
+        
+        
+    def initUI(self):      
 
+        btn1 = QPushButton("Button 1", self)
+        btn1.move(30, 50)
 
-    def initUI(self):
-
-        QToolTip.setFont(QFont('SansSerif', 10))
-
-        self.setToolTip('This is a <b>QWidget</b> widget')
-
-        but1 = QPushButton('Button1',self)
-        but1.setToolTip('This is a <b>QPushButton</b> widget')
-        but1.resize(but1.sizeHint())
-        but1.move(50,50)
-
-        but2 = QPushButton('Button2',self)
-        but2.setToolTip('This is another <b>QPushButton</b> widget')
-        but2.resize(but1.sizeHint())
-        but2.move(200,50)
-
-        self.setGeometry(300, 300, 300, 220)
-        self.setWindowTitle('Tooltips')
-        self.setWindowIcon(QIcon('turtle.jpg'))
+        btn2 = QPushButton("Button 2", self)
+        btn2.move(150, 50)
+      
+        btn1.clicked.connect(self.buttonClicked1)
+        btn2.clicked.connect(self.buttonClicked2)
+        
+        self.statusBar()
+        
+        self.setGeometry(300, 300, 290, 150)
+        self.setWindowTitle('Event sender')
         self.show()
+        
+        
+    def buttonClicked1(self):
+        self.statusBar().showMessage("Button 1")
 
-
+    def buttonClicked2(self):
+        self.statusBar().showMessage("Button 2")
+        
+        
 if __name__ == '__main__':
-
+    
     app = QApplication(sys.argv)
     ex = Example()
     sys.exit(app.exec_())
-
