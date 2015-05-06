@@ -22,6 +22,17 @@
 .ENDMACRO
 
 Lap_Time:	
+
+	push	R0
+	push	R1
+	push	R2
+	push	R3
+	push	R4
+	push	R5
+	push	R16
+	in		R16, SREG
+	push	R16
+
 	lds		R0, Timer_1ms_L				
 	lds		R1, Timer_1ms_M				; Current time since startup in ms
 	lds		R2, Timer_1ms_H				 
@@ -56,7 +67,17 @@ Lap_Time:
 	call USART_Transmit
 	USART_Newline
 	
-
+	
 Lap_Time_End:
+
+	pop		R16
+	out		SREG
+	pop		R16
+	pop		R5
+	pop		R4
+	pop		R3
+	pop		R2
+	pop		R1
+	pop		R0
 
 			reti			

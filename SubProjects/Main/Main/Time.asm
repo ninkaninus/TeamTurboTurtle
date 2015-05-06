@@ -24,14 +24,17 @@
 ; Timer subroutines
 
 Timer0_Update:
+			push	R16
+			in		R16, SREG
+			push	R16
 			
-			ldi		R20, 0x01
+			ldi		R16, 0x01
 			lds		R0, Timer_1ms_L			
 			add		R0, R20						;Advance time by 1ms whenever timer0 has compare match
 			sts		Timer_1ms_L, R0	
 			brcc	Timer_Update_End
 			
-			ldi		R20, 0x00
+			ldi		R16, 0x00
 			lds		R1, Timer_1ms_M				;24 bits = 16777 seconds = 4.6 hours... ish :D
 			adc		R1, R20
 			sts		Timer_1ms_M, R1	
@@ -44,6 +47,10 @@ Timer0_Update:
 			
 Timer_Update_End:	
 		
+			pop		R16
+			out		SREG, R16
+			pop		R16
+			
 			reti
 			
 

@@ -25,7 +25,32 @@
 
 .ENDMACRO
 
+.MACRO Brake_MS
+		in		R16, OCR0
+		push	R16
+		clr		R16
+		out		R16, OCR0
+		
+		sbi		PORTB, BRAKE
+		cli
+		ldi		R16, @0
+		call	Delay_MS
+		sei
+		cbi		PORTB, BRAKE
+		
+		pop		R16
+		out		OCR0, R16
+.ENDMACRO
+
 Input_Capture:
+
+			push	R0
+			push	R1
+			push	R2
+			push	R3
+			push	R16
+			in		R16, SREG
+			push	R16
 
 			;ldi R16, 'D'
 			;call USART_Transmit
@@ -43,6 +68,15 @@ EDGE1:		in		R0, ICR1L
 			
 			sbr		R16, 0b00000001					; set bit 0 in R16 (performs a logical ORI instruction)
 			sts		SREG_1, R16
+			
+			pop		R16
+			out		SREG
+			pop		R16
+			pop		R3
+			pop		R2
+			pop		R1
+			pop		R0
+			
 			reti
 			
 EDGE2:		lds		R0, Edge1_L
@@ -61,10 +95,16 @@ EDGE2:		lds		R0, Edge1_L
 			out		TCNT1H, R16						; Temp = R16
 			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp
 			
-			WheelSpeed_Calc
-			
 			lds		R16, SREG_1
 			cbr		R16, 0b00000001					; clear bit 0 in R16 (performs logical AND with complement of operand)
 			sts		SREG_1, R16
+			
+			pop		R16
+			out		SREG
+			pop		R16
+			pop		R3
+			pop		R2
+			pop		R1
+			pop		R0
 			
 			reti
