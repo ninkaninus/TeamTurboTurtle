@@ -13,6 +13,10 @@
 			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
 			out		TIMSK, R16				;Timer/interrupt masking register
 
+			ldi R16, 'P'
+			call USART_Transmit
+			USART_Newline
+
 .ENDMACRO
 
 .MACRO WheelSpeed_Calc
@@ -22,7 +26,6 @@
 			call	Div16_8
 			sts		Wheel_speed_L, R16
 			sts		Wheel_speed_H, R17
-
 .ENDMACRO
 
 .MACRO Brake_MS
@@ -99,6 +102,31 @@ EDGE2:		lds		R0, Edge1_L
 			cbr		R16, 0b00000001					; clear bit 0 in R16 (performs logical AND with complement of operand)
 			sts		SREG_1, R16
 			
+
+
+			lds R16, Pulse_Time_L
+			lds R17, Pulse_Time_H
+
+			/*
+			tst R17
+			brne end
+
+			tst R16
+			brne end
+
+			call USART_Decimal_16
+			ldi R16, 'E'
+			call USART_Transmit
+			USART_Newline
+			rjmp end1
+
+			end:
+			*/
+			call USART_Decimal_16
+			USART_Newline
+
+			end1:
+
 			pop		R16
 			out		SREG
 			pop		R16

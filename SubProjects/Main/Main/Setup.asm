@@ -20,6 +20,6 @@
 	sts Program_Running, R16
 
 	;Global interrupt
-	sei					;Enable global interrupt
+	
 .ENDMACRO
  

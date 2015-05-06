@@ -17,7 +17,9 @@
 .include "Setup.asm"
 
 Init:
-	Setup			
+	Setup	
+
+	sei					;Enable global interrupt	
 	rjmp Main
 
 Main:
