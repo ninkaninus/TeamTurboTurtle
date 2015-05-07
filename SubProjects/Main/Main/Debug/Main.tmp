@@ -10,6 +10,7 @@
  <INCLUDED_FILES>
   <FILE>C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Interrupt_Mapping.asm</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Macros.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Math.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\SRAM-Mapping.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE>
@@ -36,9 +37,9 @@
   <FILE>Main.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>20</LINE></Init>
-  <Input_Capture><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>45</LINE></Input_Capture>
-  <Timer0_Update><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm</FILE><LINE>26</LINE></Timer0_Update>
+  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>23</LINE></Init>
+  <Input_Capture><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>53</LINE></Input_Capture>
+  <Timer0_Update><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm</FILE><LINE>25</LINE></Timer0_Update>
   <Comm_Received><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>23</LINE></Comm_Received>
   <Lap_Time><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>24</LINE></Lap_Time>
   <Sum_16><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Math.asm</FILE><LINE>1</LINE></Sum_16>
@@ -91,11 +92,15 @@
   <I2C_Read_Call_Continue><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>75</LINE></I2C_Read_Call_Continue>
   <I2C_Read_Call_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>77</LINE></I2C_Read_Call_Wait>
   <MPU6050_Read_Dataset><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm</FILE><LINE>233</LINE></MPU6050_Read_Dataset>
-  <Timer_Update_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm</FILE><LINE>48</LINE></Timer_Update_End>
-  <EDGE2><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>82</LINE></EDGE2>
+  <Timer_Update_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm</FILE><LINE>47</LINE></Timer_Update_End>
+  <EDGE2><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>75</LINE></EDGE2>
   <EDGE1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>62</LINE></EDGE1>
-  <end1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>126</LINE></end1>
-  <Lap_Time_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>68</LINE></Lap_Time_End>
+  <end><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>152</LINE></end>
+  <Lorteopsnapperen><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>122</LINE></Lorteopsnapperen>
+  <NO_GO><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>140</LINE></NO_GO>
+  <GO><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>129</LINE></GO>
+  <end1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>144</LINE></end1>
+  <Lap_Time_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>76</LINE></Lap_Time_End>
   <AI_LAP_INTERRUPT><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>272</LINE></AI_LAP_INTERRUPT>
   <Comm_Received_Type><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>39</LINE></Comm_Received_Type>
   <Comm_Received_Command><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>49</LINE></Comm_Received_Command>
@@ -110,6 +115,6 @@
   <FIRST_ROUND><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>55</LINE></FIRST_ROUND>
   <RUN_TIME><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>70</LINE></RUN_TIME>
   <AI_Test_Speed_Laps><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>288</LINE></AI_Test_Speed_Laps>
-  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>26</LINE></Main>
+  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>29</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>

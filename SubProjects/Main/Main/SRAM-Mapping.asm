@@ -67,10 +67,10 @@
 .equ Wheel_speed_H = 0x0082
 
 ;AI Hastighed
-.equ AI_Check_Lap	= 0x0083
-.equ AI_Hastighed_out	= 0x0084
-.equ AI_Hastighed_set	= 0x0085
-.equ AI_Hastighed_D	= 0x0086
+.equ AI_Check_Lap	= 0x008F
+.equ AI_Hastighed_out	= 0x0090
+.equ AI_Hastighed_set	= 0x0091
+.equ AI_Hastighed_D	= 0x0092
 
 ;Mapping start -- Alt herefter skal holdes frit
 .equ Map_Start		= 0x00C8

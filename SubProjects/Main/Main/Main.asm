@@ -29,15 +29,12 @@ Init:
 Main:
 
 	;Check if the program should be running
-	
-			ldi	R16, 20
-			;call Motor_Set
 			
-			ldi R16, Ticks_Lap_L
-			lds R17, Ticks_Lap_H
+			ldi R16, Pulse_Time_L
+			lds R17, Pulse_Time_H
 		
-			;call USART_Decimal_16
-			;USART_Newline
+			call USART_Decimal_16
+			USART_Newline
 			
 			ldi		R16, 250
 			call	Delay_MS
