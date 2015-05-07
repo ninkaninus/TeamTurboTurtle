@@ -46,6 +46,12 @@
 .equ Pulse_Time_L2	= 0x0089
 .equ Pulse_Time_H2	= 0x008A
 
+.equ Ticks_L		= 0x008B
+.equ Ticks_H		= 0x008C
+
+.equ Ticks_Lap_L	= 0x008D
+.equ Ticks_Lap_H	= 0x008E
+
 ;Status Register
 .equ SREG_1			= 0x007B
 .equ Program_Running = 0x0080
