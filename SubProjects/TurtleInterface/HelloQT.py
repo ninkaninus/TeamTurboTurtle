@@ -4,8 +4,8 @@
 """
 ZetCode PyQt5 tutorial 
 
-In this example, we determine the event sender
-object.
+In this example, we receive data from
+a QInputDialog dialog. 
 
 author: Jan Bodnar
 website: zetcode.com 
@@ -13,10 +13,11 @@ last edited: January 2015
 """
 
 import sys
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QApplication
+from PyQt5.QtWidgets import (QWidget, QPushButton, QLineEdit, 
+    QInputDialog, QApplication)
 
 
-class Example(QMainWindow):
+class Example(QWidget):
     
     def __init__(self):
         super().__init__()
@@ -26,27 +27,25 @@ class Example(QMainWindow):
         
     def initUI(self):      
 
-        btn1 = QPushButton("Button 1", self)
-        btn1.move(30, 50)
-
-        btn2 = QPushButton("Button 2", self)
-        btn2.move(150, 50)
-      
-        btn1.clicked.connect(self.buttonClicked1)
-        btn2.clicked.connect(self.buttonClicked2)
+        self.btn = QPushButton('Dialog', self)
+        self.btn.move(20, 20)
+        self.btn.clicked.connect(self.showDialog)
         
-        self.statusBar()
+        self.le = QLineEdit(self)
+        self.le.move(130, 22)
         
         self.setGeometry(300, 300, 290, 150)
-        self.setWindowTitle('Event sender')
+        self.setWindowTitle('Input dialog')
         self.show()
         
         
-    def buttonClicked1(self):
-        self.statusBar().showMessage("Button 1")
-
-    def buttonClicked2(self):
-        self.statusBar().showMessage("Button 2")
+    def showDialog(self):
+        
+        text, ok = QInputDialog.getText(self, 'Input Dialog', 
+            'Enter your name:')
+        
+        if ok:
+            self.le.setText(str(text))
         
         
 if __name__ == '__main__':
