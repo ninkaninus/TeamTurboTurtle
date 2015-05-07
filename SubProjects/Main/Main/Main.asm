@@ -1,7 +1,10 @@
+;.include "m32def.inc"
+
 ;Mapping of all the interrupts, must be the first include!
 .include "Interrupt_Mapping.asm"
 
 ;Library includes
+.include "Macros.asm"
 .include "Math.asm"
 .include "SRAM-Mapping.asm"
 .include "USART_Library.asm"
@@ -24,18 +27,21 @@ Init:
 	rjmp Main
 
 Main:
-	/*
-	;Check if the program should be running
-	sei
-	nop
-	cli
-	lds R16, Program_Running			
-	cpi R16, 0x01
-	brne Main
 
+	;Check if the program should be running
+	
+			ldi	R16, 20
+			;call Motor_Set
+			
+			ldi R16, Ticks_Lap_L
+			lds R17, Ticks_Lap_H
+		
+			;call USART_Decimal_16
+			;USART_Newline
+			
+			ldi		R16, 250
+			call	Delay_MS
 	;Insert program code here
 	sei
-	*/
-	jmp AI_START
 
 rjmp Main

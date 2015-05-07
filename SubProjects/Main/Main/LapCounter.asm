@@ -23,15 +23,7 @@
 
 Lap_Time:	
 
-	push	R0
-	push	R1
-	push	R2
-	push	R3
-	push	R4
-	push	R5
-	push	R16
-	in		R16, SREG
-	push	R16
+	Push_Register_7 R0, R1, R2, R3, R4, R5, R16
 
 	lds		R0, Timer_1ms_L				
 	lds		R1, Timer_1ms_M				; Current time since startup in ms
@@ -53,6 +45,22 @@ Lap_Time:
 	cp R1, R16
 	brlo Lap_Time_End
 
+	lds		R0, Ticks_L
+	lds		R1, Ticks_H
+	
+	sts		Ticks_Lap_L, R0
+	sts		Ticks_Lap_H, R1
+	
+	mov R16, R0
+	mov R17, R1
+		
+	call USART_Decimal_16
+	USART_Newline
+	
+	clr		R16
+	sts		Ticks_L, R16
+	sts 	Ticks_H, R16
+	
 	sts		Lap_time_L, R0				
 	sts		Lap_time_M, R1				; Latest lap time
 	sts		Lap_time_H, R2
@@ -67,14 +75,6 @@ Lap_Time:
 
 Lap_Time_End:
 
-	pop		R16
-	out		SREG, R16
-	pop		R16
-	pop		R5
-	pop		R4
-	pop		R3
-	pop		R2
-	pop		R1
-	pop		R0
+	Pop_Register_7 R16, R5, R4, R3, R2, R1, R0
 
 			reti			

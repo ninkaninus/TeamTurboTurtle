@@ -18,7 +18,6 @@
 			ori		R16, (1<<OCIE0)			;Enable interrupt on output compare match for timer0
 			out		TIMSK, R16				;Timer/interrupt masking register
 			
-			
 .ENDMACRO
 
 ; Timer subroutines
