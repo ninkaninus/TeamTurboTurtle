@@ -1,12 +1,3 @@
-# embedding_in_qt4.py --- Simple Qt4 application embedding matplotlib canvases
-#
-# Copyright (C) 2005 Florent Rougon
-#               2006 Darren Dale
-#
-# This file is an example program for matplotlib. It may be used and
-# modified with no restriction; raw copies as well as modified versions
-# may be distributed without limitation.
-
 import sys
 import random
 import matplotlib
@@ -16,9 +7,6 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSize
 from numpy import arange, sin, pi
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-
-progname = os.path.basename(sys.argv[0])
-progversion = "0.1"
 
 
 class MyMplCanvas(FigureCanvas):
@@ -35,9 +23,8 @@ class MyMplCanvas(FigureCanvas):
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)
 
-        FigureCanvas.setSizePolicy(self,
-                QtGui.QSizePolicy.Expanding,
-                QtGui.QSizePolicy.Expanding)
+        FigureCanvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
+
         FigureCanvas.updateGeometry(self)
 
     def compute_initial_figure(self):
@@ -57,40 +44,47 @@ class MyDynamicMplCanvas(MyMplCanvas):
     def __init__(self, *args, **kwargs):
         MyMplCanvas.__init__(self, *args, **kwargs)
         timer = QtCore.QTimer(self)
-        timer.timeout.connect(self.update_figure)
+        timer.timeout.connect(self.update_figure2)
         timer.start(1000)
 
     def compute_initial_figure(self):
         self.axes.plot([0, 1, 2, 3], [1, 2, 0, 4], 'r')
 
-    def update_figure(self):
+    def update_figure2(self):
         # Build a list of 4 random integers between 0 and 10 (both inclusive)
-        l = [random.randint(0, 10) for i in range(4)]
 
-        self.axes.plot([0, 1, 2, 3], l, 'r')
-        self.draw()
+        if random.randint(0,1) == 1:
+
+            l = [random.randint(10, 20) for i in range(7)]
+            self.axes.plot([0, 1, 2, 3,4,5,6], l, 'r')
+            self.draw()
+        else:
+            l = [random.randint(0, 10) for i in range(4)]
+            self.axes.plot([0, 1, 2, 3], l, 'r')
+            self.draw()
 
 
-class ApplicationWindow(QtGui.QMainWindow):
+
+class ApplicationWindow(QMainWindow):
     def __init__(self):
-        QtGui.QMainWindow.__init__(self)
+        QMainWindow.__init__(self)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowTitle("application main window")
 
-        self.file_menu = QtGui.QMenu('&File', self)
+        self.file_menu = QMenu('&File', self)
         self.file_menu.addAction('&Quit', self.fileQuit,
                 QtCore.Qt.CTRL + QtCore.Qt.Key_Q)
         self.menuBar().addMenu(self.file_menu)
 
-        self.help_menu = QtGui.QMenu('&Help', self)
+        self.help_menu = QMenu('&Help', self)
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.help_menu)
 
         self.help_menu.addAction('&About', self.about)
 
-        self.main_widget = QtGui.QWidget(self)
+        self.main_widget = QWidget(self)
 
-        l = QtGui.QVBoxLayout(self.main_widget)
+        l = QVBoxLayout(self.main_widget)
         sc = MyStaticMplCanvas(self.main_widget, width=5, height=4, dpi=100)
         dc = MyDynamicMplCanvas(self.main_widget, width=5, height=4, dpi=100)
         l.addWidget(sc)
@@ -108,22 +102,13 @@ class ApplicationWindow(QtGui.QMainWindow):
         self.fileQuit()
 
     def about(self):
-        QtGui.QMessageBox.about(self, "About",
-  """embedding_in_qt4.py example
-  Copyright 2005 Florent Rougon, 2006 Darren Dale
+        QMessageBox.about(self, "About",
+        """This is the turtle interface used for monitoring and modifying the behaviour of the Turtle Car""")
 
-  This program is a simple example of a Qt4 application embedding matplotlib
-  canvases.
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
 
-  It may be used and modified with no restriction; raw copies as well as
-  modified versions may be distributed without limitation."""
-  )
-
-
-qApp = QtGui.QApplication(sys.argv)
-
-aw = ApplicationWindow()
-aw.setWindowTitle("%s" % progname)
-aw.show()
-sys.exit(qApp.exec_())
-#qApp.exec_()
+    aw = ApplicationWindow()
+    aw.setWindowTitle("Turtle Interface")
+    aw.show()
+    app.exec_()
