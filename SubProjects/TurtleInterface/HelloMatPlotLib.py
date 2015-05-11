@@ -7,11 +7,12 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication,QAction, QCheckBox, \
                             QMainWindow, QMenu, QHBoxLayout,\
                             QVBoxLayout,QPushButton, QSizePolicy, \
-                            QMessageBox, QWidget, QLabel
+                            QMessageBox, QWidget, QLabel, QDialog, QComboBox
 from PyQt5.QtGui import QPixmap, QIcon
 from numpy import arange, sin, pi
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+import serial
 
 
 class MyMplCanvas(FigureCanvas):
@@ -68,10 +69,64 @@ class MyDynamicMplCanvas(MyMplCanvas):
             self.axes.plot([0, 1, 2, 3], l, 'r')
             self.draw()
 
+class SerialConnectDialog(QDialog):
+    def __init__(self, parent=None):
+        QDialog.__init__(self)
+
+        self.setWindowTitle('Serial Connection')
+        self.setWindowIcon(QIcon('SerialConnect.png'))
+
+        #Variables for returning
+
+        vbox = QVBoxLayout()
+
+        #Port box
+
+        portBox = QHBoxLayout()
+        portLabel = QLabel('Port',self)
+        portBox.addWidget(portLabel)
+
+        self.portCombo = QComboBox(self)
+        self.portCombo.addItem("COM1")
+        self.portCombo.addItem("COM2")
+        self.portCombo.addItem("COM3")
+
+        portBox.addWidget(self.portCombo)
+        portBox.addStretch(1)
+
+        vbox.addLayout(portBox)
+
+        vbox.addStretch(1)
+
+        buttonConnect = QPushButton('Connect', self)
+        buttonConnect.clicked.connect(self.accept)
+        vbox.addWidget(buttonConnect)
+
+        self.setLayout(vbox)
+
+    def returnPort(self):
+        return self.portCombo.currentText()
+
+    @staticmethod
+    def getPort(parent = None):
+        dialog = SerialConnectDialog(parent)
+        result = dialog.exec_()
+        portSelected = dialog.returnPort()
+        return (portSelected, result == QDialog.Accepted)
 
 
 class ApplicationWindow(QMainWindow):
     def __init__(self):
+
+        #Serial Setup
+        self.serialObject = serial.Serial()
+        self.serialObject.baudrate = 9600
+        self.serialObject.parity = serial.PARITY_NONE
+        self.serialObject.stopbits = serial.STOPBITS_ONE
+        self.serialObject.bytesize = serial.EIGHTBITS
+
+        #Initialization stuff
+
         QMainWindow.__init__(self)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowTitle("Turtle Window")            #Name of the specific window
@@ -97,6 +152,10 @@ class ApplicationWindow(QMainWindow):
         serialConnectAction = self.serial_menu.addAction('Connect')
         serialConnectAction.triggered.connect(self.serialConnect)
         serialConnectAction.setIcon(QIcon('SerialConnect.png'))
+
+        serialDisconnectAction = self.serial_menu.addAction('Disconnect')
+        serialDisconnectAction.triggered.connect(self.serialDisconnect)
+        serialDisconnectAction.setIcon(QIcon('SerialDisconnect.png'))
 
         #GUI
 
@@ -137,7 +196,29 @@ class ApplicationWindow(QMainWindow):
         self.statusBar().showMessage("TURTLES, TURTLES, TURTLES!", 5000)
 
     def serialConnect(self):
-        print('Connecting via serial')
+        if self.serialObject.isOpen():
+             self.statusBar().showMessage("Serial communication is already running on " + self.serialObject.port + "!", 3000)
+        else:
+            portSelected, ok = SerialConnectDialog.getPort()
+            print(portSelected, ok)
+            if(ok == True):
+                try:
+                    self.serialObject.port = portSelected
+                    self.serialObject.open()
+                    self.statusBar().showMessage("Opened serial communication on " + portSelected + "!", 3000)
+
+                except serial.SerialException :
+                   self.statusBar().showMessage("Could not open serial connection on " + portSelected + "!", 3000)
+
+            else:
+                self.statusBar().showMessage("Serial connection cancelled!", 3000)
+
+    def serialDisconnect(self):
+        if self.serialObject.isOpen():
+            self.serialObject.close()
+            self.statusBar().showMessage("Closed serial communication on " + self.serialObject.port + "!", 3000)
+        else:
+            self.statusBar().showMessage("No serial port to be closed!", 3000)
 
     def fileQuit(self):
         self.close()
@@ -148,6 +229,7 @@ class ApplicationWindow(QMainWindow):
     def about(self):
         QMessageBox.about(self, "About",
         """This is the turtle interface used for monitoring and modifying the behaviour of the Turtle Car""")
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
