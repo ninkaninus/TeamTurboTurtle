@@ -4,7 +4,11 @@ import matplotlib
 matplotlib.use("Qt5Agg")
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication,QAction, QCheckBox, QMainWindow, QMenu, QHBoxLayout,QVBoxLayout,QPushButton, QSizePolicy, QMessageBox, QWidget
+from PyQt5.QtWidgets import QApplication,QAction, QCheckBox, \
+                            QMainWindow, QMenu, QHBoxLayout,\
+                            QVBoxLayout,QPushButton, QSizePolicy, \
+                            QMessageBox, QWidget, QLabel
+from PyQt5.QtGui import QPixmap, QIcon
 from numpy import arange, sin, pi
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -45,13 +49,13 @@ class MyDynamicMplCanvas(MyMplCanvas):
     def __init__(self, *args, **kwargs):
         MyMplCanvas.__init__(self, *args, **kwargs)
         timer = QtCore.QTimer(self)
-        timer.timeout.connect(self.update_figure2)
-        timer.start(100)
+        timer.timeout.connect(self.update_figure)
+        timer.start(1000)
 
     def compute_initial_figure(self):
         self.axes.plot([0, 1, 2, 3], [1, 2, 0, 4], 'r')
 
-    def update_figure2(self):
+    def update_figure(self):
         # Build a list of 4 random integers between 0 and 10 (both inclusive)
 
         if random.randint(0,1) == 1:
@@ -70,27 +74,31 @@ class ApplicationWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-        self.setWindowTitle("Turtle Window")
+        self.setWindowTitle("Turtle Window")            #Name of the specific window
+
+        #File menu
 
         self.file_menu = QMenu('&File', self)
-        self.file_menu.addAction('&Quit', self.fileQuit,
-                QtCore.Qt.CTRL + QtCore.Qt.Key_Q)
+        self.file_menu.addAction('&Quit', self.fileQuit, QtCore.Qt.CTRL + QtCore.Qt.Key_Q)
         self.menuBar().addMenu(self.file_menu)
+
+        #Help menu
 
         self.help_menu = QMenu('&Help', self)
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.help_menu)
         self.help_menu.addAction('&About', self.about)
 
-        PenisAction = QAction('&Penis', self)
-        PenisAction.setShortcut('Ctrl+O')
-        PenisAction.setStatusTip('Print application')
-        PenisAction.triggered.connect(self.printPenis)
+        #Serial Menu
 
-        self.action_menu = QMenu('&Action', self)
+        self.serial_menu = QMenu('&Serial', self)
         self.menuBar().addSeparator()
-        self.menuBar().addMenu(self.action_menu)
-        self.action_menu.addAction(PenisAction)
+        self.menuBar().addMenu(self.serial_menu)
+        serialConnectAction = self.serial_menu.addAction('Connect')
+        serialConnectAction.triggered.connect(self.serialConnect)
+        serialConnectAction.setIcon(QIcon('SerialConnect.png'))
+
+        #GUI
 
         cb = QCheckBox('Penis', self)
 
@@ -102,9 +110,13 @@ class ApplicationWindow(QMainWindow):
 
         self.main_widget = QWidget(self)
 
+        turtlePicLabel = QLabel(self)
+        turtlePic = QPixmap("Turtle.jpg")
+        turtlePicLabel.setPixmap(turtlePic)
+
         hbox = QHBoxLayout()
         vbox = QVBoxLayout()
-
+        vbox.addWidget(turtlePicLabel)
         vbox.addStretch(1)
         vbox.addWidget(cb)
         vbox.addWidget(Qb1)
@@ -115,7 +127,6 @@ class ApplicationWindow(QMainWindow):
         dc = MyDynamicMplCanvas(self.main_widget, width=5, height=4, dpi=100)
 
         hbox.addWidget(dc)
-        hbox.addStretch(1)
         hbox.addLayout(vbox)
 
         self.main_widget.setLayout(hbox)
@@ -125,8 +136,8 @@ class ApplicationWindow(QMainWindow):
 
         self.statusBar().showMessage("TURTLES, TURTLES, TURTLES!", 5000)
 
-    def printPenis(self):
-        print('Penis')
+    def serialConnect(self):
+        print('Connecting via serial')
 
     def fileQuit(self):
         self.close()
