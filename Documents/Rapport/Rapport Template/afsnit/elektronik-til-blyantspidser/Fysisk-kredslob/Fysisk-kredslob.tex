@@ -1,0 +1,43 @@
+\subsection{Overvejelser og beslutninger i elektrisk kredsløb}
+
+Som det ses af den røde boks markeret på figur ~\ref{fig:kredslob} starter kredsløbet med en 49.9 \textOmega\ modstand efterfulgt infrarød LED.
+
+\textbf{49,9\textOmega\ modstand}\\
+Grunden, til at modstanden er netop denne størrelse, er, at det er aflæst af databladet, at der skal bruges max 100mA til LED'en. Foruden dette er det aflæst, at der omtrent vil være et spændingsfald på 1.5V over LED'en. Det kan således antages, at spændingsfaldet over modstanden vil være 4.5V, da ingangsspændingen er 6.0V.
+Sådan er størrelsen af modstanden bestemt. 
+\begin{align}
+	\frac{U}{I}=R
+\end{align}
+\begin{align*}
+\updownarrow
+\end{align*}
+\begin{align}
+\frac{4.5V}{100*10^{-3}A}=45\Omega
+\end{align}
+Da det nu vides, at modstanden mindst skal være 45\textOmega , er der valgt en lidt større modstand for at sikre, at strømmen holdes under - men nær - 100mA.\linebreak
+
+\textbf{Infrarød LED}\\
+LED'en, som sidder efter modstanden, er infrarød. For at undgå mest mulig støj og forstyrrelser fra udefrakommende lyskilder, der kunne sende lys ned i blyantspidseren og på den måde aktivere kredsløbet. \\
+Som det ses i den grønne boks på ovenstående illustration kommer der efter LED'en en lysfølsom transistor.
+
+\textbf{Lysfølsom transistor} \\
+LED’en udsender lys til en lysfølsom transistor med et filter, der kun lukker lys ind med bølgelængder over 650nm, men har toppunkt mellem 800nm og 900 nm. Så længe transistoren modtager lys vil den åbne for strømmen fra forsyningen - hvor stor en strøm der passerer, afhænger af hvilken bølgelængde transistoren modtager, og hvor præcist lyset rammer den. Transistoren lukker 100 \% strøm igennem ved en bølgelængde på 860 nm, hvilket svarer til det lys der udsendes fra LED'en.
+
+\textbf{10k\textOmega\ modstand} \\
+Efter den lysfølsomme transistor kommer en 10K\textOmega\ modstand.
+Modstanden er sat, så der er noget at måle spændingen over. Størrelsen på denne er bestemt ud fra databladet, hvori det er angivet, at ved større spændinger kan man opretholde 100\% strømgennemgang over større distancer. Desuden er denne størrelse også valgt, da der efterfølgende kommer en operationsforstærker i kredsløbet. Pga denne modstand vil den outputte 0V, hvis spændingen over det inverterende input er størst.
+
+\textbf{Komperator/operationsforstærker} \\
+Det ses i den blå boks på figur ~\ref{fig:kredslob}, at der netop her i kredsløbet er en operationsforstærker. 
+ Strømmen løber fra fototransistoren og videre til det inverterende input på operationsforstærkeren, der sammenligner dette input med det ikke-inverterende input. Er spændingen over den inverterende indgang størst, vil operationsforstærkeren outputte 0V, da dens negative forsyningsspænding er forbundet til den tidligere beskrevede 10k\textOmega\ modstand, som er forbundet til ground. Er spændingen derimod størst over den ikke-inverterende indgang, hvilket den er, når blyanten er i blyantspidseren, da den lysfølsomme transistor ikke åbner for strømtilførsel, vil der outputtes den størst mulige spænding. Da den positive forsyningsspænding er sat til 6V, vil outputtet nærme sig dette.
+ 
+\textbf{Spændingsdeler} \\
+På den ikke-inverterende indgang er koblet to modstande, som udgør en spændingsdeler. Dette ses på figur ~\ref{fig:kredslob} tidligere i den gule boks. Disse modtande er 12.40 k\textOmega\ og 2,49 k\textOmega . De er valgt, da der ønskes at spændingen over den ikke-inverterende indgang skal være 1V. Ses af følgende:
+\begin{align}
+\frac{R_4}{R_3+R_4}*V_CC=V_+\\
+\frac{2.49\Omega}{12.40\Omega+2.49\Omega}*6V=1.00V
+\end{align}
+Foruden dette er størrelsen på modstandene valgt til at være kilo. Dette skyldes, at der ønskes en meget lille strøm, og der skal derfor vælges nogle store modstande. Disse modstande må dog heller ikke være for store, da der i så fald ikke vil gå nogen egentlig strøm.
+
+\textbf{MOSFET}\\
+Efter operationsforstærkeren, som maksimalt tillader et output på 6V, kommer en modstand på 220\textOmega\ . Denne er indsat for, at mindske spændingen over MOSFET'en. Til MOSFET'en skal være en spænding på mindst 2V, da netop denne MOSFET åbner for strømgennemgang ved spændinger større end dette. Motoren er koblet på MOSFET'ens drain og starter, når MOSFET'en lukker strøm igennem.
