@@ -12,24 +12,12 @@ HALL_First_Lap:							;I den første runde skal der blot måles op, så her lave
 		brne	HALL2
 
 		inc		Laengde
-		
-		lds		R20,		AI_Hastighed_set	;Indlæser den satte hastighed
-		lds		R21,		Pulse_Time_L	;Indlæser den målte hastighed
-		cp		R21,		R20				;Sammenlig
-		brlo	LOW						;AI_Check_Laper om hastigheden er for høj eller for lav
-		
-										;Hvis det bliver nødvendigt, så benyt resultatet fra skift test til at ændre "AI_Hastighed_set"
-		lds		R20,		AI_Hastighed_out
-		dec		R20						;Hvis hastigheden er for høj sættes den lidt ned
-		out		OCR2,		R20
-		
-ret
 
-LOW:									;Hvis hastigheden er for lav sættes den lidt op
+		lds		R16,	AI_Hastighed_set	;Indlæser den satte hastighed (periode)
+		lds		R17,	Pulse_Time_L		;Indlæser den målte hastighed (periode)
 
-		lds		R20,		AI_Hastighed_out
-		inc		R20						;Hvis hastigheden er for høj sættes den lidt ned
-		out		OCR2,		R20
+
+call	Hastigheds_kontrol
 
 ret
 
@@ -52,31 +40,35 @@ RUN:
 		breq	RUN_S2
 										;Hvis alle AI_Check_Laps fejler må der være tale om et lige stykke
 
-		ldi		R20,		Hastighed_l		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
-		lds		R21,		AI_Hastighed_D
-		add		R20,		R21
-		out		OCR2,		R20
+		ldi		R16,	Hastighed_l		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
+		lds		R17,	Pulse_Time_L		;Indlæser den målte hastighed (periode)
+		
+call	Hastigheds_kontrol
+
 rjmp	RUN_DONE								;Hop til run_done når hastigheden er sat
 
 RUN_S1:
-		ldi		R20,		Hastighed_s1		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
-		lds		R21,		AI_Hastighed_D
-		add		R20,		R21
-		out		OCR2,		R20
+		ldi		R16,	Hastighed_s1		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
+		lds		R17,	Pulse_Time_L		;Indlæser den målte hastighed (periode)
+		
+call	Hastigheds_kontrol
+
 rjmp	RUN_DONE
 
 
 
 RUN_S2:
-		ldi		R20,		Hastighed_s2		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
-		lds		R21,		AI_Hastighed_D
-		add		R20,		R21
-		out		OCR2,		R20
+		ldi		R16,		Hastighed_s2		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
+		lds		R17,	Pulse_Time_L		;Indlæser den målte hastighed (periode)
+		
+call	Hastigheds_kontrol
+
 rjmp	RUN_DONE
 
 RUN_DONE:
 		dec		Laengde					;Sætter den tilbageværende "Laengde" ned med en.
 ret
+
 
 
 
