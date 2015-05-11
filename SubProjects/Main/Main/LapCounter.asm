@@ -54,8 +54,8 @@ Lap_Time:
 	mov R16, R0
 	mov R17, R1
 		
-	call USART_Decimal_16
-	USART_Newline
+	;call USART_Decimal_16
+	;USART_Newline
 	
 	clr		R16
 	sts		Ticks_L, R16

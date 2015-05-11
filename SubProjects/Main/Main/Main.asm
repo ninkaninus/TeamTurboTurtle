@@ -1,4 +1,4 @@
-.include "m32def.inc"
+;.include "m32def.inc"
 
 ;Mapping of all the interrupts, must be the first include!
 .include "Interrupt_Mapping.asm"
@@ -27,20 +27,20 @@ Init:
 
 Main:
 	;Check if the program should be running
-	
-			ldi	R16, 20
+	;cli
+			;ldi	R16, 80
 			;call Motor_Set
 			
-			ldi R16, Ticks_Lap_L
-			lds R17, Ticks_Lap_H
+			;ldi R16, Ticks_Lap_L
+			;lds R17, Ticks_Lap_H
 		
 			;call USART_Decimal_16
 			;USART_Newline
 			
-			ldi		R16, 250
-			call	Delay_MS
+			;ldi		R16, 250
+			;call	Delay_MS
 	;Insert program code here
-	sei
+	;sei
 	
 
 rjmp Main
