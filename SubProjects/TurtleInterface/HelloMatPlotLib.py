@@ -3,7 +3,8 @@ import random
 import matplotlib
 matplotlib.use("Qt5Agg")
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication,QAction, QCheckBox, QMainWindow, QMenu, QHBoxLayout,QVBoxLayout,QPushButton, QSizePolicy, QMessageBox, QWidget
 from numpy import arange, sin, pi
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -45,7 +46,7 @@ class MyDynamicMplCanvas(MyMplCanvas):
         MyMplCanvas.__init__(self, *args, **kwargs)
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.update_figure2)
-        timer.start(1000)
+        timer.start(100)
 
     def compute_initial_figure(self):
         self.axes.plot([0, 1, 2, 3], [1, 2, 0, 4], 'r')
@@ -69,7 +70,7 @@ class ApplicationWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-        self.setWindowTitle("application main window")
+        self.setWindowTitle("Turtle Window")
 
         self.file_menu = QMenu('&File', self)
         self.file_menu.addAction('&Quit', self.fileQuit,
@@ -79,21 +80,53 @@ class ApplicationWindow(QMainWindow):
         self.help_menu = QMenu('&Help', self)
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.help_menu)
-
         self.help_menu.addAction('&About', self.about)
+
+        PenisAction = QAction('&Penis', self)
+        PenisAction.setShortcut('Ctrl+O')
+        PenisAction.setStatusTip('Print application')
+        PenisAction.triggered.connect(self.printPenis)
+
+        self.action_menu = QMenu('&Action', self)
+        self.menuBar().addSeparator()
+        self.menuBar().addMenu(self.action_menu)
+        self.action_menu.addAction(PenisAction)
+
+        cb = QCheckBox('Penis', self)
+
+        Qb1 = QPushButton('Button1',self)
+        Qb1.setCheckable(True)
+        Qb2 = QPushButton('Button2',self)
+        Qb3 = QPushButton('Button3',self)
+        Qb4 = QPushButton('Button4',self)
 
         self.main_widget = QWidget(self)
 
-        l = QVBoxLayout(self.main_widget)
-        sc = MyStaticMplCanvas(self.main_widget, width=5, height=4, dpi=100)
+        hbox = QHBoxLayout()
+        vbox = QVBoxLayout()
+
+        vbox.addStretch(1)
+        vbox.addWidget(cb)
+        vbox.addWidget(Qb1)
+        vbox.addWidget(Qb2)
+        vbox.addWidget(Qb3)
+        vbox.addWidget(Qb4)
+
         dc = MyDynamicMplCanvas(self.main_widget, width=5, height=4, dpi=100)
-        l.addWidget(sc)
-        l.addWidget(dc)
+
+        hbox.addWidget(dc)
+        hbox.addStretch(1)
+        hbox.addLayout(vbox)
+
+        self.main_widget.setLayout(hbox)
 
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
 
-        self.statusBar().showMessage("All hail matplotlib!", 2000)
+        self.statusBar().showMessage("TURTLES, TURTLES, TURTLES!", 5000)
+
+    def printPenis(self):
+        print('Penis')
 
     def fileQuit(self):
         self.close()
