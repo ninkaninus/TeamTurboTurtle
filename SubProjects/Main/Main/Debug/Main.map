@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu May 07 16:32:27 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Mon May 11 11:24:25 2015
 
 
 EQU  SIGNATURE_000 0000001e
@@ -568,7 +568,7 @@ EQU  ACIaddr      00000024
 EQU  TWIaddr      00000026
 EQU  SPMRaddr     00000028
 EQU  INT_VECTORS_SIZE 0000002a
-CSEG Init         000002ac
+CSEG Init         000002b0
 CSEG Input_Capture 00000198
 CSEG Timer0_Update 0000017d
 CSEG Comm_Received 0000024b
@@ -795,7 +795,7 @@ CSEG NO_GO        000001eb
 CSEG GO           000001e0
 CSEG end1         000001ed
 CSEG Lap_Time_End 00000241
-CSEG AI_LAP_INTERRUPT 0000029a
+CSEG AI_LAP_INTERRUPT 00000283
 EQU  Comm_Type_SET 00000055
 EQU  Comm_Type_GET 000000aa
 EQU  Comm_Command_Start 00000010
@@ -808,6 +808,7 @@ CSEG Comm_Received_Type_Get 00000282
 CSEG Comm_Received_Command_Start 00000274
 CSEG Comm_Received_Command_Stop 0000027c
 CSEG Comm_Received_Command_Start_End 0000027b
+CSEG AI_Test_Speed_Laps 0000028e
 DEF  Laengde      r22
 DEF  Type         r23
 DEF  Accel        r24
@@ -818,9 +819,8 @@ EQU  Accel_h2     00000019
 EQU  Hastighed_l  00000064
 EQU  Hastighed_s2 00000032
 EQU  Hastighed_s1 00000046
-CSEG AI_START     00000283
-CSEG AI_Preround  00000283
-CSEG FIRST_ROUND  0000028b
-CSEG RUN_TIME     00000293
-CSEG AI_Test_Speed_Laps 000002a5
-CSEG Main         000004f8
+CSEG AI_START     00000295
+CSEG AI_Preround  00000295
+CSEG FIRST_ROUND  0000029f
+CSEG RUN_TIME     000002a9
+CSEG Main         000004fc

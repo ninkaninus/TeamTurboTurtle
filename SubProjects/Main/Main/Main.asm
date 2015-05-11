@@ -18,7 +18,7 @@
 .include "LapCounter.asm"
 .include "Communication_Protocol.asm"
 .include "Setup.asm"
-.include "AI.asm"
+.include "AI_Main.asm"
 
 Init:
 	Setup	
@@ -27,7 +27,9 @@ Init:
 	rjmp Main
 
 Main:
-
+	
+	jmp AI_START
+	/*
 	;Check if the program should be running
 			
 			ldi R16, Pulse_Time_L
@@ -40,5 +42,6 @@ Main:
 			call	Delay_MS
 	;Insert program code here
 	sei
+	*/
 
 rjmp Main

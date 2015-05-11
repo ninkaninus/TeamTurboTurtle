@@ -1,26 +1,12 @@
-;Addresser
-.def	Laengde = R22			;Laengden af vejstykket
-.def	Type = R23				;Type af vejstykket
-.def	Accel = R24				;Checker om den første tur er begyndt.
-
-;Konstanter
-.equ	Accel_v1=10				;Disse værdier skal justeres
-.equ	Accel_v2=15
-.equ	Accel_h1=20
-.equ	Accel_h2=25
-.equ	Hastighed_l=100			;Hastigheden når vi kører ligeud
-.equ	Hastighed_s2=50			;-- stort sving
-.equ	Hastighed_s1=70			;-- lille sving
-
 AI_HALL_INTERRUPT:						;Interrupt fra hall sensoren der fungerer som et tachometer
 
 		lds		R20,		AI_Check_Lap
 		cpi		R20,		0			;AI_Check_Lap om den første runde er begyndt, ellers skal der ikke ske noget
-		brne	HALL1
+		brne	HALL_First_Lap
 		ret
 		
-HALL1:									;I den første runde skal der blot måles op, så her laver hall interruptet ikke andet end at
-;										måle "afstanden" og justerer hastigheden så accelerometeret får gode resultater.
+HALL_First_Lap:							;I den første runde skal der blot måles op, så her laver hall interruptet ikke andet end at
+										;måle "afstanden" og justerer hastigheden så accelerometeret får gode resultater.
 		lds		R20,		AI_Check_Lap
 		cpi		R20,		1			;AI_Check_Lap om den første runde er færdig.
 		brne	HALL2

@@ -58,6 +58,18 @@
     <Compile Include="AI.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AI_Hall.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AI_Hastighed.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AI_Lap.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AI_Main.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Communication_Protocol.asm">
       <SubType>Code</SubType>
     </Compile>
@@ -97,7 +109,7 @@
     <Compile Include="Time.asm">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="USART_library.asm">
+    <Compile Include="USART_Library.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WheelSpeed.asm">

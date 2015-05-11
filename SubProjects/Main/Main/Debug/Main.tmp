@@ -24,7 +24,8 @@
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Setup.asm</FILE>
-  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Main.asm</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Debug/Main.obj</FILE>
@@ -101,7 +102,7 @@
   <GO><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>129</LINE></GO>
   <end1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>144</LINE></end1>
   <Lap_Time_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>76</LINE></Lap_Time_End>
-  <AI_LAP_INTERRUPT><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>272</LINE></AI_LAP_INTERRUPT>
+  <AI_LAP_INTERRUPT><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm</FILE><LINE>1</LINE></AI_LAP_INTERRUPT>
   <Comm_Received_Type><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>39</LINE></Comm_Received_Type>
   <Comm_Received_Command><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>49</LINE></Comm_Received_Command>
   <Comm_Received_Execute><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>59</LINE></Comm_Received_Execute>
@@ -110,11 +111,11 @@
   <Comm_Received_Command_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>101</LINE></Comm_Received_Command_Start>
   <Comm_Received_Command_Stop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>113</LINE></Comm_Received_Command_Stop>
   <Comm_Received_Command_Start_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>109</LINE></Comm_Received_Command_Start_End>
-  <AI_START><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>39</LINE></AI_START>
-  <AI_Preround><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>40</LINE></AI_Preround>
-  <FIRST_ROUND><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>55</LINE></FIRST_ROUND>
-  <RUN_TIME><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>70</LINE></RUN_TIME>
-  <AI_Test_Speed_Laps><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm</FILE><LINE>288</LINE></AI_Test_Speed_Laps>
+  <AI_Test_Speed_Laps><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm</FILE><LINE>17</LINE></AI_Test_Speed_Laps>
+  <AI_START><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Main.asm</FILE><LINE>39</LINE></AI_START>
+  <AI_Preround><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Main.asm</FILE><LINE>40</LINE></AI_Preround>
+  <FIRST_ROUND><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Main.asm</FILE><LINE>56</LINE></FIRST_ROUND>
+  <RUN_TIME><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Main.asm</FILE><LINE>72</LINE></RUN_TIME>
   <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>29</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>

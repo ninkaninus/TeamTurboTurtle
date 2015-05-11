@@ -1,3 +1,7 @@
+.include "AI_Lap.asm"
+;.include "AI_Hastighed.asm"
+;.include "AI_Hall.asm"
+
 ;Addresser
 .def	Laengde = R22			;Laengden af vejstykket
 .def	Type = R23				;Type af vejstykket
@@ -15,11 +19,11 @@
 ;Initialize først
 .MACRO AI_Init
 		clr R16									;Gemmer AI_Check_Lap i ram til 0		
-		sts AI_Check_Lap, R16						;			
+		sts AI_Check_Lap, R16					;			
 		sts AI_Hastighed_D, R16					;Den passive hastighedsforøgelse bliver sat til 0. Hver gang bilen passerer målstregen efter den første vil denne blive forøget med 1.
 		
-		;ldi		R20,			80				;Sætter hastigheden til 80, så bilen langsomt bevæger sig mod målstregen uden problemer
-		;out		OCR2,			R20				;Sætter bilen i gang
+		;ldi		R20,			80			;Sætter hastigheden til 80, så bilen langsomt bevæger sig mod målstregen uden problemer
+		;out		OCR2,			R20			;Sætter bilen i gang
 		
 		ldi		R20,			100				;Initial værdi for AI_Hastighed_set, dette bruges til at bestemme hastigheden i den første runde 
 		sts		AI_Hastighed_set, R20
@@ -35,13 +39,14 @@
 AI_START:
 AI_Preround:
 		
-		
+		cli
 		lds		R20,			AI_Check_Lap
 		cpi		R20,			0				;Indtil den første omgang er færdig skal der ikke ske noget
 		brne	FIRST_ROUND
 
-		ldi R16, 20
+		ldi R16, 25
 		call Motor_Set_Percentage
+		sei
 
 rjmp	AI_Preround
 
@@ -50,13 +55,14 @@ rjmp	AI_Preround
 
 FIRST_ROUND:		;Den første omgang begynder. Der er plads til at indsætte kode der skal bearbejdes før vejtypen checkes.
 		
-		
+		cli
 		lds		R20,			AI_Check_Lap			;Checker om den første omgang er slut
 		cpi		R20,			2
 		breq	RUN_TIME
 		
 		ldi R16, 40
 		call Motor_Set_Percentage		
+		sei
 
 rjmp	FIRST_ROUND
 
@@ -171,7 +177,7 @@ SKIFT:									;Indlæser vejtypen og Laengden, hvorefter der hoppes tilbage til
 
 jmp		SKIFT_TEST
 
-
+*/
 
 
 

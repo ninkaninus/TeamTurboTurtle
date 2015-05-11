@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu May 07 16:32:27 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Mon May 11 11:24:25 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(4): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Interrupt_Mapping.asm'
@@ -17,7 +17,8 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(18): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Setup.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Main.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Main.asm(1): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm'
                  
                  ;.include "m32def.inc"
                  
@@ -840,7 +841,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
                  .include "Interrupt_Mapping.asm"
                  
                  .org 0x00
-000000 c2ab      rjmp Init
+000000 c2af      rjmp Init
                  ;Timer1 Input Capture interrupt
                  .org	0x0C
 00000c 940c 0198 jmp	Input_Capture
@@ -2178,7 +2179,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
 00023d e508      	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
 00023e b908      	out		ACSR, R16					; Global interrupt register
                  	
-00023f 940e 029a 	call AI_LAP_INTERRUPT
+00023f 940e 0283 	call AI_LAP_INTERRUPT
                  
                  Lap_Time_End:
                  
@@ -2348,12 +2349,65 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
                  	;Global interrupt
                  	
                  .ENDMACRO
-                 .include "AI.asm"
+                 .include "AI_Main.asm"
                  
-                 ;.def	Hastighed = R19 		;Den målte hastighed
-                 ;.def	AI_Hastighed_out = R20		;Den outputtede hastighed
-                 ;.def	AI_Hastighed_set = R21		;Den ønskede hastighed
-                 ;.def	AI_Hastighed_D = R22		;Forøgelsen af hastighed grundet lap runder
+                 
+                 
+000283 9140 008f 		lds		R20, AI_Check_Lap		
+                 
+000285 3041      		cpi		R20, 1
+000286 f438      		brsh	AI_Test_Speed_Laps
+                 
+000287 e041      		ldi		R20, 1
+000288 9340 008f 		sts		AI_Check_Lap, R20
+                 
+00028a e406      		ldi R16, 'F'
+00028b 940e 0034 		call USART_Transmit
+                 
+                 
+00028d 9508      		ret								;Hopper til den første runde
+                 
+                 AI_Test_Speed_Laps:
+                 		
+00028e e502      		ldi R16, 'R'
+00028f 940e 0034 		call USART_Transmit
+                 
+000291 e042      		ldi		R20, 2
+000292 9340 008f 		sts     AI_Check_Lap, R20
+                 
+                 		/*
+                 		lds		R20,		AI_Hastighed_D
+                 		inc		R20
+                 		sts		AI_Hastighed_D,R20
+                 
+                 		clr		R27						;Nulstiller X
+                 		ldi		R26,		Map_start
+                 		ldi		R16, 2
+                 		sts		AI_Check_Lap, R16
+                 		ld		Laengde,	x+			;Indlæser den første del af af det gemte map.
+                 		ld		Type,		x+
+                 		*/
+                 
+000294 9508      		ret
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 ;.include "AI_Hastighed.asm"
+                 ;.include "AI_Hall.asm"
+                 
+                 ;Addresser
                  .def	Laengde = R22			;Laengden af vejstykket
                  .def	Type = R23				;Type af vejstykket
                  .def	Accel = R24				;Checker om den første tur er begyndt.
@@ -2370,11 +2424,11 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
                  ;Initialize først
                  .MACRO AI_Init
                  		clr R16									;Gemmer AI_Check_Lap i ram til 0		
-                 		sts AI_Check_Lap, R16						;			
+                 		sts AI_Check_Lap, R16					;			
                  		sts AI_Hastighed_D, R16					;Den passive hastighedsforøgelse bliver sat til 0. Hver gang bilen passerer målstregen efter den første vil denne blive forøget med 1.
                  		
-                 		;ldi		R20,			80				;Sætter hastigheden til 80, så bilen langsomt bevæger sig mod målstregen uden problemer
-                 		;out		OCR2,			R20				;Sætter bilen i gang
+                 		;ldi		R20,			80			;Sætter hastigheden til 80, så bilen langsomt bevæger sig mod målstregen uden problemer
+                 		;out		OCR2,			R20			;Sætter bilen i gang
                  		
                  		ldi		R20,			100				;Initial værdi for AI_Hastighed_set, dette bruges til at bestemme hastigheden i den første runde 
                  		sts		AI_Hastighed_set, R20
@@ -2390,41 +2444,43 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
                  AI_START:
                  AI_Preround:
                  		
-                 		
-000283 9140 008f 		lds		R20,			AI_Check_Lap
-000285 3040      		cpi		R20,			0				;Indtil den første omgang er færdig skal der ikke ske noget
-000286 f421      		brne	FIRST_ROUND
+000295 94f8      		cli
+000296 9140 008f 		lds		R20,			AI_Check_Lap
+000298 3040      		cpi		R20,			0				;Indtil den første omgang er færdig skal der ikke ske noget
+000299 f429      		brne	FIRST_ROUND
                  
-000287 e104      		ldi R16, 20
-000288 940e 00fd 		call Motor_Set_Percentage
+00029a e109      		ldi R16, 25
+00029b 940e 00fd 		call Motor_Set_Percentage
+00029d 9478      		sei
                  
-00028a cff8      rjmp	AI_Preround
+00029e cff6      rjmp	AI_Preround
                  
                  ;-------------------------------
                  
                  
                  FIRST_ROUND:		;Den første omgang begynder. Der er plads til at indsætte kode der skal bearbejdes før vejtypen checkes.
                  		
+00029f 94f8      		cli
+0002a0 9140 008f 		lds		R20,			AI_Check_Lap			;Checker om den første omgang er slut
+0002a2 3042      		cpi		R20,			2
+0002a3 f029      		breq	RUN_TIME
                  		
-00028b 9140 008f 		lds		R20,			AI_Check_Lap			;Checker om den første omgang er slut
-00028d 3042      		cpi		R20,			2
-00028e f021      		breq	RUN_TIME
-                 		
-00028f e208      		ldi R16, 40
-000290 940e 00fd 		call Motor_Set_Percentage		
+0002a4 e208      		ldi R16, 40
+0002a5 940e 00fd 		call Motor_Set_Percentage		
+0002a7 9478      		sei
                  
-000292 cff8      rjmp	FIRST_ROUND
+0002a8 cff6      rjmp	FIRST_ROUND
                  
                  
                  ;-------------------------------
                  
                  RUN_TIME:
-000293 94f8      		cli
-000294 0000      		nop								;Hvis der skal ske noget mens bilen kører de øvrige baner skal det skrives her
-000295 e307      		ldi R16, 55
-000296 940e 00fd 		call Motor_Set_Percentage	
-000298 9478      		sei
-000299 cff9      rjmp	RUN_TIME
+0002a9 94f8      		cli
+0002aa 0000      		nop								;Hvis der skal ske noget mens bilen kører de øvrige baner skal det skrives her
+0002ab e307      		ldi R16, 55
+0002ac 940e 00fd 		call Motor_Set_Percentage	
+0002ae 9478      		sei
+0002af cff9      rjmp	RUN_TIME
                  
                  ;------------------------------
                  
@@ -2526,144 +2582,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
                  
                  jmp		SKIFT_TEST
                  
-                 ;------------------------------
-                 
-                 AI_HALL_INTERRUPT:						;Interrupt fra hall sensoren der fungerer som et tachometer
-                 
-                 		lds		R20,		AI_Check_Lap
-                 		cpi		R20,		0			;AI_Check_Lap om den første runde er begyndt, ellers skal der ikke ske noget
-                 		brne	HALL1
-                 		ret
-                 		
-                 HALL1:									;I den første runde skal der blot måles op, så her laver hall interruptet ikke andet end at
-                 ;										måle "afstanden" og justerer hastigheden så accelerometeret får gode resultater.
-                 		lds		R20,		AI_Check_Lap
-                 		cpi		R20,		1			;AI_Check_Lap om den første runde er færdig.
-                 		brne	HALL2
-                 
-                 		inc		Laengde
-                 		
-                 		lds		R20,		AI_Hastighed_set	;Indlæser den satte hastighed
-                 		lds		R21,		Pulse_Time_L	;Indlæser den målte hastighed
-                 		cp		R21,		R20				;Sammenlig
-                 		brlo	LOW						;AI_Check_Laper om hastigheden er for høj eller for lav
-                 		
-                 										;Hvis det bliver nødvendigt, så benyt resultatet fra skift test til at ændre "AI_Hastighed_set"
-                 		lds		R20,		AI_Hastighed_out
-                 		dec		R20						;Hvis hastigheden er for høj sættes den lidt ned
-                 		out		OCR2,		R20
-                 		
-                 ret
-                 
-                 LOW:									;Hvis hastigheden er for lav sættes den lidt op
-                 
-                 		lds		R20,		AI_Hastighed_out
-                 		inc		R20						;Hvis hastigheden er for høj sættes den lidt ned
-                 		out		OCR2,		R20
-                 
-                 ret
-                 
-                 HALL2:									;Hvis den første omgang er færdig skal Hall interruptet stadig måle op
-                 ;										og justerer hastigheden. Den skal dog yderligere skifte mellem de målte banestykker
-                 
-                 		cpi		Laengde,	0			;Først AI_Check_Lapes om der er noget af Laengden tilbage.
-                 		brne	RUN
-                 		ld		Laengde,	x+			;Ellers indlæses det næste stykke
-                 		ld		Type,		x+
-                 RUN:
-                 
-                 		cpi		Type,		1			;AI_Check_Lap om lille højre
-                 		breq	RUN_S1
-                 		cpi		Type,		2			;AI_Check_Lap om lille venstre
-                 		breq	RUN_S1
-                 		cpi		Type,		3			;AI_Check_Lap om stor højre
-                 		breq	RUN_S2
-                 		cpi		Type,		4			;AI_Check_Lap om stor venstre
-                 		breq	RUN_S2
-                 										;Hvis alle AI_Check_Laps fejler må der være tale om et lige stykke
-                 
-                 
-                 
-                 
-                 
-                 
-                 
-                 
-                 
-                 		ldi		R20,		Hastighed_l		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
-                 		lds		R21,		AI_Hastighed_D
-                 		add		R20,		R21
-                 		out		OCR2,		R20
-                 rjmp	RUN_DONE								;Hop til run_done når hastigheden er sat
-                 
-                 RUN_S1:
-                 		ldi		R20,		Hastighed_s1		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
-                 		lds		R21,		AI_Hastighed_D
-                 		add		R20,		R21
-                 		out		OCR2,		R20
-                 rjmp	RUN_DONE
-                 
-                 
-                 
-                 RUN_S2:
-                 		ldi		R20,		Hastighed_s2		;Hastigheden sættes. Denne del skal uddybes betydeligt, men dette er ikke nødvendigt lige nu.
-                 		lds		R21,		AI_Hastighed_D
-                 		add		R20,		R21
-                 		out		OCR2,		R20
-                 rjmp	RUN_DONE
-                 
-                 RUN_DONE:
-                 		dec		Laengde					;Sætter den tilbageværende "Laengde" ned med en.
-                 ret
-                 
-                 ;------------------------------
                  */
-                 
-                 
-                 AI_Lap_Interrupt:						;Lap interrupt skifter fra initial runden til den første runde til alle resterende.
-                 
-00029a 9140 008f 		lds		R20, AI_Check_Lap		
-                 
-00029c 3041      		cpi		R20, 1
-00029d f438      		brsh	AI_Test_Speed_Laps
-                 
-00029e e041      		ldi		R20, 1
-00029f 9340 008f 		sts		AI_Check_Lap, R20
-                 
-0002a1 e406      		ldi R16, 'F'
-0002a2 940e 0034 		call USART_Transmit
-                 
-                 
-0002a4 9508      		ret								;Hopper til den første runde
-                 
-                 AI_Test_Speed_Laps:
-                 		
-0002a5 e502      		ldi R16, 'R'
-0002a6 940e 0034 		call USART_Transmit
-                 
-0002a8 e042      		ldi		R20, 2
-0002a9 9340 008f 		sts     AI_Check_Lap, R20
-                 
-                 		/*
-                 		lds		R20,		AI_Hastighed_D
-                 		inc		R20
-                 		sts		AI_Hastighed_D,R20
-                 
-                 		clr		R27						;Nulstiller X
-                 		ldi		R26,		Map_start
-                 		ldi		R16, 2
-                 		sts		AI_Check_Lap, R16
-                 		ld		Laengde,	x+			;Indlæser den første del af af det gemte map.
-                 		ld		Type,		x+
-                 		*/
-                 
-0002ab 9508      		ret
-                 
-                 
-                 
-                 
-                 
-                 
                  
                  
                  
@@ -2675,428 +2594,428 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:
                  
                  
                  Init:
-0002ac e50f
-0002ad bf0d
-0002ae e008
-0002af bf0e
-0002b0 e607
-0002b1 e010
-0002b2 bd10
-0002b3 b909
-0002b4 e908
-0002b5 b90a
-0002b6 e806
-0002b7 bd00
-0002b8 e001
-0002b9 9300 007c
-0002bb 2700
-0002bc 9300 007d
-0002be 9300 007e
-0002c0 9300 007f
-0002c2 b301
-0002c3 6800
-0002c4 bb01
-0002c5 e609
-0002c6 bd05
-0002c7 e000
-0002c8 b901
-0002c9 e102
-0002ca b900
-0002cb e004
-0002cc bf06
-0002cd 0000
-0002ce e00b
-0002cf bf03
-0002d0 e000
-0002d1 bf02
-0002d2 ef09
-0002d3 bf0c
-0002d4 2700
-0002d5 9300 0070
-0002d7 9300 006f
-0002d9 9300 006e
-0002db b709
-0002dc 6002
-0002dd bf09
-0002de e000
-0002df bd0f
-0002e0 e802
-0002e1 bd0e
-0002e2 2700
-0002e3 9300 0083
-0002e5 9300 0084
-0002e7 b709
-0002e8 6200
-0002e9 bf09
-0002ea e500
-0002eb 940e 0034
-0002ed e00d
-0002ee 940e 0034
-0002f0 e00a
-0002f1 940e 0034
-0002f3 e8c7
-0002f4 e0d0
-0002f5 2700
-0002f6 9300 0073
-0002f8 9300 0072
-0002fa 9300 0071
-0002fc 9300 0074
-0002fe 9300 0075
-000300 9300 0076
-000302 b108
-000303 6408
-000304 b908
-000305 b700
-000306 7f07
-000307 bf00
-000308 98bb
-000309 940e 010c
-00030b ed00
-00030c 940e 0115
-00030e e109
-00030f 940e 0115
-000311 e007
-000312 940e 0115
-000314 e000
-000315 940e 0115
-000317 e008
-000318 940e 0115
-00031a e008
-00031b 940e 0115
-00031d e000
-00031e 940e 0115
-000320 e000
-000321 940e 0115
-000323 e000
-000324 940e 0115
-000326 e000
-000327 940e 0115
-000329 e000
-00032a 940e 0115
-00032c e000
-00032d 940e 0115
-00032f e000
-000330 940e 0115
-000332 e000
-000333 940e 0115
-000335 e000
-000336 940e 0115
-000338 e000
-000339 940e 0115
-00033b e000
-00033c 940e 0115
-00033e e000
-00033f 940e 0115
-000341 e000
-000342 940e 0115
-000344 e000
-000345 940e 0115
-000347 e000
-000348 940e 0115
-00034a e000
-00034b 940e 0115
-00034d e000
-00034e 940e 0115
-000350 e000
-000351 940e 0115
-000353 e000
-000354 940e 0115
-000356 e000
-000357 940e 0115
-000359 e000
-00035a 940e 0115
-00035c e000
-00035d 940e 0115
-00035f e000
-000360 940e 0115
-000362 e000
-000363 940e 0115
-000365 e000
-000366 940e 0115
-000368 940e 010c
-00036a ed00
-00036b 940e 0115
-00036d e307
-00036e 940e 0115
-000370 e000
-000371 940e 0115
-000373 e000
-000374 940e 0115
-000376 940e 010c
-000378 ed00
-000379 940e 0115
-00037b e603
-00037c 940e 0115
-00037e e000
-00037f 940e 0115
-000381 e000
-000382 940e 0115
-000384 e000
-000385 940e 0115
-000387 e000
-000388 940e 0115
-00038a e000
-00038b 940e 0115
-00038d e000
-00038e 940e 0115
-000390 e000
-000391 940e 0115
-000393 e000
-000394 940e 0115
-000396 e002
-000397 940e 0115
-000399 e000
-00039a 940e 0115
-00039c 940e 010c
-00039e ed00
-00039f 940e 0115
-0003a1 e704
-0003a2 940e 0115
-0003a4 e000
-0003a5 940e 0115
-0003a7 940e 0112
-0003a9 940e 010c
-0003ab ed00
-0003ac 940e 0115
-0003ae e109
-0003af 940e 0115
-0003b1 e007
-0003b2 940e 0115
-0003b4 e000
-0003b5 940e 0115
-0003b7 e008
-0003b8 940e 0115
-0003ba e008
-0003bb 940e 0115
-0003bd e000
-0003be 940e 0115
-0003c0 e000
-0003c1 940e 0115
-0003c3 e000
-0003c4 940e 0115
-0003c6 e000
-0003c7 940e 0115
-0003c9 e000
-0003ca 940e 0115
-0003cc e000
-0003cd 940e 0115
-0003cf e000
-0003d0 940e 0115
-0003d2 e000
-0003d3 940e 0115
-0003d5 e000
-0003d6 940e 0115
-0003d8 e000
-0003d9 940e 0115
-0003db e000
-0003dc 940e 0115
-0003de e000
-0003df 940e 0115
-0003e1 e000
-0003e2 940e 0115
-0003e4 e000
-0003e5 940e 0115
-0003e7 e000
-0003e8 940e 0115
-0003ea e000
-0003eb 940e 0115
-0003ed e000
-0003ee 940e 0115
-0003f0 e000
-0003f1 940e 0115
-0003f3 e000
-0003f4 940e 0115
-0003f6 e000
-0003f7 940e 0115
-0003f9 e000
-0003fa 940e 0115
-0003fc e000
-0003fd 940e 0115
-0003ff e000
-000400 940e 0115
-000402 e000
-000403 940e 0115
-000405 e000
-000406 940e 0115
-000408 940e 010c
-00040a ed00
-00040b 940e 0115
-00040d e307
-00040e 940e 0115
-000410 e000
-000411 940e 0115
-000413 e000
-000414 940e 0115
-000416 940e 010c
-000418 ed00
-000419 940e 0115
-00041b e603
-00041c 940e 0115
-00041e e000
-00041f 940e 0115
-000421 e000
-000422 940e 0115
-000424 e000
-000425 940e 0115
-000427 e000
-000428 940e 0115
-00042a e000
-00042b 940e 0115
-00042d e000
-00042e 940e 0115
-000430 e000
-000431 940e 0115
-000433 e000
-000434 940e 0115
-000436 e002
-000437 940e 0115
-000439 e000
-00043a 940e 0115
-00043c 940e 010c
-00043e ed00
-00043f 940e 0115
-000441 e704
-000442 940e 0115
-000444 e000
-000445 940e 0115
-000447 940e 0112
-000449 940e 010c
-00044b ed00
-00044c 940e 0115
-00044e e109
-00044f 940e 0115
-000451 e007
-000452 940e 0115
-000454 e000
-000455 940e 0115
-000457 e008
-000458 940e 0115
-00045a e008
-00045b 940e 0115
-00045d e000
-00045e 940e 0115
-000460 e000
-000461 940e 0115
-000463 e000
-000464 940e 0115
-000466 e000
-000467 940e 0115
-000469 e000
-00046a 940e 0115
-00046c e000
-00046d 940e 0115
-00046f e000
-000470 940e 0115
-000472 e000
-000473 940e 0115
-000475 e000
-000476 940e 0115
-000478 e000
-000479 940e 0115
-00047b e000
-00047c 940e 0115
-00047e e000
-00047f 940e 0115
-000481 e000
-000482 940e 0115
-000484 e000
-000485 940e 0115
-000487 e000
-000488 940e 0115
-00048a e000
-00048b 940e 0115
-00048d e000
-00048e 940e 0115
-000490 e000
-000491 940e 0115
-000493 e000
-000494 940e 0115
-000496 e000
-000497 940e 0115
-000499 e000
-00049a 940e 0115
-00049c e000
-00049d 940e 0115
-00049f e000
-0004a0 940e 0115
-0004a2 e000
-0004a3 940e 0115
-0004a5 e000
-0004a6 940e 0115
-0004a8 940e 010c
-0004aa ed00
-0004ab 940e 0115
-0004ad e307
-0004ae 940e 0115
-0004b0 e000
-0004b1 940e 0115
-0004b3 e000
-0004b4 940e 0115
-0004b6 940e 010c
-0004b8 ed00
-0004b9 940e 0115
-0004bb e603
-0004bc 940e 0115
-0004be e000
-0004bf 940e 0115
-0004c1 e000
-0004c2 940e 0115
-0004c4 e000
-0004c5 940e 0115
-0004c7 e000
-0004c8 940e 0115
-0004ca e000
-0004cb 940e 0115
-0004cd e000
-0004ce 940e 0115
-0004d0 e000
-0004d1 940e 0115
-0004d3 e000
-0004d4 940e 0115
-0004d6 e002
-0004d7 940e 0115
-0004d9 e000
-0004da 940e 0115
-0004dc 940e 010c
-0004de ed00
-0004df 940e 0115
-0004e1 e704
-0004e2 940e 0115
-0004e4 e000
-0004e5 940e 0115
-0004e7 940e 0112
-0004e9 2700
-0004ea 9300 008f
-0004ec 9300 0092
-0004ee e644
-0004ef 9340 0091
-0004f1 e0b0
-0004f2 eca8
-0004f3 e001
-0004f4 9300 0080 	Setup	
+0002b0 e50f
+0002b1 bf0d
+0002b2 e008
+0002b3 bf0e
+0002b4 e607
+0002b5 e010
+0002b6 bd10
+0002b7 b909
+0002b8 e908
+0002b9 b90a
+0002ba e806
+0002bb bd00
+0002bc e001
+0002bd 9300 007c
+0002bf 2700
+0002c0 9300 007d
+0002c2 9300 007e
+0002c4 9300 007f
+0002c6 b301
+0002c7 6800
+0002c8 bb01
+0002c9 e609
+0002ca bd05
+0002cb e000
+0002cc b901
+0002cd e102
+0002ce b900
+0002cf e004
+0002d0 bf06
+0002d1 0000
+0002d2 e00b
+0002d3 bf03
+0002d4 e000
+0002d5 bf02
+0002d6 ef09
+0002d7 bf0c
+0002d8 2700
+0002d9 9300 0070
+0002db 9300 006f
+0002dd 9300 006e
+0002df b709
+0002e0 6002
+0002e1 bf09
+0002e2 e000
+0002e3 bd0f
+0002e4 e802
+0002e5 bd0e
+0002e6 2700
+0002e7 9300 0083
+0002e9 9300 0084
+0002eb b709
+0002ec 6200
+0002ed bf09
+0002ee e500
+0002ef 940e 0034
+0002f1 e00d
+0002f2 940e 0034
+0002f4 e00a
+0002f5 940e 0034
+0002f7 e8c7
+0002f8 e0d0
+0002f9 2700
+0002fa 9300 0073
+0002fc 9300 0072
+0002fe 9300 0071
+000300 9300 0074
+000302 9300 0075
+000304 9300 0076
+000306 b108
+000307 6408
+000308 b908
+000309 b700
+00030a 7f07
+00030b bf00
+00030c 98bb
+00030d 940e 010c
+00030f ed00
+000310 940e 0115
+000312 e109
+000313 940e 0115
+000315 e007
+000316 940e 0115
+000318 e000
+000319 940e 0115
+00031b e008
+00031c 940e 0115
+00031e e008
+00031f 940e 0115
+000321 e000
+000322 940e 0115
+000324 e000
+000325 940e 0115
+000327 e000
+000328 940e 0115
+00032a e000
+00032b 940e 0115
+00032d e000
+00032e 940e 0115
+000330 e000
+000331 940e 0115
+000333 e000
+000334 940e 0115
+000336 e000
+000337 940e 0115
+000339 e000
+00033a 940e 0115
+00033c e000
+00033d 940e 0115
+00033f e000
+000340 940e 0115
+000342 e000
+000343 940e 0115
+000345 e000
+000346 940e 0115
+000348 e000
+000349 940e 0115
+00034b e000
+00034c 940e 0115
+00034e e000
+00034f 940e 0115
+000351 e000
+000352 940e 0115
+000354 e000
+000355 940e 0115
+000357 e000
+000358 940e 0115
+00035a e000
+00035b 940e 0115
+00035d e000
+00035e 940e 0115
+000360 e000
+000361 940e 0115
+000363 e000
+000364 940e 0115
+000366 e000
+000367 940e 0115
+000369 e000
+00036a 940e 0115
+00036c 940e 010c
+00036e ed00
+00036f 940e 0115
+000371 e307
+000372 940e 0115
+000374 e000
+000375 940e 0115
+000377 e000
+000378 940e 0115
+00037a 940e 010c
+00037c ed00
+00037d 940e 0115
+00037f e603
+000380 940e 0115
+000382 e000
+000383 940e 0115
+000385 e000
+000386 940e 0115
+000388 e000
+000389 940e 0115
+00038b e000
+00038c 940e 0115
+00038e e000
+00038f 940e 0115
+000391 e000
+000392 940e 0115
+000394 e000
+000395 940e 0115
+000397 e000
+000398 940e 0115
+00039a e002
+00039b 940e 0115
+00039d e000
+00039e 940e 0115
+0003a0 940e 010c
+0003a2 ed00
+0003a3 940e 0115
+0003a5 e704
+0003a6 940e 0115
+0003a8 e000
+0003a9 940e 0115
+0003ab 940e 0112
+0003ad 940e 010c
+0003af ed00
+0003b0 940e 0115
+0003b2 e109
+0003b3 940e 0115
+0003b5 e007
+0003b6 940e 0115
+0003b8 e000
+0003b9 940e 0115
+0003bb e008
+0003bc 940e 0115
+0003be e008
+0003bf 940e 0115
+0003c1 e000
+0003c2 940e 0115
+0003c4 e000
+0003c5 940e 0115
+0003c7 e000
+0003c8 940e 0115
+0003ca e000
+0003cb 940e 0115
+0003cd e000
+0003ce 940e 0115
+0003d0 e000
+0003d1 940e 0115
+0003d3 e000
+0003d4 940e 0115
+0003d6 e000
+0003d7 940e 0115
+0003d9 e000
+0003da 940e 0115
+0003dc e000
+0003dd 940e 0115
+0003df e000
+0003e0 940e 0115
+0003e2 e000
+0003e3 940e 0115
+0003e5 e000
+0003e6 940e 0115
+0003e8 e000
+0003e9 940e 0115
+0003eb e000
+0003ec 940e 0115
+0003ee e000
+0003ef 940e 0115
+0003f1 e000
+0003f2 940e 0115
+0003f4 e000
+0003f5 940e 0115
+0003f7 e000
+0003f8 940e 0115
+0003fa e000
+0003fb 940e 0115
+0003fd e000
+0003fe 940e 0115
+000400 e000
+000401 940e 0115
+000403 e000
+000404 940e 0115
+000406 e000
+000407 940e 0115
+000409 e000
+00040a 940e 0115
+00040c 940e 010c
+00040e ed00
+00040f 940e 0115
+000411 e307
+000412 940e 0115
+000414 e000
+000415 940e 0115
+000417 e000
+000418 940e 0115
+00041a 940e 010c
+00041c ed00
+00041d 940e 0115
+00041f e603
+000420 940e 0115
+000422 e000
+000423 940e 0115
+000425 e000
+000426 940e 0115
+000428 e000
+000429 940e 0115
+00042b e000
+00042c 940e 0115
+00042e e000
+00042f 940e 0115
+000431 e000
+000432 940e 0115
+000434 e000
+000435 940e 0115
+000437 e000
+000438 940e 0115
+00043a e002
+00043b 940e 0115
+00043d e000
+00043e 940e 0115
+000440 940e 010c
+000442 ed00
+000443 940e 0115
+000445 e704
+000446 940e 0115
+000448 e000
+000449 940e 0115
+00044b 940e 0112
+00044d 940e 010c
+00044f ed00
+000450 940e 0115
+000452 e109
+000453 940e 0115
+000455 e007
+000456 940e 0115
+000458 e000
+000459 940e 0115
+00045b e008
+00045c 940e 0115
+00045e e008
+00045f 940e 0115
+000461 e000
+000462 940e 0115
+000464 e000
+000465 940e 0115
+000467 e000
+000468 940e 0115
+00046a e000
+00046b 940e 0115
+00046d e000
+00046e 940e 0115
+000470 e000
+000471 940e 0115
+000473 e000
+000474 940e 0115
+000476 e000
+000477 940e 0115
+000479 e000
+00047a 940e 0115
+00047c e000
+00047d 940e 0115
+00047f e000
+000480 940e 0115
+000482 e000
+000483 940e 0115
+000485 e000
+000486 940e 0115
+000488 e000
+000489 940e 0115
+00048b e000
+00048c 940e 0115
+00048e e000
+00048f 940e 0115
+000491 e000
+000492 940e 0115
+000494 e000
+000495 940e 0115
+000497 e000
+000498 940e 0115
+00049a e000
+00049b 940e 0115
+00049d e000
+00049e 940e 0115
+0004a0 e000
+0004a1 940e 0115
+0004a3 e000
+0004a4 940e 0115
+0004a6 e000
+0004a7 940e 0115
+0004a9 e000
+0004aa 940e 0115
+0004ac 940e 010c
+0004ae ed00
+0004af 940e 0115
+0004b1 e307
+0004b2 940e 0115
+0004b4 e000
+0004b5 940e 0115
+0004b7 e000
+0004b8 940e 0115
+0004ba 940e 010c
+0004bc ed00
+0004bd 940e 0115
+0004bf e603
+0004c0 940e 0115
+0004c2 e000
+0004c3 940e 0115
+0004c5 e000
+0004c6 940e 0115
+0004c8 e000
+0004c9 940e 0115
+0004cb e000
+0004cc 940e 0115
+0004ce e000
+0004cf 940e 0115
+0004d1 e000
+0004d2 940e 0115
+0004d4 e000
+0004d5 940e 0115
+0004d7 e000
+0004d8 940e 0115
+0004da e002
+0004db 940e 0115
+0004dd e000
+0004de 940e 0115
+0004e0 940e 010c
+0004e2 ed00
+0004e3 940e 0115
+0004e5 e704
+0004e6 940e 0115
+0004e8 e000
+0004e9 940e 0115
+0004eb 940e 0112
+0004ed 2700
+0004ee 9300 008f
+0004f0 9300 0092
+0004f2 e644
+0004f3 9340 0091
+0004f5 e0b0
+0004f6 eca8
+0004f7 e001
+0004f8 9300 0080 	Setup	
                  
-0004f6 9478      	sei					;Enable global interrupt	
-0004f7 c000      	rjmp Main
+0004fa 9478      	sei					;Enable global interrupt	
+0004fb c000      	rjmp Main
                  
                  Main:
-                 
+                 	
+0004fc 940c 0295 	jmp AI_START
+                 	/*
                  	;Check if the program should be running
                  			
-0004f8 e805      			ldi R16, Pulse_Time_L
-0004f9 9110 0086 			lds R17, Pulse_Time_H
+                 			ldi R16, Pulse_Time_L
+                 			lds R17, Pulse_Time_H
                  		
-0004fb 940e 009d 			call USART_Decimal_16
-0004fd e00d
-0004fe 940e 0034
-000500 e00a
-000501 940e 0034 			USART_Newline
+                 			call USART_Decimal_16
+                 			USART_Newline
                  			
-000503 ef0a      			ldi		R16, 250
-000504 940e 00e5 			call	Delay_MS
+                 			ldi		R16, 250
+                 			call	Delay_MS
                  	;Insert program code here
-000506 9478      	sei
+                 	sei
+                 	*/
                  
-000507 cff0      rjmp Main
+0004fe cffd      rjmp Main
 
 
 RESOURCE USE INFORMATION
@@ -3116,7 +3035,7 @@ counted separately from r26..r31 here.
 "ATmega32A" register use summary:
 r0 :  24 r1 :  25 r2 :  21 r3 :  20 r4 :   6 r5 :   6 r6 :   3 r7 :   2 
 r8 :   2 r9 :   2 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16: 408 r17:  15 r18:  33 r19:  26 r20:  52 r21:   0 r22:   0 r23:   0 
+r16: 404 r17:  14 r18:  33 r19:  26 r20:  52 r21:   0 r22:   0 r23:   0 
 r24:   0 r25:   0 r26:  31 r27:  31 r28:   4 r29:   3 r30:   4 r31:   4 
 x  :   0 y  :   2 z  :   0 
 Registers used: 22 out of 35 (62.9%)
@@ -3127,18 +3046,18 @@ andi  :   1 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0
 brcc  :  14 brcs  :   0 break :   0 breq  :   7 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   4 brlt  :   0 brmi  :   0 
 brne  :   3 brpl  :   1 brsh  :   3 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  : 217 cbi   :   1 cbr   :   1 
-clc   :   0 clh   :   0 cli   :   2 cln   :   0 clr   :  18 cls   :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  : 213 cbi   :   1 cbr   :   1 
+clc   :   0 clh   :   0 cli   :   4 cln   :   0 clr   :  18 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   4 cp    :   5 cpc   :   0 
 cpi   :  12 cpse  :   0 dec   :  10 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :  20 inc   :  12 jmp   :   4 
-ld    :   0 ldd   :   0 ldi   : 269 lds   :  35 lpm   :   0 lsl   :   1 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :  20 inc   :  12 jmp   :   5 
+ld    :   0 ldd   :   0 ldi   : 265 lds   :  34 lpm   :   0 lsl   :   1 
 lsr   :   0 mov   :   7 movw  :   3 mul   :   1 muls  :   0 mulsu :   0 
 neg   :   0 nop   :   2 or    :   0 ori   :   4 out   :  36 pop   :  22 
 push  :  16 rcall :   0 ret   :  17 reti  :  11 rjmp  :  19 rol   :   0 
 ror   :   0 sbc   :  17 sbci  :   2 sbi   :   0 sbic  :   0 sbis  :   2 
 sbiw  :   1 sbr   :   1 sbrc  :   2 sbrs  :   5 sec   :   0 seh   :   0 
-sei   :   5 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
+sei   :   6 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   2 std   :   0 sts   :  64 
 sub   :  16 subi  :   1 swap  :   0 tst   :   0 wdr   :   0 
 Instructions used: 48 out of 113 (42.5%)
@@ -3146,7 +3065,7 @@ Instructions used: 48 out of 113 (42.5%)
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000a10   2518      0   2518   32768   7.7%
+[.cseg] 0x000000 0x0009fe   2500      0   2500   32768   7.6%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 

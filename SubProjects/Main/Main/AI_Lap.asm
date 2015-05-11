@@ -1,17 +1,3 @@
-;Addresser
-.def	Laengde = R22			;Laengden af vejstykket
-.def	Type = R23				;Type af vejstykket
-.def	Accel = R24				;Checker om den første tur er begyndt.
-
-;Konstanter
-.equ	Accel_v1=10				;Disse værdier skal justeres
-.equ	Accel_v2=15
-.equ	Accel_h1=20
-.equ	Accel_h2=25
-.equ	Hastighed_l=100			;Hastigheden når vi kører ligeud
-.equ	Hastighed_s2=50			;-- stort sving
-.equ	Hastighed_s1=70			;-- lille sving
-
 AI_Lap_Interrupt:						;Lap interrupt skifter fra initial runden til den første runde til alle resterende.
 
 		lds		R20, AI_Check_Lap		
