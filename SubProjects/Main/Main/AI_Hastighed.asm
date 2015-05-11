@@ -9,7 +9,9 @@ Hastigheds_kontrol:				;Skal bruge R16 som den satte periode, og R17 som den nuv
 		lds		R16,	AI_Hastighed_out
 		lds		R17,	AI_Hastighed_D
 		add		R16,	R17
-		out		OCR2,	16
+		brcs	FULD_KRAFT
+		out		OCR2,	R16
+
 
 HASTIGHED_SET_SLUT:
 ret
@@ -78,6 +80,7 @@ HASTIGHED_SET_HIGH:
 rjmp	HASTIGHED_SET_SLUT
 
 HASTIGHED_SET:
+
 
 
 
