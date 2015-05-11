@@ -1,0 +1,11 @@
+Begrænsninger for projektet:
+
+-Vi vil ikke optimere på strømforbruget, medmindre dette bliver et problem for vores andre funktionaliteter.
+
+-Programmering foregår i assembly.
+
+-Den udleverede bil skal benyttes.
+
+-Der skal bruges en atmega32 microcontroller i forbindelse med projektet.
+
+
