@@ -7,8 +7,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication,QAction, QCheckBox, \
                             QMainWindow, QMenu, QHBoxLayout,\
                             QVBoxLayout,QPushButton, QSizePolicy, \
-                            QMessageBox, QWidget, QLabel, QDialog, QComboBox
-from PyQt5.QtGui import QPixmap, QIcon
+                            QMessageBox, QWidget, QLabel, QDialog, \
+                            QComboBox, QSlider, QLCDNumber, QScrollArea
+from PyQt5.QtGui import QPixmap, QIcon, QPalette, QColor
 from numpy import arange, sin, pi
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -150,6 +151,9 @@ class ApplicationWindow(QMainWindow):
         self.serialObject.stopbits = serial.STOPBITS_ONE
         self.serialObject.bytesize = serial.EIGHTBITS
 
+        #Variables
+        self.liveUpdate = False
+
         #Initialization stuff
 
         QMainWindow.__init__(self)
@@ -178,19 +182,56 @@ class ApplicationWindow(QMainWindow):
         serialConnectAction.triggered.connect(self.serialConnect)
         serialConnectAction.setIcon(QIcon('SerialConnect.png'))
 
+        serialReconnectAction = self.serial_menu.addAction('Reconnect')
+        serialReconnectAction.triggered.connect(self.serialReconnect)
+        serialReconnectAction.setIcon(QIcon('SerialReconnect.png'))
+
         serialDisconnectAction = self.serial_menu.addAction('Disconnect')
         serialDisconnectAction.triggered.connect(self.serialDisconnect)
         serialDisconnectAction.setIcon(QIcon('SerialDisconnect.png'))
 
+
+
         #GUI
 
-        cb = QCheckBox('Penis', self)
 
-        Qb1 = QPushButton('Button1',self)
-        Qb1.setCheckable(True)
-        Qb2 = QPushButton('Button2',self)
-        Qb3 = QPushButton('Button3',self)
-        Qb4 = QPushButton('Button4',self)
+        #Buttons
+
+        self.buttonStart = QPushButton('Start',self)
+        self.buttonStart.setCheckable(True)
+        self.buttonStart.setStyleSheet("background-color:#00FF00")
+        self.buttonStart.clicked[bool].connect(self.buttonStartToggle)
+
+        buttonStop = QPushButton('Stop',self)
+        buttonStop.setStyleSheet("background-color:#FF6666")
+        buttonStop.clicked.connect(self.CarStop)
+
+        #LCD
+        self.lcdSpeed = QLCDNumber(self)
+        self.lcdSpeed.setSegmentStyle(QLCDNumber.Flat)
+
+        #Sliders
+
+        self.sliderSpeed = QSlider(Qt.Horizontal, self)
+        self.sliderSpeed.setMaximum(100)
+        self.sliderSpeed.setStyleSheet("background-color:#FFFFFF")
+        self.sliderSpeed.setFocusPolicy(Qt.NoFocus)
+        self.sliderSpeed.valueChanged[int].connect(self.sliderSpeedAdjust)
+
+        #Terminal
+        terminalSize = 100
+
+        self.labelTerminal = QLabel('>>Terminal Ready\n',self)
+        self.labelTerminal.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        self.labelTerminal.setWordWrap(True)
+        self.labelTerminal.setStyleSheet("background-color:#000000; color:#FFFFFF")
+
+        scrollAreaTerminal = QScrollArea()
+        scrollAreaTerminal.setWidget(self.labelTerminal)
+        scrollAreaTerminal.setWidgetResizable(True)
+        scrollAreaTerminal.setFixedHeight(terminalSize)
+
+        #Layout
 
         self.main_widget = QWidget(self)
 
@@ -201,24 +242,58 @@ class ApplicationWindow(QMainWindow):
         hbox = QHBoxLayout()
         vbox = QVBoxLayout()
         vbox.addWidget(turtlePicLabel)
+        vbox.addWidget(self.lcdSpeed)
+        vbox.addWidget(self.sliderSpeed)
+        vbox.addWidget(self.buttonStart)
+        vbox.addWidget(buttonStop)
         vbox.addStretch(1)
-        vbox.addWidget(cb)
-        vbox.addWidget(Qb1)
-        vbox.addWidget(Qb2)
-        vbox.addWidget(Qb3)
-        vbox.addWidget(Qb4)
+
+        v2box = QVBoxLayout()
 
         dc = MyDynamicMplCanvas(self.main_widget, width=5, height=4, dpi=100)
 
         hbox.addWidget(dc)
         hbox.addLayout(vbox)
 
-        self.main_widget.setLayout(hbox)
+        v2box.addLayout(hbox)
+        v2box.addWidget(scrollAreaTerminal)
+        v2box.addStretch(1)
+
+        self.main_widget.setLayout(v2box)
 
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
 
         self.statusBar().showMessage("TURTLES, TURTLES, TURTLES!", 5000)
+
+    def buttonStartToggle(self):
+        self.liveUpdate = not self.liveUpdate
+        if self.liveUpdate == True:
+            self.buttonStart.setText('Live!')
+            self.buttonStart.setStyleSheet("background-color:#FFFF00")
+            self.sliderSpeed.setStyleSheet("background-color:#99FF33")
+            self.CarStart(self.sliderSpeed.value())
+        else:
+            self.buttonStart.setStyleSheet("background-color:#00FF00")
+            self.sliderSpeed.setStyleSheet("background-color:#FFFFFF")
+            self.buttonStart.setText('Start')
+
+    def sliderSpeedAdjust(self, value):
+        self.lcdSpeed.display(value)
+        if self.liveUpdate == True:
+            self.CarStart(value)
+
+    def CarStart(self, speed):
+        if self.serialObject.isOpen():
+            self.statusBar().showMessage("Starting the car!", 3000)
+            command = bytearray("\x55\x10" + chr(speed), 'UTF-8')
+            self.serialObject.write(command)
+
+    def CarStop(self):
+        if self.serialObject.isOpen():
+            self.statusBar().showMessage("Stopping the car!", 3000)
+            command = bytearray("\x55\x11\x00", 'UTF-8')
+            self.serialObject.write(command)
 
     def serialConnect(self):
         if self.serialObject.isOpen():
@@ -236,6 +311,16 @@ class ApplicationWindow(QMainWindow):
 
             else:
                 self.statusBar().showMessage("Serial connection cancelled!", 3000)
+
+    def serialReconnect(self):
+        if self.serialObject.isOpen():
+             self.statusBar().showMessage("Serial communication is already running on " + self.serialObject.port + "!", 3000)
+        else:
+            try:
+                self.serialObject.open()
+                self.statusBar().showMessage("Opened serial communication on " + self.serialObject.port + "!", 3000)
+            except serial.SerialException :
+                self.statusBar().showMessage("Could not open serial connection on " + self.serialObject.port + "!", 3000)
 
     def serialDisconnect(self):
         if self.serialObject.isOpen():
