@@ -13,6 +13,7 @@ from numpy import arange, sin, pi
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import serial
+import glob
 
 
 class MyMplCanvas(FigureCanvas):
@@ -86,10 +87,11 @@ class SerialConnectDialog(QDialog):
         portLabel = QLabel('Port',self)
         portBox.addWidget(portLabel)
 
+
         self.portCombo = QComboBox(self)
-        self.portCombo.addItem("COM1")
-        self.portCombo.addItem("COM2")
-        self.portCombo.addItem("COM3")
+
+        for i in range(1,31):
+            self.portCombo.addItem("COM%d" %i)
 
         portBox.addWidget(self.portCombo)
         portBox.addStretch(1)
@@ -114,6 +116,29 @@ class SerialConnectDialog(QDialog):
         portSelected = dialog.returnPort()
         return (portSelected, result == QDialog.Accepted)
 
+    def serial_ports(self):
+        if sys.platform.startswith('win'):
+            ports = ['COM' + str(i + 1) for i in range(20)]
+
+        elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+            # this is to exclude your current terminal "/dev/tty"
+            ports = glob.glob('/dev/tty[A-Za-z]*')
+
+        elif sys.platform.startswith('darwin'):
+            ports = glob.glob('/dev/tty.*')
+        else:
+            raise EnvironmentError('Unsupported platform')
+
+        result = []
+
+        for port in ports:
+            try:
+                s = serial.Serial(port)
+                s.close()
+                result.append(port)
+            except (OSError, serial.SerialException):
+                pass
+        return result
 
 class ApplicationWindow(QMainWindow):
     def __init__(self):
@@ -199,8 +224,7 @@ class ApplicationWindow(QMainWindow):
         if self.serialObject.isOpen():
              self.statusBar().showMessage("Serial communication is already running on " + self.serialObject.port + "!", 3000)
         else:
-            portSelected, ok = SerialConnectDialog.getPort()
-            print(portSelected, ok)
+            portSelected, ok = SerialConnectDialog.getPort(self)
             if(ok == True):
                 try:
                     self.serialObject.port = portSelected
