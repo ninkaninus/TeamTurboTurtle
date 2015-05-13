@@ -16,7 +16,6 @@ from matplotlib.figure import Figure
 import serial
 import glob
 
-
 class MyMplCanvas(FigureCanvas):
     """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
     def __init__(self, parent=None, width=5, height=4, dpi=100):
