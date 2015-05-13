@@ -17,7 +17,6 @@ AI_Test_Speed_Laps:
 		ldi		R20, 2
 		sts     AI_Check_Lap, R20
 
-		/*
 		lds		R20,		AI_Hastighed_D
 		inc		R20
 		sts		AI_Hastighed_D,R20
@@ -28,7 +27,7 @@ AI_Test_Speed_Laps:
 		sts		AI_Check_Lap, R16
 		ld		Laengde,	x+			;Indlæser den første del af af det gemte map.
 		ld		Type,		x+
-		*/
+
 
 		ret
 

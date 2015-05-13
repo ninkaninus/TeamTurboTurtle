@@ -1,4 +1,4 @@
-;.include "m32def.inc"
+.include "m32def.inc"
 
 ;Mapping of all the interrupts, must be the first include!
 .include "Interrupt_Mapping.asm"
@@ -29,7 +29,6 @@ Init:
 Main:
 	
 	jmp AI_START
-	/*
 	;Check if the program should be running
 			
 			ldi R16, Pulse_Time_L
@@ -42,6 +41,6 @@ Main:
 			call	Delay_MS
 	;Insert program code here
 	sei
-	*/
+
 
 rjmp Main

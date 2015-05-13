@@ -80,8 +80,6 @@ rjmp	RUN_TIME
 
 ;------------------------------
 
-/*
-
 SKIFT_TEST:									;Dette loop påbegyndes når der skiftes mellem banetyperne. Den benytter acceleration til at bestemme hvilken banetype bilen befinder sig på
 
 		ldi		Laengde		0				;Start på et nyt stykke
@@ -108,7 +106,7 @@ LIGEUD:									;Hvis banetypen bestemmes til at være et lige stykke starter de
 		cpi		Accel,		Accel_h1	;juster værdi, Værdi for acceleration ved lille højre sving
 		brsh	SKIFT
 		
-test2
+test2:
 		cpi		Accel,		Accel_v1	;juster værdi, Værdi for acceleration ved lille venstre sving
 		brsh	SKIFT
 
@@ -177,9 +175,6 @@ SKIFT:									;Indlæser vejtypen og Laengden, hvorefter der hoppes tilbage til
 		st		X+,			Type		;og derefter vejtypen.
 
 jmp		SKIFT_TEST
-
-*/
-
 
 
 
