@@ -8,16 +8,11 @@ AI_Lap_Interrupt:						;Lap interrupt skifter fra initial runden til den første
 		ldi		R20, 1
 		sts		AI_Check_Lap, R20
 
-		ldi R16, 'F'
-		call USART_Transmit
 
 
 		ret								;Hopper til den første runde
 
 AI_Test_Speed_Laps:
-		
-		ldi R16, 'R'
-		call USART_Transmit
 
 		ldi		R20, 2
 		sts     AI_Check_Lap, R20
@@ -36,6 +31,7 @@ AI_Test_Speed_Laps:
 		*/
 
 		ret
+
 
 
 
