@@ -6,7 +6,7 @@ rjmp Init
 jmp	Input_Capture
 ;Timer1 Input Capture interrupt
 .org	0x0C
-;jmp	Input_Capture
+jmp	Input_Capture
 ;Timer0 CTC interrupt
 .org 0x14
 jmp Timer0_Update

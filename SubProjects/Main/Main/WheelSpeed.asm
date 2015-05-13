@@ -2,7 +2,7 @@
 .MACRO WheelSpeed_Init
 			ldi		R16, 0x00
 			out		TCCR1A, R16
-			ldi		R16, 0b10000010			; Falling edge triggered, 1/1024 prescaling
+			ldi		R16, 0b00000010			; Falling edge triggered, 1/1024 prescaling
 			out		TCCR1B, R16	
 
 			clr		R16
@@ -52,8 +52,18 @@
 Input_Capture:
 
 			Push_Register_5 R0, R1, R2, R3, R16
-
-
+			
+			lds		R0, Ticks_L
+			lds		R1, Ticks_H
+			
+			ldi		R16, 0x01
+			add		R0, R16
+			ldi		R16, 0x00
+			adc		R1, R16
+			
+			sts		Ticks_L, R0
+			sts		Ticks_H, R1			
+			
 			lds		R16, SREG_1			
 			sbrc	R16, 0							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
 			rjmp	EDGE2
@@ -80,20 +90,26 @@ EDGE2:		lds		R0, Edge1_L
 			sub		R2, R0
 			sbc		R3, R1
 			
+			ldi		R16, high(3000)
+			cp		R3, R16
+			brlo	WheelSpeed_End		
+			
 			lds		R16, SREG_1
 			cbr		R16, 0b00000001					; clear bit 0 in R16 (performs logical AND with complement of operand)
 			sts		SREG_1, R16
 			
 			ldi		R16, 0x00
 			out		TCNT1H, R16						; Temp = R16
-			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp			
+			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp	
 			
-			ldi		R16, high(1500)
-			cp		R3, R16
-			brlo	end
-						
-			st		Y+, R2
-			st		Y+, R3
+			sts		Pulse_Time_L, R2
+			sts		Pulse_Time_H, R3
+
+WheelSpeed_End:
+			
+			Pop_Register_5 R16, R3, R2, R1, R0
+			
+			reti
 			
 ; Compares the last two pulse times and checks to see if the difference between them is below a set threshold
 
@@ -138,8 +154,7 @@ GO:			lds		R2, Pulse_Time_L2								; Latest pulse time is considered valid and 
 			
 NO_GO:		ldi		YL, low(Pulse_Time_L1)							; Pointer register is reset
 			ldi		YH, high(Pulse_Time_L1)
-		
-			
+				
 end1:		ldi		R16, 0x01
 			add		R0,	R16
 			ldi		R16, 000

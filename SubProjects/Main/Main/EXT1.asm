@@ -64,7 +64,7 @@ WheelSpeed_End:
 
 			reti
 
-EXT1:		ldi		R16, 0x01
+;EXT1:		ldi		R16, 0x01
 			add		R10, R16
 			ldi		R16, 0
 			adc		R11, R16
@@ -80,5 +80,5 @@ EXT1:		ldi		R16, 0x01
 			ldi		R16, 0
 			out 	OCR2, R16
 			
-EXT1_End:				
+;EXT1_End:				
 			reti
