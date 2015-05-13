@@ -1,4 +1,4 @@
-Hastigheds_kontrol:				;Skal bruge R16 som den satte periode, og R17 som den nuværende periode.
+Hastigheds_kontrol:				;Skal bruge R16 som den satte periode, og R17 som den nuværende periode, og R18 som hastighed_out.
 
 		cp		R17,	R16
 		brlo	SPEED_IS_HIGH
@@ -33,8 +33,7 @@ SPEED_IS_LOW:
 
 HASTIGHED_SET_LOW:
 		
-		lds		R16,	AI_Hastighed_out
-		add		R16,	R17
+		add		R16,	R18
 		lds		R17,	AI_Hastighed_D
 		add		R16,	R17
 		brcs	FULD_KRAFT
@@ -69,7 +68,7 @@ SPEED_IS_HIGH:
 
 HASTIGHED_SET_HIGH:
 
-		lds		R16,	AI_Hastighed_out
+		mov		R16,	R18
 		dec		R16,	R17
 		lds		R17,	AI_Hastighed_D
 		add		R16,	R17
@@ -78,6 +77,7 @@ HASTIGHED_SET_HIGH:
 rjmp	HASTIGHED_SET_SLUT
 
 HASTIGHED_SET:
+
 
 
 

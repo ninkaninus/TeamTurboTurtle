@@ -1,6 +1,6 @@
 .include "AI_Lap.asm"
-;.include "AI_Hastighed.asm"
-;.include "AI_Hall.asm"
+.include "AI_Hastighed.asm"
+.include "AI_Hall.asm"
 
 ;Addresser
 .def	Laengde = R22			;Laengden af vejstykket
@@ -8,13 +8,20 @@
 .def	Accel = R24				;Checker om den første tur er begyndt.
 
 ;Konstanter
-.equ	Accel_v1=10				;Disse værdier skal justeres
-.equ	Accel_v2=15
-.equ	Accel_h1=20
-.equ	Accel_h2=25
+.equ	Accel_v1=0x13				;Disse værdier skal justeres
+.equ	Accel_v2=0xa4
+.equ	Accel_h1=0x13
+.equ	Accel_h2=0xa4
+.equ	Periode_l=100			;Periode når vi kører ligeud
+.equ	Periode_s2=100			;-- stort sving
+.equ	Periode_s1=100			;-- lille sving
+.equ	Periode_p=200			;Perioden i preround
+.equ	Periode_m=100			;Perioden i mapping round
 .equ	Hastighed_l=100			;Hastigheden når vi kører ligeud
-.equ	Hastighed_s2=50			;-- stort sving
-.equ	Hastighed_s1=70			;-- lille sving
+.equ	Hastighed_s2=100		;-- stort sving
+.equ	Hastighed_s1=100		;-- lille sving
+.equ	Hastighed_p=100			;Hastighed i preround
+.equ	Hastighed_m=100			;Hastighed i mapping round
 
 ;Initialize først
 .MACRO AI_Init
@@ -44,8 +51,6 @@ AI_Preround:
 		cpi		R20,			0				;Indtil den første omgang er færdig skal der ikke ske noget
 		brne	FIRST_ROUND
 
-		ldi R16, 25
-		call Motor_Set_Percentage
 		sei
 
 rjmp	AI_Preround
@@ -59,9 +64,7 @@ FIRST_ROUND:		;Den første omgang begynder. Der er plads til at indsætte kode d
 		lds		R20,			AI_Check_Lap			;Checker om den første omgang er slut
 		cpi		R20,			2
 		breq	RUN_TIME
-		
-		ldi R16, 40
-		call Motor_Set_Percentage		
+
 		sei
 
 rjmp	FIRST_ROUND
@@ -72,8 +75,6 @@ rjmp	FIRST_ROUND
 RUN_TIME:
 		cli
 		nop								;Hvis der skal ske noget mens bilen kører de øvrige baner skal det skrives her
-		ldi R16, 55
-		call Motor_Set_Percentage	
 		sei
 rjmp	RUN_TIME
 
@@ -178,6 +179,7 @@ SKIFT:									;Indlæser vejtypen og Laengden, hvorefter der hoppes tilbage til
 jmp		SKIFT_TEST
 
 */
+
 
 
 
