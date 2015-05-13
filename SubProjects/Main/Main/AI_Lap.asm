@@ -2,6 +2,9 @@ AI_Lap_Interrupt:						;Lap interrupt skifter fra initial runden til den første
 
 		lds		R20, AI_Check_Lap		
 
+		cpi		R20, 2
+		brsh	AI_Test_Speed_Laps_rest
+		
 		cpi		R20, 1
 		brsh	AI_Test_Speed_Laps
 
@@ -13,6 +16,12 @@ AI_Lap_Interrupt:						;Lap interrupt skifter fra initial runden til den første
 		ret								;Hopper til den første runde
 
 AI_Test_Speed_Laps:
+
+		adi		Antal,	5				;Forøg antal med fem - Bruges til at sikre at den ikke løber tør i slutningen. Antal kan ændres.
+		st		X+,			Laengde		;Sæt Laengden ind først-
+		st		X+,			Type		;og derefter vejtypen.
+
+AI_Test_Speed_Laps_rest:
 
 		ldi		R20, 2
 		sts     AI_Check_Lap, R20
