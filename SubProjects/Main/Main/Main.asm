@@ -1,4 +1,4 @@
-;.include "m32def.inc"
+.include "m32def.inc"
 
 ;Mapping of all the interrupts, must be the first include!
 .include "Interrupt_Mapping.asm"
@@ -14,33 +14,30 @@
 .include "MPU-6050.inc"
 .include "MPU-6050.asm"
 .include "Time.asm"
-.include "WheelSpeed.asm"
+.include "EXT1.asm"
+;.include "WheelSpeed.asm"
 .include "LapCounter.asm"
 .include "Communication_Protocol.asm"
 .include "Setup.asm"
 
 Init:
-	Setup	
-
-	sei					;Enable global interrupt	
-	rjmp Main
-
-Main:
-	;Check if the program should be running
-	;cli
-			;ldi	R16, 80
-			;call Motor_Set
+					Setup
+					EXT1_init	
+			ldi		R16, 90
+			;out 	OCR2, R16
 			
-			;ldi R16, Ticks_Lap_L
-			;lds R17, Ticks_Lap_H
-		
-			;call USART_Decimal_16
-			;USART_Newline
-			
-			;ldi		R16, 250
-			;call	Delay_MS
-	;Insert program code here
-	;sei
-	
+			sei					;Enable global interrupt	
+			rjmp Main
 
-rjmp Main
+Main:		ldi		R16, 60
+			call	Delay_MS
+			
+			call	MPU6050_Read_Dataset
+			
+			ldi		R16, 0x00
+			lds		R17, ACCEL_XOUT_H
+			
+			call	USART_Decimal_S16
+					USART_NewLine	
+
+			rjmp Main
