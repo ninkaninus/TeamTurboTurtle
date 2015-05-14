@@ -1,38 +1,61 @@
-AI_HALL_INTERRUPT:						;Interrupt fra hall sensoren der fungerer som et tachometer
+AI_HALL_INTERRUPT:							;Interrupt fra hall sensoren der fungerer som et tachometer
 
-		lds		R20,		AI_Check_Lap
-		cpi		R20,		0			;Checker om den første runde er begyndt, ellers skal der ikke ske noget
-		brne	HALL_First_Lap
+		lds		R20, AI_Check_Lap			
+
+		cpi		R20, AI_Lap_Speed			;Checks if we are currently running a speed lap.
+		breq	Hall_Speed_Lap
+
+		cpi		R20, AI_Lap_Mapping			;Checks if we are currently running a mapping lap.
+		breq	Hall_Map_Lap
+
+		;Else its preround and we do nothing
 		
-		ldi		R16,	Periode_p			;Reference periode.
-		lds		R17,	Pulse_Time_L		;Indlæser den målte hastighed (periode)
+		/*
+		ldi R16, 'P'
+		call USART_Transmit
+		*/
+		
+		ldi		R16,	HIGH(Periode_p)			;Reference periode.
+		lds		R17,	Pulse_Time_H		;Indlæser den målte hastighed (periode)
 		ldi		R18,	Hastighed_p			;Sætter motor output standard
 
-
-call	Hastigheds_kontrol
-
+		call	Hastigheds_kontrol
+		
 ret
 		
-HALL_First_Lap:							;I den første runde skal der blot måles op, så her laver hall interruptet ikke andet end at
-										;måle "afstanden" og justerer hastigheden så accelerometeret får gode resultater.
-		lds		R20,		AI_Check_Lap
-		cpi		R20,		1			;Checker om den første runde er færdig.
-		brne	HALL2
+;I den første runde skal der blot måles op, så her laver hall interruptet ikke andet end at
+;måle "afstanden" og justerer hastigheden så accelerometeret får gode resultater.
+Hall_Map_Lap:
+		
+		/*
+		ldi R16, 'M'
+		call USART_Transmit
+		*/			
+		;inc	Laengde
 
-		inc		Laengde
+		ldi	R16, HIGH(Periode_m)	;Reference periode.
+		lds	R17, Pulse_Time_H		;Indlæser den målte hastighed (periode)
+		ldi	R18, Hastighed_m		;Sætter motor output standard
 
-		ldi		R16,	Periode_m			;Reference periode.
-		lds		R17,	Pulse_Time_L		;Indlæser den målte hastighed (periode)
-		ldi		R18,	Hastighed_m			;Sætter motor output standard
-
-
-call	Hastigheds_kontrol
+		call	Hastigheds_kontrol
 
 ret
 
-HALL2:									;Hvis den første omgang er færdig skal Hall interruptet stadig måle op
+Hall_Speed_Lap:									;Hvis den første omgang er færdig skal Hall interruptet stadig måle op
 ;										og justerer hastigheden. Den skal dog yderligere skifte mellem de målte banestykker
+	
+	/*
+	ldi R16, 'S'
+	call USART_Transmit
+	*/
 
+	ldi	R16, HIGH(Periode_m)	;Reference periode.
+	lds	R17, Pulse_Time_H		;Indlæser den målte hastighed (periode)
+	ldi	R18, Hastighed_m		;Sætter motor output standard
+
+	call	Hastigheds_kontrol
+
+ret
 		cpi		Laengde,	0			;Først checkes om der er noget af Laengden tilbage.
 		brne	RUN
 		ld		Laengde,	x+			;Ellers indlæses det næste stykke
@@ -50,7 +73,7 @@ RUN:
 										;Hvis alle check fejler må der være tale om et lige stykke
 
 		ldi		R16,	Periode_l			;Reference periode.
-		lds		R17,	Pulse_Time_L		;Indlæser den målte hastighed (periode)
+		lds		R17,	Pulse_Time_H		;Indlæser den målte hastighed (periode)
 		ldi		R18,	Hastighed_l			;Sætter motor output standard
 		
 call	Hastigheds_kontrol
@@ -60,7 +83,7 @@ rjmp	RUN_DONE								;Hop til run_done når hastigheden er sat
 RUN_S1:
 
 		ldi		R16,	Periode_s1			;Reference periode.
-		lds		R17,	Pulse_Time_L		;Indlæser den målte hastighed (periode)
+		lds		R17,	Pulse_Time_H		;Indlæser den målte hastighed (periode)
 		ldi		R18,	Hastighed_s1		;Sætter motor output standard
 		
 call	Hastigheds_kontrol
@@ -72,7 +95,7 @@ rjmp	RUN_DONE
 RUN_S2:
 
 		ldi		R16,	Periode_s2			;Reference periode.
-		lds		R17,	Pulse_Time_L		;Indlæser den målte hastighed (periode)
+		lds		R17,	Pulse_Time_H		;Indlæser den målte hastighed (periode)
 		ldi		R18,	Hastighed_s2		;Sætter motor output standard
 		
 call	Hastigheds_kontrol

@@ -13,7 +13,6 @@
 			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
 			out		TIMSK, R16				;Timer/interrupt masking register
 
-
 			ldi R16, 'P'
 			call USART_Transmit
 			USART_Newline
@@ -106,64 +105,17 @@ EDGE2:		lds		R0, Edge1_L
 			sts		Pulse_Time_L, R2
 			sts		Pulse_Time_H, R3
 
+			mov R16, R2
+			mov R17, R3
+
+			call USART_Decimal_16
+				 USART_Newline
+
+			call AI_HALL_INTERRUPT
+
 WheelSpeed_End:
 			
 			Pop_Register_5 R16, R3, R2, R1, R0
 			
 			reti
 			
-; Compares the last two pulse times and checks to see if the difference between them is below a set threshold
-
-			ldi		R16, low(Pulse_Time_H2)+1
-			cp		YL, R16							; jump to end if pointer register is not set to Pulse_Time_H2
-			brne	end
-			
-			lds 	R0, Pulse_Time_L1
-			lds 	R1, Pulse_Time_H1
-			
-			lds		R2, Pulse_Time_L2
-			lds		R3, Pulse_Time_H2
-			
-			sub		R2, R0							
-			sbc		R3, R1
-			brpl	Lorteopsnapperen				; branch if result is positive
-						
-			ldi		R16,0x01
-			sub 	R2, R16
-			ldi		R16,0x00
-			sbc		R3, R16
-			com 	R2
-			com 	R3
-						
-Lorteopsnapperen:
-			ldi		R16, high(5000)
-			cp		R3, R16
-			brsh	NO_GO
-			
-			
-			
-GO:			lds		R2, Pulse_Time_L2								; Latest pulse time is considered valid and stored for use
-			lds		R3, Pulse_Time_H2
-			
-			sts		Pulse_Time_L, R2
-			sts		Pulse_Time_H, R3 
-			
-			ldi		YL, low(Pulse_Time_L1)							; Pointer register is reset
-			ldi		YH, high(Pulse_Time_L1)
-
-			rjmp	end1
-			
-NO_GO:		ldi		YL, low(Pulse_Time_L1)							; Pointer register is reset
-			ldi		YH, high(Pulse_Time_L1)
-				
-end1:		ldi		R16, 0x01
-			add		R0,	R16
-			ldi		R16, 000
-			adc		R1, R16
-			
-			sts		Ticks_L, R0
-			sts		Ticks_H, R1			
-			
-end:		Pop_Register_5 R16, R3, R2, R1, R0
-			
-			reti

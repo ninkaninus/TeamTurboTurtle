@@ -107,8 +107,6 @@ Comm_Received_Command_Start:
 	call Motor_Set_Percentage
 
 Comm_Received_Command_Start_End:
-	ldi R16, 'S'
-	call USART_Transmit
 
 	reti									;Return from interrupt
 
@@ -119,8 +117,7 @@ Comm_Received_Command_Stop:
 	ldi R16, 0x00							;Load in 0x00
 	out OCR2, R16							;And set the pwm duty cycle to nothing to stop the motor.
 
-	ldi R16, 'T'
-	call USART_Transmit
+Comm_Received_Command_Stop_End:
 
 	reti
 
