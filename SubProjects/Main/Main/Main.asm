@@ -14,33 +14,37 @@
 .include "MPU-6050.inc"
 .include "MPU-6050.asm"
 .include "Time.asm"
+;.include "EXT1.asm"
 .include "WheelSpeed.asm"
 .include "LapCounter.asm"
 .include "Communication_Protocol.asm"
 .include "Setup.asm"
 
 Init:
-	Setup	
+	Setup
 
+	;EXT1_init	
+	ldi	R16, 90
+	;out 	OCR2, R16
+			
+	clr	R16
+	mov	R10, R16
+	mov	R11, R16
+				
+	ldi R16, 'D'
+	call USART_Transmit
+					
 	sei					;Enable global interrupt	
 	rjmp Main
 
-Main:
-	;Check if the program should be running
-	;cli
-			;ldi	R16, 80
-			;call Motor_Set
+Main:		
+	ldi		R16, 60
+	call	Delay_MS
 			
-			;ldi R16, Ticks_Lap_L
-			;lds R17, Ticks_Lap_H
-		
-			;call USART_Decimal_16
-			;USART_Newline
+	lds		R16, Ticks_Lap_L
+	lds		R17, Ticks_Lap_H
 			
-			;ldi		R16, 250
-			;call	Delay_MS
-	;Insert program code here
-	;sei
-	
+	call	USART_Decimal_S16
+	USART_NewLine	
 
-rjmp Main
+	rjmp Main

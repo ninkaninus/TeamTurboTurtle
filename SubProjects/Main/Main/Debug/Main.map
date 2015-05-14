@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Tue May 05 15:00:59 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu May 14 12:17:22 2015
 
 
 EQU  SIGNATURE_000 0000001e
@@ -568,11 +568,11 @@ EQU  ACIaddr      00000024
 EQU  TWIaddr      00000026
 EQU  SPMRaddr     00000028
 EQU  INT_VECTORS_SIZE 0000002a
-CSEG Init         0000021c
-CSEG Input_Capture 00000192
+CSEG Init         0000029d
+CSEG Input_Capture 00000198
 CSEG Timer0_Update 0000017d
-CSEG Comm_Received 000001e4
-CSEG Lap_Time     000001c1
+CSEG Comm_Received 0000025f
+CSEG Lap_Time     00000213
 CSEG Sum_16       00000026
 CSEG Div16_8      00000029
 CSEG Div16_8_Loop 0000002b
@@ -599,10 +599,18 @@ EQU  Time_Stamp_L 00000073
 EQU  Lap_time_L   00000074
 EQU  Lap_time_M   00000075
 EQU  Lap_time_H   00000076
-EQU  Edge1_L      00000077
-EQU  Edge1_H      00000078
-EQU  Pulse_Time_L 00000079
-EQU  Pulse_Time_H 0000007a
+EQU  Edge1_L      00000083
+EQU  Edge1_H      00000084
+EQU  Pulse_Time_L 00000085
+EQU  Pulse_Time_H 00000086
+EQU  Pulse_Time_L1 00000087
+EQU  Pulse_Time_H1 00000088
+EQU  Pulse_Time_L2 00000089
+EQU  Pulse_Time_H2 0000008a
+EQU  Ticks_L      0000008b
+EQU  Ticks_H      0000008c
+EQU  Ticks_Lap_L  0000008d
+EQU  Ticks_Lap_H  0000008e
 EQU  SREG_1       0000007b
 EQU  Program_Running 00000080
 EQU  Comm_Received_Byte_Num 0000007c
@@ -773,21 +781,26 @@ EQU  MPU6050_RA_FIFO_COUNTL 00000073
 EQU  MPU6050_RA_FIFO_R_W 00000074
 EQU  MPU6050_RA_WHO_AM_I 00000075
 CSEG MPU6050_Read_Dataset 00000127
-CSEG Timer_Update_End 00000191
-CSEG EDGE2        000001a0
-CSEG EDGE1        00000196
-CSEG end1         000001c0
-CSEG Lap_Time_End 000001e3
+CSEG Timer_Update_End 00000194
+CSEG EDGE2        000001c0
+CSEG EDGE1        000001af
+CSEG WheelSpeed_End 000001d7
+CSEG end          0000020b
+CSEG Lorteopsnapperen 000001f3
+CSEG NO_GO        00000201
+CSEG GO           000001f6
+CSEG end1         00000203
+CSEG Lap_Time_End 00000255
 EQU  Comm_Type_SET 00000055
 EQU  Comm_Type_GET 000000aa
 EQU  Comm_Command_Start 00000010
 EQU  Comm_Command_Stop 00000011
-CSEG Comm_Received_Type 000001eb
-CSEG Comm_Received_Command 000001f2
-CSEG Comm_Received_Execute 000001f9
-CSEG Comm_Received_Type_Set 00000206
-CSEG Comm_Received_Type_Get 0000021b
-CSEG Comm_Received_Command_Start 0000020d
-CSEG Comm_Received_Command_Stop 00000215
-CSEG Comm_Received_Command_Start_End 00000214
-CSEG Main         0000045c
+CSEG Comm_Received_Type 00000266
+CSEG Comm_Received_Command 0000026d
+CSEG Comm_Received_Execute 00000274
+CSEG Comm_Received_Type_Set 00000281
+CSEG Comm_Received_Type_Get 0000029c
+CSEG Comm_Received_Command_Start 00000288
+CSEG Comm_Received_Command_Stop 00000293
+CSEG Comm_Received_Command_Start_End 0000028f
+CSEG Main         000004e6
