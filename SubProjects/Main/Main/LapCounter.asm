@@ -44,27 +44,27 @@ Lap_Time:
 	ldi R16, 2		
 	cp R1, R16
 	brlo Lap_Time_End
-
+	
+	sts		Lap_time_L, R0				
+	sts		Lap_time_M, R1				; Latest lap time
+	sts		Lap_time_H, R2			
+	
 	lds		R0, Ticks_L
 	lds		R1, Ticks_H
 	
 	sts		Ticks_Lap_L, R0
 	sts		Ticks_Lap_H, R1
 	
-	mov R16, R0
-	mov R17, R1
-		
-	call USART_Decimal_16
-	USART_Newline
+	mov		R16, R0
+	mov		R17, R1
 	
-	clr		R16
+	call	USART_Decimal_S16
+			USART_NewLine	
+	
+	ldi		R16, 0x00
 	sts		Ticks_L, R16
-	sts 	Ticks_H, R16
+	sts		Ticks_H, R16
 	
-	sts		Lap_time_L, R0				
-	sts		Lap_time_M, R1				; Latest lap time
-	sts		Lap_time_H, R2
-			
 	ldi		R16, 0x40					; Disable Comparator interrupt
 	out		ACSR, R16					; Global interrupt register
 			
