@@ -1,4 +1,4 @@
-.include "m32def.inc"
+;.include "m32def.inc"
 
 ;Mapping of all the interrupts, must be the first include!
 .include "Interrupt_Mapping.asm"
@@ -21,25 +21,30 @@
 .include "Setup.asm"
 
 Init:
-					Setup
-					;EXT1_init	
-			ldi		R16, 90
-			;out 	OCR2, R16
+	Setup
+
+	;EXT1_init	
+	ldi	R16, 90
+	;out 	OCR2, R16
 			
-			clr		R16
-			mov		R10, R16
-			mov		R11, R16
+	clr	R16
+	mov	R10, R16
+	mov	R11, R16
+				
+	ldi R16, 'D'
+	call USART_Transmit
 					
-			sei					;Enable global interrupt	
-			rjmp Main
+	sei					;Enable global interrupt	
+	rjmp Main
 
-Main:		ldi		R16, 60
-			call	Delay_MS
+Main:		
+	ldi		R16, 60
+	call	Delay_MS
 			
-			lds		R16, Ticks_Lap_L
-			lds		R17, Ticks_Lap_H
+	lds		R16, Ticks_Lap_L
+	lds		R17, Ticks_Lap_H
 			
-			;call	USART_Decimal_S16
-					;USART_NewLine	
+	call	USART_Decimal_S16
+	USART_NewLine	
 
-			rjmp Main
+	rjmp Main
