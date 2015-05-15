@@ -9,6 +9,7 @@
 *.tmp
 *.aux
 *.toc
+*.lst
 *~
  
 # Packages #
