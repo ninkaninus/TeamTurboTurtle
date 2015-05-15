@@ -7,6 +7,8 @@
 *.iss
 *.map
 *.tmp
+*.aux
+*.toc
 *~
  
 # Packages #
