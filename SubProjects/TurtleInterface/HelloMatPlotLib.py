@@ -8,7 +8,8 @@ from PyQt5.QtWidgets import QApplication,QAction, QCheckBox, \
                             QMainWindow, QMenu, QHBoxLayout,\
                             QVBoxLayout,QPushButton, QSizePolicy, \
                             QMessageBox, QWidget, QLabel, QDialog, \
-                            QComboBox, QSlider, QLCDNumber, QScrollArea
+                            QComboBox, QSlider, QLCDNumber, QScrollArea, QLineEdit
+
 from PyQt5.QtGui import QPixmap, QIcon, QPalette, QColor
 from numpy import arange, sin, pi
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -153,11 +154,52 @@ class ApplicationWindow(QMainWindow):
         #Variables
         self.liveUpdate = False
 
+        #Colors
+        self.colorMenuBackground = "background-color:#437919;border: 1px solid #213C0C"
+
         #Initialization stuff
 
         QMainWindow.__init__(self)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowTitle("Turtle Window")            #Name of the specific window
+
+        self.setStyleSheet("""
+        QMainWindow {
+            background-color:#437919;
+        }
+
+        QMenuBar {
+            background-color:#313131;
+            color: rgb(255,255,255);
+            border: 1px solid #000;
+        }
+
+        QMenuBar::item {
+            background-color: rgb(49,49,49);
+            color: rgb(255,255,255);
+        }
+
+        QMenuBar::item::selected {
+            background-color: rgb(30,30,30);
+        }
+
+        QMenu {
+            background-color: rgb(49,49,49);
+            color: rgb(255,255,255);
+            border: 1px solid #000;
+        }
+
+        QMenu::item::selected {
+            background-color: rgb(30,30,30);
+        }
+
+        QStatusBar {
+            background-color:#313131;
+            color: rgb(255,255,255);
+            border: 1px solid #000;
+        }
+
+        """)
 
         #File menu
 
@@ -177,6 +219,7 @@ class ApplicationWindow(QMainWindow):
         self.serial_menu = QMenu('&Serial', self)
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.serial_menu)
+
         serialConnectAction = self.serial_menu.addAction('Connect')
         serialConnectAction.triggered.connect(self.serialConnect)
         serialConnectAction.setIcon(QIcon('SerialConnect.png'))
@@ -188,9 +231,6 @@ class ApplicationWindow(QMainWindow):
         serialDisconnectAction = self.serial_menu.addAction('Disconnect')
         serialDisconnectAction.triggered.connect(self.serialDisconnect)
         serialDisconnectAction.setIcon(QIcon('SerialDisconnect.png'))
-
-
-
         #GUI
 
 
@@ -208,6 +248,7 @@ class ApplicationWindow(QMainWindow):
         #LCD
         self.lcdSpeed = QLCDNumber(self)
         self.lcdSpeed.setSegmentStyle(QLCDNumber.Flat)
+        self.lcdSpeed.setStyleSheet("background-color:#FFFFFF")
 
         #Sliders
 
@@ -231,6 +272,10 @@ class ApplicationWindow(QMainWindow):
         self.scrollAreaTerminal.setWidgetResizable(True)
         self.scrollAreaTerminal.setFixedHeight(terminalSize)
         self.scrollAreaTerminal.verticalScrollBar().rangeChanged.connect(self.terminalScrollToBottom)
+
+        self.lineEditTerminal = QLineEdit()
+        self.lineEditTerminal.setStyleSheet("background-color:#FFFFFF")
+        self.lineEditTerminal.returnPressed.connect(self.terminalLineEditEnter)
 
         #Layout
 
@@ -258,6 +303,7 @@ class ApplicationWindow(QMainWindow):
 
         v2box.addLayout(hbox)
         v2box.addWidget(self.scrollAreaTerminal)
+        v2box.addWidget(self.lineEditTerminal)
         v2box.addStretch(1)
 
         self.main_widget.setLayout(v2box)
@@ -266,6 +312,19 @@ class ApplicationWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
 
         self.statusBar().showMessage("TURTLES, TURTLES, TURTLES!", 5000)
+
+    def terminalLineEditEnter(self):
+
+        text = self.lineEditTerminal.text()
+
+        self.terminalAppend(">><font color=#FFFF00>" +
+                                text +
+                                "</font> <br />")
+
+
+
+        self.lineEditTerminal.setText("")
+
 
     def terminalScrollToBottom(self,min,max):
         self.scrollAreaTerminal.verticalScrollBar().setValue(max)
@@ -312,7 +371,7 @@ class ApplicationWindow(QMainWindow):
         self.buttonStartOff()
         if self.serialObject.isOpen():
             self.statusBar().showMessage("Stopping the car!", 3000)
-            command = bytearray([ord('\x55'), ord('\x10'), 0])
+            command = bytearray([ord('\x55'), ord('\x11'), 0])
             self.serialObject.write(command)
             self.terminalAppend(">><font color=#FF0000>" +
                                 "Stopping the car!" +
