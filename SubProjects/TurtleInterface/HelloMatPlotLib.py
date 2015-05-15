@@ -285,13 +285,13 @@ class ApplicationWindow(QMainWindow):
     def CarStart(self, speed):
         if self.serialObject.isOpen():
             self.statusBar().showMessage("Starting the car!", 3000)
-            command = bytearray("\x55\x10" + chr(speed), 'UTF-8')
+            command = bytearray([ord('\x55'), ord('\x10'), speed])
             self.serialObject.write(command)
 
     def CarStop(self):
         if self.serialObject.isOpen():
             self.statusBar().showMessage("Stopping the car!", 3000)
-            command = bytearray("\x55\x11\x00", 'UTF-8')
+            command = bytearray([ord('\x55'), ord('\x10'), 0])
             self.serialObject.write(command)
 
     def serialConnect(self):
