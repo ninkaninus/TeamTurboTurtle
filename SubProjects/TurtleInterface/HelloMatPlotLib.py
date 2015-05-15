@@ -220,15 +220,17 @@ class ApplicationWindow(QMainWindow):
         #Terminal
         terminalSize = 100
 
-        self.labelTerminal = QLabel('>>Terminal Ready\n',self)
+        self.labelTerminal = QLabel('>>Terminal Ready<br />',self)
         self.labelTerminal.setAlignment(Qt.AlignLeft | Qt.AlignTop)
         self.labelTerminal.setWordWrap(True)
         self.labelTerminal.setStyleSheet("background-color:#000000; color:#FFFFFF")
+        self.labelTerminal.setTextFormat(Qt.RichText)
 
-        scrollAreaTerminal = QScrollArea()
-        scrollAreaTerminal.setWidget(self.labelTerminal)
-        scrollAreaTerminal.setWidgetResizable(True)
-        scrollAreaTerminal.setFixedHeight(terminalSize)
+        self.scrollAreaTerminal = QScrollArea()
+        self.scrollAreaTerminal.setWidget(self.labelTerminal)
+        self.scrollAreaTerminal.setWidgetResizable(True)
+        self.scrollAreaTerminal.setFixedHeight(terminalSize)
+        self.scrollAreaTerminal.verticalScrollBar().rangeChanged.connect(self.terminalScrollToBottom)
 
         #Layout
 
@@ -255,7 +257,7 @@ class ApplicationWindow(QMainWindow):
         hbox.addLayout(vbox)
 
         v2box.addLayout(hbox)
-        v2box.addWidget(scrollAreaTerminal)
+        v2box.addWidget(self.scrollAreaTerminal)
         v2box.addStretch(1)
 
         self.main_widget.setLayout(v2box)
@@ -265,34 +267,56 @@ class ApplicationWindow(QMainWindow):
 
         self.statusBar().showMessage("TURTLES, TURTLES, TURTLES!", 5000)
 
+    def terminalScrollToBottom(self,min,max):
+        self.scrollAreaTerminal.verticalScrollBar().setValue(max)
+
+    def terminalAppend(self, textToAppend):
+        text = self.labelTerminal.text()
+        text += textToAppend
+        self.labelTerminal.setText(text)
+
     def buttonStartToggle(self):
-        self.liveUpdate = not self.liveUpdate
-        if self.liveUpdate == True:
+        if self.buttonStart.isChecked() == True:
             self.buttonStart.setText('Live!')
             self.buttonStart.setStyleSheet("background-color:#FFFF00")
             self.sliderSpeed.setStyleSheet("background-color:#99FF33")
             self.CarStart(self.sliderSpeed.value())
+
         else:
-            self.buttonStart.setStyleSheet("background-color:#00FF00")
-            self.sliderSpeed.setStyleSheet("background-color:#FFFFFF")
-            self.buttonStart.setText('Start')
+            self.buttonStartOff()
+
+    def buttonStartOff(self):
+        self.buttonStart.setStyleSheet("background-color:#00FF00")
+        self.sliderSpeed.setStyleSheet("background-color:#FFFFFF")
+        self.buttonStart.setText('Start')
 
     def sliderSpeedAdjust(self, value):
         self.lcdSpeed.display(value)
-        if self.liveUpdate == True:
+        if self.buttonStart.isChecked() == True:
             self.CarStart(value)
+
 
     def CarStart(self, speed):
         if self.serialObject.isOpen():
             self.statusBar().showMessage("Starting the car!", 3000)
             command = bytearray([ord('\x55'), ord('\x10'), speed])
             self.serialObject.write(command)
+            self.terminalAppend(">><font color=#00FF00>" +
+                                "Starting the car with " +
+                                str(speed) +
+                                "% speed!" +
+                                "</font> <br />")
 
     def CarStop(self):
+        self.buttonStart.setChecked(False)
+        self.buttonStartOff()
         if self.serialObject.isOpen():
             self.statusBar().showMessage("Stopping the car!", 3000)
             command = bytearray([ord('\x55'), ord('\x10'), 0])
             self.serialObject.write(command)
+            self.terminalAppend(">><font color=#FF0000>" +
+                                "Stopping the car!" +
+                                "</font> <br />")
 
     def serialConnect(self):
         if self.serialObject.isOpen():
