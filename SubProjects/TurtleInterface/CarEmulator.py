@@ -39,6 +39,7 @@ while 1:
         comCommand = random.randint(0,255)
         comParameter = random.randint(0,255)
         serialObject.write(bytearray([ord('\xBB'),comCommand, comParameter]))
+        print("Returned %d" %comParameter)
 
     #If it is a set type
     elif(comType == '0x55'):

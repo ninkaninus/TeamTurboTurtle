@@ -3,12 +3,13 @@ import random
 import matplotlib
 matplotlib.use("Qt5Agg")
 from PyQt5 import QtCore
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication,QAction, QCheckBox, \
+from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtWidgets import QApplication, QCheckBox, \
                             QMainWindow, QMenu, QHBoxLayout,\
                             QVBoxLayout,QPushButton, QSizePolicy, \
                             QMessageBox, QWidget, QLabel, QDialog, \
-                            QComboBox, QSlider, QLCDNumber, QScrollArea, QLineEdit
+                            QComboBox, QSlider, QLCDNumber, QScrollArea, \
+                            QLineEdit, QToolTip
 
 from PyQt5.QtGui import QPixmap, QIcon, QPalette, QColor
 from numpy import arange, sin, pi
@@ -16,19 +17,23 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import serial
 import glob
+import queue
+from com_monitor import ComMonitorThread
+from livedatafeed import LiveDataFeed
+
 
 class MyMplCanvas(FigureCanvas):
     """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
     def __init__(self, parent=None, width=5, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(111)
+        super(MyMplCanvas, self).__init__(Figure())
+        self.fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = self.fig.add_subplot(1,1,1)
+
         # We want the axes cleared every time plot() is called
         self.axes.hold(False)
-
         self.compute_initial_figure()
-
         #
-        FigureCanvas.__init__(self, fig)
+        FigureCanvas.__init__(self, self.fig)
         self.setParent(parent)
 
         FigureCanvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -39,37 +44,18 @@ class MyMplCanvas(FigureCanvas):
         pass
 
 
-class MyStaticMplCanvas(MyMplCanvas):
-    """Simple canvas with a sine plot."""
-    def compute_initial_figure(self):
-        t = arange(0.0, 3.0, 0.01)
-        s = sin(2*pi*t)
-        self.axes.plot(t, s)
-
-
 class MyDynamicMplCanvas(MyMplCanvas):
     """A canvas that updates itself every second with a new plot."""
     def __init__(self, *args, **kwargs):
         MyMplCanvas.__init__(self, *args, **kwargs)
-        timer = QtCore.QTimer(self)
-        timer.timeout.connect(self.update_figure)
-        timer.start(1000)
 
     def compute_initial_figure(self):
         self.axes.plot([0, 1, 2, 3], [1, 2, 0, 4], 'r')
 
-    def update_figure(self):
-        # Build a list of 4 random integers between 0 and 10 (both inclusive)
-
-        if random.randint(0,1) == 1:
-
-            l = [random.randint(10, 20) for i in range(7)]
-            self.axes.plot([0, 1, 2, 3,4,5,6], l, 'r')
-            self.draw()
-        else:
-            l = [random.randint(0, 10) for i in range(4)]
-            self.axes.plot([0, 1, 2, 3], l, 'r')
-            self.draw()
+    def update_figure(self, datas):
+        numList = range(0, len(datas))
+        self.axes.plot(numList, datas, 'r')
+        self.draw()
 
 class SerialConnectDialog(QDialog):
     def __init__(self, parent=None):
@@ -117,45 +103,8 @@ class SerialConnectDialog(QDialog):
         portSelected = dialog.returnPort()
         return (portSelected, result == QDialog.Accepted)
 
-    def serial_ports(self):
-        if sys.platform.startswith('win'):
-            ports = ['COM' + str(i + 1) for i in range(20)]
-
-        elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-            # this is to exclude your current terminal "/dev/tty"
-            ports = glob.glob('/dev/tty[A-Za-z]*')
-
-        elif sys.platform.startswith('darwin'):
-            ports = glob.glob('/dev/tty.*')
-        else:
-            raise EnvironmentError('Unsupported platform')
-
-        result = []
-
-        for port in ports:
-            try:
-                s = serial.Serial(port)
-                s.close()
-                result.append(port)
-            except (OSError, serial.SerialException):
-                pass
-        return result
-
 class ApplicationWindow(QMainWindow):
     def __init__(self):
-
-        #Serial Setup
-        self.serialObject = serial.Serial()
-        self.serialObject.baudrate = 9600
-        self.serialObject.parity = serial.PARITY_NONE
-        self.serialObject.stopbits = serial.STOPBITS_ONE
-        self.serialObject.bytesize = serial.EIGHTBITS
-
-        #Variables
-        self.liveUpdate = False
-
-        #Colors
-        self.colorMenuBackground = "background-color:#437919;border: 1px solid #213C0C"
 
         #Initialization stuff
 
@@ -200,6 +149,27 @@ class ApplicationWindow(QMainWindow):
         }
 
         """)
+
+        #Serial Setup
+        self.serialObject = serial.Serial()
+        self.serialObject.baudrate = 9600
+        self.serialObject.parity = serial.PARITY_NONE
+        self.serialObject.stopbits = serial.STOPBITS_ONE
+        self.serialObject.bytesize = serial.EIGHTBITS
+        self.serialObject.port_timeout=0.01
+
+        #Variables
+        self.liveUpdate = False
+        self.dataSamples = []
+
+        #Data stuff
+        self.com_monitor = None
+        self.com_data_q = None
+        self.com_error_q = None
+
+        self.dataTimer = QTimer(self)
+        self.dataTimer.timeout.connect(self.pullData)
+        self.dataTimerUpdateRate = 10
 
         #File menu
 
@@ -257,6 +227,7 @@ class ApplicationWindow(QMainWindow):
         self.sliderSpeed.setStyleSheet("background-color:#FFFFFF")
         self.sliderSpeed.setFocusPolicy(Qt.NoFocus)
         self.sliderSpeed.valueChanged[int].connect(self.sliderSpeedAdjust)
+        self.sliderSpeed.setSizePolicy(QSizePolicy.Minimum,QSizePolicy.Fixed)
 
         #Terminal
         terminalSize = 100
@@ -270,12 +241,16 @@ class ApplicationWindow(QMainWindow):
         self.scrollAreaTerminal = QScrollArea()
         self.scrollAreaTerminal.setWidget(self.labelTerminal)
         self.scrollAreaTerminal.setWidgetResizable(True)
-        self.scrollAreaTerminal.setFixedHeight(terminalSize)
         self.scrollAreaTerminal.verticalScrollBar().rangeChanged.connect(self.terminalScrollToBottom)
 
         self.lineEditTerminal = QLineEdit()
         self.lineEditTerminal.setStyleSheet("background-color:#FFFFFF")
         self.lineEditTerminal.returnPressed.connect(self.terminalLineEditEnter)
+        self.lineEditTerminal.setToolTip('Use , to seperate bytes')
+
+        self.comboboxTerminalType = QComboBox(self)
+        self.comboboxTerminalType.addItem("HEX")
+        self.comboboxTerminalType.addItem("DEC")
 
         #Layout
 
@@ -287,6 +262,7 @@ class ApplicationWindow(QMainWindow):
 
         hbox = QHBoxLayout()
         vbox = QVBoxLayout()
+        vbox.setAlignment(Qt.AlignRight)
         vbox.addWidget(turtlePicLabel)
         vbox.addWidget(self.lcdSpeed)
         vbox.addWidget(self.sliderSpeed)
@@ -296,15 +272,19 @@ class ApplicationWindow(QMainWindow):
 
         v2box = QVBoxLayout()
 
-        dc = MyDynamicMplCanvas(self.main_widget, width=5, height=4, dpi=100)
+        self.dc = MyDynamicMplCanvas(self.main_widget, width=5, height=4, dpi=100)
 
-        hbox.addWidget(dc)
+        hbox.addWidget(self.dc)
         hbox.addLayout(vbox)
+
+        hbox2 = QHBoxLayout()
+        hbox2.addWidget(self.lineEditTerminal)
+        hbox2.addWidget(self.comboboxTerminalType)
 
         v2box.addLayout(hbox)
         v2box.addWidget(self.scrollAreaTerminal)
-        v2box.addWidget(self.lineEditTerminal)
-        v2box.addStretch(1)
+        v2box.addLayout(hbox2)
+        #v2box.addStretch(1)
 
         self.main_widget.setLayout(v2box)
 
@@ -314,17 +294,50 @@ class ApplicationWindow(QMainWindow):
         self.statusBar().showMessage("TURTLES, TURTLES, TURTLES!", 5000)
 
     def terminalLineEditEnter(self):
+        if self.serialObject.isOpen() == True:
+            input_text = self.lineEditTerminal.text()
 
-        text = self.lineEditTerminal.text()
+            input_type = 'None'
 
-        self.terminalAppend(">><font color=#FFFF00>" +
-                                text +
-                                "</font> <br />")
+            input_bytes = input_text.split(',')
 
+            if self.comboboxTerminalType.currentText() == "HEX":
+                input_type = "HEX"
+                for byte in range(0, len(input_bytes)):
+                    input_bytes[byte] = int(input_bytes[byte], 16)
 
+                print('It was hex')
 
+            elif self.comboboxTerminalType.currentText() == "DEC":
+                input_type = "DEC"
+                for byte in range(0, len(input_bytes)):
+                    input_bytes[byte] = int(input_bytes[byte])
+
+                print('It was ascii')
+
+            self.terminalAppend(">><font color=#FFFF00>" +
+                                    input_type + "(" + input_text + ")" +
+                                    "</font> <br />")
+
+            command = bytearray(input_bytes)
+            self.serialObject.write(command)
+        else:
+            self.terminalAppend(">><font color=#FF0000>" +
+                                    "Serial port not open!"+
+                                    "</font> <br />")
         self.lineEditTerminal.setText("")
 
+    def pullData(self):
+
+        command = bytearray([ord('\xAA'), ord('\x10'), 0])
+        self.serialObject.write((command))
+
+        bytes = self.serialObject.read(3)
+
+        if(hex(bytes[0]) == "0xbb"):
+            self.dataSamples.append((int(bytes[1])<<8) + int(bytes[2]))
+
+        self.dc.update_figure(self.dataSamples)
 
     def terminalScrollToBottom(self,min,max):
         self.scrollAreaTerminal.verticalScrollBar().setValue(max)
@@ -388,6 +401,13 @@ class ApplicationWindow(QMainWindow):
                     self.serialObject.open()
                     self.statusBar().showMessage("Opened serial communication on " + portSelected + "!", 3000)
 
+                    self.dataTimer.start(self.dataTimerUpdateRate)
+
+                    self.com_data_q = queue.Queue()
+                    self.com_error_q = queue.Queue()
+                    #self.com_monitor = ComMonitorThread(self.com_data_q, self.com_error_q, self.serialObject)
+                    #self.com_monitor.start()
+
                 except serial.SerialException :
                    self.statusBar().showMessage("Could not open serial connection on " + portSelected + "!", 3000)
 
@@ -428,4 +448,5 @@ if __name__ == '__main__':
     aw = ApplicationWindow()
     aw.setWindowTitle("Turtle Interface")
     aw.show()
+    aw.serialConnect()
     app.exec_()
