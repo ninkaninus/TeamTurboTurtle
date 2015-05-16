@@ -1,5 +1,12 @@
-print((255<<8) + 2)
+import matplotlib.pyplot as plt
 
+fig, ax = plt.subplots()
+
+plt.xlabel('lol')
+
+fig.canvas.draw()
+
+plt.show()
 
 
 

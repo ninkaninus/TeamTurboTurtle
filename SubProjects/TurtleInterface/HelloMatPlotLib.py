@@ -272,7 +272,7 @@ class ApplicationWindow(QMainWindow):
 
         v2box = QVBoxLayout()
 
-        self.dc = MyDynamicMplCanvas(self.main_widget, width=5, height=4, dpi=100)
+        #self.dc = MyDynamicMplCanvas(self.main_widget, width=5, height=4, dpi=100)
 
         hbox.addWidget(self.dc)
         hbox.addLayout(vbox)
