@@ -32,8 +32,8 @@ Init:
 	rjmp Main
 
 Main:		
-	ldi		R16, 60
-	call	Delay_MS
-	
+
+jmp		AI_START
+		
 
 	rjmp Main

@@ -13,9 +13,6 @@
 			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
 			out		TIMSK, R16				;Timer/interrupt masking register
 
-			ldi R16, 'P'
-			call USART_Transmit
-			USART_Newline
 			
 			ldi		YL, low(Pulse_Time_L1)
 			ldi		YH, high(Pulse_Time_L1)
@@ -105,11 +102,7 @@ EDGE2:		lds		R0, Edge1_L
 			sts		Pulse_Time_L, R2
 			sts		Pulse_Time_H, R3
 
-			mov R16, R2
-			mov R17, R3
 
-			call USART_Decimal_16
-				 USART_Newline
 
 			call AI_HALL_INTERRUPT
 

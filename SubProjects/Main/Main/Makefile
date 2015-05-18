@@ -5,7 +5,7 @@ PROGRAMMER=-c usbasp -P usb # For the bette en
 #PROGRAMMER=-c stk500v1 -P /dev/ttyUSB0 # For the small green programmer
 
 default:
-	avra $(PROJECT).asm -l program.lst
+	avra $(PROJECT).asm
 	sudo avrdude -p m32 $(PROGRAMMER) -U flash:w:$(PROJECT).hex
 
 fuse:

@@ -10,12 +10,15 @@ AI_HALL_INTERRUPT:							;Interrupt fra hall sensoren der fungerer som et tachom
 
 		;Else its preround and we do nothing
 		
+		ldi		R20,			80			;Sætter hastigheden til 80, så bilen langsomt bevæger sig mod målstregen uden problemer
+		out		OCR2,			R20	
 		
-		ldi		R16,	HIGH(Periode_p)			;Reference periode.
-		lds		R17,	Pulse_Time_H		;Indlæser den målte hastighed (periode)
+		
+;		ldi		R16,	HIGH(Periode_p)			;Reference periode.
+;		lds		R17,	Pulse_Time_H		;Indlæser den målte hastighed (periode)
 	;	ldi		R18,	Hastighed_p			;Sætter motor output standard
 
-		call	Hastigheds_kontrol
+;		call	Hastigheds_kontrol
 		
 ret
 		
@@ -24,7 +27,7 @@ ret
 Hall_Map_Lap:
 		
 		
-		;inc	Laengde
+		inc	Laengde
 
 		ldi	R16, HIGH(Periode_m)	;Reference periode.
 		lds	R17, Pulse_Time_H		;Indlæser den målte hastighed (periode)
@@ -48,8 +51,8 @@ Hall_Speed_Lap:									;Hvis den første omgang er færdig skal Hall interrupte
 ret
 		cpi		Laengde,	0			;Først checkes om der er noget af Laengden tilbage.
 		brne	RUN
-		ld		Laengde,	x+			;Ellers indlæses det næste stykke
-		ld		Type,		x+
+		ld		Laengde,	Y+			;Ellers indlæses det næste stykke
+		ld		Type,		Y+
 RUN:
 
 		cpi		Type,		1			;check om lille højre
