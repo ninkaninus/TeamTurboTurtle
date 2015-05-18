@@ -10,98 +10,16 @@ from PyQt5.QtWidgets import QApplication, QCheckBox, \
                             QMessageBox, QWidget, QLabel, QDialog, \
                             QComboBox, QSlider, QLCDNumber, QScrollArea, \
                             QLineEdit, QToolTip
+from Dialogs import SerialConnectDialog
 
 from PyQt5.QtGui import QPixmap, QIcon, QPalette, QColor
-from numpy import arange, sin, pi
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
+#from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 import serial
-import glob
 import queue
 from com_monitor import ComMonitorThread
-from livedatafeed import LiveDataFeed
-
-
-class MyMplCanvas(FigureCanvas):
-    """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
-    def __init__(self, parent=None, width=5, height=4, dpi=100):
-        super(MyMplCanvas, self).__init__(Figure())
-        self.fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = self.fig.add_subplot(1,1,1)
-
-        # We want the axes cleared every time plot() is called
-        self.axes.hold(False)
-        self.compute_initial_figure()
-        #
-        FigureCanvas.__init__(self, self.fig)
-        self.setParent(parent)
-
-        FigureCanvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
-
-        FigureCanvas.updateGeometry(self)
-
-    def compute_initial_figure(self):
-        pass
-
-
-class MyDynamicMplCanvas(MyMplCanvas):
-    """A canvas that updates itself every second with a new plot."""
-    def __init__(self, *args, **kwargs):
-        MyMplCanvas.__init__(self, *args, **kwargs)
-
-    def compute_initial_figure(self):
-        self.axes.plot([0, 1, 2, 3], [1, 2, 0, 4], 'r')
-
-    def update_figure(self, datas):
-        numList = range(0, len(datas))
-        self.axes.plot(numList, datas, 'r')
-        self.draw()
-
-class SerialConnectDialog(QDialog):
-    def __init__(self, parent=None):
-        QDialog.__init__(self)
-
-        self.setWindowTitle('Serial Connection')
-        self.setWindowIcon(QIcon('SerialConnect.png'))
-
-        #Variables for returning
-
-        vbox = QVBoxLayout()
-
-        #Port box
-
-        portBox = QHBoxLayout()
-        portLabel = QLabel('Port',self)
-        portBox.addWidget(portLabel)
-
-
-        self.portCombo = QComboBox(self)
-
-        for i in range(1,31):
-            self.portCombo.addItem("COM%d" %i)
-
-        portBox.addWidget(self.portCombo)
-        portBox.addStretch(1)
-
-        vbox.addLayout(portBox)
-
-        vbox.addStretch(1)
-
-        buttonConnect = QPushButton('Connect', self)
-        buttonConnect.clicked.connect(self.accept)
-        vbox.addWidget(buttonConnect)
-
-        self.setLayout(vbox)
-
-    def returnPort(self):
-        return self.portCombo.currentText()
-
-    @staticmethod
-    def getPort(parent = None):
-        dialog = SerialConnectDialog(parent)
-        result = dialog.exec_()
-        portSelected = dialog.returnPort()
-        return (portSelected, result == QDialog.Accepted)
+from globals import *
 
 class ApplicationWindow(QMainWindow):
     def __init__(self):
@@ -161,15 +79,24 @@ class ApplicationWindow(QMainWindow):
         #Variables
         self.liveUpdate = False
         self.dataSamples = []
+        self.timeSamples = []
 
         #Data stuff
         self.com_monitor = None
         self.com_data_q = None
-        self.com_error_q = None
+        self.com_raw_data = None
 
-        self.dataTimer = QTimer(self)
-        self.dataTimer.timeout.connect(self.pullData)
-        self.dataTimerUpdateRate = 10
+        self.liveFeed = LiveDataFeed()
+
+        self.dataTimerUpdateRate = 1
+
+        self.dataTimerPullRate = 1000
+
+        self.plotUpdater = QTimer(self)
+        self.plotUpdater.timeout.connect(self.plotUpdate)
+
+        self.dataPuller = QTimer(self)
+        self.dataPuller.timeout.connect(self.pullData)
 
         #File menu
 
@@ -272,9 +199,13 @@ class ApplicationWindow(QMainWindow):
 
         v2box = QVBoxLayout()
 
-        #self.dc = MyDynamicMplCanvas(self.main_widget, width=5, height=4, dpi=100)
+        self.figure = plt.figure()
+        self.canvas = FigureCanvas(self.figure)
+        self.canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.canvas.updateGeometry()
+        self.plot()
 
-        hbox.addWidget(self.dc)
+        hbox.addWidget(self.canvas)
         hbox.addLayout(vbox)
 
         hbox2 = QHBoxLayout()
@@ -284,7 +215,6 @@ class ApplicationWindow(QMainWindow):
         v2box.addLayout(hbox)
         v2box.addWidget(self.scrollAreaTerminal)
         v2box.addLayout(hbox2)
-        #v2box.addStretch(1)
 
         self.main_widget.setLayout(v2box)
 
@@ -292,6 +222,31 @@ class ApplicationWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
 
         self.statusBar().showMessage("TURTLES, TURTLES, TURTLES!", 5000)
+
+    def read_serial_data(self):
+        qdata = list(get_all_from_queue(self.com_data_q))
+
+        if(len(qdata) > 0):
+            print("Received Something")
+            for dataSet in qdata:
+                self.dataSamples.append(dataSet[0])
+                self.timeSamples.append(dataSet[1])
+
+    def plotUpdate(self):
+        self.read_serial_data()
+        self.plot()
+
+    def plot(self):
+
+        ax = self.figure.add_subplot(111)
+        ax.hold(False)
+        ax.plot(self.timeSamples,self.dataSamples, 'r')
+        ax.set_title('Graf')
+        ax.set_ylabel('Y-Acceleration')
+        ax.set_xlabel('Time')
+        ax.autoscale(True)
+        self.figure.tight_layout()
+        self.canvas.draw()
 
     def terminalLineEditEnter(self):
         if self.serialObject.isOpen() == True:
@@ -332,12 +287,9 @@ class ApplicationWindow(QMainWindow):
         command = bytearray([ord('\xAA'), ord('\x10'), 0])
         self.serialObject.write((command))
 
-        bytes = self.serialObject.read(3)
 
-        if(hex(bytes[0]) == "0xbb"):
-            self.dataSamples.append((int(bytes[1])<<8) + int(bytes[2]))
 
-        self.dc.update_figure(self.dataSamples)
+
 
     def terminalScrollToBottom(self,min,max):
         self.scrollAreaTerminal.verticalScrollBar().setValue(max)
@@ -401,12 +353,14 @@ class ApplicationWindow(QMainWindow):
                     self.serialObject.open()
                     self.statusBar().showMessage("Opened serial communication on " + portSelected + "!", 3000)
 
-                    self.dataTimer.start(self.dataTimerUpdateRate)
+                    self.plotUpdater.start(self.dataTimerUpdateRate)
+                    self.dataPuller.start(self.dataTimerPullRate)
 
                     self.com_data_q = queue.Queue()
                     self.com_error_q = queue.Queue()
-                    #self.com_monitor = ComMonitorThread(self.com_data_q, self.com_error_q, self.serialObject)
-                    #self.com_monitor.start()
+                    self.com_monitor = ComMonitorThread(self.com_data_q, self.serialObject)
+                    self.com_monitor.start()
+
 
                 except serial.SerialException :
                    self.statusBar().showMessage("Could not open serial connection on " + portSelected + "!", 3000)
@@ -426,6 +380,8 @@ class ApplicationWindow(QMainWindow):
 
     def serialDisconnect(self):
         if self.serialObject.isOpen():
+            self.com_monitor.join()
+            self.com_monitor = None
             self.serialObject.close()
             self.statusBar().showMessage("Closed serial communication on " + self.serialObject.port + "!", 3000)
         else:

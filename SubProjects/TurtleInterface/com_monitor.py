@@ -1,6 +1,7 @@
 import queue
 import threading
 import time
+from globals import *
 
 import serial
 
@@ -35,14 +36,14 @@ class ComMonitorThread(threading.Thread):
     """
     def __init__(   self, 
                     data_q,
-                    error_q,
                     serialObject):
         threading.Thread.__init__(self)
         
-        self.serial_port = None
+        self.serialObj = serialObject
+
+        self.startTime = time.clock()
 
         self.data_q = data_q
-        self.error_q = error_q
         
         self.alive = threading.Event()
         self.alive.set()
@@ -53,20 +54,20 @@ class ComMonitorThread(threading.Thread):
         time.clock()
         
         while self.alive.isSet():
-            # Reading 1 byte, followed by whatever is left in the
-            # read buffer, as suggested by the developer of 
-            # PySerial.
-            # 
-            data = self.serial_port.read(1)
-            data += self.serial_port.read(self.serial_port.inWaiting())
-            
+
+            data = self.serialObj.read(3)
+
+            timeStamp = time.clock() - self.startTime
+
+            self.data_q.put((int(data[2]), timeStamp))
+
+            print(int(data[2]), timeStamp)
+
+            '''
             if len(data) > 0:
                 timestamp = time.clock()
                 self.data_q.put((data, timestamp))
-            
-        # clean up
-        if self.serial_port:
-            self.serial_port.close()
+            '''
 
     def join(self, timeout=None):
         self.alive.clear()
