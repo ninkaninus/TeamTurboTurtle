@@ -1,13 +1,4 @@
-import matplotlib.pyplot as plt
-
-fig, ax = plt.subplots()
-
-plt.xlabel('lol')
-
-fig.canvas.draw()
-
-plt.show()
-
+print(1*256 + 128)
 
 
 

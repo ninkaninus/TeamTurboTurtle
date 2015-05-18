@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QApplication, QCheckBox, \
                             QVBoxLayout,QPushButton, QSizePolicy, \
                             QMessageBox, QWidget, QLabel, QDialog, \
                             QComboBox, QSlider, QLCDNumber, QScrollArea, \
-                            QLineEdit, QToolTip
+                            QLineEdit, QToolTip, QListWidget
 from Dialogs import SerialConnectDialog
 
 from PyQt5.QtGui import QPixmap, QIcon, QPalette, QColor
@@ -78,19 +78,24 @@ class ApplicationWindow(QMainWindow):
 
         #Variables
         self.liveUpdate = False
-        self.dataSamples = []
-        self.timeSamples = []
+        self.dataYaccelSamples = []
+        self.timeYaccelSamples = []
+
+        self.dataZgyroSamples = []
+        self.timeZgyroSamples = []
 
         #Data stuff
         self.com_monitor = None
-        self.com_data_q = None
-        self.com_raw_data = None
+        self.com_data_Yaccel_q = None
+        self.com_data_Zgyro_q = None
+        self.com_data_Tick_q = None
+        self.com_terminal_q = None
 
         self.liveFeed = LiveDataFeed()
 
         self.dataTimerUpdateRate = 1
 
-        self.dataTimerPullRate = 1000
+        self.dataTimerPullRate = 10
 
         self.plotUpdater = QTimer(self)
         self.plotUpdater.timeout.connect(self.plotUpdate)
@@ -179,6 +184,10 @@ class ApplicationWindow(QMainWindow):
         self.comboboxTerminalType.addItem("HEX")
         self.comboboxTerminalType.addItem("DEC")
 
+        #Plot list
+        self.listPlots = QListWidget(self)
+        self.listPlots.setMaximumWidth(200)
+
         #Layout
 
         self.main_widget = QWidget(self)
@@ -206,6 +215,7 @@ class ApplicationWindow(QMainWindow):
         self.plot()
 
         hbox.addWidget(self.canvas)
+        hbox.addWidget(self.listPlots)
         hbox.addLayout(vbox)
 
         hbox2 = QHBoxLayout()
@@ -224,13 +234,19 @@ class ApplicationWindow(QMainWindow):
         self.statusBar().showMessage("TURTLES, TURTLES, TURTLES!", 5000)
 
     def read_serial_data(self):
-        qdata = list(get_all_from_queue(self.com_data_q))
-
+        qdata = list(get_all_from_queue(self.com_data_Yaccel_q))
         if(len(qdata) > 0):
-            print("Received Something")
+            print("Received Yaccel data")
             for dataSet in qdata:
-                self.dataSamples.append(dataSet[0])
-                self.timeSamples.append(dataSet[1])
+                self.dataYaccelSamples.append(dataSet[0])
+                self.timeYaccelSamples.append(dataSet[1])
+
+        qdata = list(get_all_from_queue(self.com_data_Zgyro_q))
+        if(len(qdata) > 0):
+            print("Received Zgyro data")
+            for dataSet in qdata:
+                self.dataZgyroSamples.append(dataSet[0])
+                self.timeZgyroSamples.append(dataSet[1])
 
     def plotUpdate(self):
         self.read_serial_data()
@@ -240,7 +256,7 @@ class ApplicationWindow(QMainWindow):
 
         ax = self.figure.add_subplot(111)
         ax.hold(False)
-        ax.plot(self.timeSamples,self.dataSamples, 'r')
+        ax.plot(self.timeYaccelSamples,self.dataYaccelSamples, 'r')
         ax.set_title('Graf')
         ax.set_ylabel('Y-Acceleration')
         ax.set_xlabel('Time')
@@ -284,12 +300,13 @@ class ApplicationWindow(QMainWindow):
 
     def pullData(self):
 
-        command = bytearray([ord('\xAA'), ord('\x10'), 0])
+        #Pull Yaccel
+        command = bytearray([ord('\xAA'), ord('\xa1'), 0])
         self.serialObject.write((command))
 
-
-
-
+        #Pull Zgyro
+        command = bytearray([ord('\xAA'), ord('\xa3'), 0])
+        self.serialObject.write((command))
 
     def terminalScrollToBottom(self,min,max):
         self.scrollAreaTerminal.verticalScrollBar().setValue(max)
@@ -356,9 +373,15 @@ class ApplicationWindow(QMainWindow):
                     self.plotUpdater.start(self.dataTimerUpdateRate)
                     self.dataPuller.start(self.dataTimerPullRate)
 
-                    self.com_data_q = queue.Queue()
-                    self.com_error_q = queue.Queue()
-                    self.com_monitor = ComMonitorThread(self.com_data_q, self.serialObject)
+                    self.com_data_Yaccel_q = queue.Queue()
+                    self.com_data_Zgyro_q = queue.Queue()
+                    self.com_data_Tick_q = queue.Queue()
+                    self.com_terminal_q = queue.Queue()
+                    self.com_monitor = ComMonitorThread(self.com_data_Yaccel_q,
+                                                        self.com_data_Zgyro_q,
+                                                        self.com_data_Tick_q,
+                                                        self.com_terminal_q,
+                                                        self.serialObject)
                     self.com_monitor.start()
 
 

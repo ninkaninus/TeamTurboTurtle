@@ -16,26 +16,19 @@ class ComMonitorThread(threading.Thread):
             is the time elapsed from the thread's start (in 
             seconds).
         
-        error_q:
-            Queue for error messages. In particular, if the 
-            serial port fails to open for some reason, an error
-            is placed into this queue.
+        terminal_q:
+
+        serialObject:
+
+
         
-        port:
-            The COM port to open. Must be recognized by the 
-            system.
-        
-        port_baud/stopbits/parity: 
-            Serial communication parameters
-        
-        port_timeout:
-            The timeout used for reading the COM port. If this
-            value is low, the thread will return data in finer
-            grained chunks, with more accurate timestamps, but
-            it will also consume more CPU.
+
     """
     def __init__(   self, 
-                    data_q,
+                    Yaccel_q,
+                    Zgyro_q,
+                    tick_q,
+                    terminal_q,
                     serialObject):
         threading.Thread.__init__(self)
         
@@ -43,7 +36,10 @@ class ComMonitorThread(threading.Thread):
 
         self.startTime = time.clock()
 
-        self.data_q = data_q
+        self.Yaccel_q = Yaccel_q
+        self.Zgyro_q = Zgyro_q
+        self.tick_q = tick_q
+        self.terminal_q = terminal_q
         
         self.alive = threading.Event()
         self.alive.set()
@@ -55,19 +51,41 @@ class ComMonitorThread(threading.Thread):
         
         while self.alive.isSet():
 
-            data = self.serialObj.read(3)
+            dataFirst = self.serialObj.read(3)
 
             timeStamp = time.clock() - self.startTime
 
-            self.data_q.put((int(data[2]), timeStamp))
+            if(hex(dataFirst[0])=='0xbb'):
 
-            print(int(data[2]), timeStamp)
+                #Y-Acceleration
+                if(hex(dataFirst[1])=='0xa1'):
 
-            '''
-            if len(data) > 0:
-                timestamp = time.clock()
-                self.data_q.put((data, timestamp))
-            '''
+                    dataSecond = self.serialObj.read(3)
+
+                    if(hex(dataSecond[1])=='0xa2'):
+
+                        data = (int(dataFirst[2])*256)+int(dataSecond[2])
+
+                        self.Yaccel_q.put((data, timeStamp))
+
+                        print(data, timeStamp)
+
+                #Z-Gyro
+                elif(hex(dataFirst[1])=='0xa3'):
+
+                    dataSecond = self.serialObj.read(3)
+
+                    if(hex(dataSecond[1])=='0xa4'):
+
+                        data = (int(dataFirst[2])*256)+int(dataSecond[2])
+
+                        self.Zgyro_q.put((data, timeStamp))
+
+                        print(data, timeStamp)
+
+            else:
+                print('Non comm command')
+
 
     def join(self, timeout=None):
         self.alive.clear()

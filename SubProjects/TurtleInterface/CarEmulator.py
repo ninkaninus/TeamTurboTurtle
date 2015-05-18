@@ -35,10 +35,20 @@ while 1:
 
     #If it is a get type
     if(comType == '0xaa'):
-        comType = '\xBB'
-        comCommand = random.randint(0,255)
-        comParameter = random.randint(0,255)
-        serialObject.write(bytearray([ord('\xBB'),comCommand, comParameter]))
+        comParameter1 = random.randint(0,255)
+        comParameter2 = random.randint(0,255)
+
+        #Yaccel
+        if(comCommand == '0xa1'):
+            serialObject.write(bytearray([ord('\xBB'),ord('\xA1'), comParameter1]))
+            serialObject.write(bytearray([ord('\xBB'),ord('\xA2'), comParameter2]))
+
+        #Zgyro
+        if(comCommand == '0xa3'):
+            serialObject.write(bytearray([ord('\xBB'),ord('\xA3'), comParameter1]))
+            serialObject.write(bytearray([ord('\xBB'),ord('\xA4'), comParameter2]))
+
+        comParameter = (comParameter1 * 256) + comParameter2
         print("Returned %d" %comParameter)
 
     #If it is a set type
@@ -47,6 +57,9 @@ while 1:
             print('Car started with %d%% speed!' %comParameter)
         elif(comCommand == '0x11'):
             print('Car stopped!')
+
+    else:
+        print('Unspecified type!')
 
 
 
