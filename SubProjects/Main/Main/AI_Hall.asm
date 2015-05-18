@@ -10,14 +10,10 @@ AI_HALL_INTERRUPT:							;Interrupt fra hall sensoren der fungerer som et tachom
 
 		;Else its preround and we do nothing
 		
-		/*
-		ldi R16, 'P'
-		call USART_Transmit
-		*/
 		
 		ldi		R16,	HIGH(Periode_p)			;Reference periode.
 		lds		R17,	Pulse_Time_H		;Indlæser den målte hastighed (periode)
-		ldi		R18,	Hastighed_p			;Sætter motor output standard
+	;	ldi		R18,	Hastighed_p			;Sætter motor output standard
 
 		call	Hastigheds_kontrol
 		
@@ -27,15 +23,12 @@ ret
 ;måle "afstanden" og justerer hastigheden så accelerometeret får gode resultater.
 Hall_Map_Lap:
 		
-		/*
-		ldi R16, 'M'
-		call USART_Transmit
-		*/			
+		
 		;inc	Laengde
 
 		ldi	R16, HIGH(Periode_m)	;Reference periode.
 		lds	R17, Pulse_Time_H		;Indlæser den målte hastighed (periode)
-		ldi	R18, Hastighed_m		;Sætter motor output standard
+		;ldi	R18, Hastighed_m		;Sætter motor output standard
 
 		call	Hastigheds_kontrol
 
@@ -44,14 +37,11 @@ ret
 Hall_Speed_Lap:									;Hvis den første omgang er færdig skal Hall interruptet stadig måle op
 ;										og justerer hastigheden. Den skal dog yderligere skifte mellem de målte banestykker
 	
-	/*
-	ldi R16, 'S'
-	call USART_Transmit
-	*/
+
 
 	ldi	R16, HIGH(Periode_m)	;Reference periode.
 	lds	R17, Pulse_Time_H		;Indlæser den målte hastighed (periode)
-	ldi	R18, Hastighed_m		;Sætter motor output standard
+	;ldi	R18, Hastighed_m		;Sætter motor output standard
 
 	call	Hastigheds_kontrol
 
@@ -74,7 +64,7 @@ RUN:
 
 		ldi		R16,	Periode_l			;Reference periode.
 		lds		R17,	Pulse_Time_H		;Indlæser den målte hastighed (periode)
-		ldi		R18,	Hastighed_l			;Sætter motor output standard
+		;ldi		R18,	Hastighed_l			;Sætter motor output standard
 		
 call	Hastigheds_kontrol
 
@@ -84,7 +74,7 @@ RUN_S1:
 
 		ldi		R16,	Periode_s1			;Reference periode.
 		lds		R17,	Pulse_Time_H		;Indlæser den målte hastighed (periode)
-		ldi		R18,	Hastighed_s1		;Sætter motor output standard
+		;ldi		R18,	Hastighed_s1		;Sætter motor output standard
 		
 call	Hastigheds_kontrol
 
@@ -96,7 +86,7 @@ RUN_S2:
 
 		ldi		R16,	Periode_s2			;Reference periode.
 		lds		R17,	Pulse_Time_H		;Indlæser den målte hastighed (periode)
-		ldi		R18,	Hastighed_s2		;Sætter motor output standard
+		;ldi		R18,	Hastighed_s2		;Sætter motor output standard
 		
 call	Hastigheds_kontrol
 

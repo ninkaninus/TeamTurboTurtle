@@ -55,19 +55,6 @@ Lap_Time:
 	sts		Ticks_Lap_L, R0
 	sts		Ticks_Lap_H, R1
 	
-	/*
-	ldi R16, 'L'
-	call USART_Transmit
-	*/
-
-	mov		R16, R0
-	mov		R17, R1
-	
-	/*
-	call	USART_Decimal_16
-			USART_NewLine	
-	*/
-
 	ldi		R16, 0x00
 	sts		Ticks_L, R16
 	sts		Ticks_H, R16

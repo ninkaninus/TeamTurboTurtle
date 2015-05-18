@@ -1,4 +1,4 @@
-;.include "m32def.inc"
+.include "m32def.inc"
 
 ;Mapping of all the interrupts, must be the first include!
 .include "Interrupt_Mapping.asm"
@@ -34,5 +34,6 @@ Init:
 Main:		
 	ldi		R16, 60
 	call	Delay_MS
+	
 
 	rjmp Main

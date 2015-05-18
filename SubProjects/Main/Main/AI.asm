@@ -77,107 +77,108 @@ rjmp	RUN_TIME
 
 ;------------------------------
 
-/*
+;/*
 
-SKIFT_TEST:									;Dette loop påbegyndes når der skiftes mellem banetyperne. Den benytter acceleration til at bestemme hvilken banetype bilen befinder sig på
+;SKIFT_TEST:									;Dette loop påbegyndes når der skiftes mellem banetyperne. Den benytter acceleration til at bestemme hvilken banetype bilen befinder sig på
 
-		ldi		Laengde		0				;Start på et nyt stykke
-		lds		Accel,		ACCEL_YOUT_H	;Indlæs værdien for accelerometeret
+;		ldi		Laengde		0				;Start på et nyt stykke
+;		lds		Accel,		ACCEL_YOUT_H	;Indlæs værdien for accelerometeret
 
-		cpi		Accel,		0x80			;Tester fortegn
-		brsh	test1
-		cpi		Accel,		Accel_h1		;juster værdi, Værdi for acceleration ved lille højre sving
-		brsh	RIGHT_TURN
+;		cpi		Accel,		0x80			;Tester fortegn
+
+;		brsh	test1
+;		cpi		Accel,		Accel_h1		;juster værdi, Værdi for acceleration ved lille højre sving
+;		brsh	RIGHT_TURN
 		
-test1:
-		cpi		Accel,		Accel_v1		;juster værdi, Værdi for acceleration ved lille venstre sving
-		brsh	LEFT_TURN
+;test1:
+;		cpi		Accel,		Accel_v1		;juster værdi, Værdi for acceleration ved lille venstre sving
+;		brsh	LEFT_TURN
 
 
-LIGEUD:									;Hvis banetypen bestemmes til at være et lige stykke starter dette kontinuære loop,
+;LIGEUD:									;Hvis banetypen bestemmes til at være et lige stykke starter dette kontinuære loop,
 ;										som AI_Check_Laper om accelerometeret angiver et sving. Når bilen kommer ind i et sving
 ;										hopper den til skift
 
-		lds		Accel,		ACCEL_YOUT_H	;Indlæs værdien for accelerometeret
-		ldi		Type,		0			;Sætter vejtypen til ligeud
-		cpi		Accel,		0x80		;Tester fortegn
-		brsh	test2
-		cpi		Accel,		Accel_h1	;juster værdi, Værdi for acceleration ved lille højre sving
-		brsh	SKIFT
+;		lds		Accel,		ACCEL_YOUT_H	;Indlæs værdien for accelerometeret
+;		ldi		Type,		0			;Sætter vejtypen til ligeud
+;		cpi		Accel,		0x80		;Tester fortegn
+;		brsh	test2
+;		cpi		Accel,		Accel_h1	;juster værdi, Værdi for acceleration ved lille højre sving
+;		brsh	SKIFT
 		
-test2
-		cpi		Accel,		Accel_v1	;juster værdi, Værdi for acceleration ved lille venstre sving
-		brsh	SKIFT
+;test2
+;		cpi		Accel,		Accel_v1	;juster værdi, Værdi for acceleration ved lille venstre sving
+;		brsh	SKIFT
 
-rjmp	LIGEUD
+;rjmp	LIGEUD
 
-RIGHT_TURN:								;Hvis banetypen bestemmes til at være et højre sving starter dette kontinuære loop,
+;RIGHT_TURN:								;Hvis banetypen bestemmes til at være et højre sving starter dette kontinuære loop,
 ;										som AI_Check_Laper om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
 ;										hopper den til skift
 
-		lds		Accel,		ACCEL_YOUT_H	;Indlæs værdien for accelerometeret
-		cpi		Accel,		Accel_h2	;juster værdi, Værdi for acceleration ved stort højre sving
-		brsh	RIGHT_TURN2
+;		lds		Accel,		ACCEL_YOUT_H	;Indlæs værdien for accelerometeret
+;		cpi		Accel,		Accel_h2	;juster værdi, Værdi for acceleration ved stort højre sving
+;		brsh	RIGHT_TURN2
 		
-		cpi		Accel,		Accel_h1	;juster værdi, Værdi for acceleration ved lille højre sving
-		brlo	SKIFT
+;		cpi		Accel,		Accel_h1	;juster værdi, Værdi for acceleration ved lille højre sving
+;		brlo	SKIFT
 
-		ldi		Type,		1			;Sætter vejtypen til lille højre
+;		ldi		Type,		1			;Sætter vejtypen til lille højre
 
-rjmp	RIGHT_TURN
+;rjmp	RIGHT_TURN
 
-LEFT_TURN:								;Hvis banetypen bestemmes til at være et venstre sving starter dette kontinuære loop,
+;LEFT_TURN:								;Hvis banetypen bestemmes til at være et venstre sving starter dette kontinuære loop,
 ;										som AI_Check_Laper om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
 ;										hopper den til skift
 
-		lds		Accel,		ACCEL_YOUT_H	;Indlæs værdien for accelerometeret
-		cpi		Accel,		Accel_v2	;juster værdi, Værdi for acceleration ved stort venstre sving
-		brsh	LEFT_TURN2
+;		lds		Accel,		ACCEL_YOUT_H	;Indlæs værdien for accelerometeret
+;		cpi		Accel,		Accel_v2	;juster værdi, Værdi for acceleration ved stort venstre sving
+;		brsh	LEFT_TURN2
 		
-		cpi		Accel,		Accel_v1	;juster værdi, Værdi for acceleration ved lille venstre sving
-		brlo	SKIFT
+;		cpi		Accel,		Accel_v1	;juster værdi, Værdi for acceleration ved lille venstre sving
+;		brlo	SKIFT
 
-		ldi		Type,		2			;Sætter vejtypen til lille venstre
+;		ldi		Type,		2			;Sætter vejtypen til lille venstre
 
-rjmp	LEFT_TURN
+;rjmp	LEFT_TURN
 
-RIGHT_TURN2:							;Hvis banetypen bestemmes til at være et stort højre sving starter dette kontinuære loop,
+;RIGHT_TURN2:							;Hvis banetypen bestemmes til at være et stort højre sving starter dette kontinuære loop,
 ;										som AI_Check_Laper om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
 ;										hopper den til skift
 
-		lds		Accel,		ACCEL_YOUT_H	;Indlæs værdien for accelerometeret
-		cpi		Accel,		Accel_h1	;juster værdi, Værdi for acceleration ved lille højre sving
-		brlo	SKIFT
+;		lds		Accel,		ACCEL_YOUT_H	;Indlæs værdien for accelerometeret
+;		cpi		Accel,		Accel_h1	;juster værdi, Værdi for acceleration ved lille højre sving
+;		brlo	SKIFT
 		
-		ldi		Type,		3			;Sætter vejtypen til stort højre
+;		ldi		Type,		3			;Sætter vejtypen til stort højre
 		
-rjmp	RIGHT_TURN2
+;rjmp	RIGHT_TURN2
 
-LEFT_TURN2:								;Hvis banetypen bestemmes til at være et stort venstre sving starter dette kontinuære loop,
+;LEFT_TURN2:								;Hvis banetypen bestemmes til at være et stort venstre sving starter dette kontinuære loop,
 ;										som AI_Check_Laper om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
 ;										hopper den til skift
 
-		lds		Accel,		ACCEL_YOUT_H	;Indlæs værdien for accelerometeret
-		cpi		Accel,		Accel_v1	;juster værdi, Værdi for acceleration ved lille venstre sving
-		brlo	SKIFT
+;		lds		Accel,		ACCEL_YOUT_H	;Indlæs værdien for accelerometeret
+;		cpi		Accel,		Accel_v1	;juster værdi, Værdi for acceleration ved lille venstre sving
+;		brlo	SKIFT
 
-		ldi		Type,		4			;Sætter vejtypen til stort venstre
+;		ldi		Type,		4			;Sætter vejtypen til stort venstre
 		
-rjmp	LEFT_TURN2
+;rjmp	LEFT_TURN2
 
 ;------------------------------
 
-SKIFT:									;Indlæser vejtypen og Laengden, hvorefter der hoppes tilbage til skift_test
+;SKIFT:									;Indlæser vejtypen og Laengden, hvorefter der hoppes tilbage til skift_test
 
-		inc		Antal					;Forøg antal med en enkelt - Bruges til at checke hvor lang listen er
-		st		X+,			Laengde		;Sæt Laengden ind først-
-		st		X+,			Type		;og derefter vejtypen.
+;		inc		Antal					;Forøg antal med en enkelt - Bruges til at checke hvor lang listen er
+;		st		X+,			Laengde		;Sæt Laengden ind først-
+;		st		X+,			Type		;og derefter vejtypen.
 
-jmp		SKIFT_TEST
+;jmp		SKIFT_TEST
 
 ;------------------------------
 
-AI_HALL_INTERRUPT:						;Interrupt fra hall sensoren der fungerer som et tachometer
+;AI_HALL_INTERRUPT:						;Interrupt fra hall sensoren der fungerer som et tachometer
 
 		lds		R20,		AI_Check_Lap
 		cpi		R20,		0			;AI_Check_Lap om den første runde er begyndt, ellers skal der ikke ske noget
