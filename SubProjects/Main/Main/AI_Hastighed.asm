@@ -18,7 +18,7 @@ Hastigheds_kontrol:				;Skal bruge R16 som den satte periode, og R17 som den nuv
 		ldi		R17,	4
 		cpi		R16,	25
 		brlo	HASTIGHED_SET_LOW
-		ldi		R17,	5
+		ldi		R17,	1
 		
 HASTIGHED_SET_LOW:
 		
@@ -50,7 +50,7 @@ SPEED_IS_HIGH:						;R16>R17
 		ldi		R17,	4
 		cpi		R16,	25
 		brlo	HASTIGHED_SET_HIGH
-		ldi		R17,	5
+		ldi		R17,	1
 
 HASTIGHED_SET_HIGH:
 

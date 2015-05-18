@@ -3,12 +3,12 @@ AI_Lap_Interrupt:						;Lap interrupt skifter fra initial runden til den første
 		lds		R20, AI_Check_Lap		
 
 		;Were we running a speed lap when we hit the line. Then go to speed lap handling.
-;		cpi		R20, AI_Lap_Speed
-;		brsh	AI_Test_Speed_Lap
+		cpi		R20, AI_Lap_Speed
+		brsh	AI_Test_Speed_Lap
 		
 		;Were we running a mapping lap when we hit the line. Then go to the first speed lap handling.
-;		cpi		R20, AI_Lap_Mapping
-;		brsh	AI_Test_Speed_Lap_First
+		cpi		R20, AI_Lap_Mapping
+		brsh	AI_Test_Speed_Lap_First
 
 		;We were in preround when we hit the line. So initialize the mapping round.
 		ldi		R20, AI_Lap_Mapping

@@ -10,9 +10,9 @@
 ;Konstanter
 .equ	Accel_Stort_Sving=40				;Disse værdier skal justeres
 .equ	Accel_Lille_Sving=75
-.equ	Periode_l=100			;Periode når vi kører ligeud
-.equ	Periode_s2=100			;-- stort sving
-.equ	Periode_s1=100			;-- lille sving
+.equ	Periode_l=250			;Periode når vi kører ligeud
+.equ	Periode_s2=12000			;-- stort sving
+.equ	Periode_s1=12000			;-- lille sving
 .equ	Periode_m=8000			;Perioden i mapping round
 
 .equ AI_Lap_Preround = 0
@@ -28,8 +28,8 @@
 ;		ldi		R20,			100				;Initial værdi for AI_Hastighed_set, dette bruges til at bestemme hastigheden i den første runde 
 ;		sts		AI_Hastighed_set, R20
 
-		ldi		YH,			HIGH(Map_start)		;Indlæser første Ram hukommelse tildelt til mapping
-		ldi		YL,			LOW(Map_start)		;
+		ldi		YH,			HIGH(Map_Start)		;Indlæser første Ram hukommelse tildelt til mapping
+		ldi		YL,			LOW(Map_Start)		;
 		
 		;out		OCR2,			AI_Hastighed_out	;Outputter hastigheden til motoren
 .ENDMACRO
@@ -37,15 +37,34 @@
 ;-------------------------------
 
 AI_START:
+
+		ldi		R16,	250
+		
+nope:
+		
+		st		Y+,		R16
+		dec		R16
+		cpi		R16,	0
+		brne	nope
+
+		ldi		YH,			HIGH(Map_Start)		;Indlæser første Ram hukommelse tildelt til mapping
+		ldi		YL,			LOW(Map_Start)		;
+
 AI_Preround:
 		
-		ldi		R20,			80			;Sætter hastigheden til 80, så bilen langsomt bevæger sig mod målstregen uden problemer
-		out		OCR2,			R20			;Sætter bilen i gang
-		
 		cli
-		lds		R20,			AI_Check_Lap
-		cpi		R20,			AI_Lap_Preround		;Indtil den første omgang er færdig skal der ikke ske noget
-		brne	FIRST_ROUND
+;		lds		R20,			AI_Check_Lap
+;		cpi		R20,			AI_Lap_Preround		;Indtil den første omgang er færdig skal der ikke ske noget
+;		brne	FIRST_ROUND
+
+call	MPU6050_Read_Gyro_Z
+		lds		R16,	GYRO_ZOUT_H
+call	USART_Decimal_S8
+		USART_NewLine
+		
+		ldi		R16, 60
+call	Delay_MS
+
 
 		sei
 
@@ -66,15 +85,15 @@ rjmp	AI_Preround
 rjmp	FIRST_ROUND
 
 
+
+
 ;-------------------------------
 
 RUN_TIME:
 		cli
 		nop								;Hvis der skal ske noget mens bilen kører de øvrige baner skal det skrives her
 
-		ldi		R16, 'D'
-		call	USART_Transmit
-		USART_NewLine
+
 		ldi		R16,	250
 call	Delay_MS
 
@@ -85,10 +104,7 @@ rjmp	RUN_TIME
 
 FIRST_ROUND:		;Den første omgang begynder. Der er plads til at indsætte kode der skal bearbejdes før vejtypen checkes.
 
-		ldi		Laengde,	5
-		ldi		Type,		2
-		
-jmp	SKIFT
+		ldi		Type, 1
 
 Nyt_Banestykke:									;Dette loop påbegyndes når der skiftes mellem banetyperne. Den benytter acceleration til at bestemme hvilken banetype bilen befinder sig på
 
@@ -228,20 +244,17 @@ rjmp	LEFT_TURN2
 ;------------------------------
 
 SKIFT:									;Indlæser vejtypen og Laengden, hvorefter der hoppes tilbage til skift_test
-
+cli
 		st		Y+,			Laengde		;Sæt Laengden ind først-
 		st		Y+,			Type		;og derefter vejtypen.
-		
 		mov		R16,		Laengde
-		call	USART_Decimal_8
+call	USART_Decimal_8
 		USART_NewLine
-		
 		mov		R16,		Type
-		call	USART_Decimal_8
+call	USART_Decimal_8
 		USART_NewLine
-		USART_NewLine
-		
-
+			
+sei
 jmp		Nyt_Banestykke
 
 

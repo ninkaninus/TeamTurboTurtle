@@ -32,7 +32,7 @@ Init:
 	rjmp Main
 
 Main:		
-
+	
 jmp		AI_START
 		
 

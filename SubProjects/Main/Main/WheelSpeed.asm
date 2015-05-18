@@ -13,9 +13,6 @@
 			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
 			out		TIMSK, R16				;Timer/interrupt masking register
 
-			
-			ldi		YL, low(Pulse_Time_L1)
-			ldi		YH, high(Pulse_Time_L1)
 
 .ENDMACRO
 
