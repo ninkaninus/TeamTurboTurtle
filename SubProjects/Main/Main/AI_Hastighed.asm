@@ -1,3 +1,5 @@
+;Den her fil er hastighedskontrol.
+
 Hastigheds_kontrol:				;Skal bruge R16 som den satte periode, og R17 som den nuværende periode, og R18 som hastighed_out.
 
 		cp		R17,	R16

@@ -20,10 +20,10 @@
 .include "Communication_Protocol.asm"
 .include "Setup.asm"
 .include "AI_Main.asm"
-
+.include "AI_Gyro.asm"
 Init:
 	Setup
-			
+	AI_Init
 	clr	R16
 	mov	R10, R16
 	mov	R11, R16
@@ -32,8 +32,6 @@ Init:
 	rjmp Main
 
 Main:		
-	
-jmp		AI_START
 		
 
-	rjmp Main
+rjmp Main

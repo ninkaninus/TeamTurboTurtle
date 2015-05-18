@@ -20,12 +20,14 @@ AI_Lap_Interrupt:						;Lap interrupt skifter fra initial runden til den første
 
 AI_Test_Speed_Lap_First:
 		;Sørger for at gemme det sidste banestykke. Da stykkerne bliver gemt ved skift til næste stykke.
-;		/*
+
 ;		ldi R20, 5
 ;		add		laengde, R20			;Forøg antal med fem - Bruges til at sikre at den ikke løber tør i slutningen. Antal kan ændres.
 ;		st		Y+,			Laengde		;Sæt Laengden ind først-
 ;		st		Y+,			Type		;og derefter vejtypen.
-;		*/
+
+
+;Vi har ikke afprøvet dette, så det kigger vi på senere.
 
 
 AI_Test_Speed_Lap:
@@ -33,7 +35,6 @@ AI_Test_Speed_Lap:
 		ldi		R20, 2
 		sts     AI_Check_Lap, R20
 
-;		/*
 ;		lds		R20,		AI_Hastighed_D
 ;		inc		R20
 ;		sts		AI_Hastighed_D,R20
@@ -44,9 +45,8 @@ AI_Test_Speed_Lap:
 ;		sts		AI_Check_Lap, R16
 ;		ld		Laengde,	Y+			;Indlæser den første del af af det gemte map.
 ;		ld		Type,		Y+
-;		*/
 
-
+;Vi har ikke afprøvet dette, så det kigger vi på senere.
 		ret
 
 
