@@ -64,7 +64,7 @@ class ComMonitorThread(threading.Thread):
                     if(hex(dataSecond[1])=='0xa2'):
 
                         data = (int(dataFirst[2])*256)+int(dataSecond[2])
-
+                        print(data)
                         self.Yaccel_q.put((data, timeStamp))
 
                 #Z-Gyro

@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d33783d6-c409-40bb-bafb-9c5bd9bc5684" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CarEmulator.py" afterPath="$PROJECT_DIR$/CarEmulator.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HelloMatPlotLib.py" afterPath="$PROJECT_DIR$/HelloMatPlotLib.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/com_monitor.py" afterPath="$PROJECT_DIR$/com_monitor.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data_puller.py" afterPath="$PROJECT_DIR$/data_puller.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TurtleInterface.iws" />
@@ -28,11 +29,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="HelloMatPlotLib.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="HelloMatPlotLib.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/HelloMatPlotLib.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="4827" max-vertical-offset="8364">
-              <caret line="321" column="36" selection-start-line="321" selection-start-column="36" selection-end-line="321" selection-end-column="36" />
+            <state vertical-scroll-proportion="0.6699029" vertical-offset="4790" max-vertical-offset="8364">
+              <caret line="298" column="44" selection-start-line="298" selection-start-column="44" selection-end-line="298" selection-end-column="44" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -53,8 +54,8 @@
       <file leaf-file-name="CarEmulator.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CarEmulator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="764" max-vertical-offset="1870">
-              <caret line="54" column="38" selection-start-line="54" selection-start-column="38" selection-end-line="54" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1458" max-vertical-offset="1870">
+              <caret line="60" column="20" selection-start-line="60" selection-start-column="20" selection-end-line="60" selection-end-column="20" />
               <folding>
                 <element signature="e#30#41#0" expanded="true" />
               </folding>
@@ -62,11 +63,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="com_monitor.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="com_monitor.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/com_monitor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.54126215" vertical-offset="1273" max-vertical-offset="2023">
-              <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="865" max-vertical-offset="2023">
+              <caret line="66" column="35" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -77,8 +78,8 @@
       <file leaf-file-name="data_puller.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data_puller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="149" max-vertical-offset="782">
-              <caret line="27" column="11" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="799">
+              <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -105,10 +106,10 @@
         <option value="$PROJECT_DIR$/Dialogs.py" />
         <option value="$PROJECT_DIR$/Test" />
         <option value="$PROJECT_DIR$/Test.py" />
-        <option value="$PROJECT_DIR$/data_puller.py" />
-        <option value="$PROJECT_DIR$/HelloMatPlotLib.py" />
         <option value="$PROJECT_DIR$/CarEmulator.py" />
         <option value="$PROJECT_DIR$/com_monitor.py" />
+        <option value="$PROJECT_DIR$/HelloMatPlotLib.py" />
+        <option value="$PROJECT_DIR$/data_puller.py" />
       </list>
     </option>
   </component>
@@ -157,6 +158,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -177,7 +179,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -939,16 +940,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data_puller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="149" max-vertical-offset="782">
-          <caret line="27" column="11" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="272">
@@ -957,20 +948,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/HelloMatPlotLib.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4827" max-vertical-offset="8364">
-          <caret line="321" column="36" selection-start-line="321" selection-start-column="36" selection-end-line="321" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CarEmulator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="764" max-vertical-offset="1870">
-          <caret line="54" column="38" selection-start-line="54" selection-start-column="38" selection-end-line="54" selection-end-column="38" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1458" max-vertical-offset="1870">
+          <caret line="60" column="20" selection-start-line="60" selection-start-column="20" selection-end-line="60" selection-end-column="20" />
           <folding>
             <element signature="e#30#41#0" expanded="true" />
           </folding>
@@ -979,10 +960,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/com_monitor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.54126215" vertical-offset="1273" max-vertical-offset="2023">
-          <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="865" max-vertical-offset="2023">
+          <caret line="66" column="35" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data_puller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="799">
+          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HelloMatPlotLib.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6699029" vertical-offset="4790" max-vertical-offset="8364">
+          <caret line="298" column="44" selection-start-line="298" selection-start-column="44" selection-end-line="298" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>

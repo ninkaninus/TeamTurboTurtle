@@ -266,7 +266,7 @@ class ApplicationWindow(QMainWindow):
     def read_serial_data(self):
         qdata = list(get_all_from_queue(self.com_data_Yaccel_q))
         if(len(qdata) > 0):
-            #print("Received Yaccel data")
+            print("Received Yaccel data")
             for dataSet in qdata:
                 self.dataYaccelSamples.append(dataSet)
 
@@ -284,9 +284,9 @@ class ApplicationWindow(QMainWindow):
 
         qdata = list(get_all_from_queue(self.com_data_Lap_q))
         if(len(qdata) > 0):
+            pass
             self.dataSamples.append((self.dataYaccelSamples))
-            print(len(self.dataYaccelSamples), self.labelLaptime.text(), self.datapulls)
-            self.datapulls = 0
+            #print(len(self.dataYaccelSamples), self.labelLaptime.text(), self.datapulls)
             self.dataYaccelSamples = []
             self.lapTimes.append(qdata[0])
             self.updateLaptime()
@@ -439,7 +439,7 @@ class ApplicationWindow(QMainWindow):
                                                         self.com_terminal_q,
                                                         self.serialObject)
                     self.com_monitor.start()
-                    self.com_data_puller = ComDataPullerThread(self.serialObject, 1000)
+                    self.com_data_puller = ComDataPullerThread(self.serialObject, 25)
                     self.com_data_puller.start()
 
                 except serial.SerialException :
