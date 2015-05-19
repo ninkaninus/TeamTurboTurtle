@@ -22,29 +22,31 @@
 
 Init:
 	Setup
-
-	;EXT1_init	
-	ldi	R16, 90
-	;out 	OCR2, R16
 			
 	clr	R16
 	mov	R10, R16
 	mov	R11, R16
-				
-	ldi R16, 'D'
-	call USART_Transmit
 					
 	sei					;Enable global interrupt	
 	rjmp Main
 
-Main:		
-	ldi		R16, 60
-	call	Delay_MS
-			
-	lds		R16, Ticks_Lap_L
-	lds		R17, Ticks_Lap_H
-			
-	call	USART_Decimal_S16
-	USART_NewLine	
+Main:	
+	
+	cli
+	ldi R16, 50
+	call Delay_Ms
+
+	cli
+	call MPU6050_Read_Accel_Y
+	sei
+
+	nop
+	nop
+	nop
+
+	cli
+	call MPU6050_Read_Gyro_Z
+	sei
+	
 
 	rjmp Main

@@ -55,12 +55,6 @@ Lap_Time:
 	sts		Ticks_Lap_L, R0
 	sts		Ticks_Lap_H, R1
 	
-	mov		R16, R0
-	mov		R17, R1
-	
-	call	USART_Decimal_S16
-			USART_NewLine	
-	
 	ldi		R16, 0x00
 	sts		Ticks_L, R16
 	sts		Ticks_H, R16
@@ -71,6 +65,7 @@ Lap_Time:
 	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
 	out		ACSR, R16					; Global interrupt register
 
+	call Comm_Send_LapTime
 
 Lap_Time_End:
 
