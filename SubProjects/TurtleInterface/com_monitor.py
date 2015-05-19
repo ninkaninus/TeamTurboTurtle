@@ -28,26 +28,25 @@ class ComMonitorThread(threading.Thread):
                     Yaccel_q,
                     Zgyro_q,
                     tick_q,
+                    lap_q,
                     terminal_q,
                     serialObject):
         threading.Thread.__init__(self)
         
         self.serialObj = serialObject
 
-        self.startTime = time.clock()
-
         self.Yaccel_q = Yaccel_q
         self.Zgyro_q = Zgyro_q
         self.tick_q = tick_q
+        self.lap_q = lap_q
         self.terminal_q = terminal_q
-        
+
         self.alive = threading.Event()
         self.alive.set()
         
     def run(self):
-        
-        # Restart the clock
-        time.clock()
+
+        self.startTime = time.clock()
         
         while self.alive.isSet():
 
@@ -68,8 +67,6 @@ class ComMonitorThread(threading.Thread):
 
                         self.Yaccel_q.put((data, timeStamp))
 
-                        print(data, timeStamp)
-
                 #Z-Gyro
                 elif(hex(dataFirst[1])=='0xa3'):
 
@@ -81,7 +78,41 @@ class ComMonitorThread(threading.Thread):
 
                         self.Zgyro_q.put((data, timeStamp))
 
-                        print(data, timeStamp)
+                #Ticks
+                elif(hex(dataFirst[1])=='0xa5'):
+
+                    dataSecond = self.serialObj.read(3)
+
+                    if(hex(dataSecond[1])=='0xa6'):
+
+                        data = (int(dataFirst[2])*256)+int(dataSecond[2])
+
+                        self.tick_q.put((data, timeStamp))
+
+                elif(hex(dataFirst[1])=='0xa7'):
+
+                    dataSecond = self.serialObj.read(3)
+
+                    if(hex(dataSecond[1])=='0xa8'):
+
+                        data = (int(dataFirst[2])*256)+int(dataSecond[2])
+
+                        self.lap_q.put((data, timeStamp))
+
+                elif(hex(dataFirst[1])=='0xa9'):
+
+                    self.startTime = time.clock()
+
+                    dataSecond = self.serialObj.read(3)
+
+                    if(hex(dataSecond[1])=='0xaa'):
+
+                        data = (int(dataFirst[2])*256)+int(dataSecond[2])
+
+                        self.lap_q.put(data)
+
+                else:
+                    print('Non comm command')
 
             else:
                 print('Non comm command')

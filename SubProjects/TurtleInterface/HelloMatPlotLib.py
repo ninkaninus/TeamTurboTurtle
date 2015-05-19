@@ -1,5 +1,7 @@
 import sys
 import random
+import math
+import numpy as np
 import matplotlib
 matplotlib.use("Qt5Agg")
 from PyQt5 import QtCore
@@ -19,6 +21,7 @@ import matplotlib.pyplot as plt
 import serial
 import queue
 from com_monitor import ComMonitorThread
+from data_puller import ComDataPullerThread
 from globals import *
 
 class ApplicationWindow(QMainWindow):
@@ -78,30 +81,35 @@ class ApplicationWindow(QMainWindow):
 
         #Variables
         self.liveUpdate = False
-        self.dataYaccelSamples = []
-        self.timeYaccelSamples = []
 
+        self.datapulls = 0
+
+        self.dataSamples = []
+
+        self.dataYaccelSamples = []
         self.dataZgyroSamples = []
-        self.timeZgyroSamples = []
+        self.dataTickSamples = []
+
+        self.lapTimes = []
+        self.speeds = []
 
         #Data stuff
         self.com_monitor = None
+        self.com_data_puller = None
         self.com_data_Yaccel_q = None
         self.com_data_Zgyro_q = None
         self.com_data_Tick_q = None
+        self.com_data_Lap_q = None
         self.com_terminal_q = None
 
         self.liveFeed = LiveDataFeed()
 
-        self.dataTimerUpdateRate = 1
+        self.dataTimerUpdateRate = 100
 
-        self.dataTimerPullRate = 10
+        self.dataTimerPullRate = 1
 
         self.plotUpdater = QTimer(self)
-        self.plotUpdater.timeout.connect(self.plotUpdate)
-
-        self.dataPuller = QTimer(self)
-        self.dataPuller.timeout.connect(self.pullData)
+        self.plotUpdater.timeout.connect(self.UpdateData)
 
         #File menu
 
@@ -135,6 +143,18 @@ class ApplicationWindow(QMainWindow):
         serialDisconnectAction.setIcon(QIcon('SerialDisconnect.png'))
         #GUI
 
+        #Stats
+        self.labelLaptime = QLabel('Laptime', self)
+        self.labelLaptime.setStyleSheet("background-color:#FFFFFF")
+        self.labelLaptime.setAlignment(Qt.AlignLeft)
+
+        self.labelSpeed = QLabel('Speed', self)
+        self.labelSpeed.setStyleSheet("background-color:#FFFFFF")
+        self.labelSpeed.setAlignment(Qt.AlignLeft)
+
+        self.labelSpeedAvg = QLabel('Speed avg.', self)
+        self.labelSpeedAvg.setStyleSheet("background-color:#FFFFFF")
+        self.labelSpeedAvg.setAlignment(Qt.AlignLeft)
 
         #Buttons
 
@@ -214,8 +234,14 @@ class ApplicationWindow(QMainWindow):
         self.canvas.updateGeometry()
         self.plot()
 
+        statbox = QVBoxLayout()
+        statbox.addWidget(self.listPlots)
+        statbox.addWidget(self.labelLaptime)
+        statbox.addWidget(self.labelSpeed)
+        statbox.addWidget(self.labelSpeedAvg)
+
         hbox.addWidget(self.canvas)
-        hbox.addWidget(self.listPlots)
+        hbox.addLayout(statbox)
         hbox.addLayout(vbox)
 
         hbox2 = QHBoxLayout()
@@ -233,34 +259,73 @@ class ApplicationWindow(QMainWindow):
 
         self.statusBar().showMessage("TURTLES, TURTLES, TURTLES!", 5000)
 
+    def updateLaptime(self):
+        self.labelLaptime.setText("Laptime: " +str(self.lapTimes[len(self.lapTimes)-1]))
+
+
     def read_serial_data(self):
         qdata = list(get_all_from_queue(self.com_data_Yaccel_q))
         if(len(qdata) > 0):
-            print("Received Yaccel data")
+            #print("Received Yaccel data")
             for dataSet in qdata:
-                self.dataYaccelSamples.append(dataSet[0])
-                self.timeYaccelSamples.append(dataSet[1])
+                self.dataYaccelSamples.append(dataSet)
 
         qdata = list(get_all_from_queue(self.com_data_Zgyro_q))
         if(len(qdata) > 0):
-            print("Received Zgyro data")
+            #print("Received Zgyro data")
             for dataSet in qdata:
-                self.dataZgyroSamples.append(dataSet[0])
-                self.timeZgyroSamples.append(dataSet[1])
+                self.dataZgyroSamples.append(dataSet)
 
-    def plotUpdate(self):
+        qdata = list(get_all_from_queue(self.com_data_Tick_q))
+        if(len(qdata) > 0):
+            #print("Received ticks data")
+            for dataSet in qdata:
+                self.dataTickSamples.append(dataSet)
+
+        qdata = list(get_all_from_queue(self.com_data_Lap_q))
+        if(len(qdata) > 0):
+            self.dataSamples.append((self.dataYaccelSamples))
+            print(len(self.dataYaccelSamples), self.labelLaptime.text(), self.datapulls)
+            self.datapulls = 0
+            self.dataYaccelSamples = []
+            self.lapTimes.append(qdata[0])
+            self.updateLaptime()
+
+    def UpdateData(self):
         self.read_serial_data()
         self.plot()
+
+        if(len(self.dataTickSamples)>= 2):
+            sampleLast = self.dataTickSamples[len(self.dataTickSamples)-1]
+            sampleSecondLast = self.dataTickSamples[len(self.dataTickSamples)-2]
+
+            ticks = sampleLast[0] - sampleSecondLast[0]
+            time = sampleLast[1] - sampleSecondLast[1]
+
+            distance = ((ticks/12)*math.pi*2.5)/100
+            speed = distance/time
+            self.speeds.append(speed)
+            self.labelSpeed.setText("Speed: " + "%.2f" %speed)
+
+        if(len(self.speeds)>0):
+            speedAvg = np.mean(self.speeds)
+            self.labelSpeedAvg.setText("Speed: " + "%.2f" %speedAvg)
+
 
     def plot(self):
 
         ax = self.figure.add_subplot(111)
         ax.hold(False)
-        ax.plot(self.timeYaccelSamples,self.dataYaccelSamples, 'r')
+        x_list = [y for [x, y] in self.dataYaccelSamples]
+        y_list = [x for [x, y] in self.dataYaccelSamples]
+
+        ax.plot(x_list, y_list, 'r')
         ax.set_title('Graf')
         ax.set_ylabel('Y-Acceleration')
         ax.set_xlabel('Time')
-        ax.autoscale(True)
+        #ax.set_xlim([0, 5])
+        ax.set_ylim([0, 65535])
+        #ax.autoscale(True)
         self.figure.tight_layout()
         self.canvas.draw()
 
@@ -297,16 +362,6 @@ class ApplicationWindow(QMainWindow):
                                     "Serial port not open!"+
                                     "</font> <br />")
         self.lineEditTerminal.setText("")
-
-    def pullData(self):
-
-        #Pull Yaccel
-        command = bytearray([ord('\xAA'), ord('\xa1'), 0])
-        self.serialObject.write((command))
-
-        #Pull Zgyro
-        command = bytearray([ord('\xAA'), ord('\xa3'), 0])
-        self.serialObject.write((command))
 
     def terminalScrollToBottom(self,min,max):
         self.scrollAreaTerminal.verticalScrollBar().setValue(max)
@@ -371,19 +426,21 @@ class ApplicationWindow(QMainWindow):
                     self.statusBar().showMessage("Opened serial communication on " + portSelected + "!", 3000)
 
                     self.plotUpdater.start(self.dataTimerUpdateRate)
-                    self.dataPuller.start(self.dataTimerPullRate)
 
                     self.com_data_Yaccel_q = queue.Queue()
                     self.com_data_Zgyro_q = queue.Queue()
                     self.com_data_Tick_q = queue.Queue()
                     self.com_terminal_q = queue.Queue()
+                    self.com_data_Lap_q = queue.Queue()
                     self.com_monitor = ComMonitorThread(self.com_data_Yaccel_q,
                                                         self.com_data_Zgyro_q,
                                                         self.com_data_Tick_q,
+                                                        self.com_data_Lap_q,
                                                         self.com_terminal_q,
                                                         self.serialObject)
                     self.com_monitor.start()
-
+                    self.com_data_puller = ComDataPullerThread(self.serialObject, 1000)
+                    self.com_data_puller.start()
 
                 except serial.SerialException :
                    self.statusBar().showMessage("Could not open serial connection on " + portSelected + "!", 3000)
@@ -419,7 +476,6 @@ class ApplicationWindow(QMainWindow):
     def about(self):
         QMessageBox.about(self, "About",
         """This is the turtle interface used for monitoring and modifying the behaviour of the Turtle Car""")
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
