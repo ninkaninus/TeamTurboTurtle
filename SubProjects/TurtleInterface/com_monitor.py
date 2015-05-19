@@ -91,21 +91,11 @@ class ComMonitorThread(threading.Thread):
 
                 elif(hex(dataFirst[1])=='0xa7'):
 
-                    dataSecond = self.serialObj.read(3)
-
-                    if(hex(dataSecond[1])=='0xa8'):
-
-                        data = (int(dataFirst[2])*256)+int(dataSecond[2])
-
-                        self.lap_q.put((data, timeStamp))
-
-                elif(hex(dataFirst[1])=='0xa9'):
-
                     self.startTime = time.clock()
 
                     dataSecond = self.serialObj.read(3)
 
-                    if(hex(dataSecond[1])=='0xaa'):
+                    if(hex(dataSecond[1])=='0xa8'):
 
                         data = (int(dataFirst[2])*256)+int(dataSecond[2])
 

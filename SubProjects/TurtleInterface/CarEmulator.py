@@ -53,8 +53,8 @@ while 1:
         lapTime = qdata[0]
         comParameter1 = (lapTime >> 8) & 0xff
         comParameter2 = lapTime & 0xff
-        serialObject.write(bytearray([ord('\xBB'),ord('\xA9'), comParameter1]))
-        serialObject.write(bytearray([ord('\xBB'),ord('\xAA'), comParameter2]))
+        serialObject.write(bytearray([ord('\xBB'),ord('\xA7'), comParameter1]))
+        serialObject.write(bytearray([ord('\xBB'),ord('\xA8'), comParameter2]))
         print(lapTime)
 
     data = serialObject.read(3)
@@ -87,8 +87,6 @@ while 1:
             serialObject.write(bytearray([ord('\xBB'),ord('\xA5'), comParameter1]))
             serialObject.write(bytearray([ord('\xBB'),ord('\xA6'), comParameter2]))
 
-        comParameter = (comParameter1 * 256) + comParameter2
-        #print("Returned %d" %comParameter)
 
     #If it is a set type
     elif(comType == '0x55'):
