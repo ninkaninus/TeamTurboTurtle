@@ -17,6 +17,17 @@
 .equ Comm_Command_Stop = 0x11				;Stop the car
 
 ;Define Get Commands
+.equ Comm_Command_Yaccel_H = 0xA1
+.equ Comm_Command_Yaccel_L = 0xA2
+
+.equ Comm_Command_Zgyro_H = 0xA3
+.equ Comm_Command_ZGyro_L = 0xA4
+
+.equ Comm_Command_Ticks_H = 0xA5
+.equ Comm_Command_Ticks_L = 0xA6
+
+.equ Comm_Command_LapTime_H = 0xA7
+.equ Comm_Command_LapTime_L = 0xA8
 
 
 ;Implemetation of the required communication protocol
