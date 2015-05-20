@@ -102,7 +102,12 @@ EDGE2:		lds		R0, Edge1_L
 			
 WheelSpeed_End:
 
-			call AI_HALL_INTERRUPT
+			ldi		R16,	1
+			add		Length_L,	R16
+			ldi		R16,	0
+			adc		Length_H,	R16
+
+			call AI_Hall		;Alt AI der har med ticks at gøre ligger her
 			
 			Pop_Register_5 R16, R3, R2, R1, R0
 			

@@ -1,75 +1,46 @@
-; AI_Lap_Preround = 0
-; AI_Lap_Mapping = 1
-; AI_Lap_Speed = 2
+AI_Lap:
+	lds		R17,	AI_Check_Lap
+	inc		R17							;Runde tæller
+	sts		AI_Check_Lap,	R17
 
-AI_Lap_Interrupt:						;Lap interrupt skifter fra initial runden til den første runde til alle resterende.
+	cpi		R17,	1
+	breq	Mapping
+	
+	cpi		R17,	3
+	brsh	Run_Time
 
-		lds		R20, AI_Check_Lap		
+;First round								Vi sætter der første stykke bane oveni, så vi ikke løber tør for bane.
 
-		;Were we running a speed lap when we hit the line. Then go to speed lap handling.
-		cpi		R20, AI_Lap_Speed
-		brsh	AI_Test_Speed_Lap
+		mov		R16,		YL
+		mov		R17,		YH
+		ldi		YH,			HIGH(Map_Start)		
+		ldi		YL,			LOW(Map_Start)		
+
+		ld			Length_L,		Y+
+		ld			Length_H,		Y+
+		ld			Type,			Y+
 		
-		;Were we running a mapping lap when we hit the line. Then go to the first speed lap handling.
-		cpi		R20, AI_Lap_Mapping
-		brsh	AI_Test_Speed_Lap_First
+		mov		YL,			R16
+		mov		YH,			R17
 
-		;We were in preround when we hit the line. So initialize the mapping round.
-		ldi		R20, AI_Lap_Mapping
-		sts		AI_Check_Lap, R20
-
-		ldi		Type,		0
-		ldi		Length_L,	0
-		ldi		Length_H,	0
-
-		ret			
-
-AI_Test_Speed_Lap_First:
-		;Sørger for at gemme det sidste banestykke. Da stykkerne bliver gemt ved skift til næste stykke.
-
-		ldi R20, 5
-		add		Length_L, R20			;Forøg antal med fem - Bruges til at sikre at den ikke løber tør i slutningen. Antal kan ændres.
-		ldi		R16, 0
-		adc		Length_H, R16
-
-		st		Y+,			Length_L
-		st		Y+,			Length_H	;Sæt Længden ind først-
-		st		Y+,			Type		;og derefter vejtypen.
-
-
-;Vi har ikke afprøvet dette, så det kigger vi på senere.
-
-
-AI_Test_Speed_Lap:
+		st		Y+,		Length_L
+		st		Y+,		Length_H
+		st		Y+,		Type
 		
-		ldi		R20, 2
-		sts     AI_Check_Lap, R20
+Run_Time:
 
-;		lds		R20,		AI_Hastighed_D
-;		inc		R20
-;		sts		AI_Hastighed_D,R20
+		ldi		YH,			HIGH(Map_Start)		
+		ldi		YL,			LOW(Map_Start)		
 
-		ldi		YL, low(Map_Start)
-		ldi		YH, high(Map_Start)
-		ld		Length_L,	Y+			;Indlæser den første del af af det gemte map.
-		ld		Length_H, 	Y+
-		ld		Type,		Y+
+		ld			Length_L,		Y+
+		ld			Length_H,		Y+
+		ld			Type,			Y+
 
-;Vi har ikke afprøvet dette, så det kigger vi på senere.
-		ret
+ret
 
+Mapping:
 
+call	Gyro_Kontrol
+		mov		Type,		R16
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+ret

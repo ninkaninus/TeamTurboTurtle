@@ -1,105 +1,67 @@
-;Den her fil checker hvilken slags banetype bilen befinder sig på
+;Den her fil checker hvilken slags banetype bilen befinder sig på. Den nuværende banetype sættes over I R16.
 
 Gyro_Kontrol:
 
 
-call	Gyro_Mean										;Indlæser gennemsnitsværdien af to gyro læsninger, gemmer resultatet i R16, benytter R10,R11 og R17.
+call	MPU6050_Read_Gyro_Z
+		lds		R17,		GYRO_ZOUT_H					;Indlæs værdien for Gyro
+		mov		Gyro,		R17
+		sbrc	Gyro,		7
+		neg		Gyro
 		
-		cpi		Accel,		Accel_Stort_Sving			;juster værdi, Værdi for acceleration ved stort højre sving
+		cpi		Gyro,		Gyro_Stort_Sving			;Værdien for gyro ved stort sving
 		brsh	Fortegns_test
 
 
 LIGEUD:													;Hvis banetypen bestemmes til at være et lige stykke starter dette kontinuære loop,
 ;														som AI_Check_Laper om accelerometeret angiver et sving. Når bilen kommer ind i et sving
 ;														hopper den til skift
-		cpi		Type,		0
-		breq	SAME_TYPE
-		st		Y+,			Length_L
-		st		Y+,			Length_H						;Sæt Længden ind først-
-		st		Y+,			Type						;og derefter vejtypen.
-		ldi		Type,		0							;Sætter vejtypen til ligeud
-		ldi		Length_L,	0
-		ldi		Length_H,	0
-		
+
+		ldi		R16,		3							;Sætter typen til 0
+
 ret
 
 
 Fortegns_test:
-
-call	MPU6050_Read_Gyro_Z
-		lds		R17,		GYRO_ZOUT_H					;Indlæs værdien for accelerometeret, SKAL ÆNDRES TIL GYRO
 		sbrs	R17,		7
-		
-rjmp	LEFT_TURN
-		
-RIGHT_TURN:												;Hvis banetypen bestemmes til at være et højre sving starter dette kontinuære loop,
-;														som AI_Check_Laper om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
-;														hopper den til skift
+rjmp	Venstre_Sving									;Hopper til venstre sving hvis fortegnet siger at det er et venste sving
 
-		
-		cpi		R16,		Accel_Lille_Sving	;juster værdi, Værdi for acceleration ved stort højre sving
-		brlo	RIGHT_TURN2				;Hvis gyroværdien er stor nok til et lille sving, så skifter den type.
+;Ellers er det et højre sving.
 
-		ldi		Type,		1			;Sætter vejtypen til lille højre
+		cpi		Gyro,		Gyro_Lille_Sving	;Værdi for gyro til lille sving
+		brlo	RIGHT_TURN_SMALL				;Hvis gyroværdien er stor nok til et lille sving, så skifter den type.
+
+		ldi		R16,		4			;Sætter vejtypen til stor højre
 		
 ret
 
-RIGHT_TURN2:							;Hvis banetypen bestemmes til at være et stort højre sving starter dette kontinuære loop,
-;										som AI_Check_Laper om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
-;										hopper den til skift
+RIGHT_TURN_SMALL:
 
-		cpi		Type,		0
-		brne	SAME_TYPE
-
-		st		Y+, 		Length_L
-		st		Y+,			Length_H		;Sæt Længden ind først-
-		st		Y+,			Type			;og derefter vejtypen.
-		ldi		Type,		3				;Sætter vejtypen til stort højre
-		ldi		Length_L,	0
-		ldi		Length_H,	0
+		ldi		R16,		5			;Sætter vejtypen til lille højre.
 		
 ret
 
+Venstre_Sving:
 
-LEFT_TURN:								;Hvis banetypen bestemmes til at være et højre sving starter dette kontinuære loop,
-;										som AI_Check_Laper om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
-;										hopper den til skift
+		cpi		Gyro,		Gyro_Lille_Sving	;Værdi for gyro til lille sving
+		brlo	LEFT_TURN_SMALL				;Hvis gyroværdien er stor nok til et lille sving, så skifter den type.
 
-		
-		cpi		R16,		Accel_Lille_Sving	;juster værdi, Værdi for acceleration ved stort højre sving
-		brlo	LEFT_TURN2				;Hvis gyroværdien er stor nok til et lille sving, så skifter den type.
-
-		ldi		Type,		2			;Sætter vejtypen til lille venstre
+		ldi		R16,		2			;Sætter vejtypen til stor venstre
 		
 ret
 
-LEFT_TURN2:							;Hvis banetypen bestemmes til at være et stort højre sving starter dette kontinuære loop,
-;										som AI_Check_Laper om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
-;										hopper den til skift
+LEFT_TURN_SMALL:
 
-		cpi		Type,		0
-		brne	SAME_TYPE
-		
-		st		Y+,			Length_L
-		st		Y+,			Length_H		;Sæt Længden ind først-
-		st		Y+,			Type			;og derefter vejtypen.
-		ldi		Type,		4				;Sætter vejtypen til stort venstre
-		ldi		Length_L,	0
-		ldi		Length_H, 	0
+		ldi		R16,		1			;Sætter vejtypen til lille venstre.
 		
 ret
 
-;------------------------------
-
-
-SAME_TYPE:
-
-ret
+;----------------------------------------------------------------------
 
 Gyro_Mean:
 
 call	MPU6050_Read_Gyro_Z
-		lds		R10,		GYRO_ZOUT_H	;Indlæs værdien for accelerometeret, SKAL ÆNDRES TIL GYRO
+		lds		R10,		GYRO_ZOUT_H	;Indlæs værdien for gyro
 		sbrc	R10,		7
 		neg		R10
 		
@@ -107,7 +69,7 @@ call	MPU6050_Read_Gyro_Z
 call	Delay_MS
 		
 call	MPU6050_Read_Gyro_Z
-		lds		R11,		GYRO_ZOUT_H	;Indlæs værdien for accelerometeret, SKAL ÆNDRES TIL GYRO
+		lds		R11,		GYRO_ZOUT_H	;Indlæs værdien for gyro
 		sbrc	R11,		7
 		neg		R11
 	
