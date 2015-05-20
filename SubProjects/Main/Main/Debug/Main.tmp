@@ -98,18 +98,31 @@
   <EDGE1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>64</LINE></EDGE1>
   <WheelSpeed_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>101</LINE></WheelSpeed_End>
   <Lap_Time_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>70</LINE></Lap_Time_End>
-  <Comm_Send_LapTime><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>225</LINE></Comm_Send_LapTime>
+  <Comm_Send_LapTime><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>267</LINE></Comm_Send_LapTime>
   <Comm_Received_Type><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>50</LINE></Comm_Received_Type>
-  <Comm_Received_Command><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>60</LINE></Comm_Received_Command>
-  <Comm_Received_Execute><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>70</LINE></Comm_Received_Execute>
-  <Comm_Received_Type_Set><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>97</LINE></Comm_Received_Type_Set>
-  <Comm_Received_Type_Get><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>135</LINE></Comm_Received_Type_Get>
-  <Comm_Received_Command_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>112</LINE></Comm_Received_Command_Start>
-  <Comm_Received_Command_Stop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>123</LINE></Comm_Received_Command_Stop>
-  <Comm_Received_Command_Start_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>118</LINE></Comm_Received_Command_Start_End>
-  <Comm_Received_Command_Yaccel><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>152</LINE></Comm_Received_Command_Yaccel>
-  <Comm_Received_Command_Zgyro><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>176</LINE></Comm_Received_Command_Zgyro>
-  <Comm_Received_Command_Ticks><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>199</LINE></Comm_Received_Command_Ticks>
+  <Comm_Received_Command><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>79</LINE></Comm_Received_Command>
+  <Comm_Received_Execute><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>112</LINE></Comm_Received_Execute>
+  <Comm_Received_Type_Set_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>54</LINE></Comm_Received_Type_Set_Check>
+  <Comm_Received_Type_Set_Check_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>58</LINE></Comm_Received_Type_Set_Check_End>
+  <Comm_Received_Type_Valid><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>72</LINE></Comm_Received_Type_Valid>
+  <Comm_Received_Type_Get_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>61</LINE></Comm_Received_Type_Get_Check>
+  <Comm_Received_Type_Get_Check_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>65</LINE></Comm_Received_Type_Get_Check_End>
+  <Comm_Received_Type_Reset><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>68</LINE></Comm_Received_Type_Reset>
+  <Comm_Received_Command_Type_Set_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>83</LINE></Comm_Received_Command_Type_Set_Check>
+  <Comm_Received_Command_Type_Set_Check_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>87</LINE></Comm_Received_Command_Type_Set_Check_End>
+  <Comm_Received_Command_Type_Set><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>100</LINE></Comm_Received_Command_Type_Set>
+  <Comm_Received_Command_Type_Get_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>89</LINE></Comm_Received_Command_Type_Get_Check>
+  <Comm_Received_Command_Type_Get_Check_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>93</LINE></Comm_Received_Command_Type_Get_Check_End>
+  <Comm_Received_Command_Type_Get><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>102</LINE></Comm_Received_Command_Type_Get>
+  <Comm_Received_Command_Failure><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>95</LINE></Comm_Received_Command_Failure>
+  <Comm_Received_Execute_Set><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>139</LINE></Comm_Received_Execute_Set>
+  <Comm_Received_Execute_Get><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>177</LINE></Comm_Received_Execute_Get>
+  <Comm_Received_Execute_Set_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>154</LINE></Comm_Received_Execute_Set_Start>
+  <Comm_Received_Execute_Set_Stop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>165</LINE></Comm_Received_Execute_Set_Stop>
+  <Comm_Received_Execute_Set_Start_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>160</LINE></Comm_Received_Execute_Set_Start_End>
+  <Comm_Received_Execute_Get_Yaccel><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>194</LINE></Comm_Received_Execute_Get_Yaccel>
+  <Comm_Received_Execute_Get_Zgyro><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>218</LINE></Comm_Received_Execute_Get_Zgyro>
+  <Comm_Received_Execute_Get_Ticks><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>241</LINE></Comm_Received_Execute_Get_Ticks>
   <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>33</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>
