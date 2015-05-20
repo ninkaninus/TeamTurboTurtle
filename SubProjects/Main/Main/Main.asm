@@ -31,22 +31,5 @@ Init:
 	rjmp Main
 
 Main:	
-	
-	cli
-	ldi R16, 50
-	call Delay_Ms
-
-	cli
-	call MPU6050_Read_Accel_Y
-	sei
-
-	nop
-	nop
-	nop
-
-	cli
-	call MPU6050_Read_Gyro_Z
-	sei
-	
 
 	rjmp Main

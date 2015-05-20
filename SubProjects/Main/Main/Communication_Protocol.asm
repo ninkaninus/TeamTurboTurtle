@@ -153,6 +153,9 @@ Comm_Received_Type_Get:
 	reti									;Do nothing if it was not a legit code
 
 Comm_Received_Command_Yaccel:
+
+	call MPU6050_Read_Accel_Y
+
 	ldi R16, 0xBB
 	call USART_Transmit
 
@@ -174,6 +177,8 @@ Comm_Received_Command_Yaccel:
 	reti
 
 Comm_Received_Command_Zgyro:
+	call MPU6050_Read_Gyro_Z
+
 	ldi R16, 0xBB
 	call USART_Transmit
 
