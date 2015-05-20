@@ -1,11 +1,12 @@
 .equ Diff_Max = 8192
 .equ ForgivenessZone = 4096
 
-Hastigheds_kontrol:
+
 		
 		lds		R16, SREG_1			
 		sbrc	R16, 7							; bit 7 is the delay enable 
 		rjmp	Braking
+
 
 		lds		R16, Speed_L 
 		lds		R17, Speed_H
@@ -64,8 +65,7 @@ Max_Brake:
 		Set_SREG_1 7
 		
 		ret
-		
-Braking:
+
 
 		clr R16
 		out OCR2, R16
@@ -90,8 +90,6 @@ Braking:
 		cp		R0, R6
 		brsh	Braking_End
 		
-
-
 		ret
 		
 Braking_End:
@@ -101,6 +99,7 @@ Braking_End:
 		ret
 
 Langsommere:
+
 		subi	R16, 1
 		sbci	R17, 0
 		com		R16
@@ -119,16 +118,13 @@ Langsommere:
 		ror		R16	
 		lsr		R17
 		ror		R16
-	
 		
 		out		OCR2, R16
 		
 		ret
-		
 
 MaxGas: 
 		ldi		R20, 255
 		out		OCR2, R20
 		
 		ret
-		

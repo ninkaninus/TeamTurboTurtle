@@ -25,6 +25,7 @@ Init:
 	Setup
 	clr	R16
 	sts		SREG_1, R16
+<<<<<<< 0beccf1689552c873809df8db7f467feddcd3918
 	sts		AI_Check_Lap,	R16
 			ldi		R16, 250
 			call	Delay_MS
@@ -42,6 +43,23 @@ Init:
 			call	Delay_MS
 			ldi		R16, 250
 			call	Delay_MS
+
+	ldi		R16, 100
+	out		OCR2, R16
+	clr		ZH
+					
+	sei					;Enable global interrupt	
+	rjmp Main
+	
+	
+	
+Main:	
+
+		
+	lds		R16, Pulse_Time_L
+	lds		R17, Pulse_Time_H
+	;call	USART_Decimal_16
+	;		USART_NewLine
 			
 			ldi R16, LOW(1)
 			sts Speed_L, R16
@@ -59,4 +77,3 @@ Init:
 	rjmp Main
 
 Main:	rjmp	Main
-			
