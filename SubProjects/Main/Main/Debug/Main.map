@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Wed May 20 13:07:43 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Wed May 20 16:30:53 2015
 
 
 EQU  SIGNATURE_000 0000001e
@@ -568,7 +568,7 @@ EQU  ACIaddr      00000024
 EQU  TWIaddr      00000026
 EQU  SPMRaddr     00000028
 EQU  INT_VECTORS_SIZE 0000002a
-CSEG Init         000002e9
+CSEG Init         000002e5
 CSEG Input_Capture 000001cc
 CSEG Timer0_Update 000001b1
 CSEG Comm_Received 00000257
@@ -781,7 +781,7 @@ CSEG EDGE2        000001f4
 CSEG EDGE1        000001e3
 CSEG WheelSpeed_End 0000020b
 CSEG Lap_Time_End 0000024d
-CSEG Comm_Send_LapTime 000002d4
+CSEG Comm_Send_LapTime 000002d0
 EQU  Comm_Type_SET 00000055
 EQU  Comm_Type_GET 000000aa
 EQU  Comm_Command_Start 00000010
@@ -803,6 +803,6 @@ CSEG Comm_Received_Command_Start 00000280
 CSEG Comm_Received_Command_Stop 00000285
 CSEG Comm_Received_Command_Start_End 00000284
 CSEG Comm_Received_Command_Yaccel 00000291
-CSEG Comm_Received_Command_Zgyro 000002a8
-CSEG Comm_Received_Command_Ticks 000002bf
-CSEG Main         00000520
+CSEG Comm_Received_Command_Zgyro 000002a6
+CSEG Comm_Received_Command_Ticks 000002bb
+CSEG Main         0000051c

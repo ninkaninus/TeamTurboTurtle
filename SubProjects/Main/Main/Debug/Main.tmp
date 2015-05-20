@@ -98,7 +98,7 @@
   <EDGE1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>64</LINE></EDGE1>
   <WheelSpeed_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>101</LINE></WheelSpeed_End>
   <Lap_Time_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>70</LINE></Lap_Time_End>
-  <Comm_Send_LapTime><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>224</LINE></Comm_Send_LapTime>
+  <Comm_Send_LapTime><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>225</LINE></Comm_Send_LapTime>
   <Comm_Received_Type><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>50</LINE></Comm_Received_Type>
   <Comm_Received_Command><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>60</LINE></Comm_Received_Command>
   <Comm_Received_Execute><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>70</LINE></Comm_Received_Execute>

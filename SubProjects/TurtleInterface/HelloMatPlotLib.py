@@ -77,7 +77,7 @@ class ApplicationWindow(QMainWindow):
         self.serialObject.parity = serial.PARITY_NONE
         self.serialObject.stopbits = serial.STOPBITS_ONE
         self.serialObject.bytesize = serial.EIGHTBITS
-        self.serialObject.port_timeout=0.01
+        self.serialObject.timeout = None
 
         #Variables
         self.liveUpdate = False
@@ -111,6 +111,8 @@ class ApplicationWindow(QMainWindow):
         self.plotUpdater = QTimer(self)
         self.plotUpdater.timeout.connect(self.UpdateData)
 
+        #Menues
+
         #File menu
 
         self.file_menu = QMenu('&File', self)
@@ -141,7 +143,9 @@ class ApplicationWindow(QMainWindow):
         serialDisconnectAction = self.serial_menu.addAction('Disconnect')
         serialDisconnectAction.triggered.connect(self.serialDisconnect)
         serialDisconnectAction.setIcon(QIcon('SerialDisconnect.png'))
+
         #GUI
+
 
         #Stats
         self.labelLaptime = QLabel('Laptime', self)
@@ -156,30 +160,21 @@ class ApplicationWindow(QMainWindow):
         self.labelSpeedAvg.setStyleSheet("background-color:#FFFFFF")
         self.labelSpeedAvg.setAlignment(Qt.AlignLeft)
 
-        #Buttons
 
+        #Start/Stop interface
         self.buttonStart = QPushButton('Start',self)
-        self.buttonStart.setCheckable(True)
         self.buttonStart.setStyleSheet("background-color:#00FF00")
-        self.buttonStart.clicked[bool].connect(self.buttonStartToggle)
+        self.buttonStart.clicked.connect(self.buttonStartPressed)
 
         buttonStop = QPushButton('Stop',self)
         buttonStop.setStyleSheet("background-color:#FF6666")
         buttonStop.clicked.connect(self.CarStop)
 
-        #LCD
-        self.lcdSpeed = QLCDNumber(self)
-        self.lcdSpeed.setSegmentStyle(QLCDNumber.Flat)
-        self.lcdSpeed.setStyleSheet("background-color:#FFFFFF")
+        self.lineEditSpeed = QLineEdit('35')
+        self.lineEditSpeed.setStyleSheet("background-color:#FFFFFF")
+        self.lineEditSpeed.returnPressed.connect(self.buttonStartPressed)
+        self.lineEditSpeed.setSizePolicy(QSizePolicy.Minimum,QSizePolicy.Fixed)
 
-        #Sliders
-
-        self.sliderSpeed = QSlider(Qt.Horizontal, self)
-        self.sliderSpeed.setMaximum(100)
-        self.sliderSpeed.setStyleSheet("background-color:#FFFFFF")
-        self.sliderSpeed.setFocusPolicy(Qt.NoFocus)
-        self.sliderSpeed.valueChanged[int].connect(self.sliderSpeedAdjust)
-        self.sliderSpeed.setSizePolicy(QSizePolicy.Minimum,QSizePolicy.Fixed)
 
         #Terminal
         terminalSize = 100
@@ -220,8 +215,7 @@ class ApplicationWindow(QMainWindow):
         vbox = QVBoxLayout()
         vbox.setAlignment(Qt.AlignRight)
         vbox.addWidget(turtlePicLabel)
-        vbox.addWidget(self.lcdSpeed)
-        vbox.addWidget(self.sliderSpeed)
+        vbox.addWidget(self.lineEditSpeed)
         vbox.addWidget(self.buttonStart)
         vbox.addWidget(buttonStop)
         vbox.addStretch(1)
@@ -272,22 +266,21 @@ class ApplicationWindow(QMainWindow):
 
         qdata = list(get_all_from_queue(self.com_data_Zgyro_q))
         if(len(qdata) > 0):
-            #print("Received Zgyro data")
+            print("Received Zgyro data")
             for dataSet in qdata:
                 self.dataZgyroSamples.append(dataSet)
 
         qdata = list(get_all_from_queue(self.com_data_Tick_q))
         if(len(qdata) > 0):
-            #print("Received ticks data")
+            print("Received ticks data")
             for dataSet in qdata:
                 self.dataTickSamples.append(dataSet)
 
         qdata = list(get_all_from_queue(self.com_data_Lap_q))
         if(len(qdata) > 0):
-            pass
             self.dataSamples.append((self.dataYaccelSamples))
             #print(len(self.dataYaccelSamples), self.labelLaptime.text(), self.datapulls)
-            self.dataYaccelSamples = []
+            #self.dataYaccelSamples = []
             self.lapTimes.append(qdata[0])
             self.updateLaptime()
 
@@ -371,30 +364,22 @@ class ApplicationWindow(QMainWindow):
         text += textToAppend
         self.labelTerminal.setText(text)
 
-    def buttonStartToggle(self):
-        if self.buttonStart.isChecked() == True:
-            self.buttonStart.setText('Live!')
-            self.buttonStart.setStyleSheet("background-color:#FFFF00")
-            self.sliderSpeed.setStyleSheet("background-color:#99FF33")
-            self.CarStart(self.sliderSpeed.value())
+    def buttonStartPressed(self):
+        text = self.lineEditSpeed.text()
+        self.lineEditSpeed.setText("")
+        try:
+            value = int(text)
+        except ValueError:
+            return
 
-        else:
-            self.buttonStartOff()
-
-    def buttonStartOff(self):
-        self.buttonStart.setStyleSheet("background-color:#00FF00")
-        self.sliderSpeed.setStyleSheet("background-color:#FFFFFF")
-        self.buttonStart.setText('Start')
-
-    def sliderSpeedAdjust(self, value):
-        self.lcdSpeed.display(value)
-        if self.buttonStart.isChecked() == True:
+        if(value <= 100 and value >=0):
             self.CarStart(value)
+            print(value)
+
 
 
     def CarStart(self, speed):
         if self.serialObject.isOpen():
-            self.statusBar().showMessage("Starting the car!", 3000)
             command = bytearray([ord('\x55'), ord('\x10'), speed])
             self.serialObject.write(command)
             self.terminalAppend(">><font color=#00FF00>" +
@@ -404,10 +389,7 @@ class ApplicationWindow(QMainWindow):
                                 "</font> <br />")
 
     def CarStop(self):
-        self.buttonStart.setChecked(False)
-        self.buttonStartOff()
         if self.serialObject.isOpen():
-            self.statusBar().showMessage("Stopping the car!", 3000)
             command = bytearray([ord('\x55'), ord('\x11'), 0])
             self.serialObject.write(command)
             self.terminalAppend(">><font color=#FF0000>" +
@@ -425,28 +407,32 @@ class ApplicationWindow(QMainWindow):
                     self.serialObject.open()
                     self.statusBar().showMessage("Opened serial communication on " + portSelected + "!", 3000)
 
-                    self.plotUpdater.start(self.dataTimerUpdateRate)
-
-                    self.com_data_Yaccel_q = queue.Queue()
-                    self.com_data_Zgyro_q = queue.Queue()
-                    self.com_data_Tick_q = queue.Queue()
-                    self.com_terminal_q = queue.Queue()
-                    self.com_data_Lap_q = queue.Queue()
-                    self.com_monitor = ComMonitorThread(self.com_data_Yaccel_q,
-                                                        self.com_data_Zgyro_q,
-                                                        self.com_data_Tick_q,
-                                                        self.com_data_Lap_q,
-                                                        self.com_terminal_q,
-                                                        self.serialObject)
-                    self.com_monitor.start()
-                    self.com_data_puller = ComDataPullerThread(self.serialObject, 25)
-                    self.com_data_puller.start()
+                    self.startDaemons()
 
                 except serial.SerialException :
                    self.statusBar().showMessage("Could not open serial connection on " + portSelected + "!", 3000)
 
             else:
                 self.statusBar().showMessage("Serial connection cancelled!", 3000)
+
+    def startDaemons(self):
+        self.plotUpdater.start(self.dataTimerUpdateRate)
+
+        self.com_data_Yaccel_q = queue.Queue()
+        self.com_data_Zgyro_q = queue.Queue()
+        self.com_data_Tick_q = queue.Queue()
+        self.com_terminal_q = queue.Queue()
+        self.com_data_Lap_q = queue.Queue()
+        self.com_monitor = ComMonitorThread(self.com_data_Yaccel_q,
+                                            self.com_data_Zgyro_q,
+                                            self.com_data_Tick_q,
+                                            self.com_data_Lap_q,
+                                            self.com_terminal_q,
+                                            self.serialObject)
+        self.com_monitor.daemon = True
+        self.com_monitor.start()
+        self.com_data_puller = ComDataPullerThread(self.serialObject, 10)
+        self.com_data_puller.start()
 
     def serialReconnect(self):
         if self.serialObject.isOpen():
@@ -455,6 +441,8 @@ class ApplicationWindow(QMainWindow):
             try:
                 self.serialObject.open()
                 self.statusBar().showMessage("Opened serial communication on " + self.serialObject.port + "!", 3000)
+                self.startDaemons()
+
             except serial.SerialException :
                 self.statusBar().showMessage("Could not open serial connection on " + self.serialObject.port + "!", 3000)
 

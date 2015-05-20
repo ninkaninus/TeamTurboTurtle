@@ -6,24 +6,7 @@ from globals import *
 import serial
 
 class ComMonitorThread(threading.Thread):
-    """ A thread for monitoring a COM port. The COM port is 
-        opened when the thread is started.
-    
-        data_q:
-            Queue for received data. Items in the queue are
-            (data, timestamp) pairs, where data is a binary 
-            string representing the received data, and timestamp
-            is the time elapsed from the thread's start (in 
-            seconds).
-        
-        terminal_q:
 
-        serialObject:
-
-
-        
-
-    """
     def __init__(   self, 
                     Yaccel_q,
                     Zgyro_q,
@@ -64,7 +47,6 @@ class ComMonitorThread(threading.Thread):
                     if(hex(dataSecond[1])=='0xa2'):
 
                         data = (int(dataFirst[2])*256)+int(dataSecond[2])
-                        print(data)
                         self.Yaccel_q.put((data, timeStamp))
 
                 #Z-Gyro
@@ -91,7 +73,7 @@ class ComMonitorThread(threading.Thread):
 
                 elif(hex(dataFirst[1])=='0xa7'):
 
-                    self.startTime = time.clock()
+                    #self.startTime = time.clock()
 
                     dataSecond = self.serialObj.read(3)
 
@@ -103,11 +85,10 @@ class ComMonitorThread(threading.Thread):
 
                 else:
                     print('Non comm command')
-
             else:
-                print('Non comm command')
-
+                print('Non comm type')
 
     def join(self, timeout=None):
+        print("Ending")
         self.alive.clear()
         threading.Thread.join(self, timeout)
