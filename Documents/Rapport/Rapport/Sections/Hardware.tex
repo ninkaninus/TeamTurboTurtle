@@ -14,7 +14,7 @@ Til at måle omdrejningshastigheden på bilen, samt at opfylde kravet om en elek
 
 Ud fra de første målinger, viste det sig at den lave del af signalet var meget støjfyldt og svær at behandle, så vi valgte at skære den del af signalet fra med et offset på forstærkeren. Offsettet blev styret af et potentiometer, der blev brugt som en slags justerbar referencespænding.
 
-For at digitalisere signalet, så microcontrolleren kunne behandle det, blev der brugt en komparator igen - denne gang som en schmitt trigger for at formindske fejl. Det var ikke nødvendigt at designe spændingstærsklerne på schmitt triggeren så præcist. De skulle bare ligge relativt langt fra hinanden, så eventuel støj ikke kunne få den til at skifte tilstand utilsigtet. Ud fra vores
+For at digitalisere signalet, så microcontrolleren kunne behandle det, blev der brugt en komparator igen - denne gang som en schmitt trigger for at formindske fejl. Det var ikke nødvendigt at designe spændingstærsklerne på schmitt triggeren så præcist. De skulle bare ligge relativt langt fra hinanden, så eventuel støj ikke kunne få den til at skifte tilstand utilsigtet. Ud fra vores målinger med oscilloskop 
 
 \begin{equation}
 V_{TL} = \dfrac{R_{2}*R_{3}}{R_{2}*R_{3}+R_{1}(R_{2}+R_{3})}*V_{+}
