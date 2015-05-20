@@ -12,10 +12,6 @@
 			in		R16, TIMSK
 			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
 			out		TIMSK, R16				;Timer/interrupt masking register
-
-			ldi R16, 'P'
-			call USART_Transmit
-			USART_Newline
 			
 			ldi		YL, low(Pulse_Time_L1)
 			ldi		YH, high(Pulse_Time_L1)
