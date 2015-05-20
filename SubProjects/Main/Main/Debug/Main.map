@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Mon May 04 10:50:18 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Wed May 20 13:07:43 2015
 
 
 EQU  SIGNATURE_000 0000001e
@@ -568,11 +568,11 @@ EQU  ACIaddr      00000024
 EQU  TWIaddr      00000026
 EQU  SPMRaddr     00000028
 EQU  INT_VECTORS_SIZE 0000002a
-CSEG Init         0000021b
-CSEG Input_Capture 00000192
-CSEG Timer0_Update 0000017d
-CSEG Comm_Received 000001e0
-CSEG Lap_Time     000001b5
+CSEG Init         000002e9
+CSEG Input_Capture 000001cc
+CSEG Timer0_Update 000001b1
+CSEG Comm_Received 00000257
+CSEG Lap_Time     00000213
 CSEG Sum_16       00000026
 CSEG Div16_8      00000029
 CSEG Div16_8_Loop 0000002b
@@ -603,12 +603,15 @@ EQU  Edge1_L      00000077
 EQU  Edge1_H      00000078
 EQU  Pulse_Time_L 00000079
 EQU  Pulse_Time_H 0000007a
-EQU  SREG_1       0000007b
-EQU  Program_Running 00000080
-EQU  Comm_Received_Byte_Num 0000007c
-EQU  Comm_Received_Byte_1 0000007d
-EQU  Comm_Received_Byte_2 0000007e
-EQU  Comm_Received_Byte_3 0000007f
+EQU  Ticks_L      0000007b
+EQU  Ticks_H      0000007c
+EQU  Ticks_Lap_L  0000007d
+EQU  Ticks_Lap_H  0000007e
+EQU  SREG_1       0000007f
+EQU  Comm_Received_Byte_Num 00000080
+EQU  Comm_Received_Byte_1 00000081
+EQU  Comm_Received_Byte_2 00000082
+EQU  Comm_Received_Byte_3 00000083
 CSEG USART_Transmit 00000034
 CSEG USART_Transmit_Start 00000034
 CSEG USART_Receive 00000038
@@ -771,20 +774,35 @@ EQU  MPU6050_RA_FIFO_COUNTL 00000073
 EQU  MPU6050_RA_FIFO_R_W 00000074
 EQU  MPU6050_RA_WHO_AM_I 00000075
 CSEG MPU6050_Read_Dataset 00000127
-CSEG Timer_Update_End 00000191
-CSEG EDGE2        000001a0
-CSEG EDGE1        00000196
-CSEG Lap_Time_End 000001df
+CSEG MPU6050_Read_Accel_Y 0000017d
+CSEG MPU6050_Read_Gyro_Z 00000197
+CSEG Timer_Update_End 000001c8
+CSEG EDGE2        000001f4
+CSEG EDGE1        000001e3
+CSEG WheelSpeed_End 0000020b
+CSEG Lap_Time_End 0000024d
+CSEG Comm_Send_LapTime 000002d4
 EQU  Comm_Type_SET 00000055
 EQU  Comm_Type_GET 000000aa
 EQU  Comm_Command_Start 00000010
 EQU  Comm_Command_Stop 00000011
-CSEG Comm_Received_Type 000001e7
-CSEG Comm_Received_Command 000001ee
-CSEG Comm_Received_Execute 000001f5
-CSEG Comm_Received_Type_Set 00000202
-CSEG Comm_Received_Type_Get 0000021a
-CSEG Comm_Received_Command_Start 00000209
-CSEG Comm_Received_Command_Stop 00000211
-CSEG Comm_Received_Command_Start_End 00000210
-CSEG Main         00000452
+EQU  Comm_Command_Yaccel_H 000000a1
+EQU  Comm_Command_Yaccel_L 000000a2
+EQU  Comm_Command_Zgyro_H 000000a3
+EQU  Comm_Command_ZGyro_L 000000a4
+EQU  Comm_Command_Ticks_H 000000a5
+EQU  Comm_Command_Ticks_L 000000a6
+EQU  Comm_Command_LapTime_H 000000a7
+EQU  Comm_Command_LapTime_L 000000a8
+CSEG Comm_Received_Type 0000025e
+CSEG Comm_Received_Command 00000265
+CSEG Comm_Received_Execute 0000026c
+CSEG Comm_Received_Type_Set 00000279
+CSEG Comm_Received_Type_Get 00000288
+CSEG Comm_Received_Command_Start 00000280
+CSEG Comm_Received_Command_Stop 00000285
+CSEG Comm_Received_Command_Start_End 00000284
+CSEG Comm_Received_Command_Yaccel 00000291
+CSEG Comm_Received_Command_Zgyro 000002a8
+CSEG Comm_Received_Command_Ticks 000002bf
+CSEG Main         00000520

@@ -110,8 +110,6 @@ Comm_Received_Type_Set:
 
 ;Start
 Comm_Received_Command_Start:
-	ldi R16, 0x01							;Set the flag which determines if the main program should run
-	sts Program_Running, R16				;
 
 	lds R16, Comm_Received_Byte_3			;Load in the third(Parameter) byte
 
@@ -123,8 +121,7 @@ Comm_Received_Command_Start_End:
 
 ;Stop
 Comm_Received_Command_Stop:
-	ldi R16, 0x00							;Clear the flag which determines if the main program should run
-	sts Program_Running, R16				;
+
 	ldi R16, 0x00							;Load in 0x00
 	out OCR2, R16							;And set the pwm duty cycle to nothing to stop the motor.
 
