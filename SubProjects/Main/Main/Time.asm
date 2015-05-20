@@ -18,32 +18,38 @@
 			ori		R16, (1<<OCIE0)			;Enable interrupt on output compare match for timer0
 			out		TIMSK, R16				;Timer/interrupt masking register
 			
-			
 .ENDMACRO
 
 ; Timer subroutines
 
 Timer0_Update:
+			push	R16
+			in		R16, SREG
+			push	R16
 			
-			ldi		R20, 0x01
+			ldi		R16, 0x01
 			lds		R0, Timer_1ms_L			
-			add		R0, R20						;Advance time by 1ms whenever timer0 has compare match
+			add		R0, R16						;Advance time by 1ms whenever timer0 has compare match
 			sts		Timer_1ms_L, R0	
 			brcc	Timer_Update_End
 			
-			ldi		R20, 0x00
+			ldi		R16, 0x00
 			lds		R1, Timer_1ms_M				;24 bits = 16777 seconds = 4.6 hours... ish :D
-			adc		R1, R20
+			adc		R1, R16
 			sts		Timer_1ms_M, R1	
 			brcc	Timer_Update_End
 			
 			lds		R2, Timer_1ms_H
-			adc		R2, R20
+			adc		R2, R16
 			sts		Timer_1ms_H, R2
 			brcc	Timer_Update_End
 			
 Timer_Update_End:	
 		
+			pop		R16
+			out		SREG, R16
+			pop		R16
+			
 			reti
 			
 

@@ -1,0 +1,3515 @@
+
+AVRA   Ver. 1.3.0 Main.asm Wed May 13 17:45:38 2015
+
+
+          .include "m32def.inc"
+         ;***************************************************************************
+         ;* A P P L I C A T I O N   N O T E   F O R   T H E   A V R   F A M I L Y
+         ;* 
+         ;* Number		        :AVR000
+         ;* File Name		    :"m32def.inc"
+         ;* Title		        :Register/Bit Definitions for the ATmega32
+         ;* Date                 :99.08.25
+         ;* Version              :1.00
+         ;* Support telephone	:+47 72 88 43 88 (ATMEL Norway)
+         ;* Support fax		    :+47 72 88 43 99 (ATMEL Norway)
+         ;* Support E-mail	    :avr@atmel.no
+         ;* Target MCU		    :ATmega32
+         ;*
+         ;* DESCRIPTION
+         ;* When including this file in the assembly program file, all I/O register	
+         ;* names and I/O register bit names appearing in the data book can be used.
+         ;* In addition, the six registers forming the three data pointers X, Y and
+         ;* Z have been assigned names XL - ZH. Highest RAM address for Internal 
+         ;* SRAM is also defined 
+         ;*
+         ;* The Register names are represented by their hexadecimal address.
+         ;* 
+         ;* The Register Bit names are represented by their bit number (0-7).
+         ;* 
+         ;* Please observe the difference in using the bit names with instructions
+         ;* such as "sbr"/"cbr" (set/clear bit in register) and "sbrs"/"sbrc" 
+         ;* (skip if bit in register set/cleared). The following example illustrates
+         ;* this:
+         ;* 
+         ;* in	r16,PORTB		;read PORTB latch
+         ;* sbr	r16,(1<<PB6)+(1<<PB5)	;set PB6 and PB5 (use masks, not bit#)
+         ;* out  PORTB,r16		;output to PORTB
+         ;*
+         ;* in	r16,TIFR		;read the Timer Interrupt Flag Register
+         ;* sbrc	r16,TOV0		;test the overflow flag (use bit#)
+         ;* rjmp	TOV0_is_set		;jump if set
+         ;* ...				;otherwise do something else
+         ;***************************************************************************
+         
+         ;***** Specify Device
+          .device ATmega32
+         
+         ;***** I/O Register Definitions
+          .equ	SREG	=$3f
+          .equ	SPH	    =$3e
+          .equ	SPL	    =$3d
+          .equ	OCR0	=$3c
+          .equ	GIMSK	=$3b		; For compatibility, keep both names until further
+          .equ	GICR	=$3b		; new name for GIMSK
+          .equ	GIFR	=$3a
+          .equ	TIMSK	=$39
+          .equ	TIFR	=$38
+          .equ	SPMCR	=$37
+          .equ    TWCR    =$36
+          .equ    MCUCR   =$35
+          .equ    MCUSR   =$34		; For compatibility, 
+          .equ    MCUCSR  =$34		; keep both names until further
+          .equ	TCCR0	=$33
+          .equ	TCNT0	=$32
+          .equ    OSCCAL  =$31
+          .equ    SFIOR   =$30
+          .equ	TCCR1A	=$2f
+          .equ	TCCR1B	=$2e
+          .equ	TCNT1H	=$2d
+          .equ	TCNT1L	=$2c
+          .equ	OCR1AH	=$2b
+          .equ	OCR1AL	=$2a
+          .equ	OCR1BH	=$29
+          .equ	OCR1BL	=$28
+          .equ	ICR1H	=$27
+          .equ	ICR1L	=$26
+          .equ	TCCR2	=$25
+          .equ	TCNT2	=$24
+          .equ	OCR2	=$23
+          .equ	ASSR	=$22
+          .equ	WDTCR	=$21
+          .equ    UBRRH   =$20		;  Note! UCSRC equals UBRRH
+          .equ	EEARH	=$1f
+          .equ	EEARL	=$1e
+          .equ	EEDR	=$1d
+          .equ	EECR	=$1c
+          .equ	PORTA	=$1b
+          .equ	DDRA	=$1a
+          .equ	PINA	=$19
+          .equ	PORTB	=$18
+          .equ	DDRB	=$17
+          .equ	PINB	=$16
+          .equ	PORTC	=$15
+          .equ	DDRC	=$14
+          .equ	PINC	=$13
+          .equ	PORTD	=$12
+          .equ	DDRD	=$11
+          .equ	PIND	=$10
+          .equ	SPDR	=$0f
+          .equ	SPSR	=$0e
+          .equ	SPCR	=$0d
+          .equ	UDR	    =$0c
+          .equ	UCSRA	=$0b
+          .equ	UCSRB	=$0a
+          .equ	UCSRC	=$20		;  Note! UCSRC equals UBRRH
+          .equ	UBRRL	=$09
+          .equ	ACSR	=$08
+          .equ    ADMUX   =$07
+          .equ    ADCSR   =$06
+          .equ    ADCH    =$05
+          .equ    ADCL    =$04
+          .equ    TWDR    =$03
+          .equ    TWAR    =$02
+          .equ    TWSR    =$01
+          .equ    TWBR    =$00
+         
+         
+         
+         ;***** Bit Definitions
+         ;GIMSK
+          .equ	INT1	=7
+          .equ	INT0	=6
+          .equ	INT2	=5
+          .equ	IVSEL	=1		; interrupt vector select
+          .equ	IVCE	=0		; interrupt vector change enable
+         
+         ;GIFR
+          .equ	INTF1	=7
+          .equ	INTF0	=6
+          .equ	INTF2	=5
+         
+         ;TIMSK
+          .equ    TOIE0   =0
+          .equ    OCIE0   =1
+          .equ    TOIE1   =2
+          .equ    OCIE1B  =3
+          .equ    OCIE1A  =4
+          .equ    TICIE1  =5
+          .equ    TOIE2   =6
+          .equ    OCIE2   =7
+         
+         ;TIFR
+          .equ    TOV0    =0
+          .equ    OCF0    =1
+          .equ    TOV1    =2
+          .equ    OCF1B   =3
+          .equ    OCF1A   =4
+          .equ    ICF1    =5
+          .equ    TOV2    =6
+          .equ    OCF2    =7
+         
+         ;SPMCR
+          .equ	SPMIE	=7
+          .equ	ASB	=6
+          .equ	ASRE	=4
+          .equ	BLBSET	=3
+          .equ	PGWRT	=2
+          .equ	PGERS	=1
+          .equ	SPMEN	=0
+         
+         ;MCUCR
+          .equ    SE      =7
+          .equ    SM2     =6
+          .equ    SM1     =5
+          .equ    SM0     =4
+          .equ    ISC11   =3
+          .equ    ISC10   =2
+          .equ    ISC01   =1
+          .equ    ISC00   =0
+         
+         ;MCUCSR
+          .equ	JTD     =7	
+          .equ    ISC2    =6
+          .equ    EIH     =5
+          .equ    JTRF    =4	
+          .equ    WDRF    =3
+          .equ    BORF    =2
+          .equ    EXTRF   =1
+          .equ    PORF    =0
+         
+         ;TCCR0
+          .equ    FOC0    =7
+          .equ    PWM0    =6
+          .equ	COM01	=5
+          .equ	COM00	=4
+          .equ	CTC0	=3
+          .equ	CS02	=2
+          .equ	CS01	=1
+          .equ	CS00	=0
+         
+         ;TCCR1A
+          .equ	COM1A1	=7
+          .equ	COM1A0	=6
+          .equ	COM1B1	=5
+          .equ	COM1B0	=4
+          .equ	FOC1A	=3
+          .equ	FOC1B	=2
+          .equ	PWM11	=1
+          .equ	PWM10	=0
+         
+         ;TCCR1B
+          .equ	ICNC1	=7
+          .equ	ICES1	=6
+          .equ	CTC11	=4
+          .equ	CTC10	=3
+          .equ	CTC1	=3		; Obsolete - Included for backward compatibility
+          .equ	CS12	=2
+          .equ	CS11	=1
+          .equ	CS10	=0
+         
+         ;TCCR2
+          .equ	FOC2	=7
+          .equ    PWM2    =6
+          .equ    COM21   =5
+          .equ    COM20   =4
+          .equ    CTC2    =3
+          .equ    CS22    =2
+          .equ    CS21    =1
+          .equ    CS20    =0
+         
+         ;SFIOR
+          .equ    RPDD    =7
+          .equ    RPDC    =6
+          .equ    RPDB    =5
+          .equ    RPDA    =4
+          .equ    ACME    =3
+          .equ    PUD     =2
+          .equ	PSR2	=1
+          .equ	PSR10	=0
+         
+         ;WDTCR
+          .equ	WDTOE	=4
+          .equ	WDE	=3
+          .equ	WDP2	=2
+          .equ	WDP1	=1
+          .equ	WDP0	=0
+         
+         ;EECR
+          .equ    EERIE   =3
+          .equ	EEMWE	=2
+          .equ	EEWE	=1
+          .equ	EERE	=0
+         
+         ;PORTA
+          .equ	PA7	=7
+          .equ	PA6	=6
+          .equ	PA5	=5
+          .equ	PA4	=4
+          .equ	PA3	=3
+          .equ	PA2	=2
+          .equ	PA1	=1
+          .equ	PA0	=0
+         
+         ;DDRA
+          .equ	DDA7	=7
+          .equ	DDA6	=6
+          .equ	DDA5	=5
+          .equ	DDA4	=4
+          .equ	DDA3	=3
+          .equ	DDA2	=2
+          .equ	DDA1	=1
+          .equ	DDA0	=0
+         
+         ;PINA
+          .equ	PINA7	=7
+          .equ	PINA6	=6
+          .equ	PINA5	=5
+          .equ	PINA4	=4
+          .equ	PINA3	=3
+          .equ	PINA2	=2
+          .equ	PINA1	=1
+          .equ	PINA0	=0
+         
+         ;PORTB
+          .equ	PB7	=7
+          .equ	PB6	=6
+          .equ	PB5	=5
+          .equ	PB4	=4
+          .equ	PB3	=3
+          .equ	PB2	=2
+          .equ	PB1	=1
+          .equ	PB0	=0
+         
+         ;DDRB
+          .equ	DDB7	=7
+          .equ	DDB6	=6
+          .equ	DDB5	=5
+          .equ	DDB4	=4
+          .equ	DDB3	=3
+          .equ	DDB2	=2
+          .equ	DDB1	=1
+          .equ	DDB0	=0
+         
+         ;PINB
+          .equ	PINB7	=7
+          .equ	PINB6	=6
+          .equ	PINB5	=5
+          .equ	PINB4	=4
+          .equ	PINB3	=3
+          .equ	PINB2	=2
+          .equ	PINB1	=1
+          .equ	PINB0	=0
+         
+         ;PORTC
+          .equ	PC7	=7
+          .equ	PC6	=6
+          .equ	PC5	=5
+          .equ	PC4	=4
+          .equ	PC3	=3
+          .equ	PC2	=2
+          .equ	PC1	=1
+          .equ	PC0	=0
+         
+         ;DDRC
+          .equ	DDC7	=7
+          .equ	DDC6	=6
+          .equ	DDC5	=5
+          .equ	DDC4	=4
+          .equ	DDC3	=3
+          .equ	DDC2	=2
+          .equ	DDC1	=1
+          .equ	DDC0	=0
+         
+         ;PINC
+          .equ	PINC7	=7
+          .equ	PINC6	=6
+          .equ	PINC5	=5
+          .equ	PINC4	=4
+          .equ	PINC3	=3
+          .equ	PINC2	=2
+          .equ	PINC1	=1
+          .equ	PINC0	=0
+         
+         ;PORTD
+          .equ	PD7	=7
+          .equ	PD6	=6
+          .equ	PD5	=5
+          .equ	PD4	=4
+          .equ	PD3	=3
+          .equ	PD2	=2
+          .equ	PD1	=1
+          .equ	PD0	=0
+         
+         ;DDRD
+          .equ	DDD7	=7
+          .equ	DDD6	=6
+          .equ	DDD5	=5
+          .equ	DDD4	=4
+          .equ	DDD3	=3
+          .equ	DDD2	=2
+          .equ	DDD1	=1
+          .equ	DDD0	=0
+         
+         ;PIND
+          .equ	PIND7	=7
+          .equ	PIND6	=6
+          .equ	PIND5	=5
+          .equ	PIND4	=4
+          .equ	PIND3	=3
+          .equ	PIND2	=2
+          .equ	PIND1	=1
+          .equ	PIND0	=0
+         
+         ;UCSRA
+          .equ	RXC	=7
+          .equ	TXC	=6
+          .equ	UDRE	=5
+          .equ	FE	=4
+          .equ	OR	=3		; old name kept for compatibilty
+          .equ	DOR	=3
+          .equ	PE	=2
+          .equ	U2X	=1
+          .equ	MPCM	=0
+         
+         ;UCSRB
+          .equ	RXCIE	=7
+          .equ	TXCIE	=6
+          .equ	UDRIE	=5
+          .equ	RXEN	=4
+          .equ	TXEN	=3
+          .equ	CHR9	=2		; old name kept for compatibilty
+          .equ	UCSZ2	=2
+          .equ	RXB8	=1
+          .equ	TXB8	=0
+         
+         ;UCSRC
+          .equ	URSEL	=7
+          .equ	UMSEL	=6
+          .equ	UPM1	=5
+          .equ	UPM0	=4
+          .equ	USBS	=3
+          .equ	UCSZ1	=2
+          .equ	UCSZ0	=1
+          .equ	UCPOL	=0
+         		
+         ;SPCR
+          .equ	SPIE	=7
+          .equ	SPE	=6
+          .equ	DORD	=5
+          .equ	MSTR	=4
+          .equ	CPOL	=3
+          .equ	CPHA	=2
+          .equ	SPR1	=1
+          .equ	SPR0	=0
+         
+         ;SPSR
+          .equ	SPIF	=7
+          .equ	WCOL	=6
+          .equ	SPI2X	=0
+         
+         ;ACSR
+          .equ	ACD	=7
+          .equ    ACBG    =6
+          .equ	ACO	=5
+          .equ	ACI	=4
+          .equ	ACIE	=3
+          .equ	ACIC	=2
+          .equ	ACIS1	=1
+          .equ	ACIS0	=0
+         
+         ;ADMUX
+          .equ    REFS1   =7
+          .equ    REFS0   =6
+          .equ    ADLAR   =5
+          .equ    MUX4    =4
+          .equ    MUX3    =3
+          .equ    MUX2    =2
+          .equ    MUX1    =1
+          .equ    MUX0    =0
+         
+         ;ADCSR
+          .equ    ADEN    =7
+          .equ    ADSC    =6
+          .equ    ADFR    =5
+          .equ    ADIF    =4
+          .equ    ADIE    =3
+          .equ    ADPS2   =2
+          .equ    ADPS1   =1
+          .equ    ADPS0   =0
+         
+         ; TWCR
+          .equ    TWINT   =7
+          .equ    TWEA    =6
+          .equ    TWSTA   =5
+          .equ    TWSTO   =4
+          .equ    TWWC    =3
+          .equ    TWEN    =2
+          .equ    TWI_TST =1  ;Present in core test mode only. Write Only.
+          .equ    TWIE    =0
+         
+         ; TWAR
+          .equ    TWGCE   =0
+         
+         ;ASSR
+          .equ    AS2     =3
+          .equ    TCN2UB  =2
+          .equ    OCR2UB  =1
+          .equ    TCR2UB  =0
+         
+          .def	XL	=r26
+          .def	XH	=r27
+          .def	YL	=r28
+          .def	YH	=r29
+          .def	ZL	=r30
+          .def	ZH	=r31
+         
+          .equ 	FLASHEND	=$3FFF
+          .equ 	E2END	    =$3FF
+          .equ	RAMEND	    =$85F
+         
+         			;  byte groups
+         			;  /\/--\/--\/--\ 
+          .equ 	SMALLBOOTSTART	=0b11111100000000  ;($3F00) smallest boot block is 256W
+          .equ 	SECONDBOOTSTART	=0b11111000000000  ;($3E00) 2'nd boot block size is 512W
+          .equ 	THIRDBOOTSTART	=0b11110000000000  ;($3C00) third boot block size is 1KW
+          .equ 	LARGEBOOTSTART	=0b11100000000000  ;($3800) largest boot block is 2KW
+          .equ 	BOOTSTART	=THIRDBOOTSTART  ;OBSOLETE!!! kept for compatibility
+          .equ	PAGESIZE	=64     ;number of WORDS in a page
+         
+         
+          .equ	INT0addr=$002	; External Interrupt0 Vector Address
+          .equ	INT1addr=$004	; External Interrupt1 Vector Address
+          .equ	INT2addr=$006	; External Interrupt2 Vector Address
+          .equ	OC2addr =$008	; Output Compare2 Interrupt Vector Address
+          .equ	OVF2addr=$00a	; Overflow2 Interrupt Vector Address
+          .equ	ICP1addr=$00c	; Input Capture1 Interrupt Vector Address
+          .equ	OC1Aaddr=$00e	; Output Compare1A Interrupt Vector Address
+          .equ	OC1Baddr=$010	; Output Compare1B Interrupt Vector Address
+          .equ	OVF1addr=$012	; Overflow1 Interrupt Vector Address
+          .equ	OC0addr =$014	; Output Compare0 Interrupt Vector Address
+          .equ	OVF0addr=$016	; Overflow0 Interrupt Vector Address
+          .equ	SPIaddr =$018	; SPI Interrupt Vector Address
+          .equ	URXCaddr=$01a	; USART Receive Complete Interrupt Vector Address
+          .equ	UDREaddr=$01c	; USART Data Register Empty Interrupt Vector Address
+          .equ	UTXCaddr=$01e	; USART Transmit Complete Interrupt Vector Address
+          .equ	ADCCaddr=$020	; ADC Interrupt Vector Address
+          .equ	ERDYaddr=$022	; EEPROM Interrupt Vector Address
+          .equ	ACIaddr =$024	; Analog Comparator Interrupt Vector Address
+          .equ    TWSIaddr=$026   ; Irq. vector address for Two-Wire Interface
+          .equ	SPMRaddr=$028	; Store Program Memory Ready Interrupt Vector Address
+         
+         
+         
+          
+         
+         ;Mapping of all the interrupts, must be the first include!
+          .include "Interrupt_Mapping.asm"
+         ;Interrupt vector mapping
+          .org 0x00
+C:000000 c29c      rjmp Init
+         ;External interrupt1
+          .org 0x04
+C:000004 940c 0198 jmp	Input_Capture
+         ;Timer1 Input Capture interrupt
+          .org	0x0C
+C:00000c 940c 0198 jmp	Input_Capture
+         ;Timer0 CTC interrupt
+          .org 0x14
+C:000014 940c 017d jmp Timer0_Update
+         ;USART received interrupt
+          .org 0x1A
+C:00001a 940c 025f jmp Comm_Received
+         ;Comparator interrupt
+          .org 0x24
+C:000024 940c 0213 jmp Lap_Time
+         
+         ;Library includes
+          .include "Macros.asm"
+          .MACRO Push_Register_5
+          	push	@0
+          	push	@1
+          	push	@2
+          	push	@3
+          	push	@4
+          	in	R16, SREG
+          	push	R16
+          .ENDMACRO
+         
+          .MACRO Pop_Register_5
+          	pop	R16
+          	out	SREG, R16
+          	pop	@0
+          	pop	@1
+          	pop	@2
+          	pop	@3
+          	pop	@4	
+          .ENDMACRO
+         
+          .MACRO Push_Register_7
+          	push	@0
+          	push	@1
+          	push	@2
+          	push	@3
+          	push	@4
+          	push	@5
+          	push	@6
+          	in	R16, SREG
+          	push	R16
+          .ENDMACRO
+         
+          .MACRO Pop_Register_7
+          	pop	R16
+          	out	SREG, R16
+          	pop	@0
+          	pop	@1
+          	pop	@2
+          	pop	@3
+          	pop	@4
+          	pop	@5
+          	pop	@6	
+          .ENDMACRO
+          .include "Math.asm"
+          Sum_16:
+C:000026 0f02      	add R16, R18
+C:000027 1f13      	adc R17, R19
+C:000028 9508      ret
+         
+          Div16_8:
+         	
+C:000029 27ff      	clr ZH ;Kvotient high
+C:00002a 27ee      	clr ZL ;Kvotient low
+         
+          Div16_8_Loop:
+         
+C:00002b 9631      	adiw ZH:ZL, 1 ;Kvotient ++
+         
+C:00002c 1b02      	sub R16 ,R18 ;Træk nævner fra tæller
+C:00002d 4010      	sbci R17, 0
+C:00002e f7e0      	brcc Div16_8_Loop
+         	
+C:00002f 9731      	sbiw ZH:ZL, 1 ;Kvotient --
+         
+C:000030 0f02      	add R16, R18 ;Læg nævner til
+         	
+C:000031 2f20      	mov R18, R16
+C:000032 018f      	movw R17:R16,ZH:ZL
+         
+C:000033 9508      ret
+          .include "SRAM-Mapping.asm"
+         ;Mapping of the data memory
+         ;SRAM starts at 0x60
+         
+         ;Accelerometer dataset from the MPU6050
+          .equ ACCEL_XOUT_H = 0x0060
+          .equ ACCEL_XOUT_L = 0x0061
+          .equ ACCEL_YOUT_H = 0x0062
+          .equ ACCEL_YOUT_L = 0x0063
+          .equ ACCEL_ZOUT_H = 0x0064
+          .equ ACCEL_ZOUT_L = 0x0065
+         
+         ;Temperature dataset from the MPU6050
+          .equ TEMP_OUT_H   = 0x0066
+          .equ TEMP_OUT_L   = 0x0067
+         
+         ;Gyro dataset from the MPU6050
+          .equ GYRO_XOUT_H  = 0x0068
+          .equ GYRO_XOUT_L  = 0x0069
+          .equ GYRO_YOUT_H  = 0x006A
+          .equ GYRO_YOUT_L  = 0x006B
+          .equ GYRO_ZOUT_H  = 0x006C
+          .equ GYRO_ZOUT_L  = 0x006D
+         
+         ;Time0 variables
+          .equ Timer_1ms_H  = 0x006E
+          .equ Timer_1ms_M  = 0x006F
+          .equ Timer_1ms_L  = 0x0070
+         
+         ;Finish line time stamp
+          .equ Time_Stamp_H = 0x0071
+          .equ Time_Stamp_M = 0x0072
+          .equ Time_Stamp_L = 0x0073
+         
+         ;Latest lap time
+          .equ Lap_time_L   = 0x0074
+          .equ Lap_time_M	  = 0x0075
+          .equ Lap_time_H	  = 0x0076
+         
+         ;Pulse Stuphs
+          .equ Edge1_L		= 0x0083
+          .equ Edge1_H		= 0x0084
+          .equ Pulse_Time_L	= 0x0085
+          .equ Pulse_Time_H	= 0x0086
+          .equ Pulse_Time_L1	= 0x0087
+          .equ Pulse_Time_H1	= 0x0088
+          .equ Pulse_Time_L2	= 0x0089
+          .equ Pulse_Time_H2	= 0x008A
+         
+          .equ Ticks_L		= 0x008B
+          .equ Ticks_H		= 0x008C
+         
+          .equ Ticks_Lap_L	= 0x008D
+          .equ Ticks_Lap_H	= 0x008E
+         
+         ;Status Register
+          .equ SREG_1			= 0x007B
+          .equ Program_Running = 0x0080
+         
+         ;Communication Protocol stuff
+          .equ Comm_Received_Byte_Num = 0x007C
+          .equ Comm_Received_Byte_1 = 0x007D
+          .equ Comm_Received_Byte_2 = 0x007E
+          .equ Comm_Received_Byte_3 = 0x007F
+         
+         ;Wheel Speed
+          .equ Wheel_speed_L = 0x0081
+          .equ Wheel_speed_H = 0x0082
+         
+         
+         
+          
+          .include "USART_Library.asm"
+          ; USART_library.asm
+          ; Author: StjerneIdioten
+         
+          .MACRO  USART_Init
+         	;Set Baud Rate to 9600
+          	ldi R16,	@1	
+          	ldi R17,	@0
+          
+          	out	UBRRH,	R17
+          	out UBRRL,	R16
+          
+         	;Enable receiver and transmitter
+          	ldi R16,	(1<<RXEN)|(1<<TXEN)|(1<<RXCIE)
+          	out	UCSRB,	R16
+          
+         	;Set frame format: 8data, 1stop bit
+          	ldi	R16,	(1<<URSEL)|(3<<UCSZ0)
+          	out	UCSRC,	R16
+          .ENDMACRO
+         
+          ;Waits for an empty transmit buffer and then moves R16 to the transmit buffer
+           USART_Transmit: 
+           USART_Transmit_Start:
+         	; Wait for empty transmit buffer
+C:000034 9b5d      	sbis	UCSRA,	UDRE
+C:000035 cffe      	rjmp	USART_Transmit_Start
+C:000036 b90c      	out	UDR, R16
+C:000037 9508      ret
+         
+         
+         ;Waits for a byte to be recived and outputs it to R16
+          USART_Receive:
+          USART_Receive_Start:
+         	; Wait for data to be received
+C:000038 9b5f      	sbis UCSRA, RXC
+C:000039 cffe      	rjmp USART_Receive_Start
+         	; Get and return received data from buffer
+C:00003a b10c      	in r16, UDR
+C:00003b 9508      ret
+         
+         
+         ;Outputs a newline to serial. In the format of '\r\n'
+          .Macro USART_Newline
+          	ldi R16, 0x0D
+          	call USART_Transmit 
+          	ldi R16, 0x0A
+          	call USART_Transmit 
+          .ENDMACRO
+         
+         
+         ;Outputs the byte in R16 as a string of 8 ascii 1's or 0's
+          USART_Binary:
+C:00003c 2f10      	mov R17, R16			;Copy R16 to R17
+C:00003d e020      	ldi R18, 0x00			;Set the counter to zero
+          USART_Binary_Loop:
+C:00003e ff17      	sbrs R17, 7				;Skip if bit 7 in R17 is set
+C:00003f c004      	rjmp USART_Binary_0		;Jump here if the it was 0
+C:000040 e301      	ldi R16, '1'			;Load in ascii 1 in R16
+C:000041 940e 0034 	call USART_Transmit		;Transmit the 1
+C:000043 c003      	rjmp USART_Binary_End	;Jump to the end
+          USART_Binary_0:				
+C:000044 e300      	ldi R16, '0'			;Load in ascii 0 in R16
+C:000045 940e 0034 	call USART_Transmit
+          USART_Binary_End:
+C:000047 0f11      	lsl R17					;Left shift R17
+C:000048 9523      	inc R18					;Increment R18
+C:000049 3028      	cpi R18, 0x08			;Check if we have converted and sent an entire byte yet
+C:00004a f799      	brne USART_Binary_Loop	;Repeat if we haven't
+C:00004b 9508      ret
+         
+         
+         
+         ;Expecs a 16 bit value in R17:R16
+          USART_Decimal_S16:
+         
+C:00004c 0198      	movw R19:R18, R17:R16
+C:00004d ff37      	sbrs R19, 7
+C:00004e c007      	rjmp USART_Decimal_S16_Count_10000
+         
+          USART_Decimal_S16_Signed:
+C:00004f e20d      	ldi R16, '-'
+C:000050 940e 0034 	call USART_Transmit
+C:000052 5021      	subi R18, 0x01
+C:000053 4030      	sbci R19, 0x00
+C:000054 9520      	com R18
+C:000055 9530      	com R19
+         
+          USART_Decimal_S16_Count_10000:
+C:000056 2744      	clr R20
+C:000057 e2b7      	ldi XH, HIGH(10000)
+C:000058 e1a0      	ldi XL, LOW(10000)
+          USART_Decimal_S16_Count_10000_Loop:
+C:000059 9543      	inc R20
+C:00005a 1b2a      	sub R18, XL
+C:00005b 0b3b      	sbc R19, XH
+C:00005c f7e0      	brcc USART_Decimal_S16_Count_10000_Loop
+C:00005d 954a      	dec R20
+C:00005e 0f2a      	add R18, XL
+C:00005f 1f3b      	adc R19, XH
+C:000060 e300      	ldi R16, 0x30
+C:000061 0f04      	add R16, R20
+C:000062 940e 0034 	call USART_Transmit
+         
+          USART_Decimal_S16_Count_1000:
+C:000064 2744      	clr R20
+C:000065 e0b3      	ldi XH, HIGH(1000)
+C:000066 eea8      	ldi XL, LOW(1000)
+          USART_Decimal_S16_Count_1000_Loop:
+C:000067 9543      	inc R20
+C:000068 1b2a      	sub R18, XL
+C:000069 0b3b      	sbc R19, XH
+C:00006a f7e0      	brcc USART_Decimal_S16_Count_1000_Loop
+C:00006b 954a      	dec R20
+C:00006c 0f2a      	add R18, XL
+C:00006d 1f3b      	adc R19, XH
+C:00006e e300      	ldi R16, 0x30
+C:00006f 0f04      	add R16, R20
+C:000070 940e 0034 	call USART_Transmit
+         
+          USART_Decimal_S16_Count_100:
+C:000072 2744      	clr R20
+C:000073 e0b0      	ldi XH, HIGH(100)
+C:000074 e6a4      	ldi XL, LOW(100)
+          USART_Decimal_S16_Count_100_Loop:
+C:000075 9543      	inc R20
+C:000076 1b2a      	sub R18, XL
+C:000077 0b3b      	sbc R19, XH
+C:000078 f7e0      	brcc USART_Decimal_S16_Count_100_Loop
+C:000079 954a      	dec R20
+C:00007a 0f2a      	add R18, XL
+C:00007b 1f3b      	adc R19, XH
+C:00007c e300      	ldi R16, 0x30
+C:00007d 0f04      	add R16, R20
+C:00007e 940e 0034 	call USART_Transmit
+         
+          USART_Decimal_S16_Count_10:
+C:000080 2744      	clr R20
+C:000081 e0b0      	ldi XH, HIGH(10)
+C:000082 e0aa      	ldi XL, LOW(10)
+          USART_Decimal_S16_Count_10_Loop:
+C:000083 9543      	inc R20
+C:000084 1b2a      	sub R18, XL
+C:000085 0b3b      	sbc R19, XH
+C:000086 f7e0      	brcc USART_Decimal_S16_Count_10_Loop
+C:000087 954a      	dec R20
+C:000088 0f2a      	add R18, XL
+C:000089 1f3b      	adc R19, XH
+C:00008a e300      	ldi R16, 0x30
+C:00008b 0f04      	add R16, R20
+C:00008c 940e 0034 	call USART_Transmit
+         
+          USART_Decimal_S16_Count_1:
+C:00008e 2744      	clr R20
+C:00008f e0b0      	ldi XH, HIGH(1)
+C:000090 e0a1      	ldi XL, LOW(1)
+          USART_Decimal_S16_Count_1_Loop:
+C:000091 9543      	inc R20
+C:000092 1b2a      	sub R18, XL
+C:000093 0b3b      	sbc R19, XH
+C:000094 f7e0      	brcc USART_Decimal_S16_Count_1_Loop
+C:000095 954a      	dec R20
+C:000096 0f2a      	add R18, XL
+C:000097 1f3b      	adc R19, XH
+C:000098 e300      	ldi R16, 0x30
+C:000099 0f04      	add R16, R20
+C:00009a 940e 0034 	call USART_Transmit
+         
+C:00009c 9508      ret
+         
+         
+         ;Expecs a 16 bit value in R17:R16
+          USART_Decimal_16:
+         
+C:00009d 0198      	movw R19:R18, R17:R16
+         
+          USART_Decimal_16_Count_10000:
+C:00009e 2744      	clr R20
+C:00009f e2b7      	ldi XH, HIGH(10000)
+C:0000a0 e1a0      	ldi XL, LOW(10000)
+          USART_Decimal_16_Count_10000_Loop:
+C:0000a1 9543      	inc R20
+C:0000a2 1b2a      	sub R18, XL
+C:0000a3 0b3b      	sbc R19, XH
+C:0000a4 f7e0      	brcc USART_Decimal_16_Count_10000_Loop
+C:0000a5 954a      	dec R20
+C:0000a6 0f2a      	add R18, XL
+C:0000a7 1f3b      	adc R19, XH
+C:0000a8 e300      	ldi R16, 0x30
+C:0000a9 0f04      	add R16, R20
+C:0000aa 940e 0034 	call USART_Transmit
+         
+          USART_Decimal_16_Count_1000:
+C:0000ac 2744      	clr R20
+C:0000ad e0b3      	ldi XH, HIGH(1000)
+C:0000ae eea8      	ldi XL, LOW(1000)
+          USART_Decimal_16_Count_1000_Loop:
+C:0000af 9543      	inc R20
+C:0000b0 1b2a      	sub R18, XL
+C:0000b1 0b3b      	sbc R19, XH
+C:0000b2 f7e0      	brcc USART_Decimal_16_Count_1000_Loop
+C:0000b3 954a      	dec R20
+C:0000b4 0f2a      	add R18, XL
+C:0000b5 1f3b      	adc R19, XH
+C:0000b6 e300      	ldi R16, 0x30
+C:0000b7 0f04      	add R16, R20
+C:0000b8 940e 0034 	call USART_Transmit
+         
+          USART_Decimal_16_Count_100:
+C:0000ba 2744      	clr R20
+C:0000bb e0b0      	ldi XH, HIGH(100)
+C:0000bc e6a4      	ldi XL, LOW(100)
+          USART_Decimal_16_Count_100_Loop:
+C:0000bd 9543      	inc R20
+C:0000be 1b2a      	sub R18, XL
+C:0000bf 0b3b      	sbc R19, XH
+C:0000c0 f7e0      	brcc USART_Decimal_16_Count_100_Loop
+C:0000c1 954a      	dec R20
+C:0000c2 0f2a      	add R18, XL
+C:0000c3 1f3b      	adc R19, XH
+C:0000c4 e300      	ldi R16, 0x30
+C:0000c5 0f04      	add R16, R20
+C:0000c6 940e 0034 	call USART_Transmit
+         
+          USART_Decimal_16_Count_10:
+C:0000c8 2744      	clr R20
+C:0000c9 e0b0      	ldi XH, HIGH(10)
+C:0000ca e0aa      	ldi XL, LOW(10)
+          USART_Decimal_16_Count_10_Loop:
+C:0000cb 9543      	inc R20
+C:0000cc 1b2a      	sub R18, XL
+C:0000cd 0b3b      	sbc R19, XH
+C:0000ce f7e0      	brcc USART_Decimal_16_Count_10_Loop
+C:0000cf 954a      	dec R20
+C:0000d0 0f2a      	add R18, XL
+C:0000d1 1f3b      	adc R19, XH
+C:0000d2 e300      	ldi R16, 0x30
+C:0000d3 0f04      	add R16, R20
+C:0000d4 940e 0034 	call USART_Transmit
+         
+          USART_Decimal_16_Count_1:
+C:0000d6 2744      	clr R20
+C:0000d7 e0b0      	ldi XH, HIGH(1)
+C:0000d8 e0a1      	ldi XL, LOW(1)
+          USART_Decimal_16_Count_1_Loop:
+C:0000d9 9543      	inc R20
+C:0000da 1b2a      	sub R18, XL
+C:0000db 0b3b      	sbc R19, XH
+C:0000dc f7e0      	brcc USART_Decimal_16_Count_1_Loop
+C:0000dd 954a      	dec R20
+C:0000de 0f2a      	add R18, XL
+C:0000df 1f3b      	adc R19, XH
+C:0000e0 e300      	ldi R16, 0x30
+C:0000e1 0f04      	add R16, R20
+C:0000e2 940e 0034 	call USART_Transmit
+         
+C:0000e4 9508      ret
+          .include "Delays.asm"
+         ;Author: Jonas A. L. Andersen
+         
+         ;Requires the Timer library made by Kristian! And the SRAM-Mapping.asm
+         ;These macros are intended for a micro running 16MHZ
+         
+         ;This macro can generate from 1 to 255 ms of delay.  
+         ;Uses R16, R17 and R18
+          .MACRO	DELAY_MS_M					; Cycles to execute 
+          	LDI R16, @0 ;					; 1 cycle to execute
+          	DELAY_MS_M_2: ;-----------------/
+          	LDI R17, 15 ;	              /
+          	DELAY_MS_M_1:	;------------/    /
+          	LDI R18, 177;		     /    /
+          	DELAY_MS_M_0: ;-------/    /    /
+          	NOP ;			    /C   /B   /A
+          	NOP ;				/	 /	  /
+          	NOP ;				/	 /	  /
+          	DEC R18 ;		    /    /    /
+          	BRNE DELAY_MS_M_0 ;---/    /    /
+          	DEC R17 ;		         /    /
+          	NOP ;					 /	  /
+          	BRNE DELAY_MS_M_1 ;--------/    /
+          	DEC R16 ;		              /
+          	NOP ;						  /
+          	NOP ;						  /
+          	NOP ;						  /
+          	NOP ;						  /
+          	NOP ;						  /
+          	NOP ;						  /
+          	BRNE DELAY_MS_M_2 ;-------------/
+          .ENDMACRO
+         ; Block C: 177*(1+1+1+1+2)-1 = 1061
+         ; Block B: 15*(1+C+1+1+2)-1 = 15990 
+         ; Block A: x*(1+B+1+1+1+1+1+1+1+2)-1 = x*16000-1
+         ; Total # of cycles is: 1 + A = x*16000 
+         ; Formula for delay: x*1ms
+         
+          Delay_MS:
+C:0000e5 2e90      	mov R9, R16
+C:0000e6 9030 0070 	lds R3, Timer_1ms_L
+C:0000e8 9040 006f 	lds R4, Timer_1ms_M
+C:0000ea 9050 006e 	lds R5, Timer_1ms_H
+         
+          Delay_MS_Loop:
+         	
+C:0000ec 9478      	sei
+C:0000ed 9060 0070 	lds R6, Timer_1ms_L
+C:0000ef 9070 006f 	lds R7, Timer_1ms_M
+C:0000f1 9080 006e 	lds R8, Timer_1ms_H
+         
+C:0000f3 94f8      	cli
+C:0000f4 1863      	sub R6, R3
+C:0000f5 0874      	sbc R7, R4
+C:0000f6 0885      	sbc R8, R5
+         
+C:0000f7 1469      	cp R6, R9
+         
+C:0000f8 f398      	brlo Delay_MS_Loop
+C:0000f9 9478      	sei
+C:0000fa 9508      ret
+          .include "Motor_Control.asm"
+          .EQU	MOTOR_PIN = PD7						;The pin that the motor is connected to
+         
+          .MACRO Motor_Init
+          	in R16, DDRD							;Load in the current setup of the portb
+          	ori R16, (1<<PD7)						;OR in the setup that we wish to have
+          	out DDRD, R16
+          
+          	ldi R16, 0b01101001						;Fast-pwm, non-inverting mode, no prescaling
+          	out TCCR2, R16							;
+          .ENDMACRO
+         
+          Motor_Set: 
+C:0000fb bd03      	out OCR2, R16							;Set the duty cycle of the motor
+C:0000fc 9508      ret
+         
+          Motor_Set_Percentage:
+C:0000fd 3605      	cpi R16, 101							;Check if the number is within the percentage range of 100
+C:0000fe f460      	brsh Motor_Set_Percentage_End			;Branch if not
+         
+C:0000ff ef1f      	ldi R17, 255							;Using the formula (N*255)/100=N% of 255
+C:000100 9f01      	mul R16, R17							;Multiply the number by 255
+         
+C:000101 2d00      	mov R16, R0								;The multiplication hardware leaves the result in R1:R0
+C:000102 2d11      	mov R17, R1								;
+         
+C:000103 e624      	ldi R18, 100							;Load in the 100 to divide with
+C:000104 940e 0029 	call Div16_8							;Divide with 100, the rest is returned in R18
+         
+C:000106 3322      	cpi R18, 50								;Check to see if we should round of or down.
+C:000107 f008      	brlo Motor_Set_Percentage_Out			;R16 is actually the trunctuated value of the divison which is the same as rounding down.
+C:000108 9503      	inc R16									;Increment if we were rounding up
+         
+          Motor_Set_Percentage_Out:
+         
+C:000109 940e 00fb 	call Motor_Set							;Set the duty cycle of the motor pwn as the % of 255
+         
+          Motor_Set_Percentage_End:
+C:00010b 9508       ret
+          .include "I2C.asm"
+         ;Author: StjerneIdioten
+         ;I2C communication library 
+         
+           .equ I2C_ACK = 0x01	;Value for ACK used with I2C_Read
+           .equ I2C_NACK = 0x00	;Value for NACK used with I2C_Read
+         
+           .MACRO I2C_Init ;First argument is prescaler, second argument is TWBR
+         	;Set Prescaler
+          	ldi R16, @0
+          	out TWSR, R16
+          	
+         	;Set TWBR
+          	ldi R16, @1
+          	out TWBR, R16
+          
+         	;Enable I2C module
+          	ldi R16, (1<<TWEN)
+          	out TWCR, R16
+          
+          	nop ;Important delay to allow the module to start
+          
+           .ENDMACRO
+         
+         
+         ;This function sends a start command
+          I2C_Start:
+         	;Send Start condition
+C:00010c ea04      	ldi r16, (1<<TWINT)|(1<<TWSTA)|(1<<TWEN) 
+C:00010d bf06      	out TWCR, r16
+         
+          I2C_Start_Wait:	
+         	;Wait for the start condition transmit			
+C:00010e b706      	in r16,TWCR
+C:00010f ff07      	sbrs r16,TWINT
+C:000110 cffd      	rjmp I2C_Start_Wait
+C:000111 9508      ret
+         
+         
+         ;This function sends a stop command
+          I2C_Stop:
+         	;Send Stop condition
+C:000112 e904      	ldi r16, (1<<TWINT)|(1<<TWSTO)|(1<<TWEN) 
+C:000113 bf06      	out TWCR, r16
+C:000114 9508      ret
+         
+         
+         ;This function writes the data from R16, onto the I2C data line
+          I2C_Write_Call:
+C:000115 b903      	out TWDR, r16
+C:000116 e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
+C:000117 bf06      	out TWCR, r16
+         
+          I2C_Write_Call_Wait:
+C:000118 b706      	in r16,TWCR
+C:000119 ff07      	sbrs r16,TWINT
+C:00011a cffd      	rjmp I2C_Write_Call_Wait
+C:00011b 9508      ret
+         
+         ;This is an easy to use macro of the write function
+          .MACRO I2C_Write
+          	ldi R16, @0
+          	call I2C_Write_Call
+          .ENDMACRO
+         
+         ;This function reads in data from the I2C data line and stores it in R16.
+         ;Remember to set R16 to either I2C_ACK or I2C_NACK before calling the function!
+         ;Failure to do so may result in unwanted behaviour.
+          I2C_Read_Call:
+C:00011c fd00      	sbrc r16,0
+C:00011d c002      	rjmp I2C_Read_Call_ACK
+C:00011e e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
+C:00011f c001      	rjmp I2C_Read_Call_Continue
+          I2C_Read_Call_ACK:
+C:000120 ec04      	ldi r16, (1<<TWINT) | (1<<TWEN) | (1<<TWEA)
+          I2C_Read_Call_Continue:
+C:000121 bf06      	out TWCR, r16
+          I2C_Read_Call_Wait:
+C:000122 b706      	in r16,TWCR
+C:000123 ff07      	sbrs r16,TWINT
+C:000124 cffd      	rjmp I2C_Read_Call_Wait
+         
+C:000125 b103      	in R16, TWDR
+C:000126 9508      ret
+         
+         ;Easy to use macro which takes I2C_Ack/I2C_Nack as argument.
+          .MACRO I2C_Read
+          	ldi R16, @0
+          	call I2C_Read_Call
+          .ENDMACRO
+         
+         
+          
+          .include "MPU-6050.inc"
+          .equ MPU6050_ADDRESS_W = 0b11010000 ; Address with end write bit
+          .equ MPU6050_ADDRESS_R = 0b11010001 ; Address with end read bit
+          .equ MPU6050_RA_XG_OFFS_TC = 0x00 ;[7] PWR_MODE, [6:1] XG_OFFS_TC, [0] OTP_BNK_VLD
+          .equ MPU6050_RA_YG_OFFS_TC = 0x01 ;[7] PWR_MODE, [6:1] YG_OFFS_TC, [0] OTP_BNK_VLD
+          .equ MPU6050_RA_ZG_OFFS_TC = 0x02 ;[7] PWR_MODE, [6:1] ZG_OFFS_TC, [0] OTP_BNK_VLD
+          .equ MPU6050_RA_X_FINE_GAIN = 0x03 ;[7:0] X_FINE_GAIN
+          .equ MPU6050_RA_Y_FINE_GAIN = 0x04 ;[7:0] Y_FINE_GAIN
+          .equ MPU6050_RA_Z_FINE_GAIN = 0x05 ;[7:0] Z_FINE_GAIN
+          .equ MPU6050_RA_XA_OFFS_H = 0x06 ;[15:0] XA_OFFS
+          .equ MPU6050_RA_XA_OFFS_L_TC = 0x07
+          .equ MPU6050_RA_YA_OFFS_H = 0x08 ;[15:0] YA_OFFS
+          .equ MPU6050_RA_YA_OFFS_L_TC = 0x09
+          .equ MPU6050_RA_ZA_OFFS_H = 0x0A ;[15:0] ZA_OFFS
+          .equ MPU6050_RA_ZA_OFFS_L_TC = 0x0B
+          .equ MPU6050_RA_XG_OFFS_USRH = 0x13 ;[15:0] XG_OFFS_USR
+          .equ MPU6050_RA_XG_OFFS_USRL = 0x14
+          .equ MPU6050_RA_YG_OFFS_USRH = 0x15 ;[15:0] YG_OFFS_USR
+          .equ MPU6050_RA_YG_OFFS_USRL = 0x16
+          .equ MPU6050_RA_ZG_OFFS_USRH = 0x17 ;[15:0] ZG_OFFS_USR
+          .equ MPU6050_RA_ZG_OFFS_USRL = 0x18
+          .equ MPU6050_RA_SMPLRT_DIV = 0x19
+          .equ MPU6050_RA_CONFIG = 0x1A
+          .equ MPU6050_RA_GYRO_CONFIG = 0x1B
+          .equ MPU6050_RA_ACCEL_CONFIG = 0x1C
+          .equ MPU6050_RA_FF_THR = 0x1D
+          .equ MPU6050_RA_FF_DUR = 0x1E
+          .equ MPU6050_RA_MOT_THR = 0x1F
+          .equ MPU6050_RA_MOT_DUR = 0x20
+          .equ MPU6050_RA_ZRMOT_THR = 0x21
+          .equ MPU6050_RA_ZRMOT_DUR = 0x22
+          .equ MPU6050_RA_FIFO_EN = 0x23
+          .equ MPU6050_RA_I2C_MST_CTRL = 0x24
+          .equ MPU6050_RA_I2C_SLV0_ADDR = 0x25
+          .equ MPU6050_RA_I2C_SLV0_REG = 0x26
+          .equ MPU6050_RA_I2C_SLV0_CTRL = 0x27
+          .equ MPU6050_RA_I2C_SLV1_ADDR = 0x28
+          .equ MPU6050_RA_I2C_SLV1_REG = 0x29
+          .equ MPU6050_RA_I2C_SLV1_CTRL = 0x2A
+          .equ MPU6050_RA_I2C_SLV2_ADDR = 0x2B
+          .equ MPU6050_RA_I2C_SLV2_REG = 0x2C
+          .equ MPU6050_RA_I2C_SLV2_CTRL = 0x2D
+          .equ MPU6050_RA_I2C_SLV3_ADDR = 0x2E
+          .equ MPU6050_RA_I2C_SLV3_REG = 0x2F
+          .equ MPU6050_RA_I2C_SLV3_CTRL = 0x30
+          .equ MPU6050_RA_I2C_SLV4_ADDR = 0x31
+          .equ MPU6050_RA_I2C_SLV4_REG = 0x32
+          .equ MPU6050_RA_I2C_SLV4_DO = 0x33
+          .equ MPU6050_RA_I2C_SLV4_CTRL = 0x34
+          .equ MPU6050_RA_I2C_SLV4_DI = 0x35
+          .equ MPU6050_RA_I2C_MST_STATUS = 0x36
+          .equ MPU6050_RA_INT_PIN_CFG = 0x37
+          .equ MPU6050_RA_INT_ENABLE = 0x38
+          .equ MPU6050_RA_DMP_INT_STATUS = 0x39
+          .equ MPU6050_RA_INT_STATUS = 0x3A
+          .equ MPU6050_RA_ACCEL_XOUT_H = 0x3B
+          .equ MPU6050_RA_ACCEL_XOUT_L = 0x3C
+          .equ MPU6050_RA_ACCEL_YOUT_H = 0x3D
+          .equ MPU6050_RA_ACCEL_YOUT_L = 0x3E
+          .equ MPU6050_RA_ACCEL_ZOUT_H = 0x3F
+          .equ MPU6050_RA_ACCEL_ZOUT_L = 0x40
+          .equ MPU6050_RA_TEMP_OUT_H = 0x41
+          .equ MPU6050_RA_TEMP_OUT_L = 0x42
+          .equ MPU6050_RA_GYRO_XOUT_H = 0x43
+          .equ MPU6050_RA_GYRO_XOUT_L = 0x44
+          .equ MPU6050_RA_GYRO_YOUT_H = 0x45
+          .equ MPU6050_RA_GYRO_YOUT_L = 0x46
+          .equ MPU6050_RA_GYRO_ZOUT_H = 0x47
+          .equ MPU6050_RA_GYRO_ZOUT_L = 0x48
+          .equ MPU6050_RA_EXT_SENS_DATA_00 = 0x49
+          .equ MPU6050_RA_EXT_SENS_DATA_01 = 0x4A
+          .equ MPU6050_RA_EXT_SENS_DATA_02 = 0x4B
+          .equ MPU6050_RA_EXT_SENS_DATA_03 = 0x4C
+          .equ MPU6050_RA_EXT_SENS_DATA_04 = 0x4D
+          .equ MPU6050_RA_EXT_SENS_DATA_05 = 0x4E
+          .equ MPU6050_RA_EXT_SENS_DATA_06 = 0x4F
+          .equ MPU6050_RA_EXT_SENS_DATA_07 = 0x50
+          .equ MPU6050_RA_EXT_SENS_DATA_08 = 0x51
+          .equ MPU6050_RA_EXT_SENS_DATA_09 = 0x52
+          .equ MPU6050_RA_EXT_SENS_DATA_10 = 0x53
+          .equ MPU6050_RA_EXT_SENS_DATA_11 = 0x54
+          .equ MPU6050_RA_EXT_SENS_DATA_12 = 0x55
+          .equ MPU6050_RA_EXT_SENS_DATA_13 = 0x56
+          .equ MPU6050_RA_EXT_SENS_DATA_14 = 0x57
+          .equ MPU6050_RA_EXT_SENS_DATA_15 = 0x58
+          .equ MPU6050_RA_EXT_SENS_DATA_16 = 0x59
+          .equ MPU6050_RA_EXT_SENS_DATA_17 = 0x5A
+          .equ MPU6050_RA_EXT_SENS_DATA_18 = 0x5B
+          .equ MPU6050_RA_EXT_SENS_DATA_19 = 0x5C
+          .equ MPU6050_RA_EXT_SENS_DATA_20 = 0x5D
+          .equ MPU6050_RA_EXT_SENS_DATA_21 = 0x5E
+          .equ MPU6050_RA_EXT_SENS_DATA_22 = 0x5F
+          .equ MPU6050_RA_EXT_SENS_DATA_23 = 0x60
+          .equ MPU6050_RA_MOT_DETECT_STATUS = 0x61
+          .equ MPU6050_RA_I2C_SLV0_DO = 0x63
+          .equ MPU6050_RA_I2C_SLV1_DO = 0x64
+          .equ MPU6050_RA_I2C_SLV2_DO = 0x65
+          .equ MPU6050_RA_I2C_SLV3_DO = 0x66
+          .equ MPU6050_RA_I2C_MST_DELAY_CTRL = 0x67
+          .equ MPU6050_RA_SIGNAL_PATH_RESET = 0x68
+          .equ MPU6050_RA_MOT_DETECT_CTRL = 0x69
+          .equ MPU6050_RA_USER_CTRL = 0x6A
+          .equ MPU6050_RA_PWR_MGMT_1 = 0x6B
+          .equ MPU6050_RA_PWR_MGMT_2 = 0x6C
+          .equ MPU6050_RA_BANK_SEL = 0x6D
+          .equ MPU6050_RA_MEM_START_ADDR = 0x6E
+          .equ MPU6050_RA_MEM_R_W = 0x6F
+          .equ MPU6050_RA_DMP_CFG_1 = 0x70
+          .equ MPU6050_RA_DMP_CFG_2 = 0x71
+          .equ MPU6050_RA_FIFO_COUNTH = 0x72
+          .equ MPU6050_RA_FIFO_COUNTL = 0x73
+          .equ MPU6050_RA_FIFO_R_W = 0x74
+          .equ MPU6050_RA_WHO_AM_I = 0x75
+          .include "MPU-6050.asm"
+         ;This library is for the 6DOF MPU-6050 from invensense.
+         ;This library relies on the I2C library made by StjerneIdioten.
+         ;This library relies on the "MPU-6050.inc" where all the definitions of registers are defined.
+         ;This library relies on having defined the correct SRAM locations prior to reading in data.
+         
+         ;Setup the MPU-6050
+          .MACRO MPU6050_Init
+          
+          	call I2C_Start							;Send a start									
+          	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
+          
+          	I2C_Write MPU6050_RA_SMPLRT_DIV			;Write the address to start the burst write at
+          
+         	;Sets sample rate to 8000/1+7 = 1000Hz
+          	I2C_Write 0x07
+          
+         	;MPU6050_RA_CONFIG, Disable FSync, 256Hz DLPF
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_GYRO_CONFIG, Disable gyro self tests, scale of 500 degrees/s
+          	I2C_Write 0b00001000
+          
+         	;MPU6050_RA_ACCEL_CONFIG ,Disable accel self tests, scale of +-16g, no DHPF
+          	I2C_Write 0b00001000
+          
+         	;MPU6050_RA_FF_THR ,Freefall threshold of |0mg|
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_FF_DUR ,Freefall duration limit of 0
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_MOT_THR ,Motion threshold of 0mg
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_MOT_DUR ,Motion duration of 0s
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_ZRMOT_THR ,Zero motion threshold
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_ZRMOT_DUR ,Zero motion duration threshold
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_FIFO_EN ,Disable sensor output to FIFO buffer
+          	I2C_Write 0x00
+          
+         	;Aux I2C setup
+         	;MPU6050_RA_I2C_MST_CTRL, Sets AUX I2C to single master control, plus other config
+          	I2C_Write 0x00
+          
+         	;Setup AUX I2C slaves
+         	;MPU6050_RA_I2C_SLV0_ADDR
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV0_REG
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV0_CTR
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV1_ADDR
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV1_REG
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV1_CTRL
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV2_ADDR
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV2_REG
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV2_CTRL
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV3_ADDR
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV3_REG
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV3_CTRL
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV4_ADDR
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV4_REG
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV4_DO
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV4_CTRL
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV4_DI
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_MST_STATUS ;Read-only
+          
+         	;MPU6050_RA_INT_PIN_CFG, Setup INT pin and AUX I2C pass through
+          	call I2C_Start							;Send a start
+          	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
+          
+          	I2C_Write MPU6050_RA_INT_PIN_CFG		;Write the address to start the burst write at
+          	I2C_Write 0x00							;Clear the register and burst write
+          
+         	;MPU6050_RA_INT_ENABLE, Enable data ready interrupt
+              I2C_Write 0x00
+          
+         	;MPU6050_RA_DMP_INT_STATUS				;Read-only
+             ;MPU6050_RA_INT_STATUS 3A				;Read-only
+             ;MPU6050_RA_ACCEL_XOUT_H				;Read-only
+             ;MPU6050_RA_ACCEL_XOUT_L				;Read-only
+             ;MPU6050_RA_ACCEL_YOUT_H				;Read-only
+             ;MPU6050_RA_ACCEL_YOUT_L				;Read-only
+             ;MPU6050_RA_ACCEL_ZOUT_H				;Read-only
+             ;MPU6050_RA_ACCEL_ZOUT_L				;Read-only
+             ;MPU6050_RA_TEMP_OUT_H					;Read-only
+             ;MPU6050_RA_TEMP_OUT_L					;Read-only
+             ;MPU6050_RA_GYRO_XOUT_H					;Read-only
+             ;MPU6050_RA_GYRO_XOUT_L					;Read-only
+             ;MPU6050_RA_GYRO_YOUT_H					;Read-only
+             ;MPU6050_RA_GYRO_YOUT_L					;Read-only
+             ;MPU6050_RA_GYRO_ZOUT_H					;Read-only
+             ;MPU6050_RA_GYRO_ZOUT_L					;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_00			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_01			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_02			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_03			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_04			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_05			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_06			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_07			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_08			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_09			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_10			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_11			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_12			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_13			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_14			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_15			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_16			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_17			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_18			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_19			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_20			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_21			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_22			;Read-only
+             ;MPU6050_RA_EXT_SENS_DATA_23			;Read-only
+             ;MPU6050_RA_MOT_DETECT_STATUS			;Read-only
+          
+         	;Slave out, dont care
+          
+         	;MPU6050_RA_I2C_SLV0_DO
+          	call I2C_Start							;Send a start
+          	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
+          
+          	I2C_Write MPU6050_RA_I2C_SLV0_DO		;Write the address to start the burst write at
+          	I2C_Write 0x00							;Clear the register and burst write
+          
+         	;MPU6050_RA_I2C_SLV1_DO
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV2_DO
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_SLV3_DO
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_I2C_MST_DELAY_CTRL, More slave config
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_SIGNAL_PATH_RESET, Reset sensor signal paths
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_MOT_DETECT_CTRL, Motion detection control
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_USER_CTRL, Disables FIFO, AUX I2C, FIFO and I2C reset bits to 0
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_PWR_MGMT_1, Sets clock source to gyro reference w/ PLL
+          	I2C_Write 0b00000010
+          
+         	;MPU6050_RA_PWR_MGMT_2, Controls frequency of wakeups in accel low power mode plus the sensor standby modes
+          	I2C_Write 0x00
+          
+         	;MPU6050_RA_BANK_SEL					;Not in datasheet
+             ;MPU6050_RA_MEM_START_ADDR				;Not in datasheet
+             ;MPU6050_RA_MEM_R_W						;Not in datasheet
+             ;MPU6050_RA_DMP_CFG_1					;Not in datasheet
+             ;MPU6050_RA_DMP_CFG_2					;Not in datasheet
+             ;MPU6050_RA_FIFO_COUNTH					;Read-only
+             ;MPU6050_RA_FIFO_COUNTL					;Read-only
+          
+             ;Data transfer to and from the FIFO buffer
+          	call I2C_Start							;Send a start
+          	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
+          
+          	I2C_Write MPU6050_RA_FIFO_R_W			;Write the address of the FIFO buffer register
+          	I2C_Write 0x00							;Write zero to disable it.
+          
+         	;MPU6050_RA_WHO_AM_I					;Read-only, I2C address
+          
+          	call I2C_Stop							;Send a stop
+          .ENDMACRO
+         
+         
+         ;This macro gets the value stored in the Who_Am_I register in the MPU-6050. This will always return 0x68 independent of AD0! Useful for testing the connection.
+          .MACRO MPU6050_Get_Address
+          	call I2C_Start							;Send a start
+          	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
+          	I2C_Write MPU6050_RA_WHO_AM_I			;Write the address of the Who Am I register
+          
+          	call I2C_Start							;Send a start
+          	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
+          
+          	I2C_Read I2C_Nack						;Move the read in value to R17, because R16 is used in the stop function
+          	mov R17, R16							;
+          
+          	call I2C_Stop							;Send a stop
+          
+          	mov R16, R17							;Move the read in value back into R16 
+          .ENDMACRO
+         
+         
+         ;Reads in the entire dataset supplied by the MPU6050 by doing a couple of burst reads. The values can be found at the SRAM addresses specified in SRAM-Mapping
+          MPU6050_Read_Dataset:
+C:000127 940e 010c 	call I2C_Start							;Send a start
+C:000129   +  	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
+C:000129 ed00      ldi R16, MPU6050_ADDRESS_W
+C:00012a 940e 0115 call I2C_Write_Call
+C:00012c   +  	I2C_Write MPU6050_RA_ACCEL_XOUT_H		;Write the address to begin reading from.
+C:00012c e30b      ldi R16, MPU6050_RA_ACCEL_XOUT_H
+C:00012d 940e 0115 call I2C_Write_Call
+         
+C:00012f 940e 010c 	call I2C_Start							;Send a repeated start
+C:000131   +  	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
+C:000131 ed01      ldi R16, MPU6050_ADDRESS_R
+C:000132 940e 0115 call I2C_Write_Call
+         
+C:000134   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:000134 e001      ldi R16, I2C_Ack
+C:000135 940e 011c call I2C_Read_Call
+C:000137 9300 0060 	sts ACCEL_XOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
+         
+C:000139   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:000139 e001      ldi R16, I2C_Ack
+C:00013a 940e 011c call I2C_Read_Call
+C:00013c 9300 0061 	sts ACCEL_XOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
+         
+C:00013e   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:00013e e001      ldi R16, I2C_Ack
+C:00013f 940e 011c call I2C_Read_Call
+C:000141 9300 0062 	sts ACCEL_YOUT_H, R16					;Store the ACCEL_YOUT_H in SRAM
+         
+C:000143   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:000143 e001      ldi R16, I2C_Ack
+C:000144 940e 011c call I2C_Read_Call
+C:000146 9300 0063 	sts ACCEL_YOUT_L, R16					;Store the ACCEL_YOUT_L in SRAM
+         
+C:000148   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:000148 e001      ldi R16, I2C_Ack
+C:000149 940e 011c call I2C_Read_Call
+C:00014b 9300 0064 	sts ACCEL_ZOUT_H, R16					;Store the ACCEL_ZOUT_H in SRAM
+         
+C:00014d   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:00014d e001      ldi R16, I2C_Ack
+C:00014e 940e 011c call I2C_Read_Call
+C:000150 9300 0065 	sts ACCEL_ZOUT_L, R16					;Store the ACCEL_ZOUT_L in SRAM
+         
+C:000152   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:000152 e001      ldi R16, I2C_Ack
+C:000153 940e 011c call I2C_Read_Call
+C:000155 9300 0066 	sts TEMP_OUT_H, R16						;Store the TEMP_OUT_H in SRAM
+         
+C:000157   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:000157 e001      ldi R16, I2C_Ack
+C:000158 940e 011c call I2C_Read_Call
+C:00015a 9300 0067 	sts TEMP_OUT_L, R16						;Store the TEMP_OUT_L in SRAM
+         
+C:00015c   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:00015c e001      ldi R16, I2C_Ack
+C:00015d 940e 011c call I2C_Read_Call
+C:00015f 9300 0068 	sts GYRO_XOUT_H, R16					;Store the GYRO_XOUT_H in SRAM
+         
+C:000161   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:000161 e001      ldi R16, I2C_Ack
+C:000162 940e 011c call I2C_Read_Call
+C:000164 9300 0069 	sts GYRO_XOUT_L, R16					;Store the GYRO_XOUT_L in SRAM
+         
+C:000166   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:000166 e001      ldi R16, I2C_Ack
+C:000167 940e 011c call I2C_Read_Call
+C:000169 9300 006a 	sts GYRO_YOUT_H, R16					;Store the GYRO_YOUT_H in SRAM
+         	
+C:00016b   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:00016b e001      ldi R16, I2C_Ack
+C:00016c 940e 011c call I2C_Read_Call
+C:00016e 9300 006b 	sts GYRO_YOUT_L, R16					;Store the GYRO_YOUT_L in SRAM
+         	
+C:000170   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:000170 e001      ldi R16, I2C_Ack
+C:000171 940e 011c call I2C_Read_Call
+C:000173 9300 006c 	sts GYRO_ZOUT_H, R16					;Store the GYRO_ZOUT_H in SRAM
+         	
+C:000175   +  	I2C_Read I2C_Nack						;Reply with an NACK to indicate that we do not wish to read the next byte too
+C:000175 e000      ldi R16, I2C_Nack
+C:000176 940e 011c call I2C_Read_Call
+C:000178 9300 006b 	sts GYRO_YOUT_L, R16					;Store the GYRO_YOUT_L in SRAM
+         
+C:00017a 940e 0112 	call I2C_Stop							;Send a stop
+C:00017c 9508      ret											;Return
+          .include "Time.asm"
+         ; This library handles all initial setup of timer operations
+         
+         ; Initialize timer0 to generate an output compare interrupt every 1[ms]
+          .MACRO Time_Init
+          			ldi		R16, 0b00001011			; CTC-mode, 1/64 prescaling -> 250 cycles pr ms.
+          			out		TCCR0, R16
+          			ldi		R16, 0x00
+          			out		TCNT0, R16				; Counter0 initialization
+          			ldi		R16, 249				; 249+1 cycles = 1[ms] for every output compare match
+          			out		OCR0, R16
+          			
+          			clr		R16
+          			sts		Timer_1ms_L, R16
+          			sts		Timer_1ms_M, R16
+          			sts		Timer_1ms_H, R16	
+          
+          			in		R16, TIMSK
+          			ori		R16, (1<<OCIE0)			;Enable interrupt on output compare match for timer0
+          			out		TIMSK, R16				;Timer/interrupt masking register
+          			
+          .ENDMACRO
+         
+         ; Timer subroutines
+         
+          Timer0_Update:
+C:00017d 930f      			push	R16
+C:00017e b70f      			in		R16, SREG
+C:00017f 930f      			push	R16
+         			
+C:000180 e001      			ldi		R16, 0x01
+C:000181 9000 0070 			lds		R0, Timer_1ms_L			
+C:000183 0e00      			add		R0, R16						;Advance time by 1ms whenever timer0 has compare match
+C:000184 9200 0070 			sts		Timer_1ms_L, R0	
+C:000186 f468      			brcc	Timer_Update_End
+         			
+C:000187 e000      			ldi		R16, 0x00
+C:000188 9010 006f 			lds		R1, Timer_1ms_M				;24 bits = 16777 seconds = 4.6 hours... ish :D
+C:00018a 1e10      			adc		R1, R16
+C:00018b 9210 006f 			sts		Timer_1ms_M, R1	
+C:00018d f430      			brcc	Timer_Update_End
+         			
+C:00018e 9020 006e 			lds		R2, Timer_1ms_H
+C:000190 1e20      			adc		R2, R16
+C:000191 9220 006e 			sts		Timer_1ms_H, R2
+C:000193 f400      			brcc	Timer_Update_End
+         			
+          Timer_Update_End:	
+         		
+C:000194 910f      			pop		R16
+C:000195 bf0f      			out		SREG, R16
+C:000196 910f      			pop		R16
+         			
+C:000197 9518      			reti
+         			
+         
+          
+         ;.include "EXT1.asm"
+          .include "WheelSpeed.asm"
+         
+          .MACRO WheelSpeed_Init
+          			ldi		R16, 0x00
+          			out		TCCR1A, R16
+          			ldi		R16, 0b00000010			; Falling edge triggered, 1/1024 prescaling
+          			out		TCCR1B, R16	
+          
+          			clr		R16
+          			sts		Edge1_L, R16
+          			sts		Edge1_H, R16
+          
+          			in		R16, TIMSK
+          			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
+          			out		TIMSK, R16				;Timer/interrupt masking register
+          
+          			ldi R16, 'P'
+          			call USART_Transmit
+          			USART_Newline
+          			
+          			ldi		YL, low(Pulse_Time_L1)
+          			ldi		YH, high(Pulse_Time_L1)
+          
+          .ENDMACRO
+         
+          .MACRO WheelSpeed_Calc
+          			lds		R18, Pulse_Time_L
+          			sbr		R16, 0xFF
+          			sbr		R17, 0xFF
+          			call	Div16_8
+          			sts		Wheel_speed_L, R16
+          			sts		Wheel_speed_H, R17
+          .ENDMACRO
+         
+         ; Use desired braking time in MS as argument
+          .MACRO Brake_MS
+          		in		R16, OCR0
+          		push	R16
+          		clr		R16
+          		out		R16, OCR0
+          		
+          		sbi		PORTB, BRAKE
+          		cli
+          		ldi		R16, @0
+          		call	Delay_MS
+          		sei
+          		cbi		PORTB, BRAKE
+          		
+          		pop		R16
+          		out		OCR0, R16
+          .ENDMACRO
+         
+          Input_Capture:
+         
+C:000198   +  			Push_Register_5 R0, R1, R2, R3, R16
+C:000198 920f      push	R0
+C:000199 921f      push	R1
+C:00019a 922f      push	R2
+C:00019b 923f      push	R3
+C:00019c 930f      push	R16
+C:00019d b70f      in	R16, SREG
+C:00019e 930f      push	R16
+         			
+C:00019f 9000 008b 			lds		R0, Ticks_L
+C:0001a1 9010 008c 			lds		R1, Ticks_H
+         			
+C:0001a3 e001      			ldi		R16, 0x01
+C:0001a4 0e00      			add		R0, R16
+C:0001a5 e000      			ldi		R16, 0x00
+C:0001a6 1e10      			adc		R1, R16
+         			
+C:0001a7 9200 008b 			sts		Ticks_L, R0
+C:0001a9 9210 008c 			sts		Ticks_H, R1			
+         			
+C:0001ab 9100 007b 			lds		R16, SREG_1			
+C:0001ad fd00      			sbrc	R16, 0							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
+C:0001ae c011      			rjmp	EDGE2
+         			
+C:0001af b406      EDGE1:		in		R0, ICR1L
+C:0001b0 b417      			in		R1, ICR1H
+         			
+C:0001b1 9200 0083 			sts		Edge1_L, R0
+C:0001b3 9210 0084 			sts		Edge1_H, R1
+         
+C:0001b5 6001      			sbr		R16, 0b00000001					; set bit 0 in R16 (performs a logical ORI instruction)
+C:0001b6 9300 007b 			sts		SREG_1, R16
+         			
+C:0001b8   +  			Pop_Register_5 R16, R3, R2, R1, R0
+C:0001b8 910f      pop	R16
+C:0001b9 bf0f      out	SREG, R16
+C:0001ba 910f      pop	R16
+C:0001bb 903f      pop	R3
+C:0001bc 902f      pop	R2
+C:0001bd 901f      pop	R1
+C:0001be 900f      pop	R0	
+         			
+C:0001bf 9518      			reti
+         			
+C:0001c0 9000 0083 EDGE2:		lds		R0, Edge1_L
+C:0001c2 9010 0084 			lds		R1, Edge1_H
+         			
+C:0001c4 b426      			in		R2, ICR1L
+C:0001c5 b437      			in		R3, ICR1H
+         			
+C:0001c6 1820      			sub		R2, R0
+C:0001c7 0831      			sbc		R3, R1
+         			
+C:0001c8 e00b      			ldi		R16, high(3000)
+C:0001c9 1630      			cp		R3, R16
+C:0001ca f060      			brlo	WheelSpeed_End		
+         			
+C:0001cb 9100 007b 			lds		R16, SREG_1
+C:0001cd 7f0e      			cbr		R16, 0b00000001					; clear bit 0 in R16 (performs logical AND with complement of operand)
+C:0001ce 9300 007b 			sts		SREG_1, R16
+         			
+C:0001d0 e000      			ldi		R16, 0x00
+C:0001d1 bd0d      			out		TCNT1H, R16						; Temp = R16
+C:0001d2 bd0c      			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp	
+         			
+C:0001d3 9220 0085 			sts		Pulse_Time_L, R2
+C:0001d5 9230 0086 			sts		Pulse_Time_H, R3
+         
+          WheelSpeed_End:
+         			
+C:0001d7   +  			Pop_Register_5 R16, R3, R2, R1, R0
+C:0001d7 910f      pop	R16
+C:0001d8 bf0f      out	SREG, R16
+C:0001d9 910f      pop	R16
+C:0001da 903f      pop	R3
+C:0001db 902f      pop	R2
+C:0001dc 901f      pop	R1
+C:0001dd 900f      pop	R0	
+         			
+C:0001de 9518      			reti
+         			
+         ; Compares the last two pulse times and checks to see if the difference between them is below a set threshold
+         
+C:0001df e80b      			ldi		R16, low(Pulse_Time_H2)+1
+C:0001e0 17c0      			cp		YL, R16							; jump to end if pointer register is not set to Pulse_Time_H2
+C:0001e1 f549      			brne	end
+         			
+C:0001e2 9000 0087 			lds 	R0, Pulse_Time_L1
+C:0001e4 9010 0088 			lds 	R1, Pulse_Time_H1
+         			
+C:0001e6 9020 0089 			lds		R2, Pulse_Time_L2
+C:0001e8 9030 008a 			lds		R3, Pulse_Time_H2
+         			
+C:0001ea 1820      			sub		R2, R0							
+C:0001eb 0831      			sbc		R3, R1
+C:0001ec f432      			brpl	Lorteopsnapperen				; branch if result is positive
+         						
+C:0001ed e001      			ldi		R16,0x01
+C:0001ee 1a20      			sub 	R2, R16
+C:0001ef e000      			ldi		R16,0x00
+C:0001f0 0a30      			sbc		R3, R16
+C:0001f1 9420      			com 	R2
+C:0001f2 9430      			com 	R3
+         						
+          Lorteopsnapperen:
+C:0001f3 e103      			ldi		R16, high(5000)
+C:0001f4 1630      			cp		R3, R16
+C:0001f5 f458      			brsh	NO_GO
+         			
+         			
+         			
+C:0001f6 9020 0089 GO:			lds		R2, Pulse_Time_L2								; Latest pulse time is considered valid and stored for use
+C:0001f8 9030 008a 			lds		R3, Pulse_Time_H2
+         			
+C:0001fa 9220 0085 			sts		Pulse_Time_L, R2
+C:0001fc 9230 0086 			sts		Pulse_Time_H, R3 
+         			
+C:0001fe e8c7      			ldi		YL, low(Pulse_Time_L1)							; Pointer register is reset
+C:0001ff e0d0      			ldi		YH, high(Pulse_Time_L1)
+         
+C:000200 c002      			rjmp	end1
+         			
+C:000201 e8c7      NO_GO:		ldi		YL, low(Pulse_Time_L1)							; Pointer register is reset
+C:000202 e0d0      			ldi		YH, high(Pulse_Time_L1)
+         				
+C:000203 e001      end1:		ldi		R16, 0x01
+C:000204 0e00      			add		R0,	R16
+C:000205 e000      			ldi		R16, 000
+C:000206 1e10      			adc		R1, R16
+         			
+C:000207 9200 008b 			sts		Ticks_L, R0
+C:000209 9210 008c 			sts		Ticks_H, R1			
+         			
+C:00020b   +  end:		Pop_Register_5 R16, R3, R2, R1, R0
+C:00020b 910f      pop	R16
+C:00020c bf0f      out	SREG, R16
+C:00020d 910f      pop	R16
+C:00020e 903f      pop	R3
+C:00020f 902f      pop	R2
+C:000210 901f      pop	R1
+C:000211 900f      pop	R0	
+         			
+C:000212 9518      			reti
+          .include "LapCounter.asm"
+          .MACRO LapCounter_Init
+          
+          	clr	R16
+          	sts	Time_Stamp_L, R16
+          	sts	Time_Stamp_M, R16
+          	sts	Time_Stamp_H, R16
+          			
+          	sts	Lap_time_L, R16
+          	sts	Lap_time_M, R16
+          	sts	Lap_time_H, R16
+          
+          	in R16, ACSR
+          	ori R16, 0x48						;Initialize comparator with bandgap reference and enable interrupt
+          	out ACSR, R16						;
+          
+          	in R16, SFIOR						;
+          	andi R16, ~(1<<ACME)				;Disable comparator multiplexer (AIN1 = inverting input for comparator)
+          	out SFIOR, R16						;
+          
+          	cbi DDRB,PB3						;Make PB3 input for the comparator
+          
+          .ENDMACRO
+         
+          Lap_Time:	
+         
+C:000213   +  	Push_Register_7 R0, R1, R2, R3, R4, R5, R16
+C:000213 920f      push	R0
+C:000214 921f      push	R1
+C:000215 922f      push	R2
+C:000216 923f      push	R3
+C:000217 924f      push	R4
+C:000218 925f      push	R5
+C:000219 930f      push	R16
+C:00021a b70f      in	R16, SREG
+C:00021b 930f      push	R16
+         
+C:00021c 9000 0070 	lds		R0, Timer_1ms_L				
+C:00021e 9010 006f 	lds		R1, Timer_1ms_M				; Current time since startup in ms
+C:000220 9020 006e 	lds		R2, Timer_1ms_H				 
+         			
+C:000222 9030 0073 	lds		R3, Time_Stamp_L			
+C:000224 9040 0072 	lds		R4, Time_Stamp_M			; Time stamp at start of lap
+C:000226 9050 0071 	lds		R5, Time_Stamp_H
+         			
+C:000228 9200 0073 	sts		Time_Stamp_L, R0			
+C:00022a 9210 0072 	sts		Time_Stamp_M, R1			; New time stamp for next lap
+C:00022c 9220 0071 	sts		Time_Stamp_H, R2	
+         			
+C:00022e 1803      	sub		R0, R3						
+C:00022f 0814      	sbc		R1, R4						; Difference between current time and last time stamp
+C:000230 0825      	sbc		R2, R5
+         		
+C:000231 e002      	ldi R16, 2		
+C:000232 1610      	cp R1, R16
+C:000233 f108      	brlo Lap_Time_End
+         	
+C:000234 9200 0074 	sts		Lap_time_L, R0				
+C:000236 9210 0075 	sts		Lap_time_M, R1				; Latest lap time
+C:000238 9220 0076 	sts		Lap_time_H, R2			
+         	
+C:00023a 9000 008b 	lds		R0, Ticks_L
+C:00023c 9010 008c 	lds		R1, Ticks_H
+         	
+C:00023e 9200 008d 	sts		Ticks_Lap_L, R0
+C:000240 9210 008e 	sts		Ticks_Lap_H, R1
+         	
+C:000242 2d00      	mov		R16, R0
+C:000243 2d11      	mov		R17, R1
+         	
+C:000244 940e 004c 	call	USART_Decimal_S16
+C:000246   +  			USART_NewLine	
+C:000246 e00d      ldi R16, 0x0D
+C:000247 940e 0034 call USART_Transmit 
+C:000249 e00a      ldi R16, 0x0A
+C:00024a 940e 0034 call USART_Transmit 
+         	
+C:00024c e000      	ldi		R16, 0x00
+C:00024d 9300 008b 	sts		Ticks_L, R16
+C:00024f 9300 008c 	sts		Ticks_H, R16
+         	
+C:000251 e400      	ldi		R16, 0x40					; Disable Comparator interrupt
+C:000252 b908      	out		ACSR, R16					; Global interrupt register
+         			
+C:000253 e508      	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
+C:000254 b908      	out		ACSR, R16					; Global interrupt register
+         
+         
+          Lap_Time_End:
+         
+C:000255   +  	Pop_Register_7 R16, R5, R4, R3, R2, R1, R0
+C:000255 910f      pop	R16
+C:000256 bf0f      out	SREG, R16
+C:000257 910f      pop	R16
+C:000258 905f      pop	R5
+C:000259 904f      pop	R4
+C:00025a 903f      pop	R3
+C:00025b 902f      pop	R2
+C:00025c 901f      pop	R1
+C:00025d 900f      pop	R0	
+         
+C:00025e 9518      			reti			
+          .include "Communication_Protocol.asm"
+          .Macro Comm_Init
+          	ldi R16, 0x01							;Initialize the counter as being the first byte
+          	sts Comm_Received_Byte_Num, R16			;
+          	clr R16									;Clear all of the SRAM-values used
+          	sts Comm_Received_Byte_1, R16			;
+          	sts Comm_Received_Byte_2, R16			;
+          	sts Comm_Received_Byte_3, R16			;
+          .ENDMACRO
+         
+         
+         ;Define Types
+          .equ Comm_Type_SET = 0x55					;Used for setting a value or activating a command
+          .equ Comm_Type_GET = 0xAA					;Used for getting a value from the microcontroller
+         
+         ;Define Set Commands
+          .equ Comm_Command_Start = 0x10				;Start the car at a specific % of motor speed
+          .equ Comm_Command_Stop = 0x11				;Stop the car
+         
+         ;Define Get Commands
+         
+         
+         ;Implemetation of the required communication protocol
+          Comm_Received:
+         
+C:00025f 9100 007c 	lds R16, Comm_Received_Byte_Num			;What byte # did we receive
+         
+C:000261 3001      	cpi R16, 0x01							;If it was the first
+C:000262 f019      	breq Comm_Received_Type					;Set the type
+         
+C:000263 3002      	cpi R16, 0x02							;If it was the second
+C:000264 f041      	breq Comm_Received_Command				;Set the command
+         
+         	;Working under the assumption that if it was not the first or second byte, then it must be the third.
+         
+C:000265 c00e      	rjmp Comm_Received_Execute				;Go to the execution of the received telegram
+         
+         
+         ;Received a type
+          Comm_Received_Type:
+         
+C:000266 e002      	ldi R16, 0x02							;Set the counter to two
+C:000267 9300 007c 	sts Comm_Received_Byte_Num, R16			;Store it
+         
+C:000269 b10c      	in r16, UDR								;Store the received type in SRAM
+C:00026a 9300 007d 	sts Comm_Received_Byte_1, R16			;	
+C:00026c 9518      	reti									;Return from interrupt
+         
+         ;Received a command
+          Comm_Received_Command:
+         
+C:00026d e003      	ldi R16, 0x03							;Set the counter to three
+C:00026e 9300 007c 	sts Comm_Received_Byte_Num, R16			;Store it
+         
+C:000270 b10c      	in r16, UDR								;Store the received command in SRAM
+C:000271 9300 007e 	sts Comm_Received_Byte_2, R16			;
+C:000273 9518      	reti									;Return from interrupt
+         
+         ;Execute the telegram received
+          Comm_Received_Execute:
+         
+C:000274 b10c      	in r16, UDR								;Read in the received parameter
+C:000275 9300 007f 	sts Comm_Received_Byte_3, R16			;Store it in SRAM
+         	
+C:000277 e001      	ldi R16, 0x01							;Reset the counter
+C:000278 9300 007c 	sts Comm_Received_Byte_Num, R16			;Store it in SRAM
+         
+         ;---------------------------------------------------------------------------------------------------------------------
+         ;Types
+         ;---------------------------------------------------------------------------------------------------------------------
+         
+C:00027a 9100 007d 	lds R16, Comm_Received_Byte_1			;Load in the first(Type) byte
+         
+         	;SET
+C:00027c 3505      	cpi R16, Comm_Type_SET					;Check if we received a SET and branch if it was
+C:00027d f019      	breq Comm_Received_Type_Set				;
+         
+         	;GET
+C:00027e 3a0a      	cpi R16, Comm_Type_GET					;Check if we received a GET and branch if it was
+C:00027f f0e1      	breq Comm_Received_Type_Get				;
+         
+C:000280 9518      	reti
+         ;---------------------------------------------------------------------------------------------------------------------
+         ;SET's
+         ;---------------------------------------------------------------------------------------------------------------------
+         
+          Comm_Received_Type_Set:
+         
+C:000281 9100 007e 	lds R16, Comm_Received_Byte_2			;Load in the second(Command) byte
+         
+C:000283 3100      	cpi R16, Comm_Command_Start				;Check if we received a Start command
+C:000284 f019      	breq Comm_Received_Command_Start		;
+         
+C:000285 3101      	cpi R16, Comm_Command_Stop				;Check if we received a Stop command
+C:000286 f061      	breq Comm_Received_Command_Stop			;
+         
+         	;Insert error handling here
+         
+C:000287 9518      	reti									;Do nothing if it was not a legit code
+         
+         ;Start
+          Comm_Received_Command_Start:
+C:000288 e001      	ldi R16, 0x01							;Set the flag which determines if the main program should run
+C:000289 9300 0080 	sts Program_Running, R16				;
+         
+C:00028b 9100 007f 	lds R16, Comm_Received_Byte_3			;Load in the third(Parameter) byte
+         
+C:00028d 940e 00fd 	call Motor_Set_Percentage
+         
+          Comm_Received_Command_Start_End:
+C:00028f e503      	ldi R16, 'S'
+C:000290 940e 0034 	call USART_Transmit
+         
+C:000292 9518      	reti									;Return from interrupt
+         
+         ;Stop
+          Comm_Received_Command_Stop:
+C:000293 e000      	ldi R16, 0x00							;Clear the flag which determines if the main program should run
+C:000294 9300 0080 	sts Program_Running, R16				;
+C:000296 e000      	ldi R16, 0x00							;Load in 0x00
+C:000297 bd03      	out OCR2, R16							;And set the pwm duty cycle to nothing to stop the motor.
+         
+C:000298 e504      	ldi R16, 'T'
+C:000299 940e 0034 	call USART_Transmit
+         
+C:00029b 9518      	reti
+         
+         
+         ;---------------------------------------------------------------------------------------------------------------------
+         ;GET's
+         ;---------------------------------------------------------------------------------------------------------------------
+         
+          Comm_Received_Type_Get:	
+         
+         	;Insert error handling here
+         
+C:00029c 9518      	reti									;Return from interrupt
+          .include "Setup.asm"
+          .MACRO Setup
+         	;Initialize the stack
+          	LDI	R16, low(RAMEND)
+              OUT	SPL, R16
+          	LDI	R16, high(RAMEND)
+              OUT	SPH, R16			
+          
+          	USART_Init 0b00000000,0b01100111	;Initialize the USART module with 9600 baud @ 16MHz clock
+          	Comm_Init							;Intialize the communication protocol
+          	Motor_Init							;Initialize the motor pwm
+          	I2C_Init 0x00,0x12					;Initialize the TWI module with Prescaler 4 and TWBR 12
+          	Time_Init							;Initialize the timer associated with timekeeping
+          	WheelSpeed_Init						;Initialize the wheel speed sensor
+          	LapCounter_Init						;Initialize the lap counter
+          	MPU6050_Init						;Initialize the MPU6050 3 times to make sure it writes the values(We should make some kind of check instead)
+          	MPU6050_Init						;
+          	MPU6050_Init						;
+          
+          	ldi R16, 0x01
+          	sts Program_Running, R16
+          
+         	;Global interrupt
+          	
+          .ENDMACRO
+         
+          Init:
+C:00029d   +  					Setup
+         
+
+C:00029d e50f      LDI	R16, low(RAMEND)
+C:00029e bf0d      OUT	SPL, R16
+C:00029f e008      LDI	R16, high(RAMEND)
+C:0002a0 bf0e      OUT	SPH, R16			
+         
+C:0002a1   +  USART_Init 0b00000000,0b01100111	
+
+         
+
+C:0002a1 e607      ldi R16,	0b01100111	
+C:0002a2 e010      ldi R17,	0b00000000
+         
+C:0002a3 bd10      out	UBRRH,	R17
+C:0002a4 b909      out UBRRL,	R16
+         
+         
+
+C:0002a5 e908      ldi R16,	(1<<RXEN)|(1<<TXEN)|(1<<RXCIE)
+C:0002a6 b90a      out	UCSRB,	R16
+         
+         
+
+C:0002a7 e806      ldi	R16,	(1<<URSEL)|(3<<UCSZ0)
+C:0002a8 bd00      out	UCSRC,	R16
+C:0002a9   +  Comm_Init							
+
+C:0002a9 e001      ldi R16, 0x01							
+
+C:0002aa 9300 007c sts Comm_Received_Byte_Num, R16			
+
+C:0002ac 2700      clr R16									
+
+C:0002ad 9300 007d sts Comm_Received_Byte_1, R16			
+
+C:0002af 9300 007e sts Comm_Received_Byte_2, R16			
+
+C:0002b1 9300 007f sts Comm_Received_Byte_3, R16			
+
+C:0002b3   +  Motor_Init							
+
+C:0002b3 b301      in R16, DDRD							
+
+C:0002b4 6800      ori R16, (1<<PD7)						
+
+C:0002b5 bb01      out DDRD, R16
+         
+C:0002b6 e609      ldi R16, 0b01101001						
+
+C:0002b7 bd05      out TCCR2, R16							
+
+C:0002b8   +  I2C_Init 0x00,0x12					
+
+         
+
+C:0002b8 e000      ldi R16, 0x00
+C:0002b9 b901      out TWSR, R16
+         
+         
+
+C:0002ba e102      ldi R16, 0x12
+C:0002bb b900      out TWBR, R16
+         
+         
+
+C:0002bc e004      ldi R16, (1<<TWEN)
+C:0002bd bf06      out TWCR, R16
+         
+C:0002be 0000      nop 
+
+         
+         
+C:0002bf   +  Time_Init							
+
+C:0002bf e00b      ldi		R16, 0b00001011			
+
+C:0002c0 bf03      out		TCCR0, R16
+C:0002c1 e000      ldi		R16, 0x00
+C:0002c2 bf02      out		TCNT0, R16				
+
+C:0002c3 ef09      ldi		R16, 249				
+
+C:0002c4 bf0c      out		OCR0, R16
+         
+C:0002c5 2700      clr		R16
+C:0002c6 9300 0070 sts		Timer_1ms_L, R16
+C:0002c8 9300 006f sts		Timer_1ms_M, R16
+C:0002ca 9300 006e sts		Timer_1ms_H, R16	
+         
+C:0002cc b709      in		R16, TIMSK
+C:0002cd 6002      ori		R16, (1<<OCIE0)			
+
+C:0002ce bf09      out		TIMSK, R16				
+
+         
+         
+C:0002cf   +  WheelSpeed_Init						
+
+C:0002cf e000      ldi		R16, 0x00
+C:0002d0 bd0f      out		TCCR1A, R16
+C:0002d1 e002      ldi		R16, 0b00000010			
+
+C:0002d2 bd0e      out		TCCR1B, R16	
+         
+C:0002d3 2700      clr		R16
+C:0002d4 9300 0083 sts		Edge1_L, R16
+C:0002d6 9300 0084 sts		Edge1_H, R16
+         
+C:0002d8 b709      in		R16, TIMSK
+C:0002d9 6200      ori		R16, (1<<TICIE1)		
+
+C:0002da bf09      out		TIMSK, R16				
+
+         
+C:0002db e500      ldi R16, 'P'
+C:0002dc 940e 0034 call USART_Transmit
+C:0002de   +  USART_Newline
+C:0002de e00d      ldi R16, 0x0D
+C:0002df 940e 0034 call USART_Transmit 
+C:0002e1 e00a      ldi R16, 0x0A
+C:0002e2 940e 0034 call USART_Transmit 
+         
+C:0002e4 e8c7      ldi		YL, low(Pulse_Time_L1)
+C:0002e5 e0d0      ldi		YH, high(Pulse_Time_L1)
+         
+         
+C:0002e6   +  LapCounter_Init						
+
+         
+C:0002e6 2700      clr	R16
+C:0002e7 9300 0073 sts	Time_Stamp_L, R16
+C:0002e9 9300 0072 sts	Time_Stamp_M, R16
+C:0002eb 9300 0071 sts	Time_Stamp_H, R16
+         
+C:0002ed 9300 0074 sts	Lap_time_L, R16
+C:0002ef 9300 0075 sts	Lap_time_M, R16
+C:0002f1 9300 0076 sts	Lap_time_H, R16
+         
+C:0002f3 b108      in R16, ACSR
+C:0002f4 6408      ori R16, 0x48						
+
+C:0002f5 b908      out ACSR, R16						
+
+         
+C:0002f6 b700      in R16, SFIOR						
+
+C:0002f7 7f07      andi R16, ~(1<<ACME)				
+
+C:0002f8 bf00      out SFIOR, R16						
+
+         
+C:0002f9 98bb      cbi DDRB,PB3						
+
+         
+         
+C:0002fa   +  MPU6050_Init						
+
+         
+C:0002fa 940e 010c call I2C_Start							
+
+C:0002fc   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:0002fc ed00      ldi R16, MPU6050_ADDRESS_W
+C:0002fd 940e 0115 call I2C_Write_Call
+         
+C:0002ff   +  I2C_Write MPU6050_RA_SMPLRT_DIV			
+
+C:0002ff e109      ldi R16, MPU6050_RA_SMPLRT_DIV
+C:000300 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000302   +  I2C_Write 0x07
+C:000302 e007      ldi R16, 0x07
+C:000303 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000305   +  I2C_Write 0x00
+C:000305 e000      ldi R16, 0x00
+C:000306 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000308   +  I2C_Write 0b00001000
+C:000308 e008      ldi R16, 0b00001000
+C:000309 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00030b   +  I2C_Write 0b00001000
+C:00030b e008      ldi R16, 0b00001000
+C:00030c 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00030e   +  I2C_Write 0x00
+C:00030e e000      ldi R16, 0x00
+C:00030f 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000311   +  I2C_Write 0x00
+C:000311 e000      ldi R16, 0x00
+C:000312 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000314   +  I2C_Write 0x00
+C:000314 e000      ldi R16, 0x00
+C:000315 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000317   +  I2C_Write 0x00
+C:000317 e000      ldi R16, 0x00
+C:000318 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00031a   +  I2C_Write 0x00
+C:00031a e000      ldi R16, 0x00
+C:00031b 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00031d   +  I2C_Write 0x00
+C:00031d e000      ldi R16, 0x00
+C:00031e 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000320   +  I2C_Write 0x00
+C:000320 e000      ldi R16, 0x00
+C:000321 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+
+C:000323   +  I2C_Write 0x00
+C:000323 e000      ldi R16, 0x00
+C:000324 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+
+C:000326   +  I2C_Write 0x00
+C:000326 e000      ldi R16, 0x00
+C:000327 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000329   +  I2C_Write 0x00
+C:000329 e000      ldi R16, 0x00
+C:00032a 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00032c   +  I2C_Write 0x00
+C:00032c e000      ldi R16, 0x00
+C:00032d 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00032f   +  I2C_Write 0x00
+C:00032f e000      ldi R16, 0x00
+C:000330 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000332   +  I2C_Write 0x00
+C:000332 e000      ldi R16, 0x00
+C:000333 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000335   +  I2C_Write 0x00
+C:000335 e000      ldi R16, 0x00
+C:000336 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000338   +  I2C_Write 0x00
+C:000338 e000      ldi R16, 0x00
+C:000339 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00033b   +  I2C_Write 0x00
+C:00033b e000      ldi R16, 0x00
+C:00033c 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00033e   +  I2C_Write 0x00
+C:00033e e000      ldi R16, 0x00
+C:00033f 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000341   +  I2C_Write 0x00
+C:000341 e000      ldi R16, 0x00
+C:000342 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000344   +  I2C_Write 0x00
+C:000344 e000      ldi R16, 0x00
+C:000345 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000347   +  I2C_Write 0x00
+C:000347 e000      ldi R16, 0x00
+C:000348 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00034a   +  I2C_Write 0x00
+C:00034a e000      ldi R16, 0x00
+C:00034b 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00034d   +  I2C_Write 0x00
+C:00034d e000      ldi R16, 0x00
+C:00034e 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000350   +  I2C_Write 0x00
+C:000350 e000      ldi R16, 0x00
+C:000351 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000353   +  I2C_Write 0x00
+C:000353 e000      ldi R16, 0x00
+C:000354 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000356   +  I2C_Write 0x00
+C:000356 e000      ldi R16, 0x00
+C:000357 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+         
+
+C:000359 940e 010c call I2C_Start							
+
+C:00035b   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:00035b ed00      ldi R16, MPU6050_ADDRESS_W
+C:00035c 940e 0115 call I2C_Write_Call
+         
+C:00035e   +  I2C_Write MPU6050_RA_INT_PIN_CFG		
+
+C:00035e e307      ldi R16, MPU6050_RA_INT_PIN_CFG
+C:00035f 940e 0115 call I2C_Write_Call
+C:000361   +  I2C_Write 0x00							
+
+C:000361 e000      ldi R16, 0x00
+C:000362 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000364   +  I2C_Write 0x00
+C:000364 e000      ldi R16, 0x00
+C:000365 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+         
+
+         
+         
+
+C:000367 940e 010c call I2C_Start							
+
+C:000369   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:000369 ed00      ldi R16, MPU6050_ADDRESS_W
+C:00036a 940e 0115 call I2C_Write_Call
+         
+C:00036c   +  I2C_Write MPU6050_RA_I2C_SLV0_DO		
+
+C:00036c e603      ldi R16, MPU6050_RA_I2C_SLV0_DO
+C:00036d 940e 0115 call I2C_Write_Call
+C:00036f   +  I2C_Write 0x00							
+
+C:00036f e000      ldi R16, 0x00
+C:000370 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000372   +  I2C_Write 0x00
+C:000372 e000      ldi R16, 0x00
+C:000373 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000375   +  I2C_Write 0x00
+C:000375 e000      ldi R16, 0x00
+C:000376 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000378   +  I2C_Write 0x00
+C:000378 e000      ldi R16, 0x00
+C:000379 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00037b   +  I2C_Write 0x00
+C:00037b e000      ldi R16, 0x00
+C:00037c 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00037e   +  I2C_Write 0x00
+C:00037e e000      ldi R16, 0x00
+C:00037f 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000381   +  I2C_Write 0x00
+C:000381 e000      ldi R16, 0x00
+C:000382 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000384   +  I2C_Write 0x00
+C:000384 e000      ldi R16, 0x00
+C:000385 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000387   +  I2C_Write 0b00000010
+C:000387 e002      ldi R16, 0b00000010
+C:000388 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00038a   +  I2C_Write 0x00
+C:00038a e000      ldi R16, 0x00
+C:00038b 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+         
+
+C:00038d 940e 010c call I2C_Start							
+
+C:00038f   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:00038f ed00      ldi R16, MPU6050_ADDRESS_W
+C:000390 940e 0115 call I2C_Write_Call
+         
+C:000392   +  I2C_Write MPU6050_RA_FIFO_R_W			
+
+C:000392 e704      ldi R16, MPU6050_RA_FIFO_R_W
+C:000393 940e 0115 call I2C_Write_Call
+C:000395   +  I2C_Write 0x00							
+
+C:000395 e000      ldi R16, 0x00
+C:000396 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+C:000398 940e 0112 call I2C_Stop							
+
+C:00039a   +  MPU6050_Init						
+
+         
+C:00039a 940e 010c call I2C_Start							
+
+C:00039c   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:00039c ed00      ldi R16, MPU6050_ADDRESS_W
+C:00039d 940e 0115 call I2C_Write_Call
+         
+C:00039f   +  I2C_Write MPU6050_RA_SMPLRT_DIV			
+
+C:00039f e109      ldi R16, MPU6050_RA_SMPLRT_DIV
+C:0003a0 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003a2   +  I2C_Write 0x07
+C:0003a2 e007      ldi R16, 0x07
+C:0003a3 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003a5   +  I2C_Write 0x00
+C:0003a5 e000      ldi R16, 0x00
+C:0003a6 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003a8   +  I2C_Write 0b00001000
+C:0003a8 e008      ldi R16, 0b00001000
+C:0003a9 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003ab   +  I2C_Write 0b00001000
+C:0003ab e008      ldi R16, 0b00001000
+C:0003ac 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003ae   +  I2C_Write 0x00
+C:0003ae e000      ldi R16, 0x00
+C:0003af 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003b1   +  I2C_Write 0x00
+C:0003b1 e000      ldi R16, 0x00
+C:0003b2 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003b4   +  I2C_Write 0x00
+C:0003b4 e000      ldi R16, 0x00
+C:0003b5 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003b7   +  I2C_Write 0x00
+C:0003b7 e000      ldi R16, 0x00
+C:0003b8 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003ba   +  I2C_Write 0x00
+C:0003ba e000      ldi R16, 0x00
+C:0003bb 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003bd   +  I2C_Write 0x00
+C:0003bd e000      ldi R16, 0x00
+C:0003be 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003c0   +  I2C_Write 0x00
+C:0003c0 e000      ldi R16, 0x00
+C:0003c1 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+
+C:0003c3   +  I2C_Write 0x00
+C:0003c3 e000      ldi R16, 0x00
+C:0003c4 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+
+C:0003c6   +  I2C_Write 0x00
+C:0003c6 e000      ldi R16, 0x00
+C:0003c7 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003c9   +  I2C_Write 0x00
+C:0003c9 e000      ldi R16, 0x00
+C:0003ca 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003cc   +  I2C_Write 0x00
+C:0003cc e000      ldi R16, 0x00
+C:0003cd 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003cf   +  I2C_Write 0x00
+C:0003cf e000      ldi R16, 0x00
+C:0003d0 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003d2   +  I2C_Write 0x00
+C:0003d2 e000      ldi R16, 0x00
+C:0003d3 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003d5   +  I2C_Write 0x00
+C:0003d5 e000      ldi R16, 0x00
+C:0003d6 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003d8   +  I2C_Write 0x00
+C:0003d8 e000      ldi R16, 0x00
+C:0003d9 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003db   +  I2C_Write 0x00
+C:0003db e000      ldi R16, 0x00
+C:0003dc 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003de   +  I2C_Write 0x00
+C:0003de e000      ldi R16, 0x00
+C:0003df 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003e1   +  I2C_Write 0x00
+C:0003e1 e000      ldi R16, 0x00
+C:0003e2 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003e4   +  I2C_Write 0x00
+C:0003e4 e000      ldi R16, 0x00
+C:0003e5 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003e7   +  I2C_Write 0x00
+C:0003e7 e000      ldi R16, 0x00
+C:0003e8 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003ea   +  I2C_Write 0x00
+C:0003ea e000      ldi R16, 0x00
+C:0003eb 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003ed   +  I2C_Write 0x00
+C:0003ed e000      ldi R16, 0x00
+C:0003ee 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003f0   +  I2C_Write 0x00
+C:0003f0 e000      ldi R16, 0x00
+C:0003f1 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003f3   +  I2C_Write 0x00
+C:0003f3 e000      ldi R16, 0x00
+C:0003f4 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0003f6   +  I2C_Write 0x00
+C:0003f6 e000      ldi R16, 0x00
+C:0003f7 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+         
+
+C:0003f9 940e 010c call I2C_Start							
+
+C:0003fb   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:0003fb ed00      ldi R16, MPU6050_ADDRESS_W
+C:0003fc 940e 0115 call I2C_Write_Call
+         
+C:0003fe   +  I2C_Write MPU6050_RA_INT_PIN_CFG		
+
+C:0003fe e307      ldi R16, MPU6050_RA_INT_PIN_CFG
+C:0003ff 940e 0115 call I2C_Write_Call
+C:000401   +  I2C_Write 0x00							
+
+C:000401 e000      ldi R16, 0x00
+C:000402 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000404   +  I2C_Write 0x00
+C:000404 e000      ldi R16, 0x00
+C:000405 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+         
+
+         
+         
+
+C:000407 940e 010c call I2C_Start							
+
+C:000409   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:000409 ed00      ldi R16, MPU6050_ADDRESS_W
+C:00040a 940e 0115 call I2C_Write_Call
+         
+C:00040c   +  I2C_Write MPU6050_RA_I2C_SLV0_DO		
+
+C:00040c e603      ldi R16, MPU6050_RA_I2C_SLV0_DO
+C:00040d 940e 0115 call I2C_Write_Call
+C:00040f   +  I2C_Write 0x00							
+
+C:00040f e000      ldi R16, 0x00
+C:000410 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000412   +  I2C_Write 0x00
+C:000412 e000      ldi R16, 0x00
+C:000413 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000415   +  I2C_Write 0x00
+C:000415 e000      ldi R16, 0x00
+C:000416 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000418   +  I2C_Write 0x00
+C:000418 e000      ldi R16, 0x00
+C:000419 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00041b   +  I2C_Write 0x00
+C:00041b e000      ldi R16, 0x00
+C:00041c 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00041e   +  I2C_Write 0x00
+C:00041e e000      ldi R16, 0x00
+C:00041f 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000421   +  I2C_Write 0x00
+C:000421 e000      ldi R16, 0x00
+C:000422 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000424   +  I2C_Write 0x00
+C:000424 e000      ldi R16, 0x00
+C:000425 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000427   +  I2C_Write 0b00000010
+C:000427 e002      ldi R16, 0b00000010
+C:000428 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00042a   +  I2C_Write 0x00
+C:00042a e000      ldi R16, 0x00
+C:00042b 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+         
+
+C:00042d 940e 010c call I2C_Start							
+
+C:00042f   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:00042f ed00      ldi R16, MPU6050_ADDRESS_W
+C:000430 940e 0115 call I2C_Write_Call
+         
+C:000432   +  I2C_Write MPU6050_RA_FIFO_R_W			
+
+C:000432 e704      ldi R16, MPU6050_RA_FIFO_R_W
+C:000433 940e 0115 call I2C_Write_Call
+C:000435   +  I2C_Write 0x00							
+
+C:000435 e000      ldi R16, 0x00
+C:000436 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+C:000438 940e 0112 call I2C_Stop							
+
+C:00043a   +  MPU6050_Init						
+
+         
+C:00043a 940e 010c call I2C_Start							
+
+C:00043c   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:00043c ed00      ldi R16, MPU6050_ADDRESS_W
+C:00043d 940e 0115 call I2C_Write_Call
+         
+C:00043f   +  I2C_Write MPU6050_RA_SMPLRT_DIV			
+
+C:00043f e109      ldi R16, MPU6050_RA_SMPLRT_DIV
+C:000440 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000442   +  I2C_Write 0x07
+C:000442 e007      ldi R16, 0x07
+C:000443 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000445   +  I2C_Write 0x00
+C:000445 e000      ldi R16, 0x00
+C:000446 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000448   +  I2C_Write 0b00001000
+C:000448 e008      ldi R16, 0b00001000
+C:000449 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00044b   +  I2C_Write 0b00001000
+C:00044b e008      ldi R16, 0b00001000
+C:00044c 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00044e   +  I2C_Write 0x00
+C:00044e e000      ldi R16, 0x00
+C:00044f 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000451   +  I2C_Write 0x00
+C:000451 e000      ldi R16, 0x00
+C:000452 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000454   +  I2C_Write 0x00
+C:000454 e000      ldi R16, 0x00
+C:000455 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000457   +  I2C_Write 0x00
+C:000457 e000      ldi R16, 0x00
+C:000458 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00045a   +  I2C_Write 0x00
+C:00045a e000      ldi R16, 0x00
+C:00045b 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00045d   +  I2C_Write 0x00
+C:00045d e000      ldi R16, 0x00
+C:00045e 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000460   +  I2C_Write 0x00
+C:000460 e000      ldi R16, 0x00
+C:000461 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+
+C:000463   +  I2C_Write 0x00
+C:000463 e000      ldi R16, 0x00
+C:000464 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+
+C:000466   +  I2C_Write 0x00
+C:000466 e000      ldi R16, 0x00
+C:000467 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000469   +  I2C_Write 0x00
+C:000469 e000      ldi R16, 0x00
+C:00046a 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00046c   +  I2C_Write 0x00
+C:00046c e000      ldi R16, 0x00
+C:00046d 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00046f   +  I2C_Write 0x00
+C:00046f e000      ldi R16, 0x00
+C:000470 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000472   +  I2C_Write 0x00
+C:000472 e000      ldi R16, 0x00
+C:000473 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000475   +  I2C_Write 0x00
+C:000475 e000      ldi R16, 0x00
+C:000476 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000478   +  I2C_Write 0x00
+C:000478 e000      ldi R16, 0x00
+C:000479 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00047b   +  I2C_Write 0x00
+C:00047b e000      ldi R16, 0x00
+C:00047c 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00047e   +  I2C_Write 0x00
+C:00047e e000      ldi R16, 0x00
+C:00047f 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000481   +  I2C_Write 0x00
+C:000481 e000      ldi R16, 0x00
+C:000482 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000484   +  I2C_Write 0x00
+C:000484 e000      ldi R16, 0x00
+C:000485 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000487   +  I2C_Write 0x00
+C:000487 e000      ldi R16, 0x00
+C:000488 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00048a   +  I2C_Write 0x00
+C:00048a e000      ldi R16, 0x00
+C:00048b 940e 0115 call I2C_Write_Call
+         
+         
+
+C:00048d   +  I2C_Write 0x00
+C:00048d e000      ldi R16, 0x00
+C:00048e 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000490   +  I2C_Write 0x00
+C:000490 e000      ldi R16, 0x00
+C:000491 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000493   +  I2C_Write 0x00
+C:000493 e000      ldi R16, 0x00
+C:000494 940e 0115 call I2C_Write_Call
+         
+         
+
+C:000496   +  I2C_Write 0x00
+C:000496 e000      ldi R16, 0x00
+C:000497 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+         
+
+C:000499 940e 010c call I2C_Start							
+
+C:00049b   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:00049b ed00      ldi R16, MPU6050_ADDRESS_W
+C:00049c 940e 0115 call I2C_Write_Call
+         
+C:00049e   +  I2C_Write MPU6050_RA_INT_PIN_CFG		
+
+C:00049e e307      ldi R16, MPU6050_RA_INT_PIN_CFG
+C:00049f 940e 0115 call I2C_Write_Call
+C:0004a1   +  I2C_Write 0x00							
+
+C:0004a1 e000      ldi R16, 0x00
+C:0004a2 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0004a4   +  I2C_Write 0x00
+C:0004a4 e000      ldi R16, 0x00
+C:0004a5 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+         
+
+         
+         
+
+C:0004a7 940e 010c call I2C_Start							
+
+C:0004a9   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:0004a9 ed00      ldi R16, MPU6050_ADDRESS_W
+C:0004aa 940e 0115 call I2C_Write_Call
+         
+C:0004ac   +  I2C_Write MPU6050_RA_I2C_SLV0_DO		
+
+C:0004ac e603      ldi R16, MPU6050_RA_I2C_SLV0_DO
+C:0004ad 940e 0115 call I2C_Write_Call
+C:0004af   +  I2C_Write 0x00							
+
+C:0004af e000      ldi R16, 0x00
+C:0004b0 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0004b2   +  I2C_Write 0x00
+C:0004b2 e000      ldi R16, 0x00
+C:0004b3 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0004b5   +  I2C_Write 0x00
+C:0004b5 e000      ldi R16, 0x00
+C:0004b6 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0004b8   +  I2C_Write 0x00
+C:0004b8 e000      ldi R16, 0x00
+C:0004b9 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0004bb   +  I2C_Write 0x00
+C:0004bb e000      ldi R16, 0x00
+C:0004bc 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0004be   +  I2C_Write 0x00
+C:0004be e000      ldi R16, 0x00
+C:0004bf 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0004c1   +  I2C_Write 0x00
+C:0004c1 e000      ldi R16, 0x00
+C:0004c2 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0004c4   +  I2C_Write 0x00
+C:0004c4 e000      ldi R16, 0x00
+C:0004c5 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0004c7   +  I2C_Write 0b00000010
+C:0004c7 e002      ldi R16, 0b00000010
+C:0004c8 940e 0115 call I2C_Write_Call
+         
+         
+
+C:0004ca   +  I2C_Write 0x00
+C:0004ca e000      ldi R16, 0x00
+C:0004cb 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+         
+
+C:0004cd 940e 010c call I2C_Start							
+
+C:0004cf   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:0004cf ed00      ldi R16, MPU6050_ADDRESS_W
+C:0004d0 940e 0115 call I2C_Write_Call
+         
+C:0004d2   +  I2C_Write MPU6050_RA_FIFO_R_W			
+
+C:0004d2 e704      ldi R16, MPU6050_RA_FIFO_R_W
+C:0004d3 940e 0115 call I2C_Write_Call
+C:0004d5   +  I2C_Write 0x00							
+
+C:0004d5 e000      ldi R16, 0x00
+C:0004d6 940e 0115 call I2C_Write_Call
+         
+         
+
+         
+C:0004d8 940e 0112 call I2C_Stop							
+
+         
+C:0004da e001      ldi R16, 0x01
+C:0004db 9300 0080 sts Program_Running, R16
+         
+         
+
+         
+         
+         					;EXT1_init	
+C:0004dd e50a      			ldi		R16, 90
+         			;out 	OCR2, R16
+         			
+C:0004de 2700      			clr		R16
+C:0004df 2ea0      			mov		R10, R16
+C:0004e0 2eb0      			mov		R11, R16
+         					
+C:0004e1 9478      			sei					;Enable global interrupt	
+C:0004e2 c000      			rjmp Main
+         
+C:0004e3 e30c      Main:		ldi		R16, 60
+C:0004e4 940e 00e5 			call	Delay_MS
+         			
+C:0004e6 9100 008d 			lds		R16, Ticks_Lap_L
+C:0004e8 9110 008e 			lds		R17, Ticks_Lap_H
+         			
+         			;call	USART_Decimal_S16
+         					;USART_NewLine	
+         
+C:0004ea cff8      			rjmp Main
+
+
+Segment usage:
+   Code      :      1232 words (2464 bytes)
+   Data      :         0 bytes
+   EEPROM    :         0 bytes
+
+Assembly completed with no errors.
