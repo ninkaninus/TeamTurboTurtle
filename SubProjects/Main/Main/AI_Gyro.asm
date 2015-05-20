@@ -3,21 +3,23 @@
 Gyro_Kontrol:
 
 
-call	Gyro_Mean						;Indlæser gennemsnitsværdien af to gyro læsninger, gemmer resultatet i R16, benytter R10,R11 og R17.
+call	Gyro_Mean										;Indlæser gennemsnitsværdien af to gyro læsninger, gemmer resultatet i R16, benytter R10,R11 og R17.
 		
-		cpi		Accel,		Accel_Stort_Sving		;juster værdi, Værdi for acceleration ved lille højre sving
+		cpi		Accel,		Accel_Stort_Sving			;juster værdi, Værdi for acceleration ved stort højre sving
 		brsh	Fortegns_test
 
 
-LIGEUD:									;Hvis banetypen bestemmes til at være et lige stykke starter dette kontinuære loop,
-;										som AI_Check_Laper om accelerometeret angiver et sving. Når bilen kommer ind i et sving
-;										hopper den til skift
+LIGEUD:													;Hvis banetypen bestemmes til at være et lige stykke starter dette kontinuære loop,
+;														som AI_Check_Laper om accelerometeret angiver et sving. Når bilen kommer ind i et sving
+;														hopper den til skift
 		cpi		Type,		0
 		breq	SAME_TYPE
-		st		Y+,			Laengde		;Sæt Laengden ind først-
-		st		Y+,			Type		;og derefter vejtypen.
-		ldi		Type,		0			;Sætter vejtypen til ligeud
-		ldi		Langede,	0
+		st		Y+,			Length_L
+		st		Y+,			Length_H						;Sæt Længden ind først-
+		st		Y+,			Type						;og derefter vejtypen.
+		ldi		Type,		0							;Sætter vejtypen til ligeud
+		ldi		Length_L,	0
+		ldi		Length_H,	0
 		
 ret
 
@@ -25,14 +27,14 @@ ret
 Fortegns_test:
 
 call	MPU6050_Read_Gyro_Z
-		lds		R17,		GYRO_ZOUT_H	;Indlæs værdien for accelerometeret, SKAL ÆNDRES TIL GYRO
+		lds		R17,		GYRO_ZOUT_H					;Indlæs værdien for accelerometeret, SKAL ÆNDRES TIL GYRO
 		sbrs	R17,		7
 		
 rjmp	LEFT_TURN
 		
-RIGHT_TURN:								;Hvis banetypen bestemmes til at være et højre sving starter dette kontinuære loop,
-;										som AI_Check_Laper om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
-;										hopper den til skift
+RIGHT_TURN:												;Hvis banetypen bestemmes til at være et højre sving starter dette kontinuære loop,
+;														som AI_Check_Laper om accelerometeret angiver et lige stykke. Når bilen kommer ud af et sving
+;														hopper den til skift
 
 		
 		cpi		R16,		Accel_Lille_Sving	;juster værdi, Værdi for acceleration ved stort højre sving
@@ -49,10 +51,12 @@ RIGHT_TURN2:							;Hvis banetypen bestemmes til at være et stort højre sving 
 		cpi		Type,		0
 		brne	SAME_TYPE
 
-		st		Y+,			Laengde		;Sæt Laengden ind først-
-		st		Y+,			Type		;og derefter vejtypen.
-		ldi		Type,		3			;Sætter vejtypen til stort højre
-		ldi		Langede,	0
+		st		Y+, 		Length_L
+		st		Y+,			Length_H		;Sæt Længden ind først-
+		st		Y+,			Type			;og derefter vejtypen.
+		ldi		Type,		3				;Sætter vejtypen til stort højre
+		ldi		Length_L,	0
+		ldi		Length_H,	0
 		
 ret
 
@@ -76,10 +80,12 @@ LEFT_TURN2:							;Hvis banetypen bestemmes til at være et stort højre sving s
 		cpi		Type,		0
 		brne	SAME_TYPE
 		
-		st		Y+,			Laengde		;Sæt Laengden ind først-
-		st		Y+,			Type		;og derefter vejtypen.
-		ldi		Type,		4			;Sætter vejtypen til stort venstre
-		ldi		Langede,	0
+		st		Y+,			Length_L
+		st		Y+,			Length_H		;Sæt Længden ind først-
+		st		Y+,			Type			;og derefter vejtypen.
+		ldi		Type,		4				;Sætter vejtypen til stort venstre
+		ldi		Length_L,	0
+		ldi		Length_H, 	0
 		
 ret
 

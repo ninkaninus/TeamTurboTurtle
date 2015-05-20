@@ -1,21 +1,24 @@
 ;Den her fil indeholde det der skal initializeres for at AI kan virke, samt diverse konstanter.
 
 ;Addresser
-.def	Laengde = R22			;Laengden af vejstykket
-.def	Type = R23				;Type af vejstykket
-.def	Accel = R24				;Gyro værdi
+.def	Type = R22				;Type af vejstykket
+.def	Accel = R23				;Gyro værdi
+.def	Length_L = R24			;Længden af vejstykket
+.def	Length_H = R25			;Længden af vejstykket
 
 .include "AI_Lap.asm"
-.include "AI_Hastighed.asm"
+;.include "AI_Hastighed.asm"
+.include "Speed.asm"
 .include "AI_Hall.asm"
+.include "AI_Gyro.asm"
 
 ;Konstanter
-.equ	Accel_Stort_Sving=40				;Disse værdier skal justeres
-.equ	Accel_Lille_Sving=75
-.equ	Periode_l=250			;Periode når vi kører ligeud
-.equ	Periode_s2=12000			;-- stort sving
+.equ	Accel_Stort_Sving=30				;Disse værdier skal justeres
+.equ	Accel_Lille_Sving=65
+.equ	Periode_l=6000			;Periode når vi kører ligeud
+.equ	Periode_s2=8000			;-- stort sving
 .equ	Periode_s1=12000			;-- lille sving
-.equ	Periode_m=8000			;Perioden i mapping round
+.equ	Periode_m=18000			;Perioden i mapping round
 
 .equ AI_Lap_Preround = 0
 .equ AI_Lap_Mapping = 1
@@ -33,7 +36,7 @@
 		ldi		YH,			HIGH(Map_Start)		;Indlæser første Ram hukommelse tildelt til mapping
 		ldi		YL,			LOW(Map_Start)		;
 		
-		;out		OCR2,			AI_Hastighed_out	;Outputter hastigheden til motoren
+												;Outputter hastigheden til motoren
 .ENDMACRO
 
 ;-------------------------------

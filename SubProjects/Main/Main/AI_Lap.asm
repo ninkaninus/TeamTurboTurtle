@@ -1,3 +1,7 @@
+; AI_Lap_Preround = 0
+; AI_Lap_Mapping = 1
+; AI_Lap_Speed = 2
+
 AI_Lap_Interrupt:						;Lap interrupt skifter fra initial runden til den første runde til alle resterende.
 
 		lds		R20, AI_Check_Lap		
@@ -21,10 +25,14 @@ AI_Lap_Interrupt:						;Lap interrupt skifter fra initial runden til den første
 AI_Test_Speed_Lap_First:
 		;Sørger for at gemme det sidste banestykke. Da stykkerne bliver gemt ved skift til næste stykke.
 
-;		ldi R20, 5
-;		add		laengde, R20			;Forøg antal med fem - Bruges til at sikre at den ikke løber tør i slutningen. Antal kan ændres.
-;		st		Y+,			Laengde		;Sæt Laengden ind først-
-;		st		Y+,			Type		;og derefter vejtypen.
+		ldi R20, 5
+		add		Length_L, R20			;Forøg antal med fem - Bruges til at sikre at den ikke løber tør i slutningen. Antal kan ændres.
+		ldi		R16, 0
+		adc		Length_H, R16
+
+		st		Y+,			Length_L
+		st		Y+,			Length_H	;Sæt Længden ind først-
+		st		Y+,			Type		;og derefter vejtypen.
 
 
 ;Vi har ikke afprøvet dette, så det kigger vi på senere.
@@ -39,12 +47,11 @@ AI_Test_Speed_Lap:
 ;		inc		R20
 ;		sts		AI_Hastighed_D,R20
 
-;		clr		R27						;Nulstiller X
-;		ldi		R26,		Map_start
-;		ldi		R16, 2
-;		sts		AI_Check_Lap, R16
-;		ld		Laengde,	Y+			;Indlæser den første del af af det gemte map.
-;		ld		Type,		Y+
+		ldi		YL, low(Map_Start)
+		ldi		YH, high(Map_Start)
+		ld		Length_L,	Y+			;Indlæser den første del af af det gemte map.
+		ld		Length_H, 	Y+
+		ld		Type,		Y+
 
 ;Vi har ikke afprøvet dette, så det kigger vi på senere.
 		ret

@@ -8,6 +8,8 @@
 			clr		R16
 			sts		Edge1_L, R16
 			sts		Edge1_H, R16
+			sts		Pulse_Time_L, R16
+			sts		Pulse_Time_H, R16
 
 			in		R16, TIMSK
 			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
@@ -68,12 +70,11 @@ EDGE1:		in		R0, ICR1L
 			sts		Edge1_L, R0
 			sts		Edge1_H, R1
 
+			lds		R16, SREG_1
 			sbr		R16, 0b00000001					; set bit 0 in R16 (performs a logical ORI instruction)
 			sts		SREG_1, R16
 			
-			Pop_Register_5 R16, R3, R2, R1, R0
-			
-			reti
+			rjmp	WheelSpeed_End
 			
 EDGE2:		lds		R0, Edge1_L
 			lds		R1, Edge1_H
@@ -88,6 +89,9 @@ EDGE2:		lds		R0, Edge1_L
 			cp		R3, R16
 			brlo	WheelSpeed_End		
 			
+			sts		Pulse_Time_L, R2
+			sts		Pulse_Time_H, R3
+			
 			lds		R16, SREG_1
 			cbr		R16, 0b00000001					; clear bit 0 in R16 (performs logical AND with complement of operand)
 			sts		SREG_1, R16
@@ -96,14 +100,9 @@ EDGE2:		lds		R0, Edge1_L
 			out		TCNT1H, R16						; Temp = R16
 			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp	
 			
-			sts		Pulse_Time_L, R2
-			sts		Pulse_Time_H, R3
-
-
-
-			call AI_HALL_INTERRUPT
-
 WheelSpeed_End:
+
+			;call AI_HALL_INTERRUPT
 			
 			Pop_Register_5 R16, R3, R2, R1, R0
 			
