@@ -62,12 +62,12 @@ TooLow:	;cpi		R16, 3
 		
 Speed_End:
 
-		ldi		R16, 20
-		call	Delay_MS
+;		ldi		R16, 20
+;		call	Delay_MS
 		
-		inc		ZH
-		cpi		ZH, 10
-		brlo	Speed_End2
+;		inc		ZH
+;		cpi		ZH, 10
+;		brlo	Speed_End2
 		
 		ret
 		

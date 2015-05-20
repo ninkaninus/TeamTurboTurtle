@@ -39,24 +39,26 @@ Init:
 	
 Main:	
 
-		
-	lds		R16, Pulse_Time_L
-	lds		R17, Pulse_Time_H
-	;call	USART_Decimal_16
-	;		USART_NewLine
-			
-	;mov		R16, Laengde
-	;call	USART_Decimal_8
-	;		USART_NewLine
-	;		USART_NewLine
+		mov		R16,	Length_L
+		mov		R17,	Length_H
+call	USART_Decimal_16
 
-	lds		R16, SREG_1
-	sbrs	R16, 2
-	rjmp 	Main
+		ldi		R16, ','
+call	USART_Transmit
 
-	ldi		R16, high(16000)
-	lds		R17, Pulse_Time_H
-	call	Hastigheds_kontrol
+		mov		R16,	Type
+call	USART_Decimal_8
+
+		ldi		R16, ','
+call	USART_Transmit
+
+call	Gyro_Mean
+		mov		R16,	Accel
+call	USART_Decimal_8
+		USART_Newline
+
+		ldi		R16,	60
+call	Delay_MS
 
 rjmp Main	
 
