@@ -18,7 +18,9 @@ AI_Lap_Interrupt:						;Lap interrupt skifter fra initial runden til den første
 		ldi		R20, AI_Lap_Mapping
 		sts		AI_Check_Lap, R20
 
-
+		ldi		Type,		0
+		ldi		Length_L,	0
+		ldi		Length_H,	0
 
 		ret			
 

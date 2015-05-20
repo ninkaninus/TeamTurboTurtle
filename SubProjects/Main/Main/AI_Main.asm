@@ -18,7 +18,7 @@
 .equ	Periode_l=6000			;Periode når vi kører ligeud
 .equ	Periode_s2=8000			;-- stort sving
 .equ	Periode_s1=12000			;-- lille sving
-.equ	Periode_m=18000			;Perioden i mapping round
+.equ	Periode_m=14000			;Perioden i mapping round
 
 .equ AI_Lap_Preround = 0
 .equ AI_Lap_Mapping = 1

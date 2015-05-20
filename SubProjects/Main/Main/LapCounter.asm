@@ -65,7 +65,7 @@ Lap_Time:
 	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
 	out		ACSR, R16					; Global interrupt register
 	
-	;call AI_LAP_INTERRUPT
+	call AI_LAP_INTERRUPT
 	
 	lds		R16, SREG_1
 	sbr		R16, 0b00000100					; clear bit 0 in R16 (performs logical AND with complement of operand)

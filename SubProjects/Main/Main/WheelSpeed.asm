@@ -102,7 +102,7 @@ EDGE2:		lds		R0, Edge1_L
 			
 WheelSpeed_End:
 
-			;call AI_HALL_INTERRUPT
+			call AI_HALL_INTERRUPT
 			
 			Pop_Register_5 R16, R3, R2, R1, R0
 			
