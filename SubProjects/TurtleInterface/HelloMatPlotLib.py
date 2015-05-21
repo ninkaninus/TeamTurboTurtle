@@ -277,11 +277,14 @@ class ApplicationWindow(QMainWindow):
         self.listDataSets.addItem("Lap: " + str((len(self.dataSamples)-1)))
 
     def read_serial_data(self):
+
+        '''
         qdata = list(get_all_from_queue(self.com_data_Yaccel_q))
         if(len(qdata) > 0):
             #print("Received Yaccel data")
             for dataSet in qdata:
                 self.dataYaccelSamples.append(dataSet)
+        '''
 
         qdata = list(get_all_from_queue(self.com_data_Zgyro_q))
         if(len(qdata) > 0):

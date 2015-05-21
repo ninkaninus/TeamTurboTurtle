@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d33783d6-c409-40bb-bafb-9c5bd9bc5684" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Main/Main/Main.atsuo" afterPath="$PROJECT_DIR$/../Main/Main/Main.atsuo" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Main/Main/Debug/Main.obj" afterPath="$PROJECT_DIR$/../Main/Main/Debug/Main.obj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CarEmulator.py" afterPath="$PROJECT_DIR$/CarEmulator.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Main/Main/Communication_Protocol.asm" afterPath="$PROJECT_DIR$/../Main/Main/Communication_Protocol.asm" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HelloMatPlotLib.py" afterPath="$PROJECT_DIR$/HelloMatPlotLib.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Main/Main/LapCounter.asm" afterPath="$PROJECT_DIR$/../Main/Main/LapCounter.asm" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Main/Main/Debug/Main.hex" afterPath="$PROJECT_DIR$/../Main/Main/Debug/Main.hex" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Main/Main/Debug/Main.lss" afterPath="$PROJECT_DIR$/../Main/Main/Debug/Main.lss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Main/Main/Debug/Main.map" afterPath="$PROJECT_DIR$/../Main/Main/Debug/Main.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Main/Main/Debug/Main.tmp" afterPath="$PROJECT_DIR$/../Main/Main/Debug/Main.tmp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/com_monitor.py" afterPath="$PROJECT_DIR$/com_monitor.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data_puller.py" afterPath="$PROJECT_DIR$/data_puller.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TurtleInterface.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,8 +26,8 @@
       <file leaf-file-name="HelloMatPlotLib.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/HelloMatPlotLib.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6367615">
-              <caret line="276" column="75" selection-start-line="276" selection-start-column="75" selection-end-line="276" selection-end-column="75" />
+            <state vertical-scroll-proportion="0.56236327">
+              <caret line="286" column="11" selection-start-line="286" selection-start-column="11" selection-end-line="286" selection-end-column="11" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -454,7 +441,7 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14150943" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32861635" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23742138" sideWeight="0.6464129" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23742138" sideWeight="0.6464129" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -990,8 +977,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/HelloMatPlotLib.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6367615">
-          <caret line="276" column="75" selection-start-line="276" selection-start-column="75" selection-end-line="276" selection-end-column="75" />
+        <state vertical-scroll-proportion="0.56236327">
+          <caret line="286" column="11" selection-start-line="286" selection-start-column="11" selection-end-line="286" selection-end-column="11" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
