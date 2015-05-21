@@ -10,28 +10,45 @@ For at gøre signalet fra sensoren brugbart for microcontrolleren, ville vi brug
 
 \subsection{Tachometer}
 
-Til at måle omdrejningshastigheden på bilen, samt at opfylde kravet om en elektrofysisk sensor/aktuator, blev der valgt en analog hall sensor som monteredes på motoren. Sensoren har tre ben - et til 5 V, et til stel og et output. Outputtet ligger og svinger omkring 2.5 V og ændrer sig i positiv eller negativ retning alt afhængigt af, hvordan den magnetiske flux ændrer sig i nærheden af sensoren. Når motoren kører vil man på hall sensorens output så kunne måle, når polerne passerer tæt forbi sensoren. Det giver til gengæld et svagt og noget støjet signal, der skal behandles for at microcontrolleren kan bruge det til noget. Det rå signal havde en peak-to-peak spænding på 100-200 mV, så det var ret vigtigt først at få det forstærket op. Det havde også den tilføjede bonus at skære noget af den mere højfrekvente støj fra, fordi den forstærker vi valgte, en instrumenteringsforstærker AD623, havde en knækfrekvens på godt og vel 90 kHz under de forhold vi havde. 
+Til at måle omdrejningshastigheden på bilen, samt at opfylde kravet om en elektrofysisk sensor/aktuator, blev der valgt en analog hall sensor som monteredes på motoren. Sensoren har tre ben - et til 5 V, et til stel og et output. Outputtet ligger og svinger omkring 2.5 V og ændrer sig i positiv eller negativ retning alt afhængigt af, hvordan den magnetiske flux ændrer sig i nærheden af sensoren. Når motoren kører vil man på hall sensorens output så kunne måle, når polerne passerer tæt forbi sensoren. Det giver til gengæld et svagt og noget støjet signal, der skal behandles for at microcontrolleren kan bruge det til noget. Det rå signal havde en peak-to-peak spænding på 100-200 mV, så det var ret vigtigt først at få det forstærket op. Det havde også den tilføjede bonus at skære noget af den mere højfrekvente støj fra, fordi den forstærker vi valgte, en instrumenteringsforstærker AD623, havde en knækfrekvens på godt og vel 90 kHz under de forhold vi arbejdede under. 
 
 \begin{figure}[h]
 
 	\centering
-		\includegraphics[scale=0.5]{Billeder/Schmitt.jpg}
+		\includegraphics[scale=0.3]{Billeder/Schmitt.jpg}
 	\caption{Diagram over schmitt trigger kredsløbet.}
-	\label{fig:Distance Check}
+	\label{fig:Schmitt}
 	
 \end{figure}
 
-Ud fra de første målinger, viste det sig at den lave del af signalet var meget støjfyldt og svær at behandle, så vi valgte at skære den del af signalet fra med et offset på forstærkeren. Offsettet blev styret af et potentiometer, der blev brugt som en slags justerbar referencespænding.
+Ud fra de første målinger, viste det sig at den lave del af signalet var meget støjfyldt og svær at behandle, så vi valgte at skære den del af signalet fra med et offset på forstærkeren se figur \ref{fig:Signal1}. Offsettet blev styret af et potentiometer, der blev brugt som en slags justerbar referencespænding.
 
-For at digitalisere signalet, så microcontrolleren kunne behandle det, blev der brugt en komparator igen - denne gang som en schmitt trigger for at formindske fejl. Det var ikke nødvendigt at designe spændingstærsklerne på schmitt triggeren så præcist. De skulle bare ligge relativt langt fra hinanden, så eventuel støj ikke kunne få den til at skifte tilstand utilsigtet. Ud fra vores målinger med oscilloskop viste det sig, at et spænd på over 0.5 V var rigeligt til at forhindre støj i at få schmitt triggeren til at skifte tilstand.
+\begin{figure}[h]
+
+	\centering
+		\includegraphics[scale=0.4]{Billeder/Signal1.jpg}
+	\caption{Her ses signalet fra hall sensoren før (blå) og efter (lyserød) det er blevet behandlet af forstærkeren.}
+	\label{fig:Signal1}
+	
+\end{figure}
+
+For at digitalisere signalet, så microcontrolleren kunne behandle det, blev der brugt en komparator igen - denne gang som en schmitt trigger for at formindske fejl. Det var ikke nødvendigt at designe spændingstærsklerne på schmitt triggeren så præcist. De skulle bare ligge relativt langt fra hinanden, så eventuel støj ikke kunne få den til at skifte tilstand utilsigtet. Ud fra  målinger med oscilloskop viste det sig, at et spænd på over 0.5 V var rigeligt til at forhindre støj i at få schmitt triggeren til at skifte tilstand.
 
 \begin{equation}
-V_{TL} = \dfrac{R_{2}*R_{3}}{R_{2}*R_{3}+R_{1}(R_{2}+R_{3})}*V_{+}
+V_{TL} = \dfrac{R_{2}*R_{3}}{R_{2}*R_{3}+R_{1}(R_{2}+R_{3})}*5V
+\label{eq:Vtl}
 \end{equation}
+
 
 \begin{equation}
-V_{TH} = \left(\dfrac{R_{1}*R_{2}}{R_{1}*R_{2}+(R_{1}+R_{2})(R_{3}+R_{4})} + \dfrac{R_{2}(R_{3}+R_{4})}{R_{2}(R_{3}+R_{4})+R_{1}(R_{2}+R_{3}+R_{4})}\right)*V_{+}
+V_{TH} = \left(\dfrac{R_{1}*R_{2}}{R_{1}*R_{2}+(R_{1}+R_{2})(R_{3}+R_{4})} + \dfrac{R_{2}(R_{3}+R_{4})}{R_{2}(R_{3}+R_{4})+R_{1}(R_{2}+R_{3}+R_{4})}\right)*5V
+\label{eq:Vth}
 \end{equation}
 
 
-Modstandsværdierne blev dikteret af udvalget på komponentlageret, og vi endte med spændingstærskler på henholdsvis 2.2 V og 2.8 V.
+
+Modstandsværdierne blev dikteret af udvalget på komponentlageret, og ved hjælp af ligning \eqref{eq:Vtl} og \eqref{eq:Vth} designede vi spændingstærskler på henholdsvis 2.2 V og 2.8 V. 
+
+\subsection{Bremse}
+
+\subsection{Elektromagnet}
