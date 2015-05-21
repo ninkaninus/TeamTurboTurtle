@@ -29,7 +29,7 @@ rjmp	Venstre_Sving									;Hopper til venstre sving hvis fortegnet siger at det
 ;Ellers er det et højre sving.
 
 		cpi		Gyro,		Gyro_Lille_Sving	;Værdi for gyro til lille sving
-		brlo	RIGHT_TURN_SMALL				;Hvis gyroværdien er stor nok til et lille sving, så skifter den type.
+		brsh	RIGHT_TURN_SMALL				;Hvis gyroværdien er stor nok til et lille sving, så skifter den type.
 
 		ldi		R16,		4			;Sætter vejtypen til stor højre
 		
@@ -44,7 +44,7 @@ ret
 Venstre_Sving:
 
 		cpi		Gyro,		Gyro_Lille_Sving	;Værdi for gyro til lille sving
-		brlo	LEFT_TURN_SMALL				;Hvis gyroværdien er stor nok til et lille sving, så skifter den type.
+		brsh	LEFT_TURN_SMALL				;Hvis gyroværdien er stor nok til et lille sving, så skifter den type.
 
 		ldi		R16,		2			;Sætter vejtypen til stor venstre
 		

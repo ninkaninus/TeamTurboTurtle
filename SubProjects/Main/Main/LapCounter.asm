@@ -24,7 +24,7 @@
 Lap_Time:	
 
 	Push_Register_7 R0, R1, R2, R3, R4, R5, R16
-
+	push	R17
 	lds		R0, Timer_1ms_L				
 	lds		R1, Timer_1ms_M				; Current time since startup in ms
 	lds		R2, Timer_1ms_H				 
@@ -76,6 +76,7 @@ call	AI_Lap			;Alt AI der har med rundeskift at gøre ligger her
 
 Lap_Time_End:
 
+	pop		R17
 	Pop_Register_7 R16, R5, R4, R3, R2, R1, R0
 
 			reti			

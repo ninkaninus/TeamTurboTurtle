@@ -39,17 +39,30 @@ Init:
 		
 Main:	
 
-		
+
+
+
 rjmp Main
 
+USART_LENGTH_TYPE:
 
 
+		mov		R16,	Length_L
+		mov		R17,	Length_H
+call	USART_Decimal_16
+
+		ldi		R16,	','
+call	USART_Transmit
+
+		mov		R16,	Type
+call	USART_Decimal_8
+		USART_Newline
+
+ret
 
 
-
-
-
-
+		ldi		R16,	0b00111110
+		out		DDRA,	R16
 
 
 

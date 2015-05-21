@@ -6,6 +6,7 @@ SKIFT_TEST:
 		adc		Length_H,	R16
 
 call	Gyro_Kontrol
+
 		Cp		R16,		Type
 		breq	SAME_TYPE
 		
@@ -25,10 +26,14 @@ call	Gyro_Kontrol
 		breq	LILLE_H
 		
 LILLE_V:
+		mov		R16,		Type
+call	LED
 		ldi		Type,		1
 ret
 
 LILLE_H:
+		mov		R16,		Type
+call	LED
 		ldi		Type,		5
 ret
 
@@ -41,13 +46,7 @@ LEFT_SKIFT:
 		cpi		Type,	1
 		breq	SAME_TYPE
 		
-;		mov		R16,	Type
-;call	USART_Decimal_8
-;		ldi		R16, ','
-;call	USART_Transmit
-;		ldi		R16, 'V'
-;call	USART_Transmit
-;		USART_Newline
+
 
 		st		Y+,		Length_L
 		st		Y+,		Length_H
@@ -55,18 +54,12 @@ LEFT_SKIFT:
 		ldi		Length_L,		0
 		ldi		Length_H,		0
 		ldi		Type,			2
-		
+
 ret
 
 STRAIGHT_SKIFT:
 
-;		mov		R16,	Type
-;call	USART_Decimal_8
-;		ldi		R16, ','
-;call	USART_Transmit
-;		ldi		R16, 'L'
-;call	USART_Transmit
-;		USART_Newline
+
 
 		st		Y+,		Length_L
 		st		Y+,		Length_H
@@ -74,21 +67,15 @@ STRAIGHT_SKIFT:
 		ldi		Length_L,		0
 		ldi		Length_H,		0
 		ldi		Type,			3
-		
+
 ret
 
 RIGHT_SKIFT:
 
+call	LED
 		cpi		Type,	5
 		breq	SAME_TYPE
 
-;		mov		R16,	Type
-;call	USART_Decimal_8
-;		ldi		R16, ','
-;call	USART_Transmit
-;		ldi		R16, 'H'
-;call	USART_Transmit
-;		USART_Newline
 
 		st		Y+,		Length_L
 		st		Y+,		Length_H
@@ -96,7 +83,7 @@ RIGHT_SKIFT:
 		ldi		Length_L,		0
 		ldi		Length_H,		0
 		ldi		Type,			4
-		
+
 ret
 
 

@@ -48,7 +48,7 @@
 Input_Capture:
 
 			Push_Register_5 R0, R1, R2, R3, R16
-			
+			push	R17
 			lds		R0, Ticks_L
 			lds		R1, Ticks_H
 			
@@ -102,13 +102,11 @@ EDGE2:		lds		R0, Edge1_L
 			
 WheelSpeed_End:
 
-			ldi		R16,	1
-			add		Length_L,	R16
-			ldi		R16,	0
-			adc		Length_H,	R16
+
 
 			call AI_Hall		;Alt AI der har med ticks at gøre ligger her
 			
+			pop R17
 			Pop_Register_5 R16, R3, R2, R1, R0
 			
 			reti
