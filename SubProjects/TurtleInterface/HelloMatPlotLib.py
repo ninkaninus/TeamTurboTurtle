@@ -78,6 +78,7 @@ class ApplicationWindow(QMainWindow):
         self.serialObject.stopbits = serial.STOPBITS_ONE
         self.serialObject.bytesize = serial.EIGHTBITS
         self.serialObject.timeout = None
+        self.serialObject.setWriteTimeout(0.01)
 
         #Variables
         self.liveUpdate = False
@@ -89,8 +90,9 @@ class ApplicationWindow(QMainWindow):
         self.dataYaccelSamples = []
         self.dataZgyroSamples = []
         self.dataTickSamples = []
+        self.dataTickSamplesCount = 0
 
-        self.lapTimes = []
+        self.laps = []
         self.speeds = []
 
         #Data stuff
@@ -104,10 +106,11 @@ class ApplicationWindow(QMainWindow):
 
         self.liveFeed = LiveDataFeed()
 
-        self.dataTimerUpdateRate = 25
+        self.dataTimerUpdateRate = 10
 
         self.plotUpdater = QTimer(self)
         self.plotUpdater.timeout.connect(self.UpdateData)
+        self.dataToPlot = None
 
         #Menues
 
@@ -148,9 +151,13 @@ class ApplicationWindow(QMainWindow):
 
 
         #Stats
-        self.labelLaptime = QLabel('Laptime', self)
-        self.labelLaptime.setStyleSheet("background-color:#FFFFFF")
-        self.labelLaptime.setAlignment(Qt.AlignLeft)
+        self.labelLapTime = QLabel('LapTime', self)
+        self.labelLapTime.setStyleSheet("background-color:#FFFFFF")
+        self.labelLapTime.setAlignment(Qt.AlignLeft)
+
+        self.labelLapTicks = QLabel('LapTicks', self)
+        self.labelLapTicks.setStyleSheet("background-color:#FFFFFF")
+        self.labelLapTicks.setAlignment(Qt.AlignLeft)
 
         self.labelSpeed = QLabel('Speed', self)
         self.labelSpeed.setStyleSheet("background-color:#FFFFFF")
@@ -159,6 +166,17 @@ class ApplicationWindow(QMainWindow):
         self.labelSpeedAvg = QLabel('Speed avg.', self)
         self.labelSpeedAvg.setStyleSheet("background-color:#FFFFFF")
         self.labelSpeedAvg.setAlignment(Qt.AlignLeft)
+
+        self.listDataSets = QListWidget(self)
+        self.listDataSets.setMaximumWidth(200)
+        self.listDataSets.itemClicked.connect(self.chooseDataSet)
+
+        statbox = QVBoxLayout()
+        statbox.addWidget(self.listDataSets)
+        statbox.addWidget(self.labelLapTime)
+        statbox.addWidget(self.labelLapTicks)
+        statbox.addWidget(self.labelSpeed)
+        statbox.addWidget(self.labelSpeedAvg)
 
 
         #Start/Stop interface
@@ -170,15 +188,17 @@ class ApplicationWindow(QMainWindow):
         buttonStop.setStyleSheet("background-color:#FF6666")
         buttonStop.clicked.connect(self.CarStop)
 
+        self.buttonData = QPushButton('Datacollection',self)
+        self.buttonData.setStyleSheet("background-color:#a2adff")
+        self.buttonData.setCheckable(True)
+        self.buttonData.clicked[bool].connect(self.buttonDataToggle)
+
         self.lineEditSpeed = QLineEdit('35')
         self.lineEditSpeed.setStyleSheet("background-color:#FFFFFF")
         self.lineEditSpeed.returnPressed.connect(self.buttonStartPressed)
         self.lineEditSpeed.setSizePolicy(QSizePolicy.Minimum,QSizePolicy.Fixed)
 
-
         #Terminal
-        terminalSize = 100
-
         self.labelTerminal = QLabel('>>Terminal Ready<br />',self)
         self.labelTerminal.setAlignment(Qt.AlignLeft | Qt.AlignTop)
         self.labelTerminal.setWordWrap(True)
@@ -199,10 +219,6 @@ class ApplicationWindow(QMainWindow):
         self.comboboxTerminalType.addItem("HEX")
         self.comboboxTerminalType.addItem("DEC")
 
-        #Plot list
-        self.listPlots = QListWidget(self)
-        self.listPlots.setMaximumWidth(200)
-
         #Layout
 
         self.main_widget = QWidget(self)
@@ -218,6 +234,7 @@ class ApplicationWindow(QMainWindow):
         vbox.addWidget(self.lineEditSpeed)
         vbox.addWidget(self.buttonStart)
         vbox.addWidget(buttonStop)
+        vbox.addWidget(self.buttonData)
         vbox.addStretch(1)
 
         v2box = QVBoxLayout()
@@ -226,13 +243,7 @@ class ApplicationWindow(QMainWindow):
         self.canvas = FigureCanvas(self.figure)
         self.canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.canvas.updateGeometry()
-        self.plot()
-
-        statbox = QVBoxLayout()
-        statbox.addWidget(self.listPlots)
-        statbox.addWidget(self.labelLaptime)
-        statbox.addWidget(self.labelSpeed)
-        statbox.addWidget(self.labelSpeedAvg)
+        #self.plot()
 
         hbox.addWidget(self.canvas)
         hbox.addLayout(statbox)
@@ -253,42 +264,54 @@ class ApplicationWindow(QMainWindow):
 
         self.statusBar().showMessage("TURTLES, TURTLES, TURTLES!", 5000)
 
-    def updateLaptime(self):
-        self.labelLaptime.setText("Laptime: " +str(self.lapTimes[len(self.lapTimes)-1]))
+    def chooseDataSet(self, item):
+        dataSetnumb = int(item.text().lstrip('Lap: '))
+        self.dataToPlot = self.dataSamples[dataSetnumb]
+        print(dataSetnumb)
 
+    def updateLaptime(self):
+        self.labelLapTime.setText("LapTime: " + str(self.laps[len(self.laps)-1][0]))
+        self.labelLapTicks.setText("LapTicks: " + str(self.laps[len(self.laps)-1][1]))
+
+    def listDataSetsUpdate(self):
+        self.listDataSets.addItem("Lap: " + str((len(self.dataSamples)-1)))
 
     def read_serial_data(self):
         qdata = list(get_all_from_queue(self.com_data_Yaccel_q))
         if(len(qdata) > 0):
-            print("Received Yaccel data")
+            #print("Received Yaccel data")
             for dataSet in qdata:
                 self.dataYaccelSamples.append(dataSet)
 
         qdata = list(get_all_from_queue(self.com_data_Zgyro_q))
         if(len(qdata) > 0):
-            print("Received Zgyro data")
+            #print("Received Zgyro data")
             for dataSet in qdata:
                 self.dataZgyroSamples.append(dataSet)
 
         qdata = list(get_all_from_queue(self.com_data_Tick_q))
         if(len(qdata) > 0):
-            print("Received ticks data")
+            #print("Received ticks data")
             for dataSet in qdata:
                 self.dataTickSamples.append(dataSet)
 
         qdata = list(get_all_from_queue(self.com_data_Lap_q))
         if(len(qdata) > 0):
-            self.dataSamples.append((self.dataYaccelSamples))
-            #print(len(self.dataYaccelSamples), self.labelLaptime.text(), self.datapulls)
-            #self.dataYaccelSamples = []
-            self.lapTimes.append(qdata[0])
+            self.dataSamples.append((self.dataZgyroSamples))
+            self.dataZgyroSamples = []
+            self.laps.append(qdata[0])
             self.updateLaptime()
+            self.listDataSetsUpdate()
 
     def UpdateData(self):
         self.read_serial_data()
-        self.plot()
+        if(self.dataToPlot != None):
+            self.plot()
+        else:
+            print('No data yet')
 
-        if(len(self.dataTickSamples)>= 2):
+        if(len(self.dataTickSamples) > self.dataTickSamplesCount and len(self.dataTickSamples) >=2):
+            self.dataTickSamplesCount = len(self.dataTickSamples)
             sampleLast = self.dataTickSamples[len(self.dataTickSamples)-1]
             sampleSecondLast = self.dataTickSamples[len(self.dataTickSamples)-2]
 
@@ -300,22 +323,23 @@ class ApplicationWindow(QMainWindow):
             self.speeds.append(speed)
             self.labelSpeed.setText("Speed: " + "%.2f" %speed)
 
-        if(len(self.speeds)>0):
-            speedAvg = np.mean(self.speeds)
-            self.labelSpeedAvg.setText("Speed: " + "%.2f" %speedAvg)
+            if(len(self.speeds)>0):
+                speedAvg = np.mean(self.speeds)
+                self.labelSpeedAvg.setText("Speed: " + "%.2f" %speedAvg)
 
 
     def plot(self):
 
         ax = self.figure.add_subplot(111)
         ax.hold(False)
-        x_list = [y for [x, y] in self.dataZgyroSamples]
-        y_list = [x for [x, y] in self.dataZgyroSamples]
+
+        x_list = [y for [x, y] in self.dataToPlot]
+        y_list = [x for [x, y] in self.dataToPlot]
 
         ax.plot(x_list, y_list, 'r')
-        ax.set_title('Graf')
-        ax.set_ylabel('Y-Acceleration')
-        ax.set_xlabel('Time')
+        ax.set_title('Gyro over time')
+        ax.set_ylabel('Z-Gyro')
+        ax.set_xlabel('Time in ms')
         #ax.set_xlim([0, 5])
         #ax.set_ylim([0, 65535])
         #ax.autoscale(True)
@@ -363,6 +387,14 @@ class ApplicationWindow(QMainWindow):
         text = self.labelTerminal.text()
         text += textToAppend
         self.labelTerminal.setText(text)
+
+    def buttonDataToggle(self, state):
+        if(state):
+            self.com_data_puller.start()
+            print('Es ist true')
+        else:
+            self.com_data_puller.stop()
+            print('Es ist false')
 
     def buttonStartPressed(self):
         text = self.lineEditSpeed.text()
@@ -429,7 +461,7 @@ class ApplicationWindow(QMainWindow):
         self.com_monitor.daemon = True
         self.com_monitor.start()
         self.com_data_puller = ComDataPullerThread(self.serialObject, 100)
-        self.com_data_puller.start()
+
 
     def serialReconnect(self):
         if self.serialObject.isOpen():
@@ -445,8 +477,10 @@ class ApplicationWindow(QMainWindow):
 
     def serialDisconnect(self):
         if self.serialObject.isOpen():
-            self.com_monitor.join()
+            #self.com_monitor.join()
             self.com_monitor = None
+            self.com_data_puller.stop()
+            self.com_data_puller = None
             self.serialObject.close()
             self.statusBar().showMessage("Closed serial communication on " + self.serialObject.port + "!", 3000)
         else:

@@ -37,6 +37,7 @@ class ComMonitorThread(threading.Thread):
 
             timeStamp = time.clock() - self.startTime
 
+
             if(hex(dataFirst[0])=='0xbb'):
 
                 #Y-Acceleration
@@ -63,8 +64,6 @@ class ComMonitorThread(threading.Thread):
 
                         data = self.ConvertToSigned(data)
 
-                        print(data)
-
                         self.Zgyro_q.put((data, timeStamp))
 
                 #Ticks
@@ -80,16 +79,25 @@ class ComMonitorThread(threading.Thread):
 
                 elif(hex(dataFirst[1])=='0xa7'):
 
-                    #self.startTime = time.clock()
+                    self.startTime = time.clock()
 
                     dataSecond = self.serialObj.read(3)
 
                     if(hex(dataSecond[1])=='0xa8'):
 
-                        data = (int(dataFirst[2])*256)+int(dataSecond[2])
+                        laptime = ((int(dataFirst[2])*256)+int(dataSecond[2]))/1000
 
-                        self.lap_q.put(data)
+                        dataThird = self.serialObj.read(3)
 
+                        if(hex(dataThird[1])=='0xa9'):
+
+                            dataFourth = self.serialObj.read(3)
+
+                            if(hex(dataFourth[1])=='0xaa'):
+
+                                lapTicks = (int(dataThird[2])*256)+int(dataFourth[2])
+
+                                self.lap_q.put((laptime, lapTicks ))
                 else:
                     print('Non comm command')
             else:

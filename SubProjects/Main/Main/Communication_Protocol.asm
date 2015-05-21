@@ -29,6 +29,9 @@
 .equ Comm_Command_LapTime_H = 0xA7
 .equ Comm_Command_LapTime_L = 0xA8
 
+.equ Comm_Command_LapTicks_H = 0xA9
+.equ Comm_Command_LapTicks_L = 0xAA
+
 
 ;---------------------------------------------------------------------------------------------------------------------
 ;Comm Received: Used as a USART Received interrupt
@@ -313,11 +316,34 @@ Comm_Received_Execute_Get_Ticks:
 ;Send
 ;---------------------------------------------------------------------------------------------------------------------
 
+;LapTime
 Comm_Send_LapTime:
 	ldi R16, 0xBB
 	call USART_Transmit
 
 	ldi R16, Comm_Command_LapTime_H
+	call USART_Transmit
+
+	lds R16, Lap_time_M
+	call USART_Transmit
+	
+	ldi R16, 0xBB
+	call USART_Transmit
+
+	ldi R16, Comm_Command_LapTime_L
+	call USART_Transmit
+
+	lds R16, Lap_time_L
+	call USART_Transmit
+
+	ret
+
+;Lap ticks
+Comm_Send_LapTicks:
+	ldi R16, 0xBB
+	call USART_Transmit
+
+	ldi R16, Comm_Command_LapTicks_H
 	call USART_Transmit
 
 	lds R16, Ticks_Lap_H
@@ -326,7 +352,7 @@ Comm_Send_LapTime:
 	ldi R16, 0xBB
 	call USART_Transmit
 
-	ldi R16, Comm_Command_LapTime_L
+	ldi R16, Comm_Command_LapTicks_L
 	call USART_Transmit
 
 	lds R16, Ticks_Lap_L

@@ -9,8 +9,9 @@ from globals import *
 def lapTimeEvent():
 
     lapTime = random.randint(1500, 4500)
+    lapTicks = random.randint(600, 800)
 
-    lapTime_q.put(lapTime)
+    lapTime_q.put((lapTime, lapTicks))
 
     t = threading.Timer(lapTime/1000, lapTimeEvent)
     t.start()
@@ -51,10 +52,16 @@ while 1:
     qdata = list(get_all_from_queue(lapTime_q))
     if(len(qdata) > 0):
         lapTime = qdata[0]
-        comParameter1 = (lapTime >> 8) & 0xff
-        comParameter2 = lapTime & 0xff
+        comParameter1 = (lapTime[0] >> 8) & 0xff
+        comParameter2 = lapTime[0] & 0xff
         serialObject.write(bytearray([ord('\xBB'),ord('\xA7'), comParameter1]))
         serialObject.write(bytearray([ord('\xBB'),ord('\xA8'), comParameter2]))
+
+        comParameter1 = (lapTime[1] >> 8) & 0xff
+        comParameter2 = lapTime[1] & 0xff
+        serialObject.write(bytearray([ord('\xBB'),ord('\xA9'), comParameter1]))
+        serialObject.write(bytearray([ord('\xBB'),ord('\xAA'), comParameter2]))
+
         print(lapTime)
 
     data = serialObject.read(3)
