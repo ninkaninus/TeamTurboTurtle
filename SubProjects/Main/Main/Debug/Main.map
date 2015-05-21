@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu May 21 01:00:29 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Thu May 21 12:00:49 2015
 
 
 EQU  SIGNATURE_000 0000001e
@@ -568,7 +568,7 @@ EQU  ACIaddr      00000024
 EQU  TWIaddr      00000026
 EQU  SPMRaddr     00000028
 EQU  INT_VECTORS_SIZE 0000002a
-CSEG Init         000002f8
+CSEG Init         0000030b
 CSEG Input_Capture 000001cc
 CSEG Timer0_Update 000001b1
 CSEG Comm_Received 00000257
@@ -781,7 +781,7 @@ CSEG EDGE2        000001f4
 CSEG EDGE1        000001e3
 CSEG WheelSpeed_End 0000020b
 CSEG Lap_Time_End 0000024d
-CSEG Comm_Send_LapTime 000002e3
+CSEG Comm_Send_LapTime 000002f6
 EQU  Comm_Type_Set 00000055
 EQU  Comm_Type_Get 000000aa
 EQU  Comm_Command_Start 00000010
@@ -795,27 +795,31 @@ EQU  Comm_Command_Ticks_L 000000a6
 EQU  Comm_Command_LapTime_H 000000a7
 EQU  Comm_Command_LapTime_L 000000a8
 CSEG Comm_Received_Type 0000025e
-CSEG Comm_Received_Command 0000026c
-CSEG Comm_Received_Execute 0000027f
+CSEG Comm_Received_Command 0000026a
+CSEG Comm_Received_Execute 00000290
 CSEG Comm_Received_Type_Set_Check 0000025f
-CSEG Comm_Received_Type_Set_Check_End 00000262
-CSEG Comm_Received_Type_Valid 00000266
-CSEG Comm_Received_Type_Get_Check 00000262
-CSEG Comm_Received_Type_Get_Check_End 00000265
-CSEG Comm_Received_Type_Reset 00000265
-CSEG Comm_Received_Command_Type_Set_Check 0000026e
-CSEG Comm_Received_Command_Type_Set_Check_End 00000271
-CSEG Comm_Received_Command_Type_Set 00000278
-CSEG Comm_Received_Command_Type_Get_Check 00000271
-CSEG Comm_Received_Command_Type_Get_Check_End 00000274
-CSEG Comm_Received_Command_Type_Get 00000278
-CSEG Comm_Received_Command_Failure 00000274
-CSEG Comm_Received_Execute_Set 0000028c
-CSEG Comm_Received_Execute_Get 0000029b
-CSEG Comm_Received_Execute_Set_Start 00000293
-CSEG Comm_Received_Execute_Set_Stop 00000298
-CSEG Comm_Received_Execute_Set_Start_End 00000297
-CSEG Comm_Received_Execute_Get_Yaccel 000002a4
-CSEG Comm_Received_Execute_Get_Zgyro 000002b9
-CSEG Comm_Received_Execute_Get_Ticks 000002ce
-CSEG Main         0000052f
+CSEG Comm_Received_Type_Valid 00000264
+CSEG Comm_Received_Type_Get_Check 00000261
+CSEG Comm_Received_Type_Reset 00000263
+CSEG Comm_Received_Command_Type_Set_Check 0000026c
+CSEG Comm_Received_Command_Type_Set 00000274
+CSEG Comm_Received_Command_Type_Get_Check 0000026e
+CSEG Comm_Received_Command_Type_Get 0000027b
+CSEG Comm_Received_Command_Failure 00000270
+CSEG Comm_Received_Command_Start_Check 00000275
+CSEG Comm_Received_Command_Valid 0000028a
+CSEG Comm_Received_Command_Stop_Check 00000277
+CSEG Comm_Received_Command_Reset 00000286
+CSEG Comm_Received_Command_Yaccel_Check 0000027c
+CSEG Comm_Received_Command_Zgyro_Check 0000027e
+CSEG Comm_Received_Command_Ticks_Check 00000280
+CSEG Comm_Received_Command_LapTime_Check 00000282
+CSEG Comm_Received_Execute_Set 0000029d
+CSEG Comm_Received_Execute_Get 000002ac
+CSEG Comm_Received_Execute_Set_Start 000002a4
+CSEG Comm_Received_Execute_Set_Stop 000002a9
+CSEG Comm_Received_Execute_Set_Start_End 000002a8
+CSEG Comm_Received_Execute_Get_Yaccel 000002b5
+CSEG Comm_Received_Execute_Get_Zgyro 000002ca
+CSEG Comm_Received_Execute_Get_Ticks 000002e1
+CSEG Main         00000542

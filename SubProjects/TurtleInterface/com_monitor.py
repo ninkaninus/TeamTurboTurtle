@@ -47,6 +47,9 @@ class ComMonitorThread(threading.Thread):
                     if(hex(dataSecond[1])=='0xa2'):
 
                         data = (int(dataFirst[2])*256)+int(dataSecond[2])
+
+                        data = self.ConvertToSigned(data)
+
                         self.Yaccel_q.put((data, timeStamp))
 
                 #Z-Gyro
@@ -56,7 +59,11 @@ class ComMonitorThread(threading.Thread):
 
                     if(hex(dataSecond[1])=='0xa4'):
 
-                        data = (int(dataFirst[2])*256)+int(dataSecond[2])
+                        data = (int(dataFirst[2])*256) + int(dataSecond[2])
+
+                        data = self.ConvertToSigned(data)
+
+                        print(data)
 
                         self.Zgyro_q.put((data, timeStamp))
 
@@ -87,6 +94,13 @@ class ComMonitorThread(threading.Thread):
                     print('Non comm command')
             else:
                 print('Non comm type')
+
+    def ConvertToSigned(self,number):
+        if (number > 32767):
+            return number - 65536
+        else:
+            return number
+
 
     def join(self, timeout=None):
         print("Ending")

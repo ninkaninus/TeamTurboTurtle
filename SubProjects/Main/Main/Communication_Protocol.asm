@@ -148,7 +148,7 @@ Comm_Received_Command_Reset:
 	sts Comm_Received_Byte_Num, R16					;
 	reti											;Return
 
-Comm_Comm_Received_Command_Valid:						
+Comm_Received_Command_Valid:						
 	sts Comm_Received_Byte_2, R16					;Store the received type in SRAM	
 	ldi R16, 0x03									;Set the counter to two
 	sts Comm_Received_Byte_Num, R16					;Store it					
@@ -265,7 +265,7 @@ Comm_Received_Execute_Get_Yaccel:
 	reti
 
 Comm_Received_Execute_Get_Zgyro:
-	;call MPU6050_Read_Gyro_Z
+	call MPU6050_Read_Gyro_Z
 
 	ldi R16, 0xBB
 	call USART_Transmit

@@ -104,9 +104,7 @@ class ApplicationWindow(QMainWindow):
 
         self.liveFeed = LiveDataFeed()
 
-        self.dataTimerUpdateRate = 100
-
-        self.dataTimerPullRate = 1
+        self.dataTimerUpdateRate = 25
 
         self.plotUpdater = QTimer(self)
         self.plotUpdater.timeout.connect(self.UpdateData)
@@ -133,10 +131,12 @@ class ApplicationWindow(QMainWindow):
         self.menuBar().addMenu(self.serial_menu)
 
         serialConnectAction = self.serial_menu.addAction('Connect')
+        serialConnectAction.setShortcut(QtCore.Qt.Key_C)
         serialConnectAction.triggered.connect(self.serialConnect)
         serialConnectAction.setIcon(QIcon('SerialConnect.png'))
 
         serialReconnectAction = self.serial_menu.addAction('Reconnect')
+        serialReconnectAction.setShortcut(QtCore.Qt.Key_R)
         serialReconnectAction.triggered.connect(self.serialReconnect)
         serialReconnectAction.setIcon(QIcon('SerialReconnect.png'))
 
@@ -309,15 +309,15 @@ class ApplicationWindow(QMainWindow):
 
         ax = self.figure.add_subplot(111)
         ax.hold(False)
-        x_list = [y for [x, y] in self.dataYaccelSamples]
-        y_list = [x for [x, y] in self.dataYaccelSamples]
+        x_list = [y for [x, y] in self.dataZgyroSamples]
+        y_list = [x for [x, y] in self.dataZgyroSamples]
 
         ax.plot(x_list, y_list, 'r')
         ax.set_title('Graf')
         ax.set_ylabel('Y-Acceleration')
         ax.set_xlabel('Time')
         #ax.set_xlim([0, 5])
-        ax.set_ylim([0, 65535])
+        #ax.set_ylim([0, 65535])
         #ax.autoscale(True)
         self.figure.tight_layout()
         self.canvas.draw()
@@ -374,9 +374,6 @@ class ApplicationWindow(QMainWindow):
 
         if(value <= 100 and value >=0):
             self.CarStart(value)
-            print(value)
-
-
 
     def CarStart(self, speed):
         if self.serialObject.isOpen():
@@ -431,7 +428,7 @@ class ApplicationWindow(QMainWindow):
                                             self.serialObject)
         self.com_monitor.daemon = True
         self.com_monitor.start()
-        self.com_data_puller = ComDataPullerThread(self.serialObject, 10)
+        self.com_data_puller = ComDataPullerThread(self.serialObject, 100)
         self.com_data_puller.start()
 
     def serialReconnect(self):

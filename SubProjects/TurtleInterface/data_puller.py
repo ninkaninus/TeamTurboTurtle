@@ -12,9 +12,11 @@ class ComDataPullerThread():
 
     def pullData(self):
 
+        '''
         #Pull Yaccel
         command = bytearray([ord('\xAA'), ord('\xa1'), 0])
         self.serialObj.write((command))
+        '''
 
         #time.sleep(self.delay)
 
@@ -24,11 +26,11 @@ class ComDataPullerThread():
 
         #time.sleep(self.delay)
 
-        '''
+
         #Pull Ticks
         command = bytearray([ord('\xAA'), ord('\xa5'), 0])
         self.serialObj.write((command))
-        '''
+
 
         #time.sleep(self.delay)
 
