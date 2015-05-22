@@ -31,24 +31,6 @@
 			sts		Wheel_speed_H, R17
 .ENDMACRO
 
-; Use desired braking time in MS as argument
-.MACRO Brake_MS
-		in		R16, OCR0
-		push	R16
-		clr		R16
-		out		R16, OCR0
-		
-		sbi		PORTB, BRAKE
-		cli
-		ldi		R16, @0
-		call	Delay_MS
-		sei
-		cbi		PORTB, BRAKE
-		
-		pop		R16
-		out		OCR0, R16
-.ENDMACRO
-
 Input_Capture:
 
 			Push_Register_5 R0, R1, R2, R3, R16

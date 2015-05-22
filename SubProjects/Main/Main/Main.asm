@@ -23,17 +23,9 @@
 Init:
 	Setup
 
-	;EXT1_init	
 	ldi	R16, 90
 	;out 	OCR2, R16
-			
-	clr	R16
-	mov	R10, R16
-	mov	R11, R16
 				
-	ldi R16, 'D'
-	call USART_Transmit
-					
 	sei					;Enable global interrupt	
 	rjmp Main
 
