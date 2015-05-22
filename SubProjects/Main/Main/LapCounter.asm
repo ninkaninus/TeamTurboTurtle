@@ -66,6 +66,7 @@ Lap_Time:
 	out		ACSR, R16					; Global interrupt register
 
 	call Comm_Send_LapTime
+	call Comm_Send_LapTicks
 
 Lap_Time_End:
 

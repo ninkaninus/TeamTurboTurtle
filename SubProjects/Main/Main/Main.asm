@@ -14,7 +14,6 @@
 .include "MPU-6050.inc"
 .include "MPU-6050.asm"
 .include "Time.asm"
-;.include "EXT1.asm"
 .include "WheelSpeed.asm"
 .include "LapCounter.asm"
 .include "Communication_Protocol.asm"
@@ -22,10 +21,6 @@
 
 Init:
 	Setup
-			
-	clr	R16
-	mov	R10, R16
-	mov	R11, R16
 					
 	sei					;Enable global interrupt	
 	rjmp Main
