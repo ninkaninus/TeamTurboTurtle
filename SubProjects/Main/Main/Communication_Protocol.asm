@@ -17,6 +17,17 @@
 .equ Comm_Command_Stop = 0x11				;Stop the car
 
 ;Define Get Commands
+.equ Comm_Command_Yaccel_H = 0xA1
+.equ Comm_Command_Yaccel_L = 0xA2
+
+.equ Comm_Command_Zgyro_H = 0xA3
+.equ Comm_Command_ZGyro_L = 0xA4
+
+.equ Comm_Command_Ticks_H = 0xA5
+.equ Comm_Command_Ticks_L = 0xA6
+
+.equ Comm_Command_LapTime_H = 0xA7
+.equ Comm_Command_LapTime_L = 0xA8
 
 
 ;Implemetation of the required communication protocol
@@ -107,8 +118,6 @@ Comm_Received_Command_Start:
 	call Motor_Set_Percentage
 
 Comm_Received_Command_Start_End:
-	ldi R16, 'S'
-	call USART_Transmit
 
 	reti									;Return from interrupt
 
@@ -119,9 +128,6 @@ Comm_Received_Command_Stop:
 	ldi R16, 0x00							;Load in 0x00
 	out OCR2, R16							;And set the pwm duty cycle to nothing to stop the motor.
 
-	ldi R16, 'T'
-	call USART_Transmit
-
 	reti
 
 
@@ -131,6 +137,110 @@ Comm_Received_Command_Stop:
 
 Comm_Received_Type_Get:	
 
+	lds R16, Comm_Received_Byte_2			;Load in the second(Command) byte
+
+	cpi R16, Comm_Command_Yaccel_H			
+	breq Comm_Received_Command_Yaccel		
+
+	cpi R16, Comm_Command_Zgyro_H			
+	breq Comm_Received_Command_Zgyro		
+
+	cpi R16, Comm_Command_Ticks_H
+	breq Comm_Received_Command_Ticks
+
 	;Insert error handling here
 
-	reti									;Return from interrupt
+	reti									;Do nothing if it was not a legit code
+
+Comm_Received_Command_Yaccel:
+
+	call MPU6050_Read_Accel_Y
+
+	ldi R16, 0xBB
+	call USART_Transmit
+
+	ldi R16, Comm_Command_Yaccel_H
+	call USART_Transmit
+
+	lds R16, ACCEL_YOUT_H
+	call USART_Transmit
+	
+	ldi R16, 0xBB
+	call USART_Transmit
+
+	ldi R16, Comm_Command_Yaccel_L
+	call USART_Transmit
+
+	lds R16, ACCEL_YOUT_L
+	call USART_Transmit
+
+	reti
+
+Comm_Received_Command_Zgyro:
+	call MPU6050_Read_Gyro_Z
+
+	ldi R16, 0xBB
+	call USART_Transmit
+
+	ldi R16, Comm_Command_Zgyro_H
+	call USART_Transmit
+
+	lds R16, GYRO_ZOUT_H
+	call USART_Transmit
+	
+	ldi R16, 0xBB
+	call USART_Transmit
+
+	ldi R16, Comm_Command_Zgyro_L
+	call USART_Transmit
+
+	lds R16, GYRO_ZOUT_L
+	call USART_Transmit
+
+	reti
+
+Comm_Received_Command_Ticks:
+	ldi R16, 0xBB
+	call USART_Transmit
+
+	ldi R16, Comm_Command_Ticks_H
+	call USART_Transmit
+
+	lds R16, Ticks_H
+	call USART_Transmit
+	
+	ldi R16, 0xBB
+	call USART_Transmit
+
+	ldi R16, Comm_Command_Ticks_L
+	call USART_Transmit
+
+	lds R16, Ticks_L
+	call USART_Transmit
+
+	reti
+
+;---------------------------------------------------------------------------------------------------------------------
+;Send
+;---------------------------------------------------------------------------------------------------------------------
+
+Comm_Send_LapTime:
+	ldi R16, 0xBB
+	call USART_Transmit
+
+	ldi R16, Comm_Command_LapTime_H
+	call USART_Transmit
+
+	lds R16, Ticks_Lap_H
+	call USART_Transmit
+	
+	ldi R16, 0xBB
+	call USART_Transmit
+
+	ldi R16, Comm_Command_LapTime_L
+	call USART_Transmit
+
+	lds R16, Ticks_Lap_L
+	call USART_Transmit
+
+	ret
