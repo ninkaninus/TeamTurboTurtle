@@ -10,7 +10,7 @@
 	sts	Lap_time_H, R16
 
 	in R16, ACSR
-	ori R16, 0x48						;Initialize comparator with bandgap reference and enable interrupt
+	ori R16, (1<<ACBG)|(1<<ACIE)		;Initialize comparator with bandgap reference and enable interrupt
 	out ACSR, R16						;
 
 	in R16, SFIOR						;

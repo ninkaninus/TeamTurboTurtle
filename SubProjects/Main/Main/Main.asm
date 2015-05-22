@@ -25,7 +25,7 @@ Init:
 	Setup
 	clr	R16
 	sts		SREG_1, R16
-<<<<<<< 0beccf1689552c873809df8db7f467feddcd3918
+	
 	sts		AI_Check_Lap,	R16
 			ldi		R16, 250
 			call	Delay_MS
@@ -56,6 +56,7 @@ Init:
 Main:	
 
 		
+
 	lds		R16, Pulse_Time_L
 	lds		R17, Pulse_Time_H
 	;call	USART_Decimal_16
@@ -65,7 +66,6 @@ Main:
 			sts Speed_L, R16
 			ldi R16, HIGH(1)
 			sts Speed_H, R16
-
 
 	clr		R16					
 	sts		SREG_1, R16				; clear SREG_1

@@ -16,8 +16,10 @@
 			in		R16, TIMSK
 			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
 			out		TIMSK, R16				;Timer/interrupt masking register
-			
+
 .ENDMACRO
+
+
 
 Input_Capture:
 

@@ -6,4 +6,4 @@
  */ 
 
  .equ	MOTOR = PD7
- .equ	BRAKE = PB1	
+ .equ	BRAKE = PC5	
