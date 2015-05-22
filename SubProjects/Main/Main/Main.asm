@@ -21,10 +21,14 @@
 
 Init:
 	Setup
+<<<<<<< HEAD
 
 	ldi	R16, 90
 	;out 	OCR2, R16
 
+=======
+					
+>>>>>>> origin/develop
 	sei					;Enable global interrupt	
 	rjmp Main
 

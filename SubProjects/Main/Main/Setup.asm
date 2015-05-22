@@ -18,9 +18,6 @@
 	MPU6050_Init						;
 	
 
-	ldi R16, 0x01
-	sts Program_Running, R16
-
 	;Global interrupt
 	
 .ENDMACRO
