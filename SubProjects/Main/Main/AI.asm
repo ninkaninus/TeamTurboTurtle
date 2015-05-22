@@ -9,21 +9,35 @@
 .include "AI_Read_Map.asm"
 .include "AI_Speed_Control.asm"
 ;.include "AI_Hastighed.asm"
+;.include "Speed.asm"
 .include "AI_Lap.asm"
 .include "AI_Hall.asm"
 
 ;Konstanter
-.equ	Gyro_Stort_Sving=10				;Disse værdier skal justeres
-.equ	Gyro_Lille_Sving=80
-.equ	Periode_Ligeud=7000		;Periode når vi kører ligeud
+.equ	Gyro_Stort_Sving=20				;Disse værdier skal justeres
+.equ	Gyro_Lille_Sving=75
+.equ	Periode_Ligeud=8000		;Periode når vi kører ligeud
 .equ	Periode_Stort_Sving=9000			;-- stort sving
-.equ	Periode_Lille_Sving=1000			;-- lille sving
-.equ	Periode_Mapping=10000	
+.equ	Periode_Lille_Sving=9000			;-- lille sving
+.equ	Periode_Mapping=12000	
 .equ	Motor_Ligeud=0			;Motor outpot som kan sættes som reference
-.equ	Motor_Stort_Sving=0			
+.equ	Motor_Ligeud_Min=100			;Motor outpot som kan sættes som reference
+.equ	Motor_Ligeud_Max=255			;Motor outpot som kan sættes som reference
+.equ	Motor_Stort_Sving=0	
+.equ	Motor_Stort_Sving_Min=80
+.equ	Motor_Stort_Sving_Max=185
 .equ	Motor_Lille_Sving=0
+.equ	Motor_Lille_Sving_Min=80
+.equ	Motor_Lille_Sving_Max=180
 .equ	Motor_Mapping=100
+.equ	Motor_Mapping_Min=100
+.equ	Motor_Mapping_Max=120
 .equ	Motor_Preround=100
+.equ	Motor_Ud_Af_Sving=200
+
+
+.equ	Motor_Too_Slow=180
+.equ	Periode_Too_Slow=15000
 
 ;Initialize først
 .MACRO AI_Init
@@ -35,8 +49,8 @@
 		ldi		Length_H,	0
 		ldi		R17,		0
 		sts		AI_Check_Lap,	R17
-		ldi		R16,	0b00111110
-		out		DDRA,	R16
+;		ldi		R16,	0b00111110
+;		out		DDRA,	R16
 		
 
 		
@@ -46,7 +60,7 @@
 
 
 
-LED:
+;LED:
 
 		cpi		R16,	1
 		breq	LED1

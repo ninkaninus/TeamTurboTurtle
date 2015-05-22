@@ -24,13 +24,18 @@
 
 
 Init:
+		
 	Setup
 	clr	R16
 	sts		SREG_1, R16
 	sts		AI_Check_Lap,	R16
-			
+	
+
+	
 	ldi		R16,	Motor_Preround
 	out		OCR2,	R16
+					
+
 					
 	sei					;Enable global interrupt	
 	rjmp Main
@@ -39,8 +44,8 @@ Init:
 		
 Main:	
 
-
-
+ldi		R16,	90
+out		OCR2,	R16
 
 rjmp Main
 
@@ -59,12 +64,6 @@ call	USART_Decimal_8
 		USART_Newline
 
 ret
-
-
-		ldi		R16,	0b00111110
-		out		DDRA,	R16
-
-
 
 
 

@@ -8,7 +8,7 @@ AI_Lap:
 	cpi		R17,	1
 	breq	Mapping
 	
-	cpi		R17,	2
+	cpi		R17,	3
 	brsh	Run_Time
 
 ;First round								Vi sætter der første stykke bane oveni, så vi ikke løber tør for bane.
@@ -16,8 +16,7 @@ AI_Lap:
 		st		Y+,		Length_L
 		st		Y+,		Length_H
 		st		Y+,		Type
-		mov		R16,		Type
-call	LED
+
 
 ;		mov		R16,		YL
 ;		mov		R17,		YH

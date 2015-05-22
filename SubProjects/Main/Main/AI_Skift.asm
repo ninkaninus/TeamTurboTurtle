@@ -26,14 +26,12 @@ call	Gyro_Kontrol
 		breq	LILLE_H
 		
 LILLE_V:
-		mov		R16,		Type
-call	LED
+
 		ldi		Type,		1
 ret
 
 LILLE_H:
-		mov		R16,		Type
-call	LED
+
 		ldi		Type,		5
 ret
 
@@ -72,7 +70,7 @@ ret
 
 RIGHT_SKIFT:
 
-call	LED
+
 		cpi		Type,	5
 		breq	SAME_TYPE
 
