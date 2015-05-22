@@ -17,8 +17,8 @@
 .equ Comm_Command_Stop = 0x11				;Stop the car
 
 ;Define Get Commands
-.equ Comm_Command_Yaccel_H = 0xA1
-.equ Comm_Command_Yaccel_L = 0xA2
+.equ Comm_Command_Xaccel_H = 0xA1
+.equ Comm_Command_Xaccel_L = 0xA2
 
 .equ Comm_Command_Zgyro_H = 0xA3
 .equ Comm_Command_ZGyro_L = 0xA4
@@ -32,6 +32,7 @@
 .equ Comm_Command_LapTicks_H = 0xA9
 .equ Comm_Command_LapTicks_L = 0xAA
 
+.equ Comm_Command_Data = 0xAB
 
 ;---------------------------------------------------------------------------------------------------------------------
 ;Comm Received: Used as a USART Received interrupt
@@ -120,25 +121,10 @@ Comm_Received_Command_Stop_Check:					;Check if we received a stop command
 Comm_Received_Command_Type_Get:
 	in R16, UDR	
 
-;Yaccel		
-Comm_Received_Command_Yaccel_Check:					;Check if we received a Yaccel command
-	cpi R16, Comm_Command_Yaccel_H					;Check for Yaccel command
-	breq Comm_Received_Command_Valid						;Branch to the next check if not the case
-
-;Zgyro
-Comm_Received_Command_Zgyro_Check:					;Check if we received a Zgyro command
-	cpi R16, Comm_Command_Zgyro_H					;Check for Zgyro command
-	breq Comm_Received_Command_Valid						;Branch to the next check if not the case
-	
-;Ticks
-Comm_Received_Command_Ticks_Check:					;Check if we received a Ticks command
-	cpi R16, Comm_Command_Ticks_H					;Check for Ticks command
-	breq Comm_Received_Command_Valid						;Branch to the next check if not the case
-
 ;Laptime
-Comm_Received_Command_LapTime_Check:				;Check if we received a LapTime command
-	cpi R16, Comm_Command_LapTime_H					;Check for LapTime command
-	breq Comm_Received_Command_Valid						;Branch to the next check if not the case
+Comm_Received_Command_Data_Check:					;Check if we received a LapTime command
+	cpi R16, Comm_Command_Data						;Check for LapTime command
+	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
 
 ;Invalid
 	jmp Comm_Received_Command_Reset					;If we did not in fact receive a valid set command, then reset
@@ -230,42 +216,42 @@ Comm_Received_Execute_Get:
 
 	lds R16, Comm_Received_Byte_2			;Load in the second(Command) byte
 
-	cpi R16, Comm_Command_Yaccel_H			
-	breq Comm_Received_Execute_Get_Yaccel		
-
-	cpi R16, Comm_Command_Zgyro_H			
-	breq Comm_Received_Execute_Get_Zgyro		
-
-	cpi R16, Comm_Command_Ticks_H
-	breq Comm_Received_Execute_Get_Ticks
+	cpi R16, Comm_Command_Data		
+	breq Comm_Received_Execute_Get_Data		
 
 	;Insert error handling here
 
 	reti									;Do nothing if it was not a legit code
 
-Comm_Received_Execute_Get_Yaccel:
+Comm_Received_Execute_Get_Data:
+	call Comm_Received_Execute_Get_Ticks
+	;call Comm_Received_Execute_Get_Zgyro
+	;call Comm_Received_Execute_Get_Xaccel
+	reti
 
-	;call MPU6050_Read_Accel_Y
+Comm_Received_Execute_Get_Xaccel:
+
+	call MPU6050_Read_Accel_X
 
 	ldi R16, 0xBB
 	call USART_Transmit
 
-	ldi R16, Comm_Command_Yaccel_H
+	ldi R16, Comm_Command_Xaccel_H
 	call USART_Transmit
 
-	lds R16, ACCEL_YOUT_H
+	lds R16, ACCEL_XOUT_H
 	call USART_Transmit
 	
 	ldi R16, 0xBB
 	call USART_Transmit
 
-	ldi R16, Comm_Command_Yaccel_L
+	ldi R16, Comm_Command_Xaccel_L
 	call USART_Transmit
 
-	lds R16, ACCEL_YOUT_L
+	lds R16, ACCEL_XOUT_L
 	call USART_Transmit
 
-	reti
+	ret
 
 Comm_Received_Execute_Get_Zgyro:
 	call MPU6050_Read_Gyro_Z
@@ -288,7 +274,7 @@ Comm_Received_Execute_Get_Zgyro:
 	lds R16, GYRO_ZOUT_L
 	call USART_Transmit
 
-	reti
+	ret
 
 Comm_Received_Execute_Get_Ticks:
 
@@ -310,7 +296,7 @@ Comm_Received_Execute_Get_Ticks:
 	lds R16, Ticks_L
 	call USART_Transmit
 
-	reti
+	ret
 
 ;---------------------------------------------------------------------------------------------------------------------
 ;Send

@@ -1,5 +1,8 @@
 
 .MACRO WheelSpeed_Init
+
+			
+
 			ldi		R16, 0x00
 			out		TCCR1A, R16
 			ldi		R16, 0b00000010			; Falling edge triggered, 1/1024 prescaling
@@ -8,6 +11,9 @@
 			clr		R16
 			sts		Edge1_L, R16
 			sts		Edge1_H, R16
+
+			sts		Ticks_L, R16
+			sts		Ticks_H, R16
 
 			in		R16, TIMSK
 			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0

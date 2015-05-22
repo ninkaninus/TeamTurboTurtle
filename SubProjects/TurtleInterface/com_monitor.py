@@ -8,7 +8,7 @@ import serial
 class ComMonitorThread(threading.Thread):
 
     def __init__(   self, 
-                    Yaccel_q,
+                    Xaccel_q,
                     Zgyro_q,
                     tick_q,
                     lap_q,
@@ -18,7 +18,7 @@ class ComMonitorThread(threading.Thread):
         
         self.serialObj = serialObject
 
-        self.Yaccel_q = Yaccel_q
+        self.Xaccel_q = Xaccel_q
         self.Zgyro_q = Zgyro_q
         self.tick_q = tick_q
         self.lap_q = lap_q
@@ -40,7 +40,7 @@ class ComMonitorThread(threading.Thread):
 
             if(hex(dataFirst[0])=='0xbb'):
 
-                #Y-Acceleration
+                #X-Acceleration
                 if(hex(dataFirst[1])=='0xa1'):
 
                     dataSecond = self.serialObj.read(3)
@@ -51,7 +51,7 @@ class ComMonitorThread(threading.Thread):
 
                         data = self.ConvertToSigned(data)
 
-                        self.Yaccel_q.put((data, timeStamp))
+                        self.Xaccel_q.put((data, timeStamp))
 
                 #Z-Gyro
                 elif(hex(dataFirst[1])=='0xa3'):
@@ -97,7 +97,11 @@ class ComMonitorThread(threading.Thread):
 
                                 lapTicks = (int(dataThird[2])*256)+int(dataFourth[2])
 
+                                self.Xaccel_q.put('e')
+                                self.Zgyro_q.put('e')
+                                self.tick_q.put('e')
                                 self.lap_q.put((laptime, lapTicks ))
+
                 else:
                     print('Non comm command')
             else:

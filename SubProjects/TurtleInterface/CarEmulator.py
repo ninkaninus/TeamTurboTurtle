@@ -75,25 +75,32 @@ while 1:
     #If it is a get type
     if(comType == '0xaa'):
 
-        value = random.randint(0,0xffff)
-        comParameter1 = (value >> 8) & 0xff
-        comParameter2 = value & 0xff
+        #Data
+        if(comCommand == '0xab'):
 
-        #Yaccel
-        if(comCommand == '0xa1'):
+            value = random.randint(0,0xffff)
+            comParameter1 = (value >> 8) & 0xff
+            comParameter2 = value & 0xff
+
+            #Xaccel
             serialObject.write(bytearray([ord('\xBB'),ord('\xA1'), comParameter1]))
             serialObject.write(bytearray([ord('\xBB'),ord('\xA2'), comParameter2]))
 
-        #Zgyro
-        elif(comCommand == '0xa3'):
+            value = random.randint(0,0xffff)
+            comParameter1 = (value >> 8) & 0xff
+            comParameter2 = value & 0xff
+
+            #Zgyro
             serialObject.write(bytearray([ord('\xBB'),ord('\xA3'), comParameter1]))
             serialObject.write(bytearray([ord('\xBB'),ord('\xA4'), comParameter2]))
 
-        #Ticks
-        elif(comCommand == '0xa5'):
+            value = random.randint(0,0xffff)
+            comParameter1 = (value >> 8) & 0xff
+            comParameter2 = value & 0xff
+
+            #Ticks
             serialObject.write(bytearray([ord('\xBB'),ord('\xA5'), comParameter1]))
             serialObject.write(bytearray([ord('\xBB'),ord('\xA6'), comParameter2]))
-
 
     #If it is a set type
     elif(comType == '0x55'):

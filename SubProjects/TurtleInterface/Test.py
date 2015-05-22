@@ -1,9 +1,16 @@
-def convertToSigned(number):
-        if (number > 32767):
-            return number - 65536
-        else:
-            return number
+a = [55,57,58,60,61,62,'e',42,43,44]
+b = []
 
-print(convertToSigned(0xFFA5))
+try:
+    c=a.index('e')
+    b = a[0:c]
+    del(a[0:c+1])
+    print(a)
+    print(b)
+except ValueError:
+    print('Not in list')
+
+
+
 
 

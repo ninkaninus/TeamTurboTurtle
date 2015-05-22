@@ -15,7 +15,8 @@ from PyQt5.QtWidgets import QApplication, QCheckBox, \
 from Dialogs import SerialConnectDialog
 
 from PyQt5.QtGui import QPixmap, QIcon, QPalette, QColor
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import (FigureCanvasQTAgg as FigureCanvas,
+                                                NavigationToolbar2QT as NavigationToolbar)
 #from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import serial
@@ -87,7 +88,7 @@ class ApplicationWindow(QMainWindow):
 
         self.dataSamples = []
 
-        self.dataYaccelSamples = []
+        self.dataXaccelSamples = []
         self.dataZgyroSamples = []
         self.dataTickSamples = []
         self.dataTickSamplesCount = 0
@@ -98,7 +99,7 @@ class ApplicationWindow(QMainWindow):
         #Data stuff
         self.com_monitor = None
         self.com_data_puller = None
-        self.com_data_Yaccel_q = None
+        self.com_data_Xaccel_q = None
         self.com_data_Zgyro_q = None
         self.com_data_Tick_q = None
         self.com_data_Lap_q = None
@@ -110,7 +111,8 @@ class ApplicationWindow(QMainWindow):
 
         self.plotUpdater = QTimer(self)
         self.plotUpdater.timeout.connect(self.UpdateData)
-        self.dataToPlot = None
+        self.dataToPlot = "Live"
+        self.dataBeingPlot = "Live"
 
         #Menues
 
@@ -169,6 +171,7 @@ class ApplicationWindow(QMainWindow):
 
         self.listDataSets = QListWidget(self)
         self.listDataSets.setMaximumWidth(200)
+        self.listDataSets.addItem('Live')
         self.listDataSets.itemClicked.connect(self.chooseDataSet)
 
         statbox = QVBoxLayout()
@@ -243,9 +246,17 @@ class ApplicationWindow(QMainWindow):
         self.canvas = FigureCanvas(self.figure)
         self.canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.canvas.updateGeometry()
-        #self.plot()
+        self.canvas.draw()
+        self.Toolbar = NavigationToolbar(self.canvas, self, coordinates=True)
 
-        hbox.addWidget(self.canvas)
+
+        drawingBox = QVBoxLayout()
+
+        drawingBox.addWidget(self.canvas)
+        drawingBox.addWidget(self.Toolbar)
+
+        hbox.addLayout(drawingBox)
+
         hbox.addLayout(statbox)
         hbox.addLayout(vbox)
 
@@ -262,29 +273,32 @@ class ApplicationWindow(QMainWindow):
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
 
-        self.statusBar().showMessage("TURTLES, TURTLES, TURTLES!", 5000)
-
     def chooseDataSet(self, item):
-        dataSetnumb = int(item.text().lstrip('Lap: '))
-        self.dataToPlot = self.dataSamples[dataSetnumb]
-        print(dataSetnumb)
+        if(item.text()=='Live'):
+            self.dataToPlot = "Live"
+        else:
+            self.dataToPlot = item.text().lstrip('Lap: ')
 
     def updateLaptime(self):
         self.labelLapTime.setText("LapTime: " + str(self.laps[len(self.laps)-1][0]))
-        self.labelLapTicks.setText("LapTicks: " + str(self.laps[len(self.laps)-1][1]))
+        ticks = self.laps[len(self.laps)-1][1]
+        distance = ((ticks/12)*2.5*math.pi)/100
+        self.labelLapTicks.setText("LapTicks: " +
+                                   str(ticks) +
+                                   "/" +
+                                   "%.2f" %distance +
+                                   "m")
 
     def listDataSetsUpdate(self):
         self.listDataSets.addItem("Lap: " + str((len(self.dataSamples)-1)))
 
     def read_serial_data(self):
 
-        '''
-        qdata = list(get_all_from_queue(self.com_data_Yaccel_q))
+        qdata = list(get_all_from_queue(self.com_data_Xaccel_q))
         if(len(qdata) > 0):
-            #print("Received Yaccel data")
+            print("Received Xaccel data")
             for dataSet in qdata:
-                self.dataYaccelSamples.append(dataSet)
-        '''
+                self.dataXaccelSamples.append(dataSet)
 
         qdata = list(get_all_from_queue(self.com_data_Zgyro_q))
         if(len(qdata) > 0):
@@ -300,19 +314,28 @@ class ApplicationWindow(QMainWindow):
 
         qdata = list(get_all_from_queue(self.com_data_Lap_q))
         if(len(qdata) > 0):
-            self.dataSamples.append((self.dataZgyroSamples))
-            self.dataZgyroSamples = []
-            self.laps.append(qdata[0])
-            self.updateLaptime()
-            self.listDataSetsUpdate()
+            try:
+                indexEnd = self.dataTickSamples.index('e')
+                self.dataSamples.append((self.dataTickSamples[0:indexEnd]))
+                del(self.dataTickSamples[0:indexEnd+1])
+                self.laps.append(qdata[0])
+                self.updateLaptime()
+                self.listDataSetsUpdate()
+            except ValueError:
+                print('Lap has updated, but no "e" in datasamples')
 
     def UpdateData(self):
         self.read_serial_data()
-        if(self.dataToPlot != None):
-            self.plot()
+        if(self.dataToPlot == "Live"):
+            self.dataBeingPlot = self.dataToPlot
+            self.plot(self.dataTickSamples)
+        elif((self.dataToPlot != None) and (self.dataToPlot != self.dataBeingPlot)):
+            self.dataBeingPlot = self.dataToPlot
+            self.plot(self.dataSamples[int(self.dataToPlot)])
         else:
             print('No data yet')
 
+        '''
         if(len(self.dataTickSamples) > self.dataTickSamplesCount and len(self.dataTickSamples) >=2):
             self.dataTickSamplesCount = len(self.dataTickSamples)
             sampleLast = self.dataTickSamples[len(self.dataTickSamples)-1]
@@ -329,25 +352,28 @@ class ApplicationWindow(QMainWindow):
             if(len(self.speeds)>0):
                 speedAvg = np.mean(self.speeds)
                 self.labelSpeedAvg.setText("Speed: " + "%.2f" %speedAvg)
+        '''
 
+    def plot(self, data):
 
-    def plot(self):
+        if(len(data)>=2):
+            ax = self.figure.add_subplot(111)
+            ax.hold(False)
 
-        ax = self.figure.add_subplot(111)
-        ax.hold(False)
+            x_list = [y for [x, y] in data]
+            y_list = [x for [x, y] in data]
 
-        x_list = [y for [x, y] in self.dataToPlot]
-        y_list = [x for [x, y] in self.dataToPlot]
-
-        ax.plot(x_list, y_list, 'r')
-        ax.set_title('Gyro over time')
-        ax.set_ylabel('Z-Gyro')
-        ax.set_xlabel('Time in ms')
-        #ax.set_xlim([0, 5])
-        #ax.set_ylim([0, 65535])
-        #ax.autoscale(True)
-        self.figure.tight_layout()
-        self.canvas.draw()
+            ax.plot(x_list, y_list, 'r')
+            ax.set_title('Gyro over time')
+            ax.set_ylabel('Z-Gyro')
+            ax.set_xlabel('Time in ms')
+            #ax.set_xlim([0, 5])
+            #ax.set_ylim([0, 65535])
+            #ax.autoscale(True)
+            self.figure.tight_layout()
+            self.canvas.draw()
+        else:
+            print('Not enough data yet')
 
     def terminalLineEditEnter(self):
         if self.serialObject.isOpen() == True:
@@ -450,12 +476,12 @@ class ApplicationWindow(QMainWindow):
     def startDaemons(self):
         self.plotUpdater.start(self.dataTimerUpdateRate)
 
-        self.com_data_Yaccel_q = queue.Queue()
+        self.com_data_Xaccel_q = queue.Queue()
         self.com_data_Zgyro_q = queue.Queue()
         self.com_data_Tick_q = queue.Queue()
         self.com_terminal_q = queue.Queue()
         self.com_data_Lap_q = queue.Queue()
-        self.com_monitor = ComMonitorThread(self.com_data_Yaccel_q,
+        self.com_monitor = ComMonitorThread(self.com_data_Xaccel_q,
                                             self.com_data_Zgyro_q,
                                             self.com_data_Tick_q,
                                             self.com_data_Lap_q,
@@ -463,7 +489,7 @@ class ApplicationWindow(QMainWindow):
                                             self.serialObject)
         self.com_monitor.daemon = True
         self.com_monitor.start()
-        self.com_data_puller = ComDataPullerThread(self.serialObject, 100)
+        self.com_data_puller = ComDataPullerThread(self.serialObject, 25)
 
 
     def serialReconnect(self):

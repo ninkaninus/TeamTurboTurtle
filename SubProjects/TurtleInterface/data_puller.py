@@ -12,18 +12,9 @@ class ComDataPullerThread():
     def pullData(self):
 
         if(self.active == True):
-            '''
-            #Pull Yaccel
-            command = bytearray([ord('\xAA'), ord('\xa1'), 0])
-            self.serialObj.write((command))
-            '''
 
-            #Pull Zgyro
-            command = bytearray([ord('\xAA'), ord('\xa3'), 0])
-            self.serialObj.write((command))
-
-            #Pull Ticks
-            command = bytearray([ord('\xAA'), ord('\xa5'), 0])
+            #Pull data
+            command = bytearray([ord('\xAA'), ord('\xab'), 0])
             self.serialObj.write((command))
 
             t = threading.Timer(1/self.updateFreq, self.pullData)
