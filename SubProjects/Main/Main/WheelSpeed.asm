@@ -47,9 +47,7 @@ EDGE1:		in		R0, ICR1L
 			sts		Edge1_L, R0
 			sts		Edge1_H, R1
 
-			lds		R16, SREG_1
-			sbr		R16, 0b00000001					; set bit 0 in R16 (performs a logical ORI instruction)
-			sts		SREG_1, R16
+			Set_SREG_1 	0
 			
 			Pop_Register_5 R16, R3, R2, R1, R0
 			
@@ -68,9 +66,7 @@ EDGE2:		lds		R0, Edge1_L
 			cp		R3, R16
 			brlo	WheelSpeed_End		
 			
-			lds		R16, SREG_1
-			cbr		R16, 0b00000001					; clear bit 0 in R16 (performs logical AND with complement of operand)
-			sts		SREG_1, R16
+			Clear_SREG_1 0
 			
 			ldi		R16, 0x00
 			out		TCNT1H, R16						; Temp = R16

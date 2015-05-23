@@ -56,3 +56,7 @@
 .equ Comm_Received_Byte_1 = 0x0081
 .equ Comm_Received_Byte_2 = 0x0082
 .equ Comm_Received_Byte_3 = 0x0083
+
+;Delay stuff
+.equ Delay_Ticks		  = 0x0084	
+.equ Delay_Amount		  = 0x0085

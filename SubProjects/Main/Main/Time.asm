@@ -44,9 +44,25 @@ Timer0_Update:
 			sts		Timer_1ms_H, R2
 			brcc	Timer_Update_End
 			
-Timer_Update_End:	
-		
-			pop		R16
+Timer_Update_End:
+
+
+Delay:		lds		R16, SREG_1			
+			sbrs	R16, 7							; bit 7 is the delay enable 
+			rjmp	Delay_End
+									
+			lds		R16, Delay_Ticks
+			lds		R17, Delay_Amount
+			inc		R17
+			cp		R16, R17
+			brne	Delay_End
+			
+			clr		R17
+			sts		Delay_Ticks, R17
+			
+			Clear_SREG_1 7							; clear bit 7 in SREG_1
+
+Delay_End:	pop		R16
 			out		SREG, R16
 			pop		R16
 			

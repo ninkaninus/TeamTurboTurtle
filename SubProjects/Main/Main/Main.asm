@@ -31,8 +31,8 @@ Init:
 	rjmp Main
 
 Main:	
-			lds		R18, SREG_1			
-			sbrc	R18, 2							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
+			lds		R16, SREG_1			
+			sbrc	R16, 2							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
 			rjmp	Brake
 			rjmp	Main
 	
