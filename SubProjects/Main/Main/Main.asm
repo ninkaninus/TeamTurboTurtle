@@ -21,30 +21,66 @@
 
 Init:
 	Setup
-
-	ldi	R16, 255
+	
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			
+	ldi	R16, 80
 	out 	OCR2, R16
-	ldi		R16, 0					; clear bit 0 in R16 (performs logical AND with complement of operand)
-	sts		SREG_1, R16
+	clr		R16					
+	sts		SREG_1, R16				; clear SREG_1
 
 	sei					;Enable global interrupt	
 	rjmp Main
 
 Main:	
 			lds		R16, SREG_1			
-			sbrc	R16, 2							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
-			rjmp	Brake
+			;sbrc	R16, 2							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
+			;rjmp	Brake
+			
+			rjmp	Main
+			sbi		PORTB, 0
+			
+						
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			
+			cbi		PORTB, 0
+			
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS	
+			
+			rjmp	Main
+			
 			rjmp	Main
 	
 	
-Brake: 		ldi		R16, 0
+Brake: 		clr		R16
 			out		OCR2, R16
 			
-			cbi		DDRD, 7
+			cbi		DDRD, 7							; set motor pin as input
 	
 			nop
 			
-			sbi		PORTC, 5
+			sbi		PORTB, 0
 			
 			cli
 			ldi		R16, 250
@@ -54,7 +90,7 @@ Brake: 		ldi		R16, 0
 			ldi		R16, 200
 			;call	Delay_MS
 			
-			cbi		PORTC, 5
+			cbi		PORTB, 0
 			
 Wait:		rjmp	Wait
 

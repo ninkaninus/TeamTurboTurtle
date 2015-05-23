@@ -1,5 +1,5 @@
 .EQU	MOTOR_PIN = PD7						;The pin that the motor is connected to
-.EQU	BRAKE_PIN = PC5
+.EQU	BRAKE_PIN = PB0
 
 .MACRO Motor_Init
 	in R16, DDRD							;Load in the current setup of the portb
@@ -21,11 +21,11 @@ ret
 
 .MACRO Brake_Init
 
-	in R16, DDRC							;Load in the current setup of the portc
+	in R16, DDRB							;Load in the current setup of the portc
 	ori R16, (1<<BRAKE_PIN)					;OR in the setup that we wish to have
-	out DDRC, R16							;Set brake pin as output
+	out DDRB, R16							;Set brake pin as output
 	
-	cbi	PORTC, BRAKE_PIN					;Set brake to low state
+	cbi	PORTB, BRAKE_PIN					;Set brake to high state
 
 .ENDMACRO
 
