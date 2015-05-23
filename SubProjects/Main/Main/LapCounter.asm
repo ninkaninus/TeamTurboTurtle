@@ -61,6 +61,10 @@ Lap_Time:
 	
 	ldi		R16, 0x40					; Disable Comparator interrupt
 	out		ACSR, R16					; Global interrupt register
+	
+	lds		R16, SREG_1
+	sbr		R16, 0b00000100				; set bit 0 in R16 (performs a logical ORI instruction)
+	sts		SREG_1, R16
 			
 	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
 	out		ACSR, R16					; Global interrupt register
