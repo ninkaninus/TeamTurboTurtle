@@ -1,0 +1,25 @@
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#
+# Omron_g5v1
+#
+DEF Omron_g5v1 K 0 40 Y Y 1 F N
+F0 "K" 100 200 60 H V C CNN
+F1 "Omron_g5v1" 250 300 60 H V C CNN
+F2 "" 100 350 60 H V C CNN
+F3 "" 100 350 60 H V C CNN
+DRAW
+S -150 -100 150 -300 0 1 0 N
+S -100 -150 0 -250 0 1 4 N
+P 2 0 1 4  -50 -100  -50 -300 N
+P 2 0 1 4  100 -300  100 -100 N
+X Off 1 -150 -100 150 U 50 50 1 1 B
+X Coil 2 -50 -100 150 U 50 50 1 1 B
+X In 5 100 -100 150 U 50 50 1 1 B
+X In 6 100 -300 150 D 50 50 1 1 B
+X Coil 9 -50 -300 150 D 50 50 1 1 B
+X On 10 -150 -300 150 D 50 50 1 1 B
+ENDDRAW
+ENDDEF
+#
+#End Library
