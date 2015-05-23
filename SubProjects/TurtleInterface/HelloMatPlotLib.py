@@ -174,12 +174,16 @@ class ApplicationWindow(QMainWindow):
         self.listDataSets.addItem('Live')
         self.listDataSets.itemClicked.connect(self.chooseDataSet)
 
+        self.ButtonLiveSave = QPushButton('Save')
+        self.ButtonLiveSave.setStyleSheet("background-color:#00FF00")
+        self.ButtonLiveSave.clicked.connect(self.SaveData)
         statbox = QVBoxLayout()
         statbox.addWidget(self.listDataSets)
         statbox.addWidget(self.labelLapTime)
         statbox.addWidget(self.labelLapTicks)
         statbox.addWidget(self.labelSpeed)
         statbox.addWidget(self.labelSpeedAvg)
+        statbox.addWidget(self.ButtonLiveSave)
 
 
         #Start/Stop interface
@@ -323,6 +327,10 @@ class ApplicationWindow(QMainWindow):
                 self.listDataSetsUpdate()
             except ValueError:
                 print('Lap has updated, but no "e" in datasamples')
+
+    def SaveData(self):
+        self.dataSamples.append((self.dataTickSamples))
+        self.listDataSetsUpdate()
 
     def UpdateData(self):
         self.read_serial_data()
