@@ -12,9 +12,6 @@ AI_Lap:
 
 ;First round							Vi sætter der første stykke bane oveni, så vi ikke løber tør for bane.
 
-		st		Y+,		Length_L
-		st		Y+,		Length_H
-		st		Y+,		Type
 
 		mov		R16,		YL
 		mov		R17,		YH
@@ -31,9 +28,14 @@ AI_Lap:
 		mov		YL,			R16
 		mov		YH,			R17
 
+		st		Y+,		Length_L
+		st		Y+,		Length_H
+		st		Y+,		Type
+
 		st		Y+,		R18
 		st		Y+,		R19
 		st		Y+,		R20
+		
 
 rjmp		Run_Time
 		

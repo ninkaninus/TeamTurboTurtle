@@ -20,23 +20,23 @@
 .equ	Periode_Stort_Sving=12000			;-- stort sving
 .equ	Periode_Lille_Sving=12000			;-- lille sving
 .equ	Periode_Mapping=4000	
-.equ	Motor_Ligeud=0			;Motor outpot som kan sættes som reference
-.equ	Motor_Ligeud_Min=20		;Motor outpot som kan sættes som reference
-.equ	Motor_Ligeud_Max=100			;Motor outpot som kan sættes som reference
-.equ	Motor_Stort_Sving=80
-.equ	Motor_Stort_Sving_Min=50
-.equ	Motor_Stort_Sving_Max=180
-.equ	Motor_Lille_Sving=80
-.equ	Motor_Lille_Sving_Min=50
-.equ	Motor_Lille_Sving_Max=180
-.equ	Motor_Mapping=100
-.equ	Motor_Mapping_Min=20
-.equ	Motor_Mapping_Max=100
-.equ	Motor_Preround=100
+;.equ	Motor_Ligeud=0			;Motor outpot som kan sættes som reference
+;.equ	Motor_Ligeud_Min=20		;Motor outpot som kan sættes som reference
+;.equ	Motor_Ligeud_Max=100			;Motor outpot som kan sættes som reference
+;.equ	Motor_Stort_Sving=80
+;.equ	Motor_Stort_Sving_Min=50
+;.equ	Motor_Stort_Sving_Max=180
+;.equ	Motor_Lille_Sving=80
+;.equ	Motor_Lille_Sving_Min=50
+;.equ	Motor_Lille_Sving_Max=180
+;.equ	Motor_Mapping=100
+;.equ	Motor_Mapping_Min=20
+;.equ	Motor_Mapping_Max=100
+;.equ	Motor_Preround=100
 
-.equ	Motor_Too_Slow=250
-.equ	Periode_Too_Slow=8000
-.equ	Motor_Ud_Af_Sving=200
+;.equ	Motor_Too_Slow=250
+;.equ	Periode_Too_Slow=8000
+;.equ	Motor_Ud_Af_Sving=200
 .equ	Afstand_Ud_Af_Sving=20
 
 ;Initialize først
