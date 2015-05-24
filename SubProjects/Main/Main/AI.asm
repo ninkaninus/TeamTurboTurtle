@@ -49,69 +49,11 @@
 		ldi		Length_H,	0
 		ldi		R17,		0
 		sts		AI_Check_Lap,	R17
-;		ldi		R16,	0b00111110
-;		out		DDRA,	R16
-		
 
-		
 .ENDMACRO
 
 
 
-
-
-;LED:
-
-		cpi		R16,	1
-		breq	LED1
-		cpi		R16,	2
-		breq	LED2
-		cpi		R16,	3
-		breq	LED3
-		cpi		R16,	4
-		breq	LED4
-		cpi		R16,	5
-		breq	LED5
-
-		ldi		R16,	0b00000000
-		out		PORTA,	R16
-
-ret
-
-LED1:
-
-		ldi		R16,	0b00000010
-		out		PORTA,	R16
-
-ret
-
-LED2:
-
-		ldi		R16,	0b00000100
-		out		PORTA,	R16
-
-ret
-
-LED3:
-
-		ldi		R16,	0b00001000
-		out		PORTA,	R16
-
-ret
-
-LED4:
-
-		ldi		R16,	0b00010000
-		out		PORTA,	R16
-
-ret
-
-LED5:
-
-		ldi		R16,	0b00100000
-		out		PORTA,	R16
-
-ret
 
 
 

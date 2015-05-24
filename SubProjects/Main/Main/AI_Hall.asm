@@ -10,12 +10,11 @@ AI_Hall:
 	brsh	Run_Speed
 	
 ;Ellers preround
-		ldi		R16,	Motor_Mapping
-;		out		OCR2,	R16				;Slå til for reference motor output
-		ldi	R16, HIGH(Periode_Mapping)	;Reference periode.
-		ldi	R18,	Motor_Mapping_Min
-		ldi	R19,	Motor_Mapping_Max
-;call	Hastigheds_kontrol
+
+		ldi		R16, LOW(Periode_Preround)	;Reference periode.
+		ldi		R17, HIGH(Periode_Preround)	;Reference periode.
+		sts		Speed_L,	R16
+		sts		Speed_H		R17
 
 ret
 
@@ -23,24 +22,16 @@ Mapping_Speed:
 
 call	SKIFT_TEST
 
-
-
-		mov		R16,	Type
-;call	LED
-;		ldi		R16,	Motor_Mapping
 		out		OCR2,	R16				;Slå til for reference motor output
 		
-		ldi	R16, HIGH(Periode_Mapping)	;Reference periode.
-		ldi	R18,	Motor_Mapping_Min
-		ldi	R19,	Motor_Mapping_Max
-call	Hastigheds_kontrol
+		ldi		R16, LOW(Periode_Mapping	;Reference periode.
+		ldi		R17, HIGH(Periode_Mapping)	;Reference periode.
+		sts		Speed_L,	R16
+		sts		Speed_H		R17
 
 ret
 
 Run_Speed:
-
-		ldi		R16,		0b00000000
-		out		PORTA,	R16
 
 call	Read_Map
 

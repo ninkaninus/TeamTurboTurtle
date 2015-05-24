@@ -21,8 +21,6 @@
 .include "Communication_Protocol.asm"
 .include "Setup.asm"
 
-
-
 Init:
 		
 	Setup
@@ -41,7 +39,6 @@ call	Delay_MS
 		ldi		R16,	250
 call	Delay_MS
 		ldi		R16,	250
-		
 call	Delay_MS
 		ldi		R16,	250
 call	Delay_MS
@@ -57,87 +54,4 @@ call	Delay_MS
 ldi		R16,	Motor_Preround
 		out		OCR2,	R16
 
-rjmp Main
-
-USART_LENGTH_TYPE:
-
-
-		mov		R16,	Length_L
-		mov		R17,	Length_H
-call	USART_Decimal_16
-
-		ldi		R16,	','
-call	USART_Transmit
-
-		mov		R16,	Type
-call	USART_Decimal_8
-		USART_Newline
-
-ret
-
-
-
-
-
-
-		ldi		R16,	250
-call	Delay_MS
-
-
-
-		lds		R16,	AI_Check_Lap
-;call	USART_Decimal_8
-
-	lds		R16,	AI_Check_Lap
-	cpi		R16,	6
-	brsh	TEST
-
-
-
-
-
-
-		
-		ldi		R16,	250
-call	Delay_MS
-
-		USART_Newline
-		
-		mov		R16,	Length_L
-		mov		R17,	Length_H
-call	USART_Decimal_16
-
-		ldi		R16,	250
-call	Delay_MS
-
-		ldi		R16,	','
-call	USART_Transmit
-		
-		ldi		R16,	250
-call	Delay_MS
-
-		mov		R16,	Type
-call	USART_Decimal_8
-
-		ldi		R16,	250
-call	Delay_MS
-
-		ldi		R16,	','
-call	USART_Transmit
-
-		ldi		R16,	250
-call	Delay_MS
-
-		mov		R16,	YL
-		mov		R17,	YH
-		call	USART_Decimal_16
-
-rjmp Main
-
-
-TEST:
-
-
-		ldi		R16,	0
-		out		OCR2,	R16
 rjmp Main
