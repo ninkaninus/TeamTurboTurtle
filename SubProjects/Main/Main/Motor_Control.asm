@@ -1,4 +1,5 @@
 .EQU	MOTOR_PIN = PD7						;The pin that the motor is connected to
+.EQU	BRAKE_PIN = PB0
 
 .MACRO Motor_Init
 	in R16, DDRD							;Load in the current setup of the portb
@@ -9,9 +10,24 @@
 	out TCCR2, R16							;
 .ENDMACRO
 
+; Use desired braking time in MS as argument
+.MACRO Brake_MS
+		
+.ENDMACRO
+
 Motor_Set: 
 	out OCR2, R16							;Set the duty cycle of the motor
 ret
+
+.MACRO Brake_Init
+
+	in R16, DDRB							;Load in the current setup of the portc
+	ori R16, (1<<BRAKE_PIN)					;OR in the setup that we wish to have
+	out DDRB, R16							;Set brake pin as output
+	
+	cbi	PORTB, BRAKE_PIN					;Set brake to high state
+
+.ENDMACRO
 
 Motor_Set_Percentage:
 	cpi R16, 101							;Check if the number is within the percentage range of 100

@@ -36,42 +36,48 @@
 .equ Lap_time_M	  = 0x0075
 .equ Lap_time_H	  = 0x0076
 
-;Pulse Stuphs
-.equ Edge1_L		= 0x0083
-.equ Edge1_H		= 0x0084
-.equ Pulse_Time_L	= 0x0085
-.equ Pulse_Time_H	= 0x0086
-.equ Pulse_Time_L1	= 0x0087
-.equ Pulse_Time_H1	= 0x0088
-.equ Pulse_Time_L2	= 0x0089
-.equ Pulse_Time_H2	= 0x008A
+;Wheelspeed stuff
+.equ Edge1_L		= 0x0077
+.equ Edge1_H		= 0x0078
+.equ Pulse_Time_L	= 0x0079
+.equ Pulse_Time_H	= 0x007A
 
-.equ Ticks_L		= 0x008B
-.equ Ticks_H		= 0x008C
+.equ Ticks_L		= 0x007B
+.equ Ticks_H		= 0x007C
 
-.equ Ticks_Lap_L	= 0x008D
-.equ Ticks_Lap_H	= 0x008E
+.equ Ticks_Lap_L	= 0x007D
+.equ Ticks_Lap_H	= 0x007E
 
 ;Status Register
-.equ SREG_1			= 0x007B
-.equ Program_Running = 0x0080
+.equ SREG_1			= 0x007F
 
 ;Communication Protocol stuff
-.equ Comm_Received_Byte_Num = 0x007C
-.equ Comm_Received_Byte_1 = 0x007D
-.equ Comm_Received_Byte_2 = 0x007E
-.equ Comm_Received_Byte_3 = 0x007F
+.equ Comm_Received_Byte_Num = 0x0080
+.equ Comm_Received_Byte_1 = 0x0081
+.equ Comm_Received_Byte_2 = 0x0082
+.equ Comm_Received_Byte_3 = 0x0083
 
-;Wheel Speed
-.equ Wheel_speed_L = 0x0081
-.equ Wheel_speed_H = 0x0082
+;Delay stuff
+.equ Delay_Amount		  = 0x0084
+
+.equ Time_Stamp_Braking_H = 0x0085
+.equ Time_Stamp_Braking_M = 0x0086
+.equ Time_Stamp_Braking_L = 0x0087
 
 ;AI Hastighed
-.equ AI_Check_Lap	= 0x008F
-.equ AI_Hastighed_out	= 0x0090
-.equ AI_Hastighed_set	= 0x0091
-.equ AI_Hastighed_D	= 0x0092
+.equ AI_Check_Lap	= 0x0088
+.equ AI_Hastighed_out	= 0x0089
+.equ AI_Hastighed_set	= 0x008A
+.equ AI_Hastighed_D	= 0x008B
+
+.equ Pulse			= 0x008C
+
+.equ Speed_H = 0x008D
+.equ Speed_L = 0x008E
+
+.equ Temp = 0x008F
 
 ;Mapping start -- Alt herefter skal holdes frit
 .equ Map_Start		= 0x00C8
+
 

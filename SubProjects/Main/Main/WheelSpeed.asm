@@ -1,5 +1,7 @@
-
 .MACRO WheelSpeed_Init
+
+			
+
 			ldi		R16, 0x00
 			out		TCCR1A, R16
 			ldi		R16, 0b00000010			; Falling edge triggered, 1/1024 prescaling
@@ -11,38 +13,13 @@
 			sts		Pulse_Time_L, R16
 			sts		Pulse_Time_H, R16
 
+			sts		Ticks_L, R16
+			sts		Ticks_H, R16
+
 			in		R16, TIMSK
 			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
 			out		TIMSK, R16				;Timer/interrupt masking register
-
-
-.ENDMACRO
-
-.MACRO WheelSpeed_Calc
-			lds		R18, Pulse_Time_L
-			sbr		R16, 0xFF
-			sbr		R17, 0xFF
-			call	Div16_8
-			sts		Wheel_speed_L, R16
-			sts		Wheel_speed_H, R17
-.ENDMACRO
-
-; Use desired braking time in MS as argument
-.MACRO Brake_MS
-		in		R16, OCR0
-		push	R16
-		clr		R16
-		out		R16, OCR0
-		
-		sbi		PORTB, BRAKE
-		cli
-		ldi		R16, @0
-		call	Delay_MS
-		sei
-		cbi		PORTB, BRAKE
-		
-		pop		R16
-		out		OCR0, R16
+			
 .ENDMACRO
 
 Input_Capture:
@@ -58,13 +35,28 @@ Input_Capture:
 			adc		R1, R16
 			
 			sts		Ticks_L, R0
-			sts		Ticks_H, R1			
+			sts		Ticks_H, R1	
+			
+			lds		R16, Pulse
+			cpi		R16, 1
+			breq	Edge1
+			
+			cpi		R16, 4
+			breq	Edge2
+			
+			inc		R16
+			sts		Pulse, R16
+			
+			rjmp	WheelSpeed_End
 			
 			lds		R16, SREG_1			
 			sbrc	R16, 0							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
 			rjmp	EDGE2
 			
-EDGE1:		in		R0, ICR1L
+EDGE1:		inc		R16
+			sts		Pulse, R16
+
+			in		R0, ICR1L
 			in		R1, ICR1H
 			
 			sts		Edge1_L, R0
@@ -76,7 +68,10 @@ EDGE1:		in		R0, ICR1L
 			
 			rjmp	WheelSpeed_End
 			
-EDGE2:		lds		R0, Edge1_L
+EDGE2:		ldi		R16, 1
+			sts		Pulse, R16
+
+			lds		R0, Edge1_L
 			lds		R1, Edge1_H
 			
 			in		R2, ICR1L
@@ -85,7 +80,7 @@ EDGE2:		lds		R0, Edge1_L
 			sub		R2, R0
 			sbc		R3, R1
 			
-			ldi		R16, high(3000)
+			ldi		R16, high(6000)
 			cp		R3, R16
 			brlo	WheelSpeed_End		
 			
@@ -99,14 +94,22 @@ EDGE2:		lds		R0, Edge1_L
 			ldi		R16, 0x00
 			out		TCNT1H, R16						; Temp = R16
 			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp	
+
+			call	Hastigheds_kontrol
 			
 WheelSpeed_End:
-
 
 
 			call AI_Hall		;Alt AI der har med ticks at gøre ligger her
 			
 			pop R17
+
+			
+WheelSpeed_End:
+
+			;call AI_HALL_INTERRUPT
+						
+
 			Pop_Register_5 R16, R3, R2, R1, R0
 			
 			reti

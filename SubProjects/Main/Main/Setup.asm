@@ -8,6 +8,7 @@
 	USART_Init 0b00000000,0b01100111	;Initialize the USART module with 9600 baud @ 16MHz clock
 	Comm_Init							;Intialize the communication protocol
 	Motor_Init							;Initialize the motor pwm
+	Brake_Init							;Initialize the brake pin
 	I2C_Init 0x00,0x12					;Initialize the TWI module with Prescaler 4 and TWBR 12
 	Time_Init							;Initialize the timer associated with timekeeping
 	WheelSpeed_Init						;Initialize the wheel speed sensor
@@ -16,10 +17,4 @@
 	MPU6050_Init						;
 	MPU6050_Init						;
 	AI_Init
-
-	ldi R16, 0x01
-	sts Program_Running, R16
-
-	;Global interrupt
-	
 .ENDMACRO

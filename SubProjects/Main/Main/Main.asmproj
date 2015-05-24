@@ -103,6 +103,9 @@
     <Compile Include="Setup.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Speed.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SRAM-Mapping.asm">
       <SubType>Code</SubType>
     </Compile>
