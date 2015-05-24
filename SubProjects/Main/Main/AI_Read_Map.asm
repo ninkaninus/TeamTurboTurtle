@@ -47,6 +47,7 @@ Road_Reaction:
 		mov		R16,	Length_L
 		ror		R16
 		ror		R16
+		ror		R16
 		sub		R17,	R16
 
 		ldi		R16,	HIGH(Periode_Ligeud)	;Reference periode.
@@ -81,13 +82,13 @@ Lille_Sving:
 
 		cpi		Length_H,		0
 		brne	Lille_Sving_Test
-		cpi		Length_L,		30
+		cpi		Length_L,		Afstand_Ud_Af_Sving
 		brlo	Ud_Af_Sving
 
 Lille_Sving_Test:
 
 		ldi		R16,	Motor_Lille_Sving
-;		out		OCR2,	R16				;Slå til for reference motor output
+		out		OCR2,	R16				;Slå til for reference motor output
 
 		ldi	R16, HIGH(Periode_Lille_Sving)	;Reference periode.
 		ldi	R18,	Motor_Lille_Sving_Min
@@ -100,13 +101,13 @@ Stor_Sving:
 
 		cpi		Length_H,		0
 		brne	Lille_Sving_Test
-		cpi		Length_L,		30
+		cpi		Length_L,		Afstand_Ud_Af_Sving
 		brlo	Ud_Af_Sving
 
 Stor_Sving_Test:
 
 		ldi		R16,	Motor_Stort_Sving
-;		out		OCR2,	R16				;Slå til for reference motor output
+		out		OCR2,	R16				;Slå til for reference motor output
 
 		ldi	R16, HIGH(Periode_Stort_Sving)	;Reference periode.
 		ldi	R18,	Motor_Stort_Sving_Min
