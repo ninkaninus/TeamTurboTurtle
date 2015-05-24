@@ -1,5 +1,5 @@
 
-AVRA   Ver. 1.3.0 Main.asm Sat May 23 19:37:40 2015
+AVRA   Ver. 1.3.0 Main.asm Sun May 24 05:11:24 2015
 
 
           .include "m32def.inc"
@@ -507,22 +507,22 @@ AVRA   Ver. 1.3.0 Main.asm Sat May 23 19:37:40 2015
           .include "Interrupt_Mapping.asm"
          ;Interrupt vector mapping
           .org 0x00
-C:000000 c336      rjmp Init
+C:000000 c3a1      rjmp Init
          ;External interrupt1
          ;.org 0x04
          ;jmp	Input_Capture
          ;Timer1 Input Capture interrupt
           .org	0x0C
-C:00000c 940c 01df jmp	Input_Capture
+C:00000c 940c 00e5 jmp	Input_Capture
          ;Timer0 CTC interrupt
           .org 0x14
-C:000014 940c 01b1 jmp Timer0_Update
+C:000014 940c 0205 jmp Timer0_Update
          ;USART received interrupt
           .org 0x1A
-C:00001a 940c 0273 jmp Comm_Received
+C:00001a 940c 026b jmp Comm_Received
          ;Comparator interrupt
           .org 0x24
-C:000024 940c 0228 jmp Lap_Time
+C:000024 940c 0220 jmp Lap_Time
          
          ;Library includes
           .include "Macros.asm"
@@ -581,8 +581,6 @@ C:000024 940c 0228 jmp Lap_Time
           			cbr		R16, (1<<@0)					; clear bit in R16 (performs logical AND with complement of operand)
           			sts		SREG_1, R16
           .ENDMACRO
-         
-          
           .include "Math.asm"
           Sum_16:
 C:000026 0f02      	add R16, R18
@@ -671,8 +669,13 @@ C:000033 9508      ret
           .equ Comm_Received_Byte_3 = 0x0083
          
          ;Delay stuff
-          .equ Delay_Ticks		  = 0x0084	
-          .equ Delay_Amount		  = 0x0085
+          .equ Delay_Amount		  = 0x0084
+         
+          .equ Time_Stamp_Braking_H = 0x0085
+          .equ Time_Stamp_Braking_M = 0x0086
+          .equ Time_Stamp_Braking_L = 0x0087
+         
+          .equ Pulse			= 0x0088
           .include "USART_Library.asm"
           ; USART_library.asm
           ; Author: StjerneIdioten
@@ -930,6 +933,127 @@ C:0000e1 0f04      	add R16, R20
 C:0000e2 940e 0034 	call USART_Transmit
          
 C:0000e4 9508      ret
+          .include "WheelSpeed.asm"
+          .MACRO WheelSpeed_Init
+          
+          			
+          
+          			ldi		R16, 0x00
+          			out		TCCR1A, R16
+          			ldi		R16, 0b00000010			; Falling edge triggered, 1/1024 prescaling
+          			out		TCCR1B, R16	
+          
+          			clr		R16
+          			sts		Edge1_L, R16
+          			sts		Edge1_H, R16
+          
+          			sts		Ticks_L, R16
+          			sts		Ticks_H, R16
+          
+          			in		R16, TIMSK
+          			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
+          			out		TIMSK, R16				;Timer/interrupt masking register
+          			
+          .ENDMACRO
+         
+          Input_Capture:
+         
+C:0000e5   +  			Push_Register_5 R0, R1, R2, R3, R16
+C:0000e5 920f      push	R0
+C:0000e6 921f      push	R1
+C:0000e7 922f      push	R2
+C:0000e8 923f      push	R3
+C:0000e9 930f      push	R16
+C:0000ea b70f      in	R16, SREG
+C:0000eb 930f      push	R16
+         			
+C:0000ec 9000 007b 			lds		R0, Ticks_L
+C:0000ee 9010 007c 			lds		R1, Ticks_H
+         			
+C:0000f0 e001      			ldi		R16, 0x01
+C:0000f1 0e00      			add		R0, R16
+C:0000f2 e000      			ldi		R16, 0x00
+C:0000f3 1e10      			adc		R1, R16
+         			
+C:0000f4 9200 007b 			sts		Ticks_L, R0
+C:0000f6 9210 007c 			sts		Ticks_H, R1	
+         			
+C:0000f8 9100 0088 			lds		R16, Pulse
+C:0000fa 3001      			cpi		R16, 1
+C:0000fb f051      			breq	Edge1
+         			
+C:0000fc 3004      			cpi		R16, 4
+C:0000fd f0b9      			breq	Edge2
+         			
+C:0000fe 9503      			inc		R16
+C:0000ff 9300 0088 			sts		Pulse, R16
+         			
+C:000101 c02f      			rjmp	WheelSpeed_End
+         			
+C:000102 9100 007f 			lds		R16, SREG_1			
+C:000104 fd00      			sbrc	R16, 0							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
+C:000105 c00f      			rjmp	EDGE2
+         			
+C:000106 9503      EDGE1:		inc		R16
+C:000107 9300 0088 			sts		Pulse, R16
+         
+C:000109 b406      			in		R0, ICR1L
+C:00010a b417      			in		R1, ICR1H
+         			
+C:00010b 9200 0077 			sts		Edge1_L, R0
+C:00010d 9210 0078 			sts		Edge1_H, R1
+         
+C:00010f 9100 007f 			lds		R16, SREG_1
+C:000111 6001      			sbr		R16, 0b00000001					; set bit 0 in R16 (performs a logical ORI instruction)
+C:000112 9300 007f 			sts		SREG_1, R16
+         			
+C:000114 c01c      			rjmp	WheelSpeed_End
+         			
+C:000115 e001      EDGE2:		ldi		R16, 1
+C:000116 9300 0088 			sts		Pulse, R16
+         
+C:000118 9000 0077 			lds		R0, Edge1_L
+C:00011a 9010 0078 			lds		R1, Edge1_H
+         			
+C:00011c b426      			in		R2, ICR1L
+C:00011d b437      			in		R3, ICR1H
+         			
+C:00011e 1820      			sub		R2, R0
+C:00011f 0831      			sbc		R3, R1
+         			
+C:000120 e107      			ldi		R16, high(6000)
+C:000121 1630      			cp		R3, R16
+C:000122 f070      			brlo	WheelSpeed_End		
+         			
+C:000123 9220 0079 			sts		Pulse_Time_L, R2
+C:000125 9230 007a 			sts		Pulse_Time_H, R3
+         			
+C:000127 9100 007f 			lds		R16, SREG_1
+C:000129 7f0e      			cbr		R16, 0b00000001					; clear bit 0 in R16 (performs logical AND with complement of operand)
+C:00012a 9300 007f 			sts		SREG_1, R16
+         			
+C:00012c e000      			ldi		R16, 0x00
+C:00012d bd0d      			out		TCNT1H, R16						; Temp = R16
+C:00012e bd0c      			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp	
+         			
+C:00012f 940e 032f 			call	Hastigheds_kontrol
+         			
+          WheelSpeed_End:
+         
+         			;call AI_HALL_INTERRUPT
+         						
+C:000131   +  			Pop_Register_5 R16, R3, R2, R1, R0
+C:000131 910f      pop	R16
+C:000132 bf0f      out	SREG, R16
+C:000133 910f      pop	R16
+C:000134 903f      pop	R3
+C:000135 902f      pop	R2
+C:000136 901f      pop	R1
+C:000137 900f      pop	R0	
+         			
+C:000138 9518      			reti
+         			
+          
           .include "Delays.asm"
          ;Author: Jonas A. L. Andersen
          
@@ -969,28 +1093,28 @@ C:0000e4 9508      ret
          ; Formula for delay: x*1ms
          
           Delay_MS:
-C:0000e5 2e90      	mov R9, R16
-C:0000e6 9030 0070 	lds R3, Timer_1ms_L
-C:0000e8 9040 006f 	lds R4, Timer_1ms_M
-C:0000ea 9050 006e 	lds R5, Timer_1ms_H
+C:000139 2e90      	mov R9, R16
+C:00013a 9030 0070 	lds R3, Timer_1ms_L
+C:00013c 9040 006f 	lds R4, Timer_1ms_M
+C:00013e 9050 006e 	lds R5, Timer_1ms_H
          
           Delay_MS_Loop:
          	
-C:0000ec 9478      	sei
-C:0000ed 9060 0070 	lds R6, Timer_1ms_L
-C:0000ef 9070 006f 	lds R7, Timer_1ms_M
-C:0000f1 9080 006e 	lds R8, Timer_1ms_H
+C:000140 9478      	sei
+C:000141 9060 0070 	lds R6, Timer_1ms_L
+C:000143 9070 006f 	lds R7, Timer_1ms_M
+C:000145 9080 006e 	lds R8, Timer_1ms_H
          
-C:0000f3 94f8      	cli
-C:0000f4 1863      	sub R6, R3
-C:0000f5 0874      	sbc R7, R4
-C:0000f6 0885      	sbc R8, R5
+C:000147 94f8      	cli
+C:000148 1863      	sub R6, R3
+C:000149 0874      	sbc R7, R4
+C:00014a 0885      	sbc R8, R5
          
-C:0000f7 1469      	cp R6, R9
+C:00014b 1469      	cp R6, R9
          
-C:0000f8 f398      	brlo Delay_MS_Loop
-C:0000f9 9478      	sei
-C:0000fa 9508      ret
+C:00014c f398      	brlo Delay_MS_Loop
+C:00014d 9478      	sei
+C:00014e 9508      ret
           .include "Motor_Control.asm"
           .EQU	MOTOR_PIN = PD7						;The pin that the motor is connected to
           .EQU	BRAKE_PIN = PB0
@@ -1010,8 +1134,8 @@ C:0000fa 9508      ret
           .ENDMACRO
          
           Motor_Set: 
-C:0000fb bd03      	out OCR2, R16							;Set the duty cycle of the motor
-C:0000fc 9508      ret
+C:00014f bd03      	out OCR2, R16							;Set the duty cycle of the motor
+C:000150 9508      ret
          
           .MACRO Brake_Init
           
@@ -1024,28 +1148,28 @@ C:0000fc 9508      ret
           .ENDMACRO
          
           Motor_Set_Percentage:
-C:0000fd 3605      	cpi R16, 101							;Check if the number is within the percentage range of 100
-C:0000fe f460      	brsh Motor_Set_Percentage_End			;Branch if not
+C:000151 3605      	cpi R16, 101							;Check if the number is within the percentage range of 100
+C:000152 f460      	brsh Motor_Set_Percentage_End			;Branch if not
          
-C:0000ff ef1f      	ldi R17, 255							;Using the formula (N*255)/100=N% of 255
-C:000100 9f01      	mul R16, R17							;Multiply the number by 255
+C:000153 ef1f      	ldi R17, 255							;Using the formula (N*255)/100=N% of 255
+C:000154 9f01      	mul R16, R17							;Multiply the number by 255
          
-C:000101 2d00      	mov R16, R0								;The multiplication hardware leaves the result in R1:R0
-C:000102 2d11      	mov R17, R1								;
+C:000155 2d00      	mov R16, R0								;The multiplication hardware leaves the result in R1:R0
+C:000156 2d11      	mov R17, R1								;
          
-C:000103 e624      	ldi R18, 100							;Load in the 100 to divide with
-C:000104 940e 0029 	call Div16_8							;Divide with 100, the rest is returned in R18
+C:000157 e624      	ldi R18, 100							;Load in the 100 to divide with
+C:000158 940e 0029 	call Div16_8							;Divide with 100, the rest is returned in R18
          
-C:000106 3322      	cpi R18, 50								;Check to see if we should round of or down.
-C:000107 f008      	brlo Motor_Set_Percentage_Out			;R16 is actually the trunctuated value of the divison which is the same as rounding down.
-C:000108 9503      	inc R16									;Increment if we were rounding up
+C:00015a 3322      	cpi R18, 50								;Check to see if we should round of or down.
+C:00015b f008      	brlo Motor_Set_Percentage_Out			;R16 is actually the trunctuated value of the divison which is the same as rounding down.
+C:00015c 9503      	inc R16									;Increment if we were rounding up
          
           Motor_Set_Percentage_Out:
          
-C:000109 940e 00fb 	call Motor_Set							;Set the duty cycle of the motor pwn as the % of 255
+C:00015d 940e 014f 	call Motor_Set							;Set the duty cycle of the motor pwn as the % of 255
          
           Motor_Set_Percentage_End:
-C:00010b 9508       ret
+C:00015f 9508       ret
           .include "I2C.asm"
          ;Author: StjerneIdioten
          ;I2C communication library 
@@ -1074,36 +1198,36 @@ C:00010b 9508       ret
          ;This function sends a start command
           I2C_Start:
          	;Send Start condition
-C:00010c ea04      	ldi r16, (1<<TWINT)|(1<<TWSTA)|(1<<TWEN) 
-C:00010d bf06      	out TWCR, r16
+C:000160 ea04      	ldi r16, (1<<TWINT)|(1<<TWSTA)|(1<<TWEN) 
+C:000161 bf06      	out TWCR, r16
          
           I2C_Start_Wait:	
          	;Wait for the start condition transmit			
-C:00010e b706      	in r16,TWCR
-C:00010f ff07      	sbrs r16,TWINT
-C:000110 cffd      	rjmp I2C_Start_Wait
-C:000111 9508      ret
+C:000162 b706      	in r16,TWCR
+C:000163 ff07      	sbrs r16,TWINT
+C:000164 cffd      	rjmp I2C_Start_Wait
+C:000165 9508      ret
          
          
          ;This function sends a stop command
           I2C_Stop:
          	;Send Stop condition
-C:000112 e904      	ldi r16, (1<<TWINT)|(1<<TWSTO)|(1<<TWEN) 
-C:000113 bf06      	out TWCR, r16
-C:000114 9508      ret
+C:000166 e904      	ldi r16, (1<<TWINT)|(1<<TWSTO)|(1<<TWEN) 
+C:000167 bf06      	out TWCR, r16
+C:000168 9508      ret
          
          
          ;This function writes the data from R16, onto the I2C data line
           I2C_Write_Call:
-C:000115 b903      	out TWDR, r16
-C:000116 e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
-C:000117 bf06      	out TWCR, r16
+C:000169 b903      	out TWDR, r16
+C:00016a e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
+C:00016b bf06      	out TWCR, r16
          
           I2C_Write_Call_Wait:
-C:000118 b706      	in r16,TWCR
-C:000119 ff07      	sbrs r16,TWINT
-C:00011a cffd      	rjmp I2C_Write_Call_Wait
-C:00011b 9508      ret
+C:00016c b706      	in r16,TWCR
+C:00016d ff07      	sbrs r16,TWINT
+C:00016e cffd      	rjmp I2C_Write_Call_Wait
+C:00016f 9508      ret
          
          ;This is an easy to use macro of the write function
           .MACRO I2C_Write
@@ -1115,21 +1239,21 @@ C:00011b 9508      ret
          ;Remember to set R16 to either I2C_ACK or I2C_NACK before calling the function!
          ;Failure to do so may result in unwanted behaviour.
           I2C_Read_Call:
-C:00011c fd00      	sbrc r16,0
-C:00011d c002      	rjmp I2C_Read_Call_ACK
-C:00011e e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
-C:00011f c001      	rjmp I2C_Read_Call_Continue
+C:000170 fd00      	sbrc r16,0
+C:000171 c002      	rjmp I2C_Read_Call_ACK
+C:000172 e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
+C:000173 c001      	rjmp I2C_Read_Call_Continue
           I2C_Read_Call_ACK:
-C:000120 ec04      	ldi r16, (1<<TWINT) | (1<<TWEN) | (1<<TWEA)
+C:000174 ec04      	ldi r16, (1<<TWINT) | (1<<TWEN) | (1<<TWEA)
           I2C_Read_Call_Continue:
-C:000121 bf06      	out TWCR, r16
+C:000175 bf06      	out TWCR, r16
           I2C_Read_Call_Wait:
-C:000122 b706      	in r16,TWCR
-C:000123 ff07      	sbrs r16,TWINT
-C:000124 cffd      	rjmp I2C_Read_Call_Wait
+C:000176 b706      	in r16,TWCR
+C:000177 ff07      	sbrs r16,TWINT
+C:000178 cffd      	rjmp I2C_Read_Call_Wait
          
-C:000125 b103      	in R16, TWDR
-C:000126 9508      ret
+C:000179 b103      	in R16, TWDR
+C:00017a 9508      ret
          
          ;Easy to use macro which takes I2C_Ack/I2C_Nack as argument.
           .MACRO I2C_Read
@@ -1486,145 +1610,145 @@ C:000126 9508      ret
          
          ;Reads in the entire dataset supplied by the MPU6050 by doing a couple of burst reads. The values can be found at the SRAM addresses specified in SRAM-Mapping
           MPU6050_Read_Dataset:
-C:000127 940e 010c 	call I2C_Start							;Send a start
-C:000129   +  	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
-C:000129 ed00      ldi R16, MPU6050_ADDRESS_W
-C:00012a 940e 0115 call I2C_Write_Call
-C:00012c   +  	I2C_Write MPU6050_RA_ACCEL_XOUT_H		;Write the address to begin reading from.
-C:00012c e30b      ldi R16, MPU6050_RA_ACCEL_XOUT_H
-C:00012d 940e 0115 call I2C_Write_Call
+C:00017b 940e 0160 	call I2C_Start							;Send a start
+C:00017d   +  	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
+C:00017d ed00      ldi R16, MPU6050_ADDRESS_W
+C:00017e 940e 0169 call I2C_Write_Call
+C:000180   +  	I2C_Write MPU6050_RA_ACCEL_XOUT_H		;Write the address to begin reading from.
+C:000180 e30b      ldi R16, MPU6050_RA_ACCEL_XOUT_H
+C:000181 940e 0169 call I2C_Write_Call
          
-C:00012f 940e 010c 	call I2C_Start							;Send a repeated start
-C:000131   +  	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
-C:000131 ed01      ldi R16, MPU6050_ADDRESS_R
-C:000132 940e 0115 call I2C_Write_Call
+C:000183 940e 0160 	call I2C_Start							;Send a repeated start
+C:000185   +  	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
+C:000185 ed01      ldi R16, MPU6050_ADDRESS_R
+C:000186 940e 0169 call I2C_Write_Call
          
-C:000134   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:000134 e001      ldi R16, I2C_Ack
-C:000135 940e 011c call I2C_Read_Call
-C:000137 9300 0060 	sts ACCEL_XOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
+C:000188   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:000188 e001      ldi R16, I2C_Ack
+C:000189 940e 0170 call I2C_Read_Call
+C:00018b 9300 0060 	sts ACCEL_XOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
          
-C:000139   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:000139 e001      ldi R16, I2C_Ack
-C:00013a 940e 011c call I2C_Read_Call
-C:00013c 9300 0061 	sts ACCEL_XOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
+C:00018d   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:00018d e001      ldi R16, I2C_Ack
+C:00018e 940e 0170 call I2C_Read_Call
+C:000190 9300 0061 	sts ACCEL_XOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
          
-C:00013e   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:00013e e001      ldi R16, I2C_Ack
-C:00013f 940e 011c call I2C_Read_Call
-C:000141 9300 0062 	sts ACCEL_YOUT_H, R16					;Store the ACCEL_YOUT_H in SRAM
+C:000192   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:000192 e001      ldi R16, I2C_Ack
+C:000193 940e 0170 call I2C_Read_Call
+C:000195 9300 0062 	sts ACCEL_YOUT_H, R16					;Store the ACCEL_YOUT_H in SRAM
          
-C:000143   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:000143 e001      ldi R16, I2C_Ack
-C:000144 940e 011c call I2C_Read_Call
-C:000146 9300 0063 	sts ACCEL_YOUT_L, R16					;Store the ACCEL_YOUT_L in SRAM
+C:000197   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:000197 e001      ldi R16, I2C_Ack
+C:000198 940e 0170 call I2C_Read_Call
+C:00019a 9300 0063 	sts ACCEL_YOUT_L, R16					;Store the ACCEL_YOUT_L in SRAM
          
-C:000148   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:000148 e001      ldi R16, I2C_Ack
-C:000149 940e 011c call I2C_Read_Call
-C:00014b 9300 0064 	sts ACCEL_ZOUT_H, R16					;Store the ACCEL_ZOUT_H in SRAM
+C:00019c   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:00019c e001      ldi R16, I2C_Ack
+C:00019d 940e 0170 call I2C_Read_Call
+C:00019f 9300 0064 	sts ACCEL_ZOUT_H, R16					;Store the ACCEL_ZOUT_H in SRAM
          
-C:00014d   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:00014d e001      ldi R16, I2C_Ack
-C:00014e 940e 011c call I2C_Read_Call
-C:000150 9300 0065 	sts ACCEL_ZOUT_L, R16					;Store the ACCEL_ZOUT_L in SRAM
+C:0001a1   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:0001a1 e001      ldi R16, I2C_Ack
+C:0001a2 940e 0170 call I2C_Read_Call
+C:0001a4 9300 0065 	sts ACCEL_ZOUT_L, R16					;Store the ACCEL_ZOUT_L in SRAM
          
-C:000152   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:000152 e001      ldi R16, I2C_Ack
-C:000153 940e 011c call I2C_Read_Call
-C:000155 9300 0066 	sts TEMP_OUT_H, R16						;Store the TEMP_OUT_H in SRAM
+C:0001a6   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:0001a6 e001      ldi R16, I2C_Ack
+C:0001a7 940e 0170 call I2C_Read_Call
+C:0001a9 9300 0066 	sts TEMP_OUT_H, R16						;Store the TEMP_OUT_H in SRAM
          
-C:000157   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:000157 e001      ldi R16, I2C_Ack
-C:000158 940e 011c call I2C_Read_Call
-C:00015a 9300 0067 	sts TEMP_OUT_L, R16						;Store the TEMP_OUT_L in SRAM
+C:0001ab   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:0001ab e001      ldi R16, I2C_Ack
+C:0001ac 940e 0170 call I2C_Read_Call
+C:0001ae 9300 0067 	sts TEMP_OUT_L, R16						;Store the TEMP_OUT_L in SRAM
          
-C:00015c   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:00015c e001      ldi R16, I2C_Ack
-C:00015d 940e 011c call I2C_Read_Call
-C:00015f 9300 0068 	sts GYRO_XOUT_H, R16					;Store the GYRO_XOUT_H in SRAM
+C:0001b0   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:0001b0 e001      ldi R16, I2C_Ack
+C:0001b1 940e 0170 call I2C_Read_Call
+C:0001b3 9300 0068 	sts GYRO_XOUT_H, R16					;Store the GYRO_XOUT_H in SRAM
          
-C:000161   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:000161 e001      ldi R16, I2C_Ack
-C:000162 940e 011c call I2C_Read_Call
-C:000164 9300 0069 	sts GYRO_XOUT_L, R16					;Store the GYRO_XOUT_L in SRAM
+C:0001b5   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:0001b5 e001      ldi R16, I2C_Ack
+C:0001b6 940e 0170 call I2C_Read_Call
+C:0001b8 9300 0069 	sts GYRO_XOUT_L, R16					;Store the GYRO_XOUT_L in SRAM
          
-C:000166   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:000166 e001      ldi R16, I2C_Ack
-C:000167 940e 011c call I2C_Read_Call
-C:000169 9300 006a 	sts GYRO_YOUT_H, R16					;Store the GYRO_YOUT_H in SRAM
+C:0001ba   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:0001ba e001      ldi R16, I2C_Ack
+C:0001bb 940e 0170 call I2C_Read_Call
+C:0001bd 9300 006a 	sts GYRO_YOUT_H, R16					;Store the GYRO_YOUT_H in SRAM
          	
-C:00016b   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:00016b e001      ldi R16, I2C_Ack
-C:00016c 940e 011c call I2C_Read_Call
-C:00016e 9300 006b 	sts GYRO_YOUT_L, R16					;Store the GYRO_YOUT_L in SRAM
+C:0001bf   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:0001bf e001      ldi R16, I2C_Ack
+C:0001c0 940e 0170 call I2C_Read_Call
+C:0001c2 9300 006b 	sts GYRO_YOUT_L, R16					;Store the GYRO_YOUT_L in SRAM
          	
-C:000170   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:000170 e001      ldi R16, I2C_Ack
-C:000171 940e 011c call I2C_Read_Call
-C:000173 9300 006c 	sts GYRO_ZOUT_H, R16					;Store the GYRO_ZOUT_H in SRAM
+C:0001c4   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:0001c4 e001      ldi R16, I2C_Ack
+C:0001c5 940e 0170 call I2C_Read_Call
+C:0001c7 9300 006c 	sts GYRO_ZOUT_H, R16					;Store the GYRO_ZOUT_H in SRAM
          	
-C:000175   +  	I2C_Read I2C_Nack						;Reply with an NACK to indicate that we do not wish to read the next byte too
-C:000175 e000      ldi R16, I2C_Nack
-C:000176 940e 011c call I2C_Read_Call
-C:000178 9300 006b 	sts GYRO_YOUT_L, R16					;Store the GYRO_YOUT_L in SRAM
+C:0001c9   +  	I2C_Read I2C_Nack						;Reply with an NACK to indicate that we do not wish to read the next byte too
+C:0001c9 e000      ldi R16, I2C_Nack
+C:0001ca 940e 0170 call I2C_Read_Call
+C:0001cc 9300 006b 	sts GYRO_YOUT_L, R16					;Store the GYRO_YOUT_L in SRAM
          
-C:00017a 940e 0112 	call I2C_Stop							;Send a stop
-C:00017c 9508      ret											;Return
+C:0001ce 940e 0166 	call I2C_Stop							;Send a stop
+C:0001d0 9508      ret											;Return
          
           MPU6050_Read_Accel_X:
-C:00017d 940e 010c 	call I2C_Start							;Send a start
-C:00017f   +  	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
-C:00017f ed00      ldi R16, MPU6050_ADDRESS_W
-C:000180 940e 0115 call I2C_Write_Call
-C:000182   +  	I2C_Write MPU6050_RA_ACCEL_XOUT_H		;Write the address to begin reading from.
-C:000182 e30b      ldi R16, MPU6050_RA_ACCEL_XOUT_H
-C:000183 940e 0115 call I2C_Write_Call
+C:0001d1 940e 0160 	call I2C_Start							;Send a start
+C:0001d3   +  	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
+C:0001d3 ed00      ldi R16, MPU6050_ADDRESS_W
+C:0001d4 940e 0169 call I2C_Write_Call
+C:0001d6   +  	I2C_Write MPU6050_RA_ACCEL_XOUT_H		;Write the address to begin reading from.
+C:0001d6 e30b      ldi R16, MPU6050_RA_ACCEL_XOUT_H
+C:0001d7 940e 0169 call I2C_Write_Call
          
-C:000185 940e 010c 	call I2C_Start							;Send a repeated start
-C:000187   +  	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
-C:000187 ed01      ldi R16, MPU6050_ADDRESS_R
-C:000188 940e 0115 call I2C_Write_Call
+C:0001d9 940e 0160 	call I2C_Start							;Send a repeated start
+C:0001db   +  	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
+C:0001db ed01      ldi R16, MPU6050_ADDRESS_R
+C:0001dc 940e 0169 call I2C_Write_Call
          
-C:00018a   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:00018a e001      ldi R16, I2C_Ack
-C:00018b 940e 011c call I2C_Read_Call
-C:00018d 9300 0060 	sts ACCEL_XOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
+C:0001de   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:0001de e001      ldi R16, I2C_Ack
+C:0001df 940e 0170 call I2C_Read_Call
+C:0001e1 9300 0060 	sts ACCEL_XOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
          
-C:00018f   +  	I2C_Read I2C_Nack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:00018f e000      ldi R16, I2C_Nack
-C:000190 940e 011c call I2C_Read_Call
-C:000192 9300 0061 	sts ACCEL_XOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
+C:0001e3   +  	I2C_Read I2C_Nack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:0001e3 e000      ldi R16, I2C_Nack
+C:0001e4 940e 0170 call I2C_Read_Call
+C:0001e6 9300 0061 	sts ACCEL_XOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
          
-C:000194 940e 0112 	call I2C_Stop							;Send a stop
-C:000196 9508      ret											;Return
+C:0001e8 940e 0166 	call I2C_Stop							;Send a stop
+C:0001ea 9508      ret											;Return
          
           MPU6050_Read_Gyro_Z:
-C:000197 940e 010c 	call I2C_Start							;Send a start
-C:000199   +  	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
-C:000199 ed00      ldi R16, MPU6050_ADDRESS_W
-C:00019a 940e 0115 call I2C_Write_Call
-C:00019c   +  	I2C_Write MPU6050_RA_GYRO_ZOUT_H		;Write the address to begin reading from.
-C:00019c e407      ldi R16, MPU6050_RA_GYRO_ZOUT_H
-C:00019d 940e 0115 call I2C_Write_Call
+C:0001eb 940e 0160 	call I2C_Start							;Send a start
+C:0001ed   +  	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
+C:0001ed ed00      ldi R16, MPU6050_ADDRESS_W
+C:0001ee 940e 0169 call I2C_Write_Call
+C:0001f0   +  	I2C_Write MPU6050_RA_GYRO_ZOUT_H		;Write the address to begin reading from.
+C:0001f0 e407      ldi R16, MPU6050_RA_GYRO_ZOUT_H
+C:0001f1 940e 0169 call I2C_Write_Call
          
-C:00019f 940e 010c 	call I2C_Start							;Send a repeated start
-C:0001a1   +  	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
-C:0001a1 ed01      ldi R16, MPU6050_ADDRESS_R
-C:0001a2 940e 0115 call I2C_Write_Call
+C:0001f3 940e 0160 	call I2C_Start							;Send a repeated start
+C:0001f5   +  	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
+C:0001f5 ed01      ldi R16, MPU6050_ADDRESS_R
+C:0001f6 940e 0169 call I2C_Write_Call
          
-C:0001a4   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:0001a4 e001      ldi R16, I2C_Ack
-C:0001a5 940e 011c call I2C_Read_Call
-C:0001a7 9300 006c 	sts GYRO_ZOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
+C:0001f8   +  	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:0001f8 e001      ldi R16, I2C_Ack
+C:0001f9 940e 0170 call I2C_Read_Call
+C:0001fb 9300 006c 	sts GYRO_ZOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
          
-C:0001a9   +  	I2C_Read I2C_Nack						;Reply with an ACK to indicate that we wish to read the next byte too
-C:0001a9 e000      ldi R16, I2C_Nack
-C:0001aa 940e 011c call I2C_Read_Call
-C:0001ac 9300 006d 	sts GYRO_ZOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
+C:0001fd   +  	I2C_Read I2C_Nack						;Reply with an ACK to indicate that we wish to read the next byte too
+C:0001fd e000      ldi R16, I2C_Nack
+C:0001fe 940e 0170 call I2C_Read_Call
+C:000200 9300 006d 	sts GYRO_ZOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
          
-C:0001ae 940e 0112 	call I2C_Stop							;Send a stop
-C:0001b0 9508      ret											;Return
+C:000202 940e 0166 	call I2C_Stop							;Send a stop
+C:000204 9508      ret											;Return
           .include "Time.asm"
          ; This library handles all initial setup of timer operations
          
@@ -1651,169 +1775,37 @@ C:0001b0 9508      ret											;Return
          ; Timer subroutines
          
           Timer0_Update:
-C:0001b1 930f      			push	R16
-C:0001b2 b70f      			in		R16, SREG
-C:0001b3 930f      			push	R16
+C:000205 930f      			push	R16
+C:000206 b70f      			in		R16, SREG
+C:000207 930f      			push	R16
          			
-C:0001b4 e001      			ldi		R16, 0x01
-C:0001b5 9000 0070 			lds		R0, Timer_1ms_L			
-C:0001b7 0e00      			add		R0, R16						;Advance time by 1ms whenever timer0 has compare match
-C:0001b8 9200 0070 			sts		Timer_1ms_L, R0	
-C:0001ba f468      			brcc	Timer_Update_End
+C:000208 e001      			ldi		R16, 0x01
+C:000209 9000 0070 			lds		R0, Timer_1ms_L			
+C:00020b 0e00      			add		R0, R16						;Advance time by 1ms whenever timer0 has compare match
+C:00020c 9200 0070 			sts		Timer_1ms_L, R0	
+C:00020e f468      			brcc	Timer_Update_End
          			
-C:0001bb e000      			ldi		R16, 0x00
-C:0001bc 9010 006f 			lds		R1, Timer_1ms_M				;24 bits = 16777 seconds = 4.6 hours... ish :D
-C:0001be 1e10      			adc		R1, R16
-C:0001bf 9210 006f 			sts		Timer_1ms_M, R1	
-C:0001c1 f430      			brcc	Timer_Update_End
+C:00020f e000      			ldi		R16, 0x00
+C:000210 9010 006f 			lds		R1, Timer_1ms_M				;24 bits = 16777 seconds = 4.6 hours... ish :D
+C:000212 1e10      			adc		R1, R16
+C:000213 9210 006f 			sts		Timer_1ms_M, R1	
+C:000215 f430      			brcc	Timer_Update_End
          			
-C:0001c2 9020 006e 			lds		R2, Timer_1ms_H
-C:0001c4 1e20      			adc		R2, R16
-C:0001c5 9220 006e 			sts		Timer_1ms_H, R2
-C:0001c7 f400      			brcc	Timer_Update_End
+C:000216 9020 006e 			lds		R2, Timer_1ms_H
+C:000218 1e20      			adc		R2, R16
+C:000219 9220 006e 			sts		Timer_1ms_H, R2
+C:00021b f400      			brcc	Timer_Update_End
          			
           Timer_Update_End:
          
-         
-C:0001c8 9100 007f Delay:		lds		R16, SREG_1			
-C:0001ca ff07      			sbrs	R16, 7							; bit 7 is the delay enable 
-C:0001cb c00f      			rjmp	Delay_End
-         									
-C:0001cc 9100 0084 			lds		R16, Delay_Ticks
-C:0001ce 9110 0085 			lds		R17, Delay_Amount
-C:0001d0 9513      			inc		R17
-C:0001d1 1701      			cp		R16, R17
-C:0001d2 f441      			brne	Delay_End
+C:00021c 910f      			pop		R16
+C:00021d bf0f      			out		SREG, R16
+C:00021e 910f      			pop		R16
          			
-C:0001d3 2711      			clr		R17
-C:0001d4 9310 0084 			sts		Delay_Ticks, R17
-         			
-C:0001d6   +  			Clear_SREG_1 7							; clear bit 7 in SREG_1
-C:0001d6 9100 007f lds		R16, SREG_1
-C:0001d8 770f      cbr		R16, (1<<7)					
-
-C:0001d9 9300 007f sts		SREG_1, R16
-         
-C:0001db 910f      Delay_End:	pop		R16
-C:0001dc bf0f      			out		SREG, R16
-C:0001dd 910f      			pop		R16
-         			
-C:0001de 9518      			reti
+C:00021f 9518      			reti
          			
          
           
-          .include "WheelSpeed.asm"
-         
-          .MACRO WheelSpeed_Init
-          
-          			
-          
-          			ldi		R16, 0x00
-          			out		TCCR1A, R16
-          			ldi		R16, 0b00000010			; Falling edge triggered, 1/1024 prescaling
-          			out		TCCR1B, R16	
-          
-          			clr		R16
-          			sts		Edge1_L, R16
-          			sts		Edge1_H, R16
-          
-          			sts		Ticks_L, R16
-          			sts		Ticks_H, R16
-          
-          			in		R16, TIMSK
-          			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
-          			out		TIMSK, R16				;Timer/interrupt masking register
-          			
-          .ENDMACRO
-         
-         
-          Input_Capture:
-         
-C:0001df   +  			Push_Register_5 R0, R1, R2, R3, R16
-C:0001df 920f      push	R0
-C:0001e0 921f      push	R1
-C:0001e1 922f      push	R2
-C:0001e2 923f      push	R3
-C:0001e3 930f      push	R16
-C:0001e4 b70f      in	R16, SREG
-C:0001e5 930f      push	R16
-         			
-C:0001e6 9000 007b 			lds		R0, Ticks_L
-C:0001e8 9010 007c 			lds		R1, Ticks_H
-         			
-C:0001ea e001      			ldi		R16, 0x01
-C:0001eb 0e00      			add		R0, R16
-C:0001ec e000      			ldi		R16, 0x00
-C:0001ed 1e10      			adc		R1, R16
-         			
-C:0001ee 9200 007b 			sts		Ticks_L, R0
-C:0001f0 9210 007c 			sts		Ticks_H, R1			
-         			
-C:0001f2 9100 007f 			lds		R16, SREG_1			
-C:0001f4 fd00      			sbrc	R16, 0							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
-C:0001f5 c013      			rjmp	EDGE2
-         			
-C:0001f6 b406      EDGE1:		in		R0, ICR1L
-C:0001f7 b417      			in		R1, ICR1H
-         			
-C:0001f8 9200 0077 			sts		Edge1_L, R0
-C:0001fa 9210 0078 			sts		Edge1_H, R1
-         
-C:0001fc   +  			Set_SREG_1 	0
-C:0001fc 9100 007f lds		R16, SREG_1
-C:0001fe 6001      sbr		R16, (1<<0)					
-
-C:0001ff 9300 007f sts		SREG_1, R16
-         			
-C:000201   +  			Pop_Register_5 R16, R3, R2, R1, R0
-C:000201 910f      pop	R16
-C:000202 bf0f      out	SREG, R16
-C:000203 910f      pop	R16
-C:000204 903f      pop	R3
-C:000205 902f      pop	R2
-C:000206 901f      pop	R1
-C:000207 900f      pop	R0	
-         			
-C:000208 9518      			reti
-         			
-C:000209 9000 0077 EDGE2:		lds		R0, Edge1_L
-C:00020b 9010 0078 			lds		R1, Edge1_H
-         			
-C:00020d b426      			in		R2, ICR1L
-C:00020e b437      			in		R3, ICR1H
-         			
-C:00020f 1820      			sub		R2, R0
-C:000210 0831      			sbc		R3, R1
-         			
-C:000211 e00b      			ldi		R16, high(3000)
-C:000212 1630      			cp		R3, R16
-C:000213 f060      			brlo	WheelSpeed_End		
-         			
-C:000214   +  			Clear_SREG_1 0
-C:000214 9100 007f lds		R16, SREG_1
-C:000216 7f0e      cbr		R16, (1<<0)					
-
-C:000217 9300 007f sts		SREG_1, R16
-         			
-C:000219 e000      			ldi		R16, 0x00
-C:00021a bd0d      			out		TCNT1H, R16						; Temp = R16
-C:00021b bd0c      			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp	
-         			
-C:00021c 9220 0079 			sts		Pulse_Time_L, R2
-C:00021e 9230 007a 			sts		Pulse_Time_H, R3
-         
-          WheelSpeed_End:
-         			
-C:000220   +  			Pop_Register_5 R16, R3, R2, R1, R0
-C:000220 910f      pop	R16
-C:000221 bf0f      out	SREG, R16
-C:000222 910f      pop	R16
-C:000223 903f      pop	R3
-C:000224 902f      pop	R2
-C:000225 901f      pop	R1
-C:000226 900f      pop	R0	
-         			
-C:000227 9518      			reti
           .include "LapCounter.asm"
           .MACRO LapCounter_Init
           
@@ -1840,80 +1832,80 @@ C:000227 9518      			reti
          
           Lap_Time:	
          
-C:000228   +  	Push_Register_7 R0, R1, R2, R3, R4, R5, R16
-C:000228 920f      push	R0
-C:000229 921f      push	R1
-C:00022a 922f      push	R2
-C:00022b 923f      push	R3
-C:00022c 924f      push	R4
-C:00022d 925f      push	R5
-C:00022e 930f      push	R16
-C:00022f b70f      in	R16, SREG
-C:000230 930f      push	R16
+C:000220   +  	Push_Register_7 R0, R1, R2, R3, R4, R5, R16
+C:000220 920f      push	R0
+C:000221 921f      push	R1
+C:000222 922f      push	R2
+C:000223 923f      push	R3
+C:000224 924f      push	R4
+C:000225 925f      push	R5
+C:000226 930f      push	R16
+C:000227 b70f      in	R16, SREG
+C:000228 930f      push	R16
          
-C:000231 9000 0070 	lds		R0, Timer_1ms_L				
-C:000233 9010 006f 	lds		R1, Timer_1ms_M				; Current time since startup in ms
-C:000235 9020 006e 	lds		R2, Timer_1ms_H				 
+C:000229 9000 0070 	lds		R0, Timer_1ms_L				
+C:00022b 9010 006f 	lds		R1, Timer_1ms_M				; Current time since startup in ms
+C:00022d 9020 006e 	lds		R2, Timer_1ms_H				 
          			
-C:000237 9030 0073 	lds		R3, Time_Stamp_L			
-C:000239 9040 0072 	lds		R4, Time_Stamp_M			; Time stamp at start of lap
-C:00023b 9050 0071 	lds		R5, Time_Stamp_H
+C:00022f 9030 0073 	lds		R3, Time_Stamp_L			
+C:000231 9040 0072 	lds		R4, Time_Stamp_M			; Time stamp at start of lap
+C:000233 9050 0071 	lds		R5, Time_Stamp_H
          			
-C:00023d 9200 0073 	sts		Time_Stamp_L, R0			
-C:00023f 9210 0072 	sts		Time_Stamp_M, R1			; New time stamp for next lap
-C:000241 9220 0071 	sts		Time_Stamp_H, R2	
+C:000235 9200 0073 	sts		Time_Stamp_L, R0			
+C:000237 9210 0072 	sts		Time_Stamp_M, R1			; New time stamp for next lap
+C:000239 9220 0071 	sts		Time_Stamp_H, R2	
          			
-C:000243 1803      	sub		R0, R3						
-C:000244 0814      	sbc		R1, R4						; Difference between current time and last time stamp
-C:000245 0825      	sbc		R2, R5
+C:00023b 1803      	sub		R0, R3						
+C:00023c 0814      	sbc		R1, R4						; Difference between current time and last time stamp
+C:00023d 0825      	sbc		R2, R5
          		
-C:000246 e002      	ldi R16, 2		
-C:000247 1610      	cp R1, R16
-C:000248 f100      	brlo Lap_Time_End
+C:00023e e002      	ldi R16, 2		
+C:00023f 1610      	cp R1, R16
+C:000240 f100      	brlo Lap_Time_End
          	
-C:000249 9200 0074 	sts		Lap_time_L, R0				
-C:00024b 9210 0075 	sts		Lap_time_M, R1				; Latest lap time
-C:00024d 9220 0076 	sts		Lap_time_H, R2			
+C:000241 9200 0074 	sts		Lap_time_L, R0				
+C:000243 9210 0075 	sts		Lap_time_M, R1				; Latest lap time
+C:000245 9220 0076 	sts		Lap_time_H, R2			
          	
-C:00024f 9000 007b 	lds		R0, Ticks_L
-C:000251 9010 007c 	lds		R1, Ticks_H
+C:000247 9000 007b 	lds		R0, Ticks_L
+C:000249 9010 007c 	lds		R1, Ticks_H
          	
-C:000253 9200 007d 	sts		Ticks_Lap_L, R0
-C:000255 9210 007e 	sts		Ticks_Lap_H, R1
+C:00024b 9200 007d 	sts		Ticks_Lap_L, R0
+C:00024d 9210 007e 	sts		Ticks_Lap_H, R1
          	
-C:000257 e000      	ldi		R16, 0x00
-C:000258 9300 007b 	sts		Ticks_L, R16
-C:00025a 9300 007c 	sts		Ticks_H, R16
+C:00024f e000      	ldi		R16, 0x00
+C:000250 9300 007b 	sts		Ticks_L, R16
+C:000252 9300 007c 	sts		Ticks_H, R16
          	
-C:00025c e400      	ldi		R16, 0x40					; Disable Comparator interrupt
-C:00025d b908      	out		ACSR, R16					; Global interrupt register
+C:000254 e400      	ldi		R16, 0x40					; Disable Comparator interrupt
+C:000255 b908      	out		ACSR, R16					; Global interrupt register
          	
-C:00025e   +  	Set_SREG_1 	2
-C:00025e 9100 007f lds		R16, SREG_1
-C:000260 6004      sbr		R16, (1<<2)					
+C:000256   +  	Set_SREG_1 	2
+C:000256 9100 007f lds		R16, SREG_1
+C:000258 6004      sbr		R16, (1<<2)					
 
-C:000261 9300 007f sts		SREG_1, R16
+C:000259 9300 007f sts		SREG_1, R16
          			
-C:000263 e508      	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
-C:000264 b908      	out		ACSR, R16					; Global interrupt register
+C:00025b e508      	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
+C:00025c b908      	out		ACSR, R16					; Global interrupt register
          
-C:000265 940e 030d 	call Comm_Send_LapTime
-C:000267 940e 0322 	call Comm_Send_LapTicks
+C:00025d 940e 0305 	call Comm_Send_LapTime
+C:00025f 940e 031a 	call Comm_Send_LapTicks
          
           Lap_Time_End:
          
-C:000269   +  	Pop_Register_7 R16, R5, R4, R3, R2, R1, R0
-C:000269 910f      pop	R16
-C:00026a bf0f      out	SREG, R16
-C:00026b 910f      pop	R16
-C:00026c 905f      pop	R5
-C:00026d 904f      pop	R4
-C:00026e 903f      pop	R3
-C:00026f 902f      pop	R2
-C:000270 901f      pop	R1
-C:000271 900f      pop	R0	
+C:000261   +  	Pop_Register_7 R16, R5, R4, R3, R2, R1, R0
+C:000261 910f      pop	R16
+C:000262 bf0f      out	SREG, R16
+C:000263 910f      pop	R16
+C:000264 905f      pop	R5
+C:000265 904f      pop	R4
+C:000266 903f      pop	R3
+C:000267 902f      pop	R2
+C:000268 901f      pop	R1
+C:000269 900f      pop	R0	
          
-C:000272 9518      			reti			
+C:00026a 9518      			reti			
           .include "Communication_Protocol.asm"
           .Macro Comm_Init
           	ldi R16, 0x01							;Initialize the counter as being the first byte
@@ -1956,17 +1948,17 @@ C:000272 9518      			reti
          ;---------------------------------------------------------------------------------------------------------------------
           Comm_Received:
          
-C:000273 9100 0080 	lds R16, Comm_Received_Byte_Num			;What byte # did we receive
+C:00026b 9100 0080 	lds R16, Comm_Received_Byte_Num			;What byte # did we receive
          
-C:000275 3001      	cpi R16, 0x01							;If it was the first
-C:000276 f019      	breq Comm_Received_Type					;Set the type
+C:00026d 3001      	cpi R16, 0x01							;If it was the first
+C:00026e f019      	breq Comm_Received_Type					;Set the type
          
-C:000277 3002      	cpi R16, 0x02							;If it was the second
-C:000278 f069      	breq Comm_Received_Command				;Set the command
+C:00026f 3002      	cpi R16, 0x02							;If it was the second
+C:000270 f069      	breq Comm_Received_Command				;Set the command
          
          	;Working under the assumption that if it was not the first or second byte, then it must be the third.
          
-C:000279 c02c      	rjmp Comm_Received_Execute				;Go to the execution of the received telegram
+C:000271 c02c      	rjmp Comm_Received_Execute				;Go to the execution of the received telegram
          
          
          ;---------------------------------------------------------------------------------------------------------------------
@@ -1974,91 +1966,91 @@ C:000279 c02c      	rjmp Comm_Received_Execute				;Go to the execution of the re
          ;---------------------------------------------------------------------------------------------------------------------
           Comm_Received_Type:
          	
-C:00027a b10c      	in R16, UDR	
+C:000272 b10c      	in R16, UDR	
          				
           Comm_Received_Type_Set_Check:				;Check if we received a set type
-C:00027b 3505      	cpi R16, Comm_Type_Set					;Check for set type
-C:00027c f019      	breq Comm_Received_Type_Valid			;Branch to the next check if not the case
+C:000273 3505      	cpi R16, Comm_Type_Set					;Check for set type
+C:000274 f019      	breq Comm_Received_Type_Valid			;Branch to the next check if not the case
          
           Comm_Received_Type_Get_Check:				;Check if we received a get type
-C:00027d 3a0a      	cpi R16, Comm_Type_Get					;Check for get type
-C:00027e f009      	breq Comm_Received_Type_Valid			;Branch to the reset since we did not received a valid type
+C:000275 3a0a      	cpi R16, Comm_Type_Get					;Check for get type
+C:000276 f009      	breq Comm_Received_Type_Valid			;Branch to the reset since we did not received a valid type
          
           Comm_Received_Type_Reset:					;Branch here if it was not a valid type
-C:00027f 9518      	reti									;Does nothing else than return since the byte counter is already at one
+C:000277 9518      	reti									;Does nothing else than return since the byte counter is already at one
          
           Comm_Received_Type_Valid:
-C:000280 9300 0081 	sts Comm_Received_Byte_1, R16			;Store the received type in SRAM	
-C:000282 e002      	ldi R16, 0x02							;Set the counter to two
-C:000283 9300 0080 	sts Comm_Received_Byte_Num, R16			;Store it					
-C:000285 9518      reti										;Return from interrupt
+C:000278 9300 0081 	sts Comm_Received_Byte_1, R16			;Store the received type in SRAM	
+C:00027a e002      	ldi R16, 0x02							;Set the counter to two
+C:00027b 9300 0080 	sts Comm_Received_Byte_Num, R16			;Store it					
+C:00027d 9518      reti										;Return from interrupt
          
          ;---------------------------------------------------------------------------------------------------------------------
          ;Received a command
          ;---------------------------------------------------------------------------------------------------------------------
           Comm_Received_Command:
          
-C:000286 9100 0081 	lds R16, Comm_Received_Byte_1
+C:00027e 9100 0081 	lds R16, Comm_Received_Byte_1
          
           Comm_Received_Command_Type_Set_Check:				;Check if we received a set type
-C:000288 3505      	cpi R16, Comm_Type_Set							;Check for set type
-C:000289 f031      	breq Comm_Received_Command_Type_Set				;Branch to the next check if not the case
+C:000280 3505      	cpi R16, Comm_Type_Set							;Check for set type
+C:000281 f031      	breq Comm_Received_Command_Type_Set				;Branch to the next check if not the case
          
           Comm_Received_Command_Type_Get_Check:				;Check if we received a get type
-C:00028a 3a0a      	cpi R16, Comm_Type_Get							;Check for get type
-C:00028b f059      	breq Comm_Received_Command_Type_Get				;Branch to the reset since we did not received a valid type
+C:000282 3a0a      	cpi R16, Comm_Type_Get							;Check for get type
+C:000283 f059      	breq Comm_Received_Command_Type_Get				;Branch to the reset since we did not received a valid type
          
           Comm_Received_Command_Failure:						;This should never actually be called, since this is only possible if something else is tangling with the specific SRAM address inbetween bytes
-C:00028c e403      	ldi R16, 'C'											;But in the case that this happens
-C:00028d 940e 0034 	call USART_Transmit								;The program will be stuck in the interrupt and spam
-C:00028f cffc      	rjmp Comm_Received_Command_Failure				;'C' over the USART
+C:000284 e403      	ldi R16, 'C'											;But in the case that this happens
+C:000285 940e 0034 	call USART_Transmit								;The program will be stuck in the interrupt and spam
+C:000287 cffc      	rjmp Comm_Received_Command_Failure				;'C' over the USART
          
          ;---------------------------------------------------------------------------------------------------------------------
          ;Check for matching set commands
          ;---------------------------------------------------------------------------------------------------------------------
           Comm_Received_Command_Type_Set:
-C:000290 b10c      	in R16, UDR	
+C:000288 b10c      	in R16, UDR	
          
          ;Start			
           Comm_Received_Command_Start_Check:					;Check if we received a start command
-C:000291 3100      	cpi R16, Comm_Command_Start						;Check for start command
-C:000292 f069      	breq Comm_Received_Command_Valid		;Branch to the next check if not the case
+C:000289 3100      	cpi R16, Comm_Command_Start						;Check for start command
+C:00028a f069      	breq Comm_Received_Command_Valid		;Branch to the next check if not the case
          
          ;Stop
           Comm_Received_Command_Stop_Check:					;Check if we received a stop command
-C:000293 3101      	cpi R16, Comm_Command_Stop						;Check for stop command
-C:000294 f059      	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
+C:00028b 3101      	cpi R16, Comm_Command_Stop						;Check for stop command
+C:00028c f059      	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
          
          ;Invalid
-C:000295 940c 029c 	jmp Comm_Received_Command_Reset					;If we did not in fact receive a valid set command, then reset
+C:00028d 940c 0294 	jmp Comm_Received_Command_Reset					;If we did not in fact receive a valid set command, then reset
          
          ;---------------------------------------------------------------------------------------------------------------------
          ;Check for matching get commands
          ;---------------------------------------------------------------------------------------------------------------------
           Comm_Received_Command_Type_Get:
-C:000297 b10c      	in R16, UDR	
+C:00028f b10c      	in R16, UDR	
          
          ;Laptime
           Comm_Received_Command_Data_Check:					;Check if we received a LapTime command
-C:000298 3a0b      	cpi R16, Comm_Command_Data						;Check for LapTime command
-C:000299 f031      	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
+C:000290 3a0b      	cpi R16, Comm_Command_Data						;Check for LapTime command
+C:000291 f031      	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
          
          ;Invalid
-C:00029a 940c 029c 	jmp Comm_Received_Command_Reset					;If we did not in fact receive a valid set command, then reset
+C:000292 940c 0294 	jmp Comm_Received_Command_Reset					;If we did not in fact receive a valid set command, then reset
          
          ;---------------------------------------------------------------------------------------------------------------------
          ;Command handling
          ;---------------------------------------------------------------------------------------------------------------------
           Comm_Received_Command_Reset:
-C:00029c e001      	ldi R16, 0x01									;Reset the byte counter since we received an invalid command after a valid type									
-C:00029d 9300 0080 	sts Comm_Received_Byte_Num, R16					;
-C:00029f 9518      	reti											;Return
+C:000294 e001      	ldi R16, 0x01									;Reset the byte counter since we received an invalid command after a valid type									
+C:000295 9300 0080 	sts Comm_Received_Byte_Num, R16					;
+C:000297 9518      	reti											;Return
          
           Comm_Received_Command_Valid:						
-C:0002a0 9300 0082 	sts Comm_Received_Byte_2, R16					;Store the received type in SRAM	
-C:0002a2 e003      	ldi R16, 0x03									;Set the counter to two
-C:0002a3 9300 0080 	sts Comm_Received_Byte_Num, R16					;Store it					
-C:0002a5 9518      reti												;Return from interrupt
+C:000298 9300 0082 	sts Comm_Received_Byte_2, R16					;Store the received type in SRAM	
+C:00029a e003      	ldi R16, 0x03									;Set the counter to two
+C:00029b 9300 0080 	sts Comm_Received_Byte_Num, R16					;Store it					
+C:00029d 9518      reti												;Return from interrupt
          
          
          ;---------------------------------------------------------------------------------------------------------------------
@@ -2066,63 +2058,63 @@ C:0002a5 9518      reti												;Return from interrupt
          ;---------------------------------------------------------------------------------------------------------------------
           Comm_Received_Execute:
          
-C:0002a6 b10c      	in r16, UDR								;Read in the received parameter
-C:0002a7 9300 0083 	sts Comm_Received_Byte_3, R16			;Store it in SRAM
+C:00029e b10c      	in r16, UDR								;Read in the received parameter
+C:00029f 9300 0083 	sts Comm_Received_Byte_3, R16			;Store it in SRAM
          	
-C:0002a9 e001      	ldi R16, 0x01							;Reset the counter
-C:0002aa 9300 0080 	sts Comm_Received_Byte_Num, R16			;Store it in SRAM
+C:0002a1 e001      	ldi R16, 0x01							;Reset the counter
+C:0002a2 9300 0080 	sts Comm_Received_Byte_Num, R16			;Store it in SRAM
          
          ;---------------------------------------------------------------------------------------------------------------------
          ;Execute Types
          ;---------------------------------------------------------------------------------------------------------------------
          
-C:0002ac 9100 0081 	lds R16, Comm_Received_Byte_1			;Load in the first(Type) byte
+C:0002a4 9100 0081 	lds R16, Comm_Received_Byte_1			;Load in the first(Type) byte
          
          	;SET
-C:0002ae 3505      	cpi R16, Comm_Type_Set					;Check if we received a SET and branch if it was
-C:0002af f019      	breq Comm_Received_Execute_Set			;
+C:0002a6 3505      	cpi R16, Comm_Type_Set					;Check if we received a SET and branch if it was
+C:0002a7 f019      	breq Comm_Received_Execute_Set			;
          
          	;GET
-C:0002b0 3a0a      	cpi R16, Comm_Type_Get					;Check if we received a GET and branch if it was
-C:0002b1 f081      	breq Comm_Received_Execute_Get			;
+C:0002a8 3a0a      	cpi R16, Comm_Type_Get					;Check if we received a GET and branch if it was
+C:0002a9 f081      	breq Comm_Received_Execute_Get			;
          
-C:0002b2 9518      	reti
+C:0002aa 9518      	reti
          ;---------------------------------------------------------------------------------------------------------------------
          ;Execute SET's
          ;---------------------------------------------------------------------------------------------------------------------
          
           Comm_Received_Execute_Set:
          
-C:0002b3 9100 0082 	lds R16, Comm_Received_Byte_2			;Load in the second(Command) byte
+C:0002ab 9100 0082 	lds R16, Comm_Received_Byte_2			;Load in the second(Command) byte
          
-C:0002b5 3100      	cpi R16, Comm_Command_Start				;Check if we received a Start command
-C:0002b6 f019      	breq Comm_Received_Execute_Set_Start	;
+C:0002ad 3100      	cpi R16, Comm_Command_Start				;Check if we received a Start command
+C:0002ae f019      	breq Comm_Received_Execute_Set_Start	;
          
-C:0002b7 3101      	cpi R16, Comm_Command_Stop				;Check if we received a Stop command
-C:0002b8 f031      	breq Comm_Received_Execute_Set_Stop		;
+C:0002af 3101      	cpi R16, Comm_Command_Stop				;Check if we received a Stop command
+C:0002b0 f031      	breq Comm_Received_Execute_Set_Stop		;
          
          	;Insert error handling here
          
-C:0002b9 9518      	reti									;Do nothing if it was not a legit code
+C:0002b1 9518      	reti									;Do nothing if it was not a legit code
          
          ;Start
           Comm_Received_Execute_Set_Start:
          
-C:0002ba 9100 0083 	lds R16, Comm_Received_Byte_3			;Load in the third(Parameter) byte
+C:0002b2 9100 0083 	lds R16, Comm_Received_Byte_3			;Load in the third(Parameter) byte
          
-C:0002bc 940e 00fd 	call Motor_Set_Percentage
+C:0002b4 940e 0151 	call Motor_Set_Percentage
          
           Comm_Received_Execute_Set_Start_End:
          
-C:0002be 9518      	reti									;Return from interrupt
+C:0002b6 9518      	reti									;Return from interrupt
          
          ;Stop
           Comm_Received_Execute_Set_Stop:
          
-C:0002bf e000      	ldi R16, 0x00							;Load in 0x00
-C:0002c0 bd03      	out OCR2, R16							;And set the pwm duty cycle to nothing to stop the motor.
+C:0002b7 e000      	ldi R16, 0x00							;Load in 0x00
+C:0002b8 bd03      	out OCR2, R16							;And set the pwm duty cycle to nothing to stop the motor.
          
-C:0002c1 9518      	reti
+C:0002b9 9518      	reti
          
          
          ;---------------------------------------------------------------------------------------------------------------------
@@ -2131,89 +2123,89 @@ C:0002c1 9518      	reti
          
           Comm_Received_Execute_Get:	
          
-C:0002c2 9100 0082 	lds R16, Comm_Received_Byte_2			;Load in the second(Command) byte
+C:0002ba 9100 0082 	lds R16, Comm_Received_Byte_2			;Load in the second(Command) byte
          
-C:0002c4 3a0b      	cpi R16, Comm_Command_Data		
-C:0002c5 f009      	breq Comm_Received_Execute_Get_Data		
+C:0002bc 3a0b      	cpi R16, Comm_Command_Data		
+C:0002bd f009      	breq Comm_Received_Execute_Get_Data		
          
          	;Insert error handling here
          
-C:0002c6 9518      	reti									;Do nothing if it was not a legit code
+C:0002be 9518      	reti									;Do nothing if it was not a legit code
          
           Comm_Received_Execute_Get_Data:
-C:0002c7 940e 02f8 	call Comm_Received_Execute_Get_Ticks
+C:0002bf 940e 02f0 	call Comm_Received_Execute_Get_Ticks
          	;call Comm_Received_Execute_Get_Zgyro
          	;call Comm_Received_Execute_Get_Xaccel
-C:0002c9 9518      	reti
+C:0002c1 9518      	reti
          
           Comm_Received_Execute_Get_Xaccel:
          
-C:0002ca 940e 017d 	call MPU6050_Read_Accel_X
+C:0002c2 940e 01d1 	call MPU6050_Read_Accel_X
          
-C:0002cc eb0b      	ldi R16, 0xBB
-C:0002cd 940e 0034 	call USART_Transmit
+C:0002c4 eb0b      	ldi R16, 0xBB
+C:0002c5 940e 0034 	call USART_Transmit
          
-C:0002cf ea01      	ldi R16, Comm_Command_Xaccel_H
-C:0002d0 940e 0034 	call USART_Transmit
+C:0002c7 ea01      	ldi R16, Comm_Command_Xaccel_H
+C:0002c8 940e 0034 	call USART_Transmit
          
-C:0002d2 9100 0060 	lds R16, ACCEL_XOUT_H
-C:0002d4 940e 0034 	call USART_Transmit
+C:0002ca 9100 0060 	lds R16, ACCEL_XOUT_H
+C:0002cc 940e 0034 	call USART_Transmit
          	
-C:0002d6 eb0b      	ldi R16, 0xBB
-C:0002d7 940e 0034 	call USART_Transmit
+C:0002ce eb0b      	ldi R16, 0xBB
+C:0002cf 940e 0034 	call USART_Transmit
          
-C:0002d9 ea02      	ldi R16, Comm_Command_Xaccel_L
-C:0002da 940e 0034 	call USART_Transmit
+C:0002d1 ea02      	ldi R16, Comm_Command_Xaccel_L
+C:0002d2 940e 0034 	call USART_Transmit
          
-C:0002dc 9100 0061 	lds R16, ACCEL_XOUT_L
-C:0002de 940e 0034 	call USART_Transmit
+C:0002d4 9100 0061 	lds R16, ACCEL_XOUT_L
+C:0002d6 940e 0034 	call USART_Transmit
          
-C:0002e0 9508      	ret
+C:0002d8 9508      	ret
          
           Comm_Received_Execute_Get_Zgyro:
-C:0002e1 940e 0197 	call MPU6050_Read_Gyro_Z
+C:0002d9 940e 01eb 	call MPU6050_Read_Gyro_Z
          
-C:0002e3 eb0b      	ldi R16, 0xBB
-C:0002e4 940e 0034 	call USART_Transmit
+C:0002db eb0b      	ldi R16, 0xBB
+C:0002dc 940e 0034 	call USART_Transmit
          
-C:0002e6 ea03      	ldi R16, Comm_Command_Zgyro_H
-C:0002e7 940e 0034 	call USART_Transmit
+C:0002de ea03      	ldi R16, Comm_Command_Zgyro_H
+C:0002df 940e 0034 	call USART_Transmit
          
-C:0002e9 9100 006c 	lds R16, GYRO_ZOUT_H
-C:0002eb 940e 0034 	call USART_Transmit
+C:0002e1 9100 006c 	lds R16, GYRO_ZOUT_H
+C:0002e3 940e 0034 	call USART_Transmit
          	
-C:0002ed eb0b      	ldi R16, 0xBB
-C:0002ee 940e 0034 	call USART_Transmit
+C:0002e5 eb0b      	ldi R16, 0xBB
+C:0002e6 940e 0034 	call USART_Transmit
          
-C:0002f0 ea04      	ldi R16, Comm_Command_Zgyro_L
-C:0002f1 940e 0034 	call USART_Transmit
+C:0002e8 ea04      	ldi R16, Comm_Command_Zgyro_L
+C:0002e9 940e 0034 	call USART_Transmit
          
-C:0002f3 9100 006d 	lds R16, GYRO_ZOUT_L
-C:0002f5 940e 0034 	call USART_Transmit
+C:0002eb 9100 006d 	lds R16, GYRO_ZOUT_L
+C:0002ed 940e 0034 	call USART_Transmit
          
-C:0002f7 9508      	ret
+C:0002ef 9508      	ret
          
           Comm_Received_Execute_Get_Ticks:
          
-C:0002f8 eb0b      	ldi R16, 0xBB
-C:0002f9 940e 0034 	call USART_Transmit
+C:0002f0 eb0b      	ldi R16, 0xBB
+C:0002f1 940e 0034 	call USART_Transmit
          
-C:0002fb ea05      	ldi R16, Comm_Command_Ticks_H
-C:0002fc 940e 0034 	call USART_Transmit
+C:0002f3 ea05      	ldi R16, Comm_Command_Ticks_H
+C:0002f4 940e 0034 	call USART_Transmit
          
-C:0002fe 9100 007c 	lds R16, Ticks_H
-C:000300 940e 0034 	call USART_Transmit
+C:0002f6 9100 007c 	lds R16, Ticks_H
+C:0002f8 940e 0034 	call USART_Transmit
          	
-C:000302 eb0b      	ldi R16, 0xBB
-C:000303 940e 0034 	call USART_Transmit
+C:0002fa eb0b      	ldi R16, 0xBB
+C:0002fb 940e 0034 	call USART_Transmit
          
-C:000305 ea06      	ldi R16, Comm_Command_Ticks_L
-C:000306 940e 0034 	call USART_Transmit
+C:0002fd ea06      	ldi R16, Comm_Command_Ticks_L
+C:0002fe 940e 0034 	call USART_Transmit
          
-C:000308 9100 007b 	lds R16, Ticks_L
-C:00030a 940e 0034 	call USART_Transmit
+C:000300 9100 007b 	lds R16, Ticks_L
+C:000302 940e 0034 	call USART_Transmit
          
-C:00030c 9508      	ret
+C:000304 9508      	ret
          
          ;---------------------------------------------------------------------------------------------------------------------
          ;Send
@@ -2221,47 +2213,192 @@ C:00030c 9508      	ret
          
          ;LapTime
           Comm_Send_LapTime:
-C:00030d eb0b      	ldi R16, 0xBB
-C:00030e 940e 0034 	call USART_Transmit
+C:000305 eb0b      	ldi R16, 0xBB
+C:000306 940e 0034 	call USART_Transmit
          
-C:000310 ea07      	ldi R16, Comm_Command_LapTime_H
-C:000311 940e 0034 	call USART_Transmit
+C:000308 ea07      	ldi R16, Comm_Command_LapTime_H
+C:000309 940e 0034 	call USART_Transmit
          
-C:000313 9100 0075 	lds R16, Lap_time_M
-C:000315 940e 0034 	call USART_Transmit
+C:00030b 9100 0075 	lds R16, Lap_time_M
+C:00030d 940e 0034 	call USART_Transmit
          	
-C:000317 eb0b      	ldi R16, 0xBB
-C:000318 940e 0034 	call USART_Transmit
+C:00030f eb0b      	ldi R16, 0xBB
+C:000310 940e 0034 	call USART_Transmit
          
-C:00031a ea08      	ldi R16, Comm_Command_LapTime_L
-C:00031b 940e 0034 	call USART_Transmit
+C:000312 ea08      	ldi R16, Comm_Command_LapTime_L
+C:000313 940e 0034 	call USART_Transmit
          
-C:00031d 9100 0074 	lds R16, Lap_time_L
-C:00031f 940e 0034 	call USART_Transmit
+C:000315 9100 0074 	lds R16, Lap_time_L
+C:000317 940e 0034 	call USART_Transmit
          
-C:000321 9508      	ret
+C:000319 9508      	ret
          
          ;Lap ticks
           Comm_Send_LapTicks:
-C:000322 eb0b      	ldi R16, 0xBB
-C:000323 940e 0034 	call USART_Transmit
+C:00031a eb0b      	ldi R16, 0xBB
+C:00031b 940e 0034 	call USART_Transmit
          
-C:000325 ea09      	ldi R16, Comm_Command_LapTicks_H
-C:000326 940e 0034 	call USART_Transmit
+C:00031d ea09      	ldi R16, Comm_Command_LapTicks_H
+C:00031e 940e 0034 	call USART_Transmit
          
-C:000328 9100 007e 	lds R16, Ticks_Lap_H
-C:00032a 940e 0034 	call USART_Transmit
+C:000320 9100 007e 	lds R16, Ticks_Lap_H
+C:000322 940e 0034 	call USART_Transmit
          	
-C:00032c eb0b      	ldi R16, 0xBB
-C:00032d 940e 0034 	call USART_Transmit
+C:000324 eb0b      	ldi R16, 0xBB
+C:000325 940e 0034 	call USART_Transmit
          
-C:00032f ea0a      	ldi R16, Comm_Command_LapTicks_L
-C:000330 940e 0034 	call USART_Transmit
+C:000327 ea0a      	ldi R16, Comm_Command_LapTicks_L
+C:000328 940e 0034 	call USART_Transmit
          
-C:000332 9100 007d 	lds R16, Ticks_Lap_L
-C:000334 940e 0034 	call USART_Transmit
+C:00032a 9100 007d 	lds R16, Ticks_Lap_L
+C:00032c 940e 0034 	call USART_Transmit
          
-C:000336 9508      	ret
+C:00032e 9508      	ret
+          .include "Speed.asm"
+          .equ Diff_Max = 5760
+          .equ ForgivenessZone = 4000
+         
+          Hastigheds_kontrol:
+         		
+C:00032f 9100 007f 		lds		R16, SREG_1			
+C:000331 fd07      		sbrc	R16, 7							; bit 7 is the delay enable 
+C:000332 c03c      		rjmp	Braking
+         
+C:000333 e500      		ldi		R16, low(18000) 
+C:000334 e416      		ldi		R17, high(18000)
+C:000335 9120 0079 		lds		R18, Pulse_Time_L
+C:000337 9130 007a 		lds		R19, Pulse_Time_H
+         
+C:000339 1b02      		sub		R16, R18						; R16 = Ønsket pulstid, R17 = Sidst målte pulstid
+C:00033a 0b13      		sbc		R17, R19
+         		
+C:00033b b70f      		in		R16, SREG
+C:00033c fd02      		sbrc	R16, 2
+C:00033d c04e      		rjmp	Langsommere
+         		
+          Hurtigere:		
+         		
+C:00033e 9000 0070 		lds		R0, Timer_1ms_L
+C:000340 9010 006f 		lds		R1, Timer_1ms_M
+C:000342 9020 006e 		lds		R2, Timer_1ms_H
+         		
+C:000344 9200 0087 		sts		Time_Stamp_Braking_L, R0
+C:000346 9210 0086 		sts		Time_Stamp_Braking_M, R1
+C:000348 9220 0085 		sts		Time_Stamp_Braking_H, R2
+         		
+C:00034a e040      		ldi		R20, 0
+C:00034b bd43      		out		OCR2, R20
+         		
+C:00034c 301f      		cpi		R17, high(ForgivenessZone)
+C:00034d f1b8      		brlo	Braking_End
+         		
+C:00034e 3016      		cpi		R17, high(Diff_Max - ForgivenessZone)
+C:00034f f4a8      		brsh	Max_Brake
+         		
+C:000350 9516      		lsr		R17
+C:000351 9507      		ror		R16
+C:000352 9516      		lsr		R17
+C:000353 9507      		ror		R16				; divider med 64
+C:000354 9516      		lsr		R17
+C:000355 9507      		ror		R16	
+C:000356 9516      		lsr		R17
+C:000357 9507      		ror		R16	
+C:000358 9516      		lsr		R17
+C:000359 9507      		ror		R16
+C:00035a 9516      		lsr		R17
+C:00035b 9507      		ror		R16
+         		
+C:00035c 9300 0084 		sts		Delay_Amount, R16
+         		
+C:00035e 9ac0      		sbi		PORTB, PB0
+C:00035f   +  		Set_SREG_1 7
+C:00035f 9100 007f lds		R16, SREG_1
+C:000361 6800      sbr		R16, (1<<7)					
+
+C:000362 9300 007f sts		SREG_1, R16
+         		
+C:000364 9508      		ret
+         
+          Max_Brake:		
+C:000365 ef4f      		ldi		R20, 255
+C:000366 9310 0084 		sts		Delay_Amount, R17
+         		
+C:000368 9ac0      		sbi		PORTB, PB0
+C:000369   +  		Set_SREG_1 7
+C:000369 9100 007f lds		R16, SREG_1
+C:00036b 6800      sbr		R16, (1<<7)					
+
+C:00036c 9300 007f sts		SREG_1, R16
+         		
+C:00036e 9508      		ret
+         		
+          Braking: 
+C:00036f 9000 0070 		lds		R0, Timer_1ms_L				
+C:000371 9010 006f 		lds		R1, Timer_1ms_M				; Current time since startup in ms
+C:000373 9020 006e 		lds		R2, Timer_1ms_H				 
+         				
+C:000375 9030 0087 		lds		R3, Time_Stamp_Braking_L			
+C:000377 9040 0086 		lds		R4, Time_Stamp_Braking_M			; Time stamp at start of lap
+C:000379 9050 0085 		lds		R5, Time_Stamp_Braking_H
+         							
+C:00037b 1803      		sub		R0, R3						
+C:00037c 0814      		sbc		R1, R4						; Difference between current time and last time stamp
+C:00037d 0825      		sbc		R2, R5
+         		
+C:00037e 9060 0084 		lds		R6, Delay_Amount
+         
+C:000380 2011      		tst		R1
+C:000381 f419      		brne	Braking_End
+         		
+C:000382 1406      		cp		R0, R6
+C:000383 f408      		brsh	Braking_End
+         		
+C:000384 9508      		ret
+         		
+          Braking_End:
+C:000385 98c0      		cbi		PORTB, PB0
+C:000386   +  		Clear_SREG_1 7
+C:000386 9100 007f lds		R16, SREG_1
+C:000388 770f      cbr		R16, (1<<7)					
+
+C:000389 9300 007f sts		SREG_1, R16
+         		
+C:00038b 9508      		ret
+         
+          Langsommere:
+C:00038c 5001      		subi	R16, 1
+C:00038d 4010      		sbci	R17, 0
+C:00038e 9500      		com		R16
+C:00038f 9510      		com		R17
+         			
+C:000390 3116      		cpi		R17, high(Diff_Max)
+C:000391 f468      		brsh	MaxGas
+         				
+C:000392 9516      		lsr		R17
+C:000393 9507      		ror		R16
+C:000394 9516      		lsr		R17
+C:000395 9507      		ror		R16				; divider med 32
+C:000396 9516      		lsr		R17
+C:000397 9507      		ror		R16	
+C:000398 9516      		lsr		R17
+C:000399 9507      		ror		R16	
+C:00039a 9516      		lsr		R17
+C:00039b 9507      		ror		R16
+         	
+         		
+C:00039c bd03      		out		OCR2, R16
+         		
+C:00039d e501      		ldi		R16, 'Q'
+         		;call	USART_Transmit
+         		;		USART_NewLine
+C:00039e 9508      		ret
+         		
+         
+          MaxGas: 
+C:00039f ef4f      		ldi		R20, 255
+C:0003a0 bd43      		out		OCR2, R20
+         		
+C:0003a1 9508      		ret
           .include "Setup.asm"
           .MACRO Setup
          	;Initialize the stack
@@ -2288,808 +2425,426 @@ C:000336 9508      	ret
           .ENDMACRO
          
           Init:
-C:000337   +  	Setup
+C:0003a2   +  	Setup
          
 
-C:000337 e50f      LDI	R16, low(RAMEND)
-C:000338 bf0d      OUT	SPL, R16
-C:000339 e008      LDI	R16, high(RAMEND)
-C:00033a bf0e      OUT	SPH, R16			
+C:0003a2 e50f      LDI	R16, low(RAMEND)
+C:0003a3 bf0d      OUT	SPL, R16
+C:0003a4 e008      LDI	R16, high(RAMEND)
+C:0003a5 bf0e      OUT	SPH, R16			
          
-C:00033b   +  USART_Init 0b00000000,0b01100111	
+C:0003a6   +  USART_Init 0b00000000,0b01100111	
 
          
 
-C:00033b e607      ldi R16,	0b01100111	
-C:00033c e010      ldi R17,	0b00000000
+C:0003a6 e607      ldi R16,	0b01100111	
+C:0003a7 e010      ldi R17,	0b00000000
          
-C:00033d bd10      out	UBRRH,	R17
-C:00033e b909      out UBRRL,	R16
+C:0003a8 bd10      out	UBRRH,	R17
+C:0003a9 b909      out UBRRL,	R16
          
          
 
-C:00033f e908      ldi R16,	(1<<RXEN)|(1<<TXEN)|(1<<RXCIE)
-C:000340 b90a      out	UCSRB,	R16
+C:0003aa e908      ldi R16,	(1<<RXEN)|(1<<TXEN)|(1<<RXCIE)
+C:0003ab b90a      out	UCSRB,	R16
          
          
 
-C:000341 e806      ldi	R16,	(1<<URSEL)|(3<<UCSZ0)
-C:000342 bd00      out	UCSRC,	R16
-C:000343   +  Comm_Init							
+C:0003ac e806      ldi	R16,	(1<<URSEL)|(3<<UCSZ0)
+C:0003ad bd00      out	UCSRC,	R16
+C:0003ae   +  Comm_Init							
 
-C:000343 e001      ldi R16, 0x01							
+C:0003ae e001      ldi R16, 0x01							
 
-C:000344 9300 0080 sts Comm_Received_Byte_Num, R16			
+C:0003af 9300 0080 sts Comm_Received_Byte_Num, R16			
 
-C:000346 2700      clr R16									
+C:0003b1 2700      clr R16									
 
-C:000347 9300 0081 sts Comm_Received_Byte_1, R16			
+C:0003b2 9300 0081 sts Comm_Received_Byte_1, R16			
 
-C:000349 9300 0082 sts Comm_Received_Byte_2, R16			
+C:0003b4 9300 0082 sts Comm_Received_Byte_2, R16			
 
-C:00034b 9300 0083 sts Comm_Received_Byte_3, R16			
+C:0003b6 9300 0083 sts Comm_Received_Byte_3, R16			
 
-C:00034d   +  Motor_Init							
+C:0003b8   +  Motor_Init							
 
-C:00034d b301      in R16, DDRD							
+C:0003b8 b301      in R16, DDRD							
 
-C:00034e 6800      ori R16, (1<<PD7)						
+C:0003b9 6800      ori R16, (1<<PD7)						
 
-C:00034f bb01      out DDRD, R16
+C:0003ba bb01      out DDRD, R16
          
-C:000350 e609      ldi R16, 0b01101001						
+C:0003bb e609      ldi R16, 0b01101001						
 
-C:000351 bd05      out TCCR2, R16							
+C:0003bc bd05      out TCCR2, R16							
 
-C:000352   +  Brake_Init							
+C:0003bd   +  Brake_Init							
 
          
-C:000352 b307      in R16, DDRB							
+C:0003bd b307      in R16, DDRB							
 
-C:000353 6001      ori R16, (1<<BRAKE_PIN)					
+C:0003be 6001      ori R16, (1<<BRAKE_PIN)					
 
-C:000354 bb07      out DDRB, R16							
+C:0003bf bb07      out DDRB, R16							
 
          
-C:000355 98c0      cbi	PORTB, BRAKE_PIN					
+C:0003c0 98c0      cbi	PORTB, BRAKE_PIN					
 
          
          
-C:000356   +  I2C_Init 0x00,0x12					
+C:0003c1   +  I2C_Init 0x00,0x12					
 
          
 
-C:000356 e000      ldi R16, 0x00
-C:000357 b901      out TWSR, R16
+C:0003c1 e000      ldi R16, 0x00
+C:0003c2 b901      out TWSR, R16
          
          
 
-C:000358 e102      ldi R16, 0x12
-C:000359 b900      out TWBR, R16
+C:0003c3 e102      ldi R16, 0x12
+C:0003c4 b900      out TWBR, R16
          
          
 
-C:00035a e004      ldi R16, (1<<TWEN)
-C:00035b bf06      out TWCR, R16
+C:0003c5 e004      ldi R16, (1<<TWEN)
+C:0003c6 bf06      out TWCR, R16
          
-C:00035c 0000      nop 
+C:0003c7 0000      nop 
 
          
          
-C:00035d   +  Time_Init							
+C:0003c8   +  Time_Init							
 
-C:00035d e00b      ldi		R16, 0b00001011			
+C:0003c8 e00b      ldi		R16, 0b00001011			
 
-C:00035e bf03      out		TCCR0, R16
-C:00035f e000      ldi		R16, 0x00
-C:000360 bf02      out		TCNT0, R16				
+C:0003c9 bf03      out		TCCR0, R16
+C:0003ca e000      ldi		R16, 0x00
+C:0003cb bf02      out		TCNT0, R16				
 
-C:000361 ef09      ldi		R16, 249				
+C:0003cc ef09      ldi		R16, 249				
 
-C:000362 bf0c      out		OCR0, R16
+C:0003cd bf0c      out		OCR0, R16
          
-C:000363 2700      clr		R16
-C:000364 9300 0070 sts		Timer_1ms_L, R16
-C:000366 9300 006f sts		Timer_1ms_M, R16
-C:000368 9300 006e sts		Timer_1ms_H, R16	
+C:0003ce 2700      clr		R16
+C:0003cf 9300 0070 sts		Timer_1ms_L, R16
+C:0003d1 9300 006f sts		Timer_1ms_M, R16
+C:0003d3 9300 006e sts		Timer_1ms_H, R16	
          
-C:00036a b709      in		R16, TIMSK
-C:00036b 6002      ori		R16, (1<<OCIE0)			
+C:0003d5 b709      in		R16, TIMSK
+C:0003d6 6002      ori		R16, (1<<OCIE0)			
 
-C:00036c bf09      out		TIMSK, R16				
+C:0003d7 bf09      out		TIMSK, R16				
 
          
          
-C:00036d   +  WheelSpeed_Init						
+C:0003d8   +  WheelSpeed_Init						
 
          
          
          
-C:00036d e000      ldi		R16, 0x00
-C:00036e bd0f      out		TCCR1A, R16
-C:00036f e002      ldi		R16, 0b00000010			
+C:0003d8 e000      ldi		R16, 0x00
+C:0003d9 bd0f      out		TCCR1A, R16
+C:0003da e002      ldi		R16, 0b00000010			
 
-C:000370 bd0e      out		TCCR1B, R16	
+C:0003db bd0e      out		TCCR1B, R16	
          
-C:000371 2700      clr		R16
-C:000372 9300 0077 sts		Edge1_L, R16
-C:000374 9300 0078 sts		Edge1_H, R16
+C:0003dc 2700      clr		R16
+C:0003dd 9300 0077 sts		Edge1_L, R16
+C:0003df 9300 0078 sts		Edge1_H, R16
          
-C:000376 9300 007b sts		Ticks_L, R16
-C:000378 9300 007c sts		Ticks_H, R16
+C:0003e1 9300 007b sts		Ticks_L, R16
+C:0003e3 9300 007c sts		Ticks_H, R16
          
-C:00037a b709      in		R16, TIMSK
-C:00037b 6200      ori		R16, (1<<TICIE1)		
+C:0003e5 b709      in		R16, TIMSK
+C:0003e6 6200      ori		R16, (1<<TICIE1)		
 
-C:00037c bf09      out		TIMSK, R16				
+C:0003e7 bf09      out		TIMSK, R16				
 
          
          
-C:00037d   +  LapCounter_Init						
+C:0003e8   +  LapCounter_Init						
 
          
-C:00037d 2700      clr	R16
-C:00037e 9300 0073 sts	Time_Stamp_L, R16
-C:000380 9300 0072 sts	Time_Stamp_M, R16
-C:000382 9300 0071 sts	Time_Stamp_H, R16
+C:0003e8 2700      clr	R16
+C:0003e9 9300 0073 sts	Time_Stamp_L, R16
+C:0003eb 9300 0072 sts	Time_Stamp_M, R16
+C:0003ed 9300 0071 sts	Time_Stamp_H, R16
          
-C:000384 9300 0074 sts	Lap_time_L, R16
-C:000386 9300 0075 sts	Lap_time_M, R16
-C:000388 9300 0076 sts	Lap_time_H, R16
+C:0003ef 9300 0074 sts	Lap_time_L, R16
+C:0003f1 9300 0075 sts	Lap_time_M, R16
+C:0003f3 9300 0076 sts	Lap_time_H, R16
          
-C:00038a b108      in R16, ACSR
-C:00038b 6408      ori R16, 0x48						
+C:0003f5 b108      in R16, ACSR
+C:0003f6 6408      ori R16, 0x48						
 
-C:00038c b908      out ACSR, R16						
+C:0003f7 b908      out ACSR, R16						
 
          
-C:00038d b700      in R16, SFIOR						
+C:0003f8 b700      in R16, SFIOR						
 
-C:00038e 7f07      andi R16, ~(1<<ACME)				
+C:0003f9 7f07      andi R16, ~(1<<ACME)				
 
-C:00038f bf00      out SFIOR, R16						
+C:0003fa bf00      out SFIOR, R16						
 
          
-C:000390 98bb      cbi DDRB,PB3						
+C:0003fb 98bb      cbi DDRB,PB3						
 
          
          
-C:000391   +  MPU6050_Init						
+C:0003fc   +  MPU6050_Init						
 
          
-C:000391 940e 010c call I2C_Start							
+C:0003fc 940e 0160 call I2C_Start							
 
-C:000393   +  I2C_Write MPU6050_ADDRESS_W				
+C:0003fe   +  I2C_Write MPU6050_ADDRESS_W				
 
-C:000393 ed00      ldi R16, MPU6050_ADDRESS_W
-C:000394 940e 0115 call I2C_Write_Call
+C:0003fe ed00      ldi R16, MPU6050_ADDRESS_W
+C:0003ff 940e 0169 call I2C_Write_Call
          
-C:000396   +  I2C_Write MPU6050_RA_SMPLRT_DIV			
+C:000401   +  I2C_Write MPU6050_RA_SMPLRT_DIV			
 
-C:000396 e109      ldi R16, MPU6050_RA_SMPLRT_DIV
-C:000397 940e 0115 call I2C_Write_Call
+C:000401 e109      ldi R16, MPU6050_RA_SMPLRT_DIV
+C:000402 940e 0169 call I2C_Write_Call
          
          
 
-C:000399   +  I2C_Write 0x07
-C:000399 e007      ldi R16, 0x07
-C:00039a 940e 0115 call I2C_Write_Call
+C:000404   +  I2C_Write 0x07
+C:000404 e007      ldi R16, 0x07
+C:000405 940e 0169 call I2C_Write_Call
          
          
 
-C:00039c   +  I2C_Write 0x00
-C:00039c e000      ldi R16, 0x00
-C:00039d 940e 0115 call I2C_Write_Call
+C:000407   +  I2C_Write 0x00
+C:000407 e000      ldi R16, 0x00
+C:000408 940e 0169 call I2C_Write_Call
          
          
 
-C:00039f   +  I2C_Write 0b00001000
-C:00039f e008      ldi R16, 0b00001000
-C:0003a0 940e 0115 call I2C_Write_Call
+C:00040a   +  I2C_Write 0b00001000
+C:00040a e008      ldi R16, 0b00001000
+C:00040b 940e 0169 call I2C_Write_Call
          
          
 
-C:0003a2   +  I2C_Write 0b00001000
-C:0003a2 e008      ldi R16, 0b00001000
-C:0003a3 940e 0115 call I2C_Write_Call
+C:00040d   +  I2C_Write 0b00001000
+C:00040d e008      ldi R16, 0b00001000
+C:00040e 940e 0169 call I2C_Write_Call
          
          
 
-C:0003a5   +  I2C_Write 0x00
-C:0003a5 e000      ldi R16, 0x00
-C:0003a6 940e 0115 call I2C_Write_Call
+C:000410   +  I2C_Write 0x00
+C:000410 e000      ldi R16, 0x00
+C:000411 940e 0169 call I2C_Write_Call
          
          
 
-C:0003a8   +  I2C_Write 0x00
-C:0003a8 e000      ldi R16, 0x00
-C:0003a9 940e 0115 call I2C_Write_Call
+C:000413   +  I2C_Write 0x00
+C:000413 e000      ldi R16, 0x00
+C:000414 940e 0169 call I2C_Write_Call
          
          
 
-C:0003ab   +  I2C_Write 0x00
-C:0003ab e000      ldi R16, 0x00
-C:0003ac 940e 0115 call I2C_Write_Call
+C:000416   +  I2C_Write 0x00
+C:000416 e000      ldi R16, 0x00
+C:000417 940e 0169 call I2C_Write_Call
          
          
 
-C:0003ae   +  I2C_Write 0x00
-C:0003ae e000      ldi R16, 0x00
-C:0003af 940e 0115 call I2C_Write_Call
+C:000419   +  I2C_Write 0x00
+C:000419 e000      ldi R16, 0x00
+C:00041a 940e 0169 call I2C_Write_Call
          
          
 
-C:0003b1   +  I2C_Write 0x00
-C:0003b1 e000      ldi R16, 0x00
-C:0003b2 940e 0115 call I2C_Write_Call
+C:00041c   +  I2C_Write 0x00
+C:00041c e000      ldi R16, 0x00
+C:00041d 940e 0169 call I2C_Write_Call
          
          
 
-C:0003b4   +  I2C_Write 0x00
-C:0003b4 e000      ldi R16, 0x00
-C:0003b5 940e 0115 call I2C_Write_Call
+C:00041f   +  I2C_Write 0x00
+C:00041f e000      ldi R16, 0x00
+C:000420 940e 0169 call I2C_Write_Call
          
          
 
-C:0003b7   +  I2C_Write 0x00
-C:0003b7 e000      ldi R16, 0x00
-C:0003b8 940e 0115 call I2C_Write_Call
+C:000422   +  I2C_Write 0x00
+C:000422 e000      ldi R16, 0x00
+C:000423 940e 0169 call I2C_Write_Call
          
          
 
          
 
-C:0003ba   +  I2C_Write 0x00
-C:0003ba e000      ldi R16, 0x00
-C:0003bb 940e 0115 call I2C_Write_Call
+C:000425   +  I2C_Write 0x00
+C:000425 e000      ldi R16, 0x00
+C:000426 940e 0169 call I2C_Write_Call
          
          
 
          
 
-C:0003bd   +  I2C_Write 0x00
-C:0003bd e000      ldi R16, 0x00
-C:0003be 940e 0115 call I2C_Write_Call
+C:000428   +  I2C_Write 0x00
+C:000428 e000      ldi R16, 0x00
+C:000429 940e 0169 call I2C_Write_Call
          
          
 
-C:0003c0   +  I2C_Write 0x00
-C:0003c0 e000      ldi R16, 0x00
-C:0003c1 940e 0115 call I2C_Write_Call
+C:00042b   +  I2C_Write 0x00
+C:00042b e000      ldi R16, 0x00
+C:00042c 940e 0169 call I2C_Write_Call
          
          
 
-C:0003c3   +  I2C_Write 0x00
-C:0003c3 e000      ldi R16, 0x00
-C:0003c4 940e 0115 call I2C_Write_Call
+C:00042e   +  I2C_Write 0x00
+C:00042e e000      ldi R16, 0x00
+C:00042f 940e 0169 call I2C_Write_Call
          
          
 
-C:0003c6   +  I2C_Write 0x00
-C:0003c6 e000      ldi R16, 0x00
-C:0003c7 940e 0115 call I2C_Write_Call
+C:000431   +  I2C_Write 0x00
+C:000431 e000      ldi R16, 0x00
+C:000432 940e 0169 call I2C_Write_Call
          
          
 
-C:0003c9   +  I2C_Write 0x00
-C:0003c9 e000      ldi R16, 0x00
-C:0003ca 940e 0115 call I2C_Write_Call
+C:000434   +  I2C_Write 0x00
+C:000434 e000      ldi R16, 0x00
+C:000435 940e 0169 call I2C_Write_Call
          
          
 
-C:0003cc   +  I2C_Write 0x00
-C:0003cc e000      ldi R16, 0x00
-C:0003cd 940e 0115 call I2C_Write_Call
+C:000437   +  I2C_Write 0x00
+C:000437 e000      ldi R16, 0x00
+C:000438 940e 0169 call I2C_Write_Call
          
          
 
-C:0003cf   +  I2C_Write 0x00
-C:0003cf e000      ldi R16, 0x00
-C:0003d0 940e 0115 call I2C_Write_Call
+C:00043a   +  I2C_Write 0x00
+C:00043a e000      ldi R16, 0x00
+C:00043b 940e 0169 call I2C_Write_Call
          
          
 
-C:0003d2   +  I2C_Write 0x00
-C:0003d2 e000      ldi R16, 0x00
-C:0003d3 940e 0115 call I2C_Write_Call
+C:00043d   +  I2C_Write 0x00
+C:00043d e000      ldi R16, 0x00
+C:00043e 940e 0169 call I2C_Write_Call
          
          
 
-C:0003d5   +  I2C_Write 0x00
-C:0003d5 e000      ldi R16, 0x00
-C:0003d6 940e 0115 call I2C_Write_Call
+C:000440   +  I2C_Write 0x00
+C:000440 e000      ldi R16, 0x00
+C:000441 940e 0169 call I2C_Write_Call
          
          
 
-C:0003d8   +  I2C_Write 0x00
-C:0003d8 e000      ldi R16, 0x00
-C:0003d9 940e 0115 call I2C_Write_Call
+C:000443   +  I2C_Write 0x00
+C:000443 e000      ldi R16, 0x00
+C:000444 940e 0169 call I2C_Write_Call
          
          
 
-C:0003db   +  I2C_Write 0x00
-C:0003db e000      ldi R16, 0x00
-C:0003dc 940e 0115 call I2C_Write_Call
+C:000446   +  I2C_Write 0x00
+C:000446 e000      ldi R16, 0x00
+C:000447 940e 0169 call I2C_Write_Call
          
          
 
-C:0003de   +  I2C_Write 0x00
-C:0003de e000      ldi R16, 0x00
-C:0003df 940e 0115 call I2C_Write_Call
+C:000449   +  I2C_Write 0x00
+C:000449 e000      ldi R16, 0x00
+C:00044a 940e 0169 call I2C_Write_Call
          
          
 
-C:0003e1   +  I2C_Write 0x00
-C:0003e1 e000      ldi R16, 0x00
-C:0003e2 940e 0115 call I2C_Write_Call
+C:00044c   +  I2C_Write 0x00
+C:00044c e000      ldi R16, 0x00
+C:00044d 940e 0169 call I2C_Write_Call
          
          
 
-C:0003e4   +  I2C_Write 0x00
-C:0003e4 e000      ldi R16, 0x00
-C:0003e5 940e 0115 call I2C_Write_Call
+C:00044f   +  I2C_Write 0x00
+C:00044f e000      ldi R16, 0x00
+C:000450 940e 0169 call I2C_Write_Call
          
          
 
-C:0003e7   +  I2C_Write 0x00
-C:0003e7 e000      ldi R16, 0x00
-C:0003e8 940e 0115 call I2C_Write_Call
+C:000452   +  I2C_Write 0x00
+C:000452 e000      ldi R16, 0x00
+C:000453 940e 0169 call I2C_Write_Call
          
          
 
-C:0003ea   +  I2C_Write 0x00
-C:0003ea e000      ldi R16, 0x00
-C:0003eb 940e 0115 call I2C_Write_Call
+C:000455   +  I2C_Write 0x00
+C:000455 e000      ldi R16, 0x00
+C:000456 940e 0169 call I2C_Write_Call
          
          
 
-C:0003ed   +  I2C_Write 0x00
-C:0003ed e000      ldi R16, 0x00
-C:0003ee 940e 0115 call I2C_Write_Call
+C:000458   +  I2C_Write 0x00
+C:000458 e000      ldi R16, 0x00
+C:000459 940e 0169 call I2C_Write_Call
          
          
 
          
          
 
-C:0003f0 940e 010c call I2C_Start							
+C:00045b 940e 0160 call I2C_Start							
 
-C:0003f2   +  I2C_Write MPU6050_ADDRESS_W				
+C:00045d   +  I2C_Write MPU6050_ADDRESS_W				
 
-C:0003f2 ed00      ldi R16, MPU6050_ADDRESS_W
-C:0003f3 940e 0115 call I2C_Write_Call
+C:00045d ed00      ldi R16, MPU6050_ADDRESS_W
+C:00045e 940e 0169 call I2C_Write_Call
          
-C:0003f5   +  I2C_Write MPU6050_RA_INT_PIN_CFG		
+C:000460   +  I2C_Write MPU6050_RA_INT_PIN_CFG		
 
-C:0003f5 e307      ldi R16, MPU6050_RA_INT_PIN_CFG
-C:0003f6 940e 0115 call I2C_Write_Call
-C:0003f8   +  I2C_Write 0x00							
+C:000460 e307      ldi R16, MPU6050_RA_INT_PIN_CFG
+C:000461 940e 0169 call I2C_Write_Call
+C:000463   +  I2C_Write 0x00							
 
-C:0003f8 e000      ldi R16, 0x00
-C:0003f9 940e 0115 call I2C_Write_Call
-         
-         
-
-C:0003fb   +  I2C_Write 0x00
-C:0003fb e000      ldi R16, 0x00
-C:0003fc 940e 0115 call I2C_Write_Call
-         
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-         
-
-         
-         
-
-C:0003fe 940e 010c call I2C_Start							
-
-C:000400   +  I2C_Write MPU6050_ADDRESS_W				
-
-C:000400 ed00      ldi R16, MPU6050_ADDRESS_W
-C:000401 940e 0115 call I2C_Write_Call
-         
-C:000403   +  I2C_Write MPU6050_RA_I2C_SLV0_DO		
-
-C:000403 e603      ldi R16, MPU6050_RA_I2C_SLV0_DO
-C:000404 940e 0115 call I2C_Write_Call
-C:000406   +  I2C_Write 0x00							
-
-C:000406 e000      ldi R16, 0x00
-C:000407 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000409   +  I2C_Write 0x00
-C:000409 e000      ldi R16, 0x00
-C:00040a 940e 0115 call I2C_Write_Call
-         
-         
-
-C:00040c   +  I2C_Write 0x00
-C:00040c e000      ldi R16, 0x00
-C:00040d 940e 0115 call I2C_Write_Call
-         
-         
-
-C:00040f   +  I2C_Write 0x00
-C:00040f e000      ldi R16, 0x00
-C:000410 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000412   +  I2C_Write 0x00
-C:000412 e000      ldi R16, 0x00
-C:000413 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000415   +  I2C_Write 0x00
-C:000415 e000      ldi R16, 0x00
-C:000416 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000418   +  I2C_Write 0x00
-C:000418 e000      ldi R16, 0x00
-C:000419 940e 0115 call I2C_Write_Call
-         
-         
-
-C:00041b   +  I2C_Write 0x00
-C:00041b e000      ldi R16, 0x00
-C:00041c 940e 0115 call I2C_Write_Call
-         
-         
-
-C:00041e   +  I2C_Write 0b00000010
-C:00041e e002      ldi R16, 0b00000010
-C:00041f 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000421   +  I2C_Write 0x00
-C:000421 e000      ldi R16, 0x00
-C:000422 940e 0115 call I2C_Write_Call
-         
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-
-         
-         
-
-C:000424 940e 010c call I2C_Start							
-
-C:000426   +  I2C_Write MPU6050_ADDRESS_W				
-
-C:000426 ed00      ldi R16, MPU6050_ADDRESS_W
-C:000427 940e 0115 call I2C_Write_Call
-         
-C:000429   +  I2C_Write MPU6050_RA_FIFO_R_W			
-
-C:000429 e704      ldi R16, MPU6050_RA_FIFO_R_W
-C:00042a 940e 0115 call I2C_Write_Call
-C:00042c   +  I2C_Write 0x00							
-
-C:00042c e000      ldi R16, 0x00
-C:00042d 940e 0115 call I2C_Write_Call
-         
-         
-
-         
-C:00042f 940e 0112 call I2C_Stop							
-
-C:000431   +  MPU6050_Init						
-
-         
-C:000431 940e 010c call I2C_Start							
-
-C:000433   +  I2C_Write MPU6050_ADDRESS_W				
-
-C:000433 ed00      ldi R16, MPU6050_ADDRESS_W
-C:000434 940e 0115 call I2C_Write_Call
-         
-C:000436   +  I2C_Write MPU6050_RA_SMPLRT_DIV			
-
-C:000436 e109      ldi R16, MPU6050_RA_SMPLRT_DIV
-C:000437 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000439   +  I2C_Write 0x07
-C:000439 e007      ldi R16, 0x07
-C:00043a 940e 0115 call I2C_Write_Call
-         
-         
-
-C:00043c   +  I2C_Write 0x00
-C:00043c e000      ldi R16, 0x00
-C:00043d 940e 0115 call I2C_Write_Call
-         
-         
-
-C:00043f   +  I2C_Write 0b00001000
-C:00043f e008      ldi R16, 0b00001000
-C:000440 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000442   +  I2C_Write 0b00001000
-C:000442 e008      ldi R16, 0b00001000
-C:000443 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000445   +  I2C_Write 0x00
-C:000445 e000      ldi R16, 0x00
-C:000446 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000448   +  I2C_Write 0x00
-C:000448 e000      ldi R16, 0x00
-C:000449 940e 0115 call I2C_Write_Call
-         
-         
-
-C:00044b   +  I2C_Write 0x00
-C:00044b e000      ldi R16, 0x00
-C:00044c 940e 0115 call I2C_Write_Call
-         
-         
-
-C:00044e   +  I2C_Write 0x00
-C:00044e e000      ldi R16, 0x00
-C:00044f 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000451   +  I2C_Write 0x00
-C:000451 e000      ldi R16, 0x00
-C:000452 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000454   +  I2C_Write 0x00
-C:000454 e000      ldi R16, 0x00
-C:000455 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000457   +  I2C_Write 0x00
-C:000457 e000      ldi R16, 0x00
-C:000458 940e 0115 call I2C_Write_Call
-         
-         
-
-         
-
-C:00045a   +  I2C_Write 0x00
-C:00045a e000      ldi R16, 0x00
-C:00045b 940e 0115 call I2C_Write_Call
-         
-         
-
-         
-
-C:00045d   +  I2C_Write 0x00
-C:00045d e000      ldi R16, 0x00
-C:00045e 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000460   +  I2C_Write 0x00
-C:000460 e000      ldi R16, 0x00
-C:000461 940e 0115 call I2C_Write_Call
-         
-         
-
-C:000463   +  I2C_Write 0x00
 C:000463 e000      ldi R16, 0x00
-C:000464 940e 0115 call I2C_Write_Call
+C:000464 940e 0169 call I2C_Write_Call
          
          
 
 C:000466   +  I2C_Write 0x00
 C:000466 e000      ldi R16, 0x00
-C:000467 940e 0115 call I2C_Write_Call
+C:000467 940e 0169 call I2C_Write_Call
          
          
 
-C:000469   +  I2C_Write 0x00
-C:000469 e000      ldi R16, 0x00
-C:00046a 940e 0115 call I2C_Write_Call
          
-         
 
-C:00046c   +  I2C_Write 0x00
-C:00046c e000      ldi R16, 0x00
-C:00046d 940e 0115 call I2C_Write_Call
          
-         
 
-C:00046f   +  I2C_Write 0x00
-C:00046f e000      ldi R16, 0x00
-C:000470 940e 0115 call I2C_Write_Call
-         
          
 
-C:000472   +  I2C_Write 0x00
-C:000472 e000      ldi R16, 0x00
-C:000473 940e 0115 call I2C_Write_Call
          
-         
 
-C:000475   +  I2C_Write 0x00
-C:000475 e000      ldi R16, 0x00
-C:000476 940e 0115 call I2C_Write_Call
-         
          
 
-C:000478   +  I2C_Write 0x00
-C:000478 e000      ldi R16, 0x00
-C:000479 940e 0115 call I2C_Write_Call
          
-         
 
-C:00047b   +  I2C_Write 0x00
-C:00047b e000      ldi R16, 0x00
-C:00047c 940e 0115 call I2C_Write_Call
-         
          
 
-C:00047e   +  I2C_Write 0x00
-C:00047e e000      ldi R16, 0x00
-C:00047f 940e 0115 call I2C_Write_Call
          
-         
 
-C:000481   +  I2C_Write 0x00
-C:000481 e000      ldi R16, 0x00
-C:000482 940e 0115 call I2C_Write_Call
          
-         
 
-C:000484   +  I2C_Write 0x00
-C:000484 e000      ldi R16, 0x00
-C:000485 940e 0115 call I2C_Write_Call
-         
          
 
-C:000487   +  I2C_Write 0x00
-C:000487 e000      ldi R16, 0x00
-C:000488 940e 0115 call I2C_Write_Call
          
-         
 
-C:00048a   +  I2C_Write 0x00
-C:00048a e000      ldi R16, 0x00
-C:00048b 940e 0115 call I2C_Write_Call
-         
          
 
-C:00048d   +  I2C_Write 0x00
-C:00048d e000      ldi R16, 0x00
-C:00048e 940e 0115 call I2C_Write_Call
          
-         
 
-         
          
 
-C:000490 940e 010c call I2C_Start							
-
-C:000492   +  I2C_Write MPU6050_ADDRESS_W				
-
-C:000492 ed00      ldi R16, MPU6050_ADDRESS_W
-C:000493 940e 0115 call I2C_Write_Call
          
-C:000495   +  I2C_Write MPU6050_RA_INT_PIN_CFG		
-
-C:000495 e307      ldi R16, MPU6050_RA_INT_PIN_CFG
-C:000496 940e 0115 call I2C_Write_Call
-C:000498   +  I2C_Write 0x00							
 
-C:000498 e000      ldi R16, 0x00
-C:000499 940e 0115 call I2C_Write_Call
          
-         
 
-C:00049b   +  I2C_Write 0x00
-C:00049b e000      ldi R16, 0x00
-C:00049c 940e 0115 call I2C_Write_Call
-         
          
 
          
@@ -3139,30 +2894,82 @@ C:00049c 940e 0115 call I2C_Write_Call
          
 
          
+         
 
+         
          
 
+C:000469 940e 0160 call I2C_Start							
+
+C:00046b   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:00046b ed00      ldi R16, MPU6050_ADDRESS_W
+C:00046c 940e 0169 call I2C_Write_Call
          
+C:00046e   +  I2C_Write MPU6050_RA_I2C_SLV0_DO		
+
+C:00046e e603      ldi R16, MPU6050_RA_I2C_SLV0_DO
+C:00046f 940e 0169 call I2C_Write_Call
+C:000471   +  I2C_Write 0x00							
 
+C:000471 e000      ldi R16, 0x00
+C:000472 940e 0169 call I2C_Write_Call
          
+         
 
+C:000474   +  I2C_Write 0x00
+C:000474 e000      ldi R16, 0x00
+C:000475 940e 0169 call I2C_Write_Call
+         
          
 
+C:000477   +  I2C_Write 0x00
+C:000477 e000      ldi R16, 0x00
+C:000478 940e 0169 call I2C_Write_Call
          
+         
 
+C:00047a   +  I2C_Write 0x00
+C:00047a e000      ldi R16, 0x00
+C:00047b 940e 0169 call I2C_Write_Call
+         
          
 
+C:00047d   +  I2C_Write 0x00
+C:00047d e000      ldi R16, 0x00
+C:00047e 940e 0169 call I2C_Write_Call
          
+         
 
+C:000480   +  I2C_Write 0x00
+C:000480 e000      ldi R16, 0x00
+C:000481 940e 0169 call I2C_Write_Call
          
+         
 
+C:000483   +  I2C_Write 0x00
+C:000483 e000      ldi R16, 0x00
+C:000484 940e 0169 call I2C_Write_Call
+         
          
 
+C:000486   +  I2C_Write 0x00
+C:000486 e000      ldi R16, 0x00
+C:000487 940e 0169 call I2C_Write_Call
          
+         
 
+C:000489   +  I2C_Write 0b00000010
+C:000489 e002      ldi R16, 0b00000010
+C:00048a 940e 0169 call I2C_Write_Call
+         
          
 
+C:00048c   +  I2C_Write 0x00
+C:00048c e000      ldi R16, 0x00
+C:00048d 940e 0169 call I2C_Write_Call
          
+         
 
          
 
@@ -3173,338 +2980,668 @@ C:00049c 940e 0115 call I2C_Write_Call
          
 
          
+
          
 
          
          
 
-C:00049e 940e 010c call I2C_Start							
+C:00048f 940e 0160 call I2C_Start							
 
-C:0004a0   +  I2C_Write MPU6050_ADDRESS_W				
+C:000491   +  I2C_Write MPU6050_ADDRESS_W				
 
-C:0004a0 ed00      ldi R16, MPU6050_ADDRESS_W
-C:0004a1 940e 0115 call I2C_Write_Call
+C:000491 ed00      ldi R16, MPU6050_ADDRESS_W
+C:000492 940e 0169 call I2C_Write_Call
          
-C:0004a3   +  I2C_Write MPU6050_RA_I2C_SLV0_DO		
+C:000494   +  I2C_Write MPU6050_RA_FIFO_R_W			
 
-C:0004a3 e603      ldi R16, MPU6050_RA_I2C_SLV0_DO
-C:0004a4 940e 0115 call I2C_Write_Call
-C:0004a6   +  I2C_Write 0x00							
+C:000494 e704      ldi R16, MPU6050_RA_FIFO_R_W
+C:000495 940e 0169 call I2C_Write_Call
+C:000497   +  I2C_Write 0x00							
 
-C:0004a6 e000      ldi R16, 0x00
-C:0004a7 940e 0115 call I2C_Write_Call
+C:000497 e000      ldi R16, 0x00
+C:000498 940e 0169 call I2C_Write_Call
          
          
 
-C:0004a9   +  I2C_Write 0x00
-C:0004a9 e000      ldi R16, 0x00
-C:0004aa 940e 0115 call I2C_Write_Call
          
-         
+C:00049a 940e 0166 call I2C_Stop							
 
-C:0004ac   +  I2C_Write 0x00
-C:0004ac e000      ldi R16, 0x00
-C:0004ad 940e 0115 call I2C_Write_Call
+C:00049c   +  MPU6050_Init						
+
          
+C:00049c 940e 0160 call I2C_Start							
+
+C:00049e   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:00049e ed00      ldi R16, MPU6050_ADDRESS_W
+C:00049f 940e 0169 call I2C_Write_Call
          
+C:0004a1   +  I2C_Write MPU6050_RA_SMPLRT_DIV			
 
-C:0004af   +  I2C_Write 0x00
-C:0004af e000      ldi R16, 0x00
-C:0004b0 940e 0115 call I2C_Write_Call
+C:0004a1 e109      ldi R16, MPU6050_RA_SMPLRT_DIV
+C:0004a2 940e 0169 call I2C_Write_Call
          
          
 
-C:0004b2   +  I2C_Write 0x00
-C:0004b2 e000      ldi R16, 0x00
-C:0004b3 940e 0115 call I2C_Write_Call
+C:0004a4   +  I2C_Write 0x07
+C:0004a4 e007      ldi R16, 0x07
+C:0004a5 940e 0169 call I2C_Write_Call
          
          
 
-C:0004b5   +  I2C_Write 0x00
-C:0004b5 e000      ldi R16, 0x00
-C:0004b6 940e 0115 call I2C_Write_Call
+C:0004a7   +  I2C_Write 0x00
+C:0004a7 e000      ldi R16, 0x00
+C:0004a8 940e 0169 call I2C_Write_Call
          
          
 
-C:0004b8   +  I2C_Write 0x00
-C:0004b8 e000      ldi R16, 0x00
-C:0004b9 940e 0115 call I2C_Write_Call
+C:0004aa   +  I2C_Write 0b00001000
+C:0004aa e008      ldi R16, 0b00001000
+C:0004ab 940e 0169 call I2C_Write_Call
          
          
 
-C:0004bb   +  I2C_Write 0x00
-C:0004bb e000      ldi R16, 0x00
-C:0004bc 940e 0115 call I2C_Write_Call
+C:0004ad   +  I2C_Write 0b00001000
+C:0004ad e008      ldi R16, 0b00001000
+C:0004ae 940e 0169 call I2C_Write_Call
          
          
 
-C:0004be   +  I2C_Write 0b00000010
-C:0004be e002      ldi R16, 0b00000010
-C:0004bf 940e 0115 call I2C_Write_Call
+C:0004b0   +  I2C_Write 0x00
+C:0004b0 e000      ldi R16, 0x00
+C:0004b1 940e 0169 call I2C_Write_Call
          
          
 
-C:0004c1   +  I2C_Write 0x00
-C:0004c1 e000      ldi R16, 0x00
-C:0004c2 940e 0115 call I2C_Write_Call
+C:0004b3   +  I2C_Write 0x00
+C:0004b3 e000      ldi R16, 0x00
+C:0004b4 940e 0169 call I2C_Write_Call
          
          
 
+C:0004b6   +  I2C_Write 0x00
+C:0004b6 e000      ldi R16, 0x00
+C:0004b7 940e 0169 call I2C_Write_Call
          
-
          
 
+C:0004b9   +  I2C_Write 0x00
+C:0004b9 e000      ldi R16, 0x00
+C:0004ba 940e 0169 call I2C_Write_Call
          
-
          
 
+C:0004bc   +  I2C_Write 0x00
+C:0004bc e000      ldi R16, 0x00
+C:0004bd 940e 0169 call I2C_Write_Call
          
-
          
 
+C:0004bf   +  I2C_Write 0x00
+C:0004bf e000      ldi R16, 0x00
+C:0004c0 940e 0169 call I2C_Write_Call
          
          
 
-C:0004c4 940e 010c call I2C_Start							
-
-C:0004c6   +  I2C_Write MPU6050_ADDRESS_W				
-
-C:0004c6 ed00      ldi R16, MPU6050_ADDRESS_W
-C:0004c7 940e 0115 call I2C_Write_Call
+C:0004c2   +  I2C_Write 0x00
+C:0004c2 e000      ldi R16, 0x00
+C:0004c3 940e 0169 call I2C_Write_Call
+         
          
-C:0004c9   +  I2C_Write MPU6050_RA_FIFO_R_W			
 
-C:0004c9 e704      ldi R16, MPU6050_RA_FIFO_R_W
-C:0004ca 940e 0115 call I2C_Write_Call
-C:0004cc   +  I2C_Write 0x00							
+         
 
-C:0004cc e000      ldi R16, 0x00
-C:0004cd 940e 0115 call I2C_Write_Call
+C:0004c5   +  I2C_Write 0x00
+C:0004c5 e000      ldi R16, 0x00
+C:0004c6 940e 0169 call I2C_Write_Call
          
          
 
          
-C:0004cf 940e 0112 call I2C_Stop							
-
-C:0004d1   +  MPU6050_Init						
 
+C:0004c8   +  I2C_Write 0x00
+C:0004c8 e000      ldi R16, 0x00
+C:0004c9 940e 0169 call I2C_Write_Call
          
-C:0004d1 940e 010c call I2C_Start							
-
-C:0004d3   +  I2C_Write MPU6050_ADDRESS_W				
-
-C:0004d3 ed00      ldi R16, MPU6050_ADDRESS_W
-C:0004d4 940e 0115 call I2C_Write_Call
          
-C:0004d6   +  I2C_Write MPU6050_RA_SMPLRT_DIV			
 
-C:0004d6 e109      ldi R16, MPU6050_RA_SMPLRT_DIV
-C:0004d7 940e 0115 call I2C_Write_Call
+C:0004cb   +  I2C_Write 0x00
+C:0004cb e000      ldi R16, 0x00
+C:0004cc 940e 0169 call I2C_Write_Call
          
          
 
-C:0004d9   +  I2C_Write 0x07
-C:0004d9 e007      ldi R16, 0x07
-C:0004da 940e 0115 call I2C_Write_Call
+C:0004ce   +  I2C_Write 0x00
+C:0004ce e000      ldi R16, 0x00
+C:0004cf 940e 0169 call I2C_Write_Call
          
          
 
-C:0004dc   +  I2C_Write 0x00
-C:0004dc e000      ldi R16, 0x00
-C:0004dd 940e 0115 call I2C_Write_Call
+C:0004d1   +  I2C_Write 0x00
+C:0004d1 e000      ldi R16, 0x00
+C:0004d2 940e 0169 call I2C_Write_Call
          
          
 
-C:0004df   +  I2C_Write 0b00001000
-C:0004df e008      ldi R16, 0b00001000
-C:0004e0 940e 0115 call I2C_Write_Call
+C:0004d4   +  I2C_Write 0x00
+C:0004d4 e000      ldi R16, 0x00
+C:0004d5 940e 0169 call I2C_Write_Call
          
          
 
-C:0004e2   +  I2C_Write 0b00001000
-C:0004e2 e008      ldi R16, 0b00001000
-C:0004e3 940e 0115 call I2C_Write_Call
+C:0004d7   +  I2C_Write 0x00
+C:0004d7 e000      ldi R16, 0x00
+C:0004d8 940e 0169 call I2C_Write_Call
          
          
 
-C:0004e5   +  I2C_Write 0x00
-C:0004e5 e000      ldi R16, 0x00
-C:0004e6 940e 0115 call I2C_Write_Call
+C:0004da   +  I2C_Write 0x00
+C:0004da e000      ldi R16, 0x00
+C:0004db 940e 0169 call I2C_Write_Call
          
          
 
-C:0004e8   +  I2C_Write 0x00
-C:0004e8 e000      ldi R16, 0x00
-C:0004e9 940e 0115 call I2C_Write_Call
+C:0004dd   +  I2C_Write 0x00
+C:0004dd e000      ldi R16, 0x00
+C:0004de 940e 0169 call I2C_Write_Call
          
          
 
-C:0004eb   +  I2C_Write 0x00
-C:0004eb e000      ldi R16, 0x00
-C:0004ec 940e 0115 call I2C_Write_Call
+C:0004e0   +  I2C_Write 0x00
+C:0004e0 e000      ldi R16, 0x00
+C:0004e1 940e 0169 call I2C_Write_Call
          
          
 
-C:0004ee   +  I2C_Write 0x00
-C:0004ee e000      ldi R16, 0x00
-C:0004ef 940e 0115 call I2C_Write_Call
+C:0004e3   +  I2C_Write 0x00
+C:0004e3 e000      ldi R16, 0x00
+C:0004e4 940e 0169 call I2C_Write_Call
          
          
 
-C:0004f1   +  I2C_Write 0x00
-C:0004f1 e000      ldi R16, 0x00
-C:0004f2 940e 0115 call I2C_Write_Call
+C:0004e6   +  I2C_Write 0x00
+C:0004e6 e000      ldi R16, 0x00
+C:0004e7 940e 0169 call I2C_Write_Call
          
          
 
-C:0004f4   +  I2C_Write 0x00
-C:0004f4 e000      ldi R16, 0x00
-C:0004f5 940e 0115 call I2C_Write_Call
+C:0004e9   +  I2C_Write 0x00
+C:0004e9 e000      ldi R16, 0x00
+C:0004ea 940e 0169 call I2C_Write_Call
          
          
 
-C:0004f7   +  I2C_Write 0x00
-C:0004f7 e000      ldi R16, 0x00
-C:0004f8 940e 0115 call I2C_Write_Call
+C:0004ec   +  I2C_Write 0x00
+C:0004ec e000      ldi R16, 0x00
+C:0004ed 940e 0169 call I2C_Write_Call
          
          
 
+C:0004ef   +  I2C_Write 0x00
+C:0004ef e000      ldi R16, 0x00
+C:0004f0 940e 0169 call I2C_Write_Call
          
+         
 
-C:0004fa   +  I2C_Write 0x00
-C:0004fa e000      ldi R16, 0x00
-C:0004fb 940e 0115 call I2C_Write_Call
+C:0004f2   +  I2C_Write 0x00
+C:0004f2 e000      ldi R16, 0x00
+C:0004f3 940e 0169 call I2C_Write_Call
          
          
 
+C:0004f5   +  I2C_Write 0x00
+C:0004f5 e000      ldi R16, 0x00
+C:0004f6 940e 0169 call I2C_Write_Call
          
+         
 
-C:0004fd   +  I2C_Write 0x00
-C:0004fd e000      ldi R16, 0x00
-C:0004fe 940e 0115 call I2C_Write_Call
+C:0004f8   +  I2C_Write 0x00
+C:0004f8 e000      ldi R16, 0x00
+C:0004f9 940e 0169 call I2C_Write_Call
          
          
 
-C:000500   +  I2C_Write 0x00
-C:000500 e000      ldi R16, 0x00
-C:000501 940e 0115 call I2C_Write_Call
+         
          
+
+C:0004fb 940e 0160 call I2C_Start							
+
+C:0004fd   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:0004fd ed00      ldi R16, MPU6050_ADDRESS_W
+C:0004fe 940e 0169 call I2C_Write_Call
          
+C:000500   +  I2C_Write MPU6050_RA_INT_PIN_CFG		
+
+C:000500 e307      ldi R16, MPU6050_RA_INT_PIN_CFG
+C:000501 940e 0169 call I2C_Write_Call
+C:000503   +  I2C_Write 0x00							
 
-C:000503   +  I2C_Write 0x00
 C:000503 e000      ldi R16, 0x00
-C:000504 940e 0115 call I2C_Write_Call
+C:000504 940e 0169 call I2C_Write_Call
          
          
 
 C:000506   +  I2C_Write 0x00
 C:000506 e000      ldi R16, 0x00
-C:000507 940e 0115 call I2C_Write_Call
+C:000507 940e 0169 call I2C_Write_Call
          
          
 
-C:000509   +  I2C_Write 0x00
-C:000509 e000      ldi R16, 0x00
-C:00050a 940e 0115 call I2C_Write_Call
          
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+         
+
+         
+         
+
+C:000509 940e 0160 call I2C_Start							
+
+C:00050b   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:00050b ed00      ldi R16, MPU6050_ADDRESS_W
+C:00050c 940e 0169 call I2C_Write_Call
+         
+C:00050e   +  I2C_Write MPU6050_RA_I2C_SLV0_DO		
+
+C:00050e e603      ldi R16, MPU6050_RA_I2C_SLV0_DO
+C:00050f 940e 0169 call I2C_Write_Call
+C:000511   +  I2C_Write 0x00							
+
+C:000511 e000      ldi R16, 0x00
+C:000512 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000514   +  I2C_Write 0x00
+C:000514 e000      ldi R16, 0x00
+C:000515 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000517   +  I2C_Write 0x00
+C:000517 e000      ldi R16, 0x00
+C:000518 940e 0169 call I2C_Write_Call
+         
+         
+
+C:00051a   +  I2C_Write 0x00
+C:00051a e000      ldi R16, 0x00
+C:00051b 940e 0169 call I2C_Write_Call
+         
+         
+
+C:00051d   +  I2C_Write 0x00
+C:00051d e000      ldi R16, 0x00
+C:00051e 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000520   +  I2C_Write 0x00
+C:000520 e000      ldi R16, 0x00
+C:000521 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000523   +  I2C_Write 0x00
+C:000523 e000      ldi R16, 0x00
+C:000524 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000526   +  I2C_Write 0x00
+C:000526 e000      ldi R16, 0x00
+C:000527 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000529   +  I2C_Write 0b00000010
+C:000529 e002      ldi R16, 0b00000010
+C:00052a 940e 0169 call I2C_Write_Call
+         
+         
+
+C:00052c   +  I2C_Write 0x00
+C:00052c e000      ldi R16, 0x00
+C:00052d 940e 0169 call I2C_Write_Call
+         
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+
+         
+         
+
+C:00052f 940e 0160 call I2C_Start							
+
+C:000531   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:000531 ed00      ldi R16, MPU6050_ADDRESS_W
+C:000532 940e 0169 call I2C_Write_Call
+         
+C:000534   +  I2C_Write MPU6050_RA_FIFO_R_W			
+
+C:000534 e704      ldi R16, MPU6050_RA_FIFO_R_W
+C:000535 940e 0169 call I2C_Write_Call
+C:000537   +  I2C_Write 0x00							
+
+C:000537 e000      ldi R16, 0x00
+C:000538 940e 0169 call I2C_Write_Call
+         
+         
+
+         
+C:00053a 940e 0166 call I2C_Stop							
+
+C:00053c   +  MPU6050_Init						
+
+         
+C:00053c 940e 0160 call I2C_Start							
+
+C:00053e   +  I2C_Write MPU6050_ADDRESS_W				
+
+C:00053e ed00      ldi R16, MPU6050_ADDRESS_W
+C:00053f 940e 0169 call I2C_Write_Call
+         
+C:000541   +  I2C_Write MPU6050_RA_SMPLRT_DIV			
+
+C:000541 e109      ldi R16, MPU6050_RA_SMPLRT_DIV
+C:000542 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000544   +  I2C_Write 0x07
+C:000544 e007      ldi R16, 0x07
+C:000545 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000547   +  I2C_Write 0x00
+C:000547 e000      ldi R16, 0x00
+C:000548 940e 0169 call I2C_Write_Call
+         
+         
+
+C:00054a   +  I2C_Write 0b00001000
+C:00054a e008      ldi R16, 0b00001000
+C:00054b 940e 0169 call I2C_Write_Call
+         
+         
+
+C:00054d   +  I2C_Write 0b00001000
+C:00054d e008      ldi R16, 0b00001000
+C:00054e 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000550   +  I2C_Write 0x00
+C:000550 e000      ldi R16, 0x00
+C:000551 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000553   +  I2C_Write 0x00
+C:000553 e000      ldi R16, 0x00
+C:000554 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000556   +  I2C_Write 0x00
+C:000556 e000      ldi R16, 0x00
+C:000557 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000559   +  I2C_Write 0x00
+C:000559 e000      ldi R16, 0x00
+C:00055a 940e 0169 call I2C_Write_Call
+         
+         
+
+C:00055c   +  I2C_Write 0x00
+C:00055c e000      ldi R16, 0x00
+C:00055d 940e 0169 call I2C_Write_Call
+         
+         
+
+C:00055f   +  I2C_Write 0x00
+C:00055f e000      ldi R16, 0x00
+C:000560 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000562   +  I2C_Write 0x00
+C:000562 e000      ldi R16, 0x00
+C:000563 940e 0169 call I2C_Write_Call
+         
+         
+
+         
+
+C:000565   +  I2C_Write 0x00
+C:000565 e000      ldi R16, 0x00
+C:000566 940e 0169 call I2C_Write_Call
+         
+         
+
+         
+
+C:000568   +  I2C_Write 0x00
+C:000568 e000      ldi R16, 0x00
+C:000569 940e 0169 call I2C_Write_Call
+         
+         
+
+C:00056b   +  I2C_Write 0x00
+C:00056b e000      ldi R16, 0x00
+C:00056c 940e 0169 call I2C_Write_Call
+         
+         
+
+C:00056e   +  I2C_Write 0x00
+C:00056e e000      ldi R16, 0x00
+C:00056f 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000571   +  I2C_Write 0x00
+C:000571 e000      ldi R16, 0x00
+C:000572 940e 0169 call I2C_Write_Call
+         
+         
+
+C:000574   +  I2C_Write 0x00
+C:000574 e000      ldi R16, 0x00
+C:000575 940e 0169 call I2C_Write_Call
+         
          
 
-C:00050c   +  I2C_Write 0x00
-C:00050c e000      ldi R16, 0x00
-C:00050d 940e 0115 call I2C_Write_Call
+C:000577   +  I2C_Write 0x00
+C:000577 e000      ldi R16, 0x00
+C:000578 940e 0169 call I2C_Write_Call
          
          
 
-C:00050f   +  I2C_Write 0x00
-C:00050f e000      ldi R16, 0x00
-C:000510 940e 0115 call I2C_Write_Call
+C:00057a   +  I2C_Write 0x00
+C:00057a e000      ldi R16, 0x00
+C:00057b 940e 0169 call I2C_Write_Call
          
          
 
-C:000512   +  I2C_Write 0x00
-C:000512 e000      ldi R16, 0x00
-C:000513 940e 0115 call I2C_Write_Call
+C:00057d   +  I2C_Write 0x00
+C:00057d e000      ldi R16, 0x00
+C:00057e 940e 0169 call I2C_Write_Call
          
          
 
-C:000515   +  I2C_Write 0x00
-C:000515 e000      ldi R16, 0x00
-C:000516 940e 0115 call I2C_Write_Call
+C:000580   +  I2C_Write 0x00
+C:000580 e000      ldi R16, 0x00
+C:000581 940e 0169 call I2C_Write_Call
          
          
 
-C:000518   +  I2C_Write 0x00
-C:000518 e000      ldi R16, 0x00
-C:000519 940e 0115 call I2C_Write_Call
+C:000583   +  I2C_Write 0x00
+C:000583 e000      ldi R16, 0x00
+C:000584 940e 0169 call I2C_Write_Call
          
          
 
-C:00051b   +  I2C_Write 0x00
-C:00051b e000      ldi R16, 0x00
-C:00051c 940e 0115 call I2C_Write_Call
+C:000586   +  I2C_Write 0x00
+C:000586 e000      ldi R16, 0x00
+C:000587 940e 0169 call I2C_Write_Call
          
          
 
-C:00051e   +  I2C_Write 0x00
-C:00051e e000      ldi R16, 0x00
-C:00051f 940e 0115 call I2C_Write_Call
+C:000589   +  I2C_Write 0x00
+C:000589 e000      ldi R16, 0x00
+C:00058a 940e 0169 call I2C_Write_Call
          
          
 
-C:000521   +  I2C_Write 0x00
-C:000521 e000      ldi R16, 0x00
-C:000522 940e 0115 call I2C_Write_Call
+C:00058c   +  I2C_Write 0x00
+C:00058c e000      ldi R16, 0x00
+C:00058d 940e 0169 call I2C_Write_Call
          
          
 
-C:000524   +  I2C_Write 0x00
-C:000524 e000      ldi R16, 0x00
-C:000525 940e 0115 call I2C_Write_Call
+C:00058f   +  I2C_Write 0x00
+C:00058f e000      ldi R16, 0x00
+C:000590 940e 0169 call I2C_Write_Call
          
          
 
-C:000527   +  I2C_Write 0x00
-C:000527 e000      ldi R16, 0x00
-C:000528 940e 0115 call I2C_Write_Call
+C:000592   +  I2C_Write 0x00
+C:000592 e000      ldi R16, 0x00
+C:000593 940e 0169 call I2C_Write_Call
          
          
 
-C:00052a   +  I2C_Write 0x00
-C:00052a e000      ldi R16, 0x00
-C:00052b 940e 0115 call I2C_Write_Call
+C:000595   +  I2C_Write 0x00
+C:000595 e000      ldi R16, 0x00
+C:000596 940e 0169 call I2C_Write_Call
          
          
 
-C:00052d   +  I2C_Write 0x00
-C:00052d e000      ldi R16, 0x00
-C:00052e 940e 0115 call I2C_Write_Call
+C:000598   +  I2C_Write 0x00
+C:000598 e000      ldi R16, 0x00
+C:000599 940e 0169 call I2C_Write_Call
          
          
 
          
          
 
-C:000530 940e 010c call I2C_Start							
+C:00059b 940e 0160 call I2C_Start							
 
-C:000532   +  I2C_Write MPU6050_ADDRESS_W				
+C:00059d   +  I2C_Write MPU6050_ADDRESS_W				
 
-C:000532 ed00      ldi R16, MPU6050_ADDRESS_W
-C:000533 940e 0115 call I2C_Write_Call
+C:00059d ed00      ldi R16, MPU6050_ADDRESS_W
+C:00059e 940e 0169 call I2C_Write_Call
          
-C:000535   +  I2C_Write MPU6050_RA_INT_PIN_CFG		
+C:0005a0   +  I2C_Write MPU6050_RA_INT_PIN_CFG		
 
-C:000535 e307      ldi R16, MPU6050_RA_INT_PIN_CFG
-C:000536 940e 0115 call I2C_Write_Call
-C:000538   +  I2C_Write 0x00							
+C:0005a0 e307      ldi R16, MPU6050_RA_INT_PIN_CFG
+C:0005a1 940e 0169 call I2C_Write_Call
+C:0005a3   +  I2C_Write 0x00							
 
-C:000538 e000      ldi R16, 0x00
-C:000539 940e 0115 call I2C_Write_Call
+C:0005a3 e000      ldi R16, 0x00
+C:0005a4 940e 0169 call I2C_Write_Call
          
          
 
-C:00053b   +  I2C_Write 0x00
-C:00053b e000      ldi R16, 0x00
-C:00053c 940e 0115 call I2C_Write_Call
+C:0005a6   +  I2C_Write 0x00
+C:0005a6 e000      ldi R16, 0x00
+C:0005a7 940e 0169 call I2C_Write_Call
          
          
 
@@ -3594,75 +3731,75 @@ C:00053c 940e 0115 call I2C_Write_Call
          
          
 
-C:00053e 940e 010c call I2C_Start							
+C:0005a9 940e 0160 call I2C_Start							
 
-C:000540   +  I2C_Write MPU6050_ADDRESS_W				
+C:0005ab   +  I2C_Write MPU6050_ADDRESS_W				
 
-C:000540 ed00      ldi R16, MPU6050_ADDRESS_W
-C:000541 940e 0115 call I2C_Write_Call
+C:0005ab ed00      ldi R16, MPU6050_ADDRESS_W
+C:0005ac 940e 0169 call I2C_Write_Call
          
-C:000543   +  I2C_Write MPU6050_RA_I2C_SLV0_DO		
+C:0005ae   +  I2C_Write MPU6050_RA_I2C_SLV0_DO		
 
-C:000543 e603      ldi R16, MPU6050_RA_I2C_SLV0_DO
-C:000544 940e 0115 call I2C_Write_Call
-C:000546   +  I2C_Write 0x00							
+C:0005ae e603      ldi R16, MPU6050_RA_I2C_SLV0_DO
+C:0005af 940e 0169 call I2C_Write_Call
+C:0005b1   +  I2C_Write 0x00							
 
-C:000546 e000      ldi R16, 0x00
-C:000547 940e 0115 call I2C_Write_Call
+C:0005b1 e000      ldi R16, 0x00
+C:0005b2 940e 0169 call I2C_Write_Call
          
          
 
-C:000549   +  I2C_Write 0x00
-C:000549 e000      ldi R16, 0x00
-C:00054a 940e 0115 call I2C_Write_Call
+C:0005b4   +  I2C_Write 0x00
+C:0005b4 e000      ldi R16, 0x00
+C:0005b5 940e 0169 call I2C_Write_Call
          
          
 
-C:00054c   +  I2C_Write 0x00
-C:00054c e000      ldi R16, 0x00
-C:00054d 940e 0115 call I2C_Write_Call
+C:0005b7   +  I2C_Write 0x00
+C:0005b7 e000      ldi R16, 0x00
+C:0005b8 940e 0169 call I2C_Write_Call
          
          
 
-C:00054f   +  I2C_Write 0x00
-C:00054f e000      ldi R16, 0x00
-C:000550 940e 0115 call I2C_Write_Call
+C:0005ba   +  I2C_Write 0x00
+C:0005ba e000      ldi R16, 0x00
+C:0005bb 940e 0169 call I2C_Write_Call
          
          
 
-C:000552   +  I2C_Write 0x00
-C:000552 e000      ldi R16, 0x00
-C:000553 940e 0115 call I2C_Write_Call
+C:0005bd   +  I2C_Write 0x00
+C:0005bd e000      ldi R16, 0x00
+C:0005be 940e 0169 call I2C_Write_Call
          
          
 
-C:000555   +  I2C_Write 0x00
-C:000555 e000      ldi R16, 0x00
-C:000556 940e 0115 call I2C_Write_Call
+C:0005c0   +  I2C_Write 0x00
+C:0005c0 e000      ldi R16, 0x00
+C:0005c1 940e 0169 call I2C_Write_Call
          
          
 
-C:000558   +  I2C_Write 0x00
-C:000558 e000      ldi R16, 0x00
-C:000559 940e 0115 call I2C_Write_Call
+C:0005c3   +  I2C_Write 0x00
+C:0005c3 e000      ldi R16, 0x00
+C:0005c4 940e 0169 call I2C_Write_Call
          
          
 
-C:00055b   +  I2C_Write 0x00
-C:00055b e000      ldi R16, 0x00
-C:00055c 940e 0115 call I2C_Write_Call
+C:0005c6   +  I2C_Write 0x00
+C:0005c6 e000      ldi R16, 0x00
+C:0005c7 940e 0169 call I2C_Write_Call
          
          
 
-C:00055e   +  I2C_Write 0b00000010
-C:00055e e002      ldi R16, 0b00000010
-C:00055f 940e 0115 call I2C_Write_Call
+C:0005c9   +  I2C_Write 0b00000010
+C:0005c9 e002      ldi R16, 0b00000010
+C:0005ca 940e 0169 call I2C_Write_Call
          
          
 
-C:000561   +  I2C_Write 0x00
-C:000561 e000      ldi R16, 0x00
-C:000562 940e 0115 call I2C_Write_Call
+C:0005cc   +  I2C_Write 0x00
+C:0005cc e000      ldi R16, 0x00
+C:0005cd 940e 0169 call I2C_Write_Call
          
          
 
@@ -3681,26 +3818,26 @@ C:000562 940e 0115 call I2C_Write_Call
          
          
 
-C:000564 940e 010c call I2C_Start							
+C:0005cf 940e 0160 call I2C_Start							
 
-C:000566   +  I2C_Write MPU6050_ADDRESS_W				
+C:0005d1   +  I2C_Write MPU6050_ADDRESS_W				
 
-C:000566 ed00      ldi R16, MPU6050_ADDRESS_W
-C:000567 940e 0115 call I2C_Write_Call
+C:0005d1 ed00      ldi R16, MPU6050_ADDRESS_W
+C:0005d2 940e 0169 call I2C_Write_Call
          
-C:000569   +  I2C_Write MPU6050_RA_FIFO_R_W			
+C:0005d4   +  I2C_Write MPU6050_RA_FIFO_R_W			
 
-C:000569 e704      ldi R16, MPU6050_RA_FIFO_R_W
-C:00056a 940e 0115 call I2C_Write_Call
-C:00056c   +  I2C_Write 0x00							
+C:0005d4 e704      ldi R16, MPU6050_RA_FIFO_R_W
+C:0005d5 940e 0169 call I2C_Write_Call
+C:0005d7   +  I2C_Write 0x00							
 
-C:00056c e000      ldi R16, 0x00
-C:00056d 940e 0115 call I2C_Write_Call
+C:0005d7 e000      ldi R16, 0x00
+C:0005d8 940e 0169 call I2C_Write_Call
          
          
 
          
-C:00056f 940e 0112 call I2C_Stop							
+C:0005da 940e 0166 call I2C_Stop							
 
          
          
@@ -3709,93 +3846,40 @@ C:00056f 940e 0112 call I2C_Stop
          
          
          	
-C:000571 ef0a      			ldi		R16, 250
-C:000572 940e 00e5 			call	Delay_MS
-C:000574 ef0a      			ldi		R16, 250
-C:000575 940e 00e5 			call	Delay_MS
-C:000577 ef0a      			ldi		R16, 250
-C:000578 940e 00e5 			call	Delay_MS
-C:00057a ef0a      			ldi		R16, 250
-C:00057b 940e 00e5 			call	Delay_MS
-C:00057d ef0a      			ldi		R16, 250
-C:00057e 940e 00e5 			call	Delay_MS
-C:000580 ef0a      			ldi		R16, 250
-C:000581 940e 00e5 			call	Delay_MS
-C:000583 ef0a      			ldi		R16, 250
-C:000584 940e 00e5 			call	Delay_MS
-C:000586 ef0a      			ldi		R16, 250
-C:000587 940e 00e5 			call	Delay_MS
+C:0005dc ef0a      			ldi		R16, 250
+C:0005dd 940e 0139 			call	Delay_MS
+C:0005df ef0a      			ldi		R16, 250
+C:0005e0 940e 0139 			call	Delay_MS
+C:0005e2 ef0a      			ldi		R16, 250
+C:0005e3 940e 0139 			call	Delay_MS
+C:0005e5 ef0a      			ldi		R16, 250
+C:0005e6 940e 0139 			call	Delay_MS
+C:0005e8 ef0a      			ldi		R16, 250
+C:0005e9 940e 0139 			call	Delay_MS
+C:0005eb ef0a      			ldi		R16, 250
+C:0005ec 940e 0139 			call	Delay_MS
+C:0005ee ef0a      			ldi		R16, 250
+C:0005ef 940e 0139 			call	Delay_MS
+C:0005f1 ef0a      			ldi		R16, 250
+C:0005f2 940e 0139 			call	Delay_MS
          			
-C:000589 e500      	ldi	R16, 80
-C:00058a bd03      	out 	OCR2, R16
-C:00058b 2700      	clr		R16					
-C:00058c 9300 007f 	sts		SREG_1, R16				; clear SREG_1
+C:0005f4 e500      	ldi	R16, 80
+C:0005f5 bd03      	out 	OCR2, R16
+C:0005f6 2700      	clr		R16					
+C:0005f7 9300 007f 	sts		SREG_1, R16				; clear SREG_1
          
-C:00058e 9478      	sei					;Enable global interrupt	
-C:00058f c000      	rjmp Main
+C:0005f9 ef0a      			ldi		R16, 250
+C:0005fa 940e 0139 			call	Delay_MS
          
-          Main:	
-C:000590 9100 007f 			lds		R16, SREG_1			
-         			;sbrc	R16, 2							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
-         			;rjmp	Brake
-         			
-C:000592 cffd      			rjmp	Main
-C:000593 9ac0      			sbi		PORTB, 0
-         			
-         						
-C:000594 ef0a      			ldi		R16, 250
-C:000595 940e 00e5 			call	Delay_MS
-C:000597 ef0a      			ldi		R16, 250
-C:000598 940e 00e5 			call	Delay_MS
-         			
-C:00059a 98c0      			cbi		PORTB, 0
-         			
-C:00059b ef0a      			ldi		R16, 250
-C:00059c 940e 00e5 			call	Delay_MS
-C:00059e ef0a      			ldi		R16, 250
-C:00059f 940e 00e5 			call	Delay_MS	
-         			
-C:0005a1 cfee      			rjmp	Main
-         			
-C:0005a2 cfed      			rjmp	Main
-         	
-         	
-C:0005a3 2700      Brake: 		clr		R16
-C:0005a4 bd03      			out		OCR2, R16
-         			
-C:0005a5 988f      			cbi		DDRD, 7							; set motor pin as input
-         	
-C:0005a6 0000      			nop
-         			
-C:0005a7 9ac0      			sbi		PORTB, 0
-         			
-C:0005a8 94f8      			cli
-C:0005a9 ef0a      			ldi		R16, 250
-C:0005aa 940e 00e5 			call	Delay_MS
-C:0005ac ef0a      			ldi		R16, 250
-C:0005ad 940e 00e5 			call	Delay_MS
-C:0005af ec08      			ldi		R16, 200
-         			;call	Delay_MS
-         			
-C:0005b0 98c0      			cbi		PORTB, 0
-         			
-C:0005b1 cfff      Wait:		rjmp	Wait
+C:0005fc 9478      	sei					;Enable global interrupt	
+C:0005fd c000      	rjmp Main
          
+C:0005fe cfff      Main:	rjmp	Main
          			
-          Brake2:		;rjmp	Brake
-         
-C:0005b2 9a8f      			sbi		DDRD, 7
-C:0005b3 0000      			nop
-C:0005b4 0000      			nop
-         			
-C:0005b5 e500      			ldi		R16, 80
-C:0005b6 bd03      			out		OCR2, R16
-         			
-C:0005b7 cffa      			rjmp  	Brake2
 
 
 Segment usage:
-   Code      :      1435 words (2870 bytes)
+   Code      :      1506 words (3012 bytes)
    Data      :         0 bytes
    EEPROM    :         0 bytes
 

@@ -53,4 +53,3 @@
 			cbr		R16, (1<<@0)					; clear bit in R16 (performs logical AND with complement of operand)
 			sts		SREG_1, R16
 .ENDMACRO
-
