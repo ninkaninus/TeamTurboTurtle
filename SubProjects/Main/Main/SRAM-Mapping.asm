@@ -56,3 +56,17 @@
 .equ Comm_Received_Byte_1 = 0x0081
 .equ Comm_Received_Byte_2 = 0x0082
 .equ Comm_Received_Byte_3 = 0x0083
+
+;Delay stuff
+.equ Delay_Amount		  = 0x0084
+
+.equ Time_Stamp_Braking_H = 0x0085
+.equ Time_Stamp_Braking_M = 0x0086
+.equ Time_Stamp_Braking_L = 0x0087
+
+.equ Pulse			= 0x0088
+
+.equ Speed_H = 0x0089
+.equ Speed_L = 0x008A
+
+.equ Temp = 0x008B

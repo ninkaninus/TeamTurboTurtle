@@ -14,15 +14,16 @@
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Math.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\SRAM-Mapping.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delays.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.inc</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm</FILE>
-  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE>
+  <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE>
   <FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Setup.asm</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
@@ -36,10 +37,10 @@
   <FILE>Main.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>22</LINE></Init>
-  <Input_Capture><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>51</LINE></Input_Capture>
+  <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>23</LINE></Init>
+  <Input_Capture><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>23</LINE></Input_Capture>
   <Timer0_Update><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm</FILE><LINE>25</LINE></Timer0_Update>
-  <Comm_Received><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>40</LINE></Comm_Received>
+  <Comm_Received><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>43</LINE></Comm_Received>
   <Lap_Time><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>24</LINE></Lap_Time>
   <Sum_16><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Math.asm</FILE><LINE>1</LINE></Sum_16>
   <Div16_8><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Math.asm</FILE><LINE>6</LINE></Div16_8>
@@ -75,12 +76,16 @@
   <USART_Decimal_16_Count_10_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>228</LINE></USART_Decimal_16_Count_10_Loop>
   <USART_Decimal_16_Count_1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>240</LINE></USART_Decimal_16_Count_1>
   <USART_Decimal_16_Count_1_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>244</LINE></USART_Decimal_16_Count_1_Loop>
+  <Edge1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>54</LINE></Edge1>
+  <Edge2><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>69</LINE></Edge2>
+  <WheelSpeed_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>98</LINE></WheelSpeed_End>
+  <Hastigheds_kontrol><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>4</LINE></Hastigheds_kontrol>
   <Delay_MS><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delays.asm</FILE><LINE>38</LINE></Delay_MS>
   <Delay_MS_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delays.asm</FILE><LINE>44</LINE></Delay_MS_Loop>
-  <Motor_Set><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>12</LINE></Motor_Set>
-  <Motor_Set_Percentage><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>16</LINE></Motor_Set_Percentage>
-  <Motor_Set_Percentage_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>37</LINE></Motor_Set_Percentage_End>
-  <Motor_Set_Percentage_Out><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>33</LINE></Motor_Set_Percentage_Out>
+  <Motor_Set><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>18</LINE></Motor_Set>
+  <Motor_Set_Percentage><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>32</LINE></Motor_Set_Percentage>
+  <Motor_Set_Percentage_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>53</LINE></Motor_Set_Percentage_End>
+  <Motor_Set_Percentage_Out><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm</FILE><LINE>49</LINE></Motor_Set_Percentage_Out>
   <I2C_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>26</LINE></I2C_Start>
   <I2C_Start_Wait><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>31</LINE></I2C_Start_Wait>
   <I2C_Stop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm</FILE><LINE>40</LINE></I2C_Stop>
@@ -94,38 +99,45 @@
   <MPU6050_Read_Accel_X><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm</FILE><LINE>286</LINE></MPU6050_Read_Accel_X>
   <MPU6050_Read_Gyro_Z><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm</FILE><LINE>303</LINE></MPU6050_Read_Gyro_Z>
   <Timer_Update_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm</FILE><LINE>47</LINE></Timer_Update_End>
-  <EDGE2><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>83</LINE></EDGE2>
-  <EDGE1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>70</LINE></EDGE1>
-  <WheelSpeed_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>107</LINE></WheelSpeed_End>
-  <Lap_Time_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>71</LINE></Lap_Time_End>
-  <Comm_Send_LapTime><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>306</LINE></Comm_Send_LapTime>
-  <Comm_Send_LapTicks><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>328</LINE></Comm_Send_LapTicks>
-  <Comm_Received_Type><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>58</LINE></Comm_Received_Type>
-  <Comm_Received_Command><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>82</LINE></Comm_Received_Command>
-  <Comm_Received_Execute><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>150</LINE></Comm_Received_Execute>
-  <Comm_Received_Type_Set_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>62</LINE></Comm_Received_Type_Set_Check>
-  <Comm_Received_Type_Valid><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>73</LINE></Comm_Received_Type_Valid>
-  <Comm_Received_Type_Get_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>66</LINE></Comm_Received_Type_Get_Check>
-  <Comm_Received_Type_Reset><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>70</LINE></Comm_Received_Type_Reset>
-  <Comm_Received_Command_Type_Set_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>86</LINE></Comm_Received_Command_Type_Set_Check>
-  <Comm_Received_Command_Type_Set><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>102</LINE></Comm_Received_Command_Type_Set>
-  <Comm_Received_Command_Type_Get_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>90</LINE></Comm_Received_Command_Type_Get_Check>
-  <Comm_Received_Command_Type_Get><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>121</LINE></Comm_Received_Command_Type_Get>
-  <Comm_Received_Command_Failure><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>94</LINE></Comm_Received_Command_Failure>
-  <Comm_Received_Command_Start_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>106</LINE></Comm_Received_Command_Start_Check>
-  <Comm_Received_Command_Valid><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>140</LINE></Comm_Received_Command_Valid>
-  <Comm_Received_Command_Stop_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>111</LINE></Comm_Received_Command_Stop_Check>
-  <Comm_Received_Command_Reset><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>135</LINE></Comm_Received_Command_Reset>
-  <Comm_Received_Command_Data_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>125</LINE></Comm_Received_Command_Data_Check>
-  <Comm_Received_Execute_Set><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>177</LINE></Comm_Received_Execute_Set>
-  <Comm_Received_Execute_Get><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>215</LINE></Comm_Received_Execute_Get>
-  <Comm_Received_Execute_Set_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>192</LINE></Comm_Received_Execute_Set_Start>
-  <Comm_Received_Execute_Set_Stop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>203</LINE></Comm_Received_Execute_Set_Stop>
-  <Comm_Received_Execute_Set_Start_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>198</LINE></Comm_Received_Execute_Set_Start_End>
-  <Comm_Received_Execute_Get_Data><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>226</LINE></Comm_Received_Execute_Get_Data>
-  <Comm_Received_Execute_Get_Ticks><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>279</LINE></Comm_Received_Execute_Get_Ticks>
-  <Comm_Received_Execute_Get_Xaccel><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>232</LINE></Comm_Received_Execute_Get_Xaccel>
-  <Comm_Received_Execute_Get_Zgyro><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>256</LINE></Comm_Received_Execute_Get_Zgyro>
-  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>28</LINE></Main>
+  <Lap_Time_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>78</LINE></Lap_Time_End>
+  <Comm_Send_LapTime><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>342</LINE></Comm_Send_LapTime>
+  <Comm_Send_LapTicks><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>364</LINE></Comm_Send_LapTicks>
+  <Comm_Received_Type><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>61</LINE></Comm_Received_Type>
+  <Comm_Received_Command><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>85</LINE></Comm_Received_Command>
+  <Comm_Received_Execute><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>164</LINE></Comm_Received_Execute>
+  <Comm_Received_Type_Set_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>65</LINE></Comm_Received_Type_Set_Check>
+  <Comm_Received_Type_Valid><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>76</LINE></Comm_Received_Type_Valid>
+  <Comm_Received_Type_Get_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>69</LINE></Comm_Received_Type_Get_Check>
+  <Comm_Received_Type_Reset><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>73</LINE></Comm_Received_Type_Reset>
+  <Comm_Received_Command_Type_Set_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>89</LINE></Comm_Received_Command_Type_Set_Check>
+  <Comm_Received_Command_Type_Set><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>105</LINE></Comm_Received_Command_Type_Set>
+  <Comm_Received_Command_Type_Get_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>93</LINE></Comm_Received_Command_Type_Get_Check>
+  <Comm_Received_Command_Type_Get><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>134</LINE></Comm_Received_Command_Type_Get>
+  <Comm_Received_Command_Failure><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>97</LINE></Comm_Received_Command_Failure>
+  <Comm_Received_Command_Start_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>109</LINE></Comm_Received_Command_Start_Check>
+  <Comm_Received_Command_Valid><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>153</LINE></Comm_Received_Command_Valid>
+  <Comm_Received_Command_Stop_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>114</LINE></Comm_Received_Command_Stop_Check>
+  <Comm_Received_Command_Speed_H_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>119</LINE></Comm_Received_Command_Speed_H_Check>
+  <Comm_Received_Command_Speed_L_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>124</LINE></Comm_Received_Command_Speed_L_Check>
+  <Comm_Received_Command_Reset><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>148</LINE></Comm_Received_Command_Reset>
+  <Comm_Received_Command_Data_Check><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>138</LINE></Comm_Received_Command_Data_Check>
+  <Comm_Received_Execute_Set><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>191</LINE></Comm_Received_Execute_Set>
+  <Comm_Received_Execute_Get><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>251</LINE></Comm_Received_Execute_Get>
+  <Comm_Received_Execute_Set_Start><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>212</LINE></Comm_Received_Execute_Set_Start>
+  <Comm_Received_Execute_Set_Stop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>223</LINE></Comm_Received_Execute_Set_Stop>
+  <Comm_Received_Execute_Speed_H><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>233</LINE></Comm_Received_Execute_Speed_H>
+  <Comm_Received_Execute_Speed_L><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>239</LINE></Comm_Received_Execute_Speed_L>
+  <Comm_Received_Execute_Set_Start_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>218</LINE></Comm_Received_Execute_Set_Start_End>
+  <Comm_Received_Execute_Get_Data><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>262</LINE></Comm_Received_Execute_Get_Data>
+  <Comm_Received_Execute_Get_Ticks><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>315</LINE></Comm_Received_Execute_Get_Ticks>
+  <Comm_Received_Execute_Get_Xaccel><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>268</LINE></Comm_Received_Execute_Get_Xaccel>
+  <Comm_Received_Execute_Get_Zgyro><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>292</LINE></Comm_Received_Execute_Get_Zgyro>
+  <Braking><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>68</LINE></Braking>
+  <Langsommere><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>103</LINE></Langsommere>
+  <Hurtigere><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>22</LINE></Hurtigere>
+  <Braking_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>97</LINE></Braking_End>
+  <Max_Brake><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>59</LINE></Max_Brake>
+  <MaxGas><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>129</LINE></MaxGas>
+  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>58</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>

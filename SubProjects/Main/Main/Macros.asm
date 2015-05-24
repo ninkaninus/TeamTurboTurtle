@@ -41,3 +41,15 @@
 	pop	@5
 	pop	@6	
 .ENDMACRO
+
+.MACRO Set_SREG_1 
+			lds		R16, SREG_1
+			sbr		R16, (1<<@0)					; set bit in R16 (performs a logical ORI instruction)
+			sts		SREG_1, R16
+.ENDMACRO
+
+.MACRO Clear_SREG_1 
+			lds		R16, SREG_1
+			cbr		R16, (1<<@0)					; clear bit in R16 (performs logical AND with complement of operand)
+			sts		SREG_1, R16
+.ENDMACRO

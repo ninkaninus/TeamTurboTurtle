@@ -44,8 +44,8 @@ Timer0_Update:
 			sts		Timer_1ms_H, R2
 			brcc	Timer_Update_End
 			
-Timer_Update_End:	
-		
+Timer_Update_End:
+
 			pop		R16
 			out		SREG, R16
 			pop		R16

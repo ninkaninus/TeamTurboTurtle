@@ -16,6 +16,9 @@
 .equ Comm_Command_Start = 0x10				;Start the car at a specific % of motor speed
 .equ Comm_Command_Stop = 0x11				;Stop the car
 
+.equ Comm_Command_Speed_H = 0x12
+.equ Comm_Command_Speed_L = 0x13
+
 ;Define Get Commands
 .equ Comm_Command_Xaccel_H = 0xA1
 .equ Comm_Command_Xaccel_L = 0xA2
@@ -105,11 +108,21 @@ Comm_Received_Command_Type_Set:
 ;Start			
 Comm_Received_Command_Start_Check:					;Check if we received a start command
 	cpi R16, Comm_Command_Start						;Check for start command
-	breq Comm_Received_Command_Valid		;Branch to the next check if not the case
+	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
 
 ;Stop
 Comm_Received_Command_Stop_Check:					;Check if we received a stop command
 	cpi R16, Comm_Command_Stop						;Check for stop command
+	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
+
+;Speed_H
+Comm_Received_Command_Speed_H_Check:				;Check if we received a stop command
+	cpi R16, Comm_Command_Speed_H					;Check for stop command
+	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
+
+;Speed_L
+Comm_Received_Command_Speed_L_Check:				;Check if we received a stop command
+	cpi R16, Comm_Command_Speed_L					;Check for stop command
 	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
 
 ;Invalid
@@ -140,7 +153,8 @@ Comm_Received_Command_Reset:
 Comm_Received_Command_Valid:						
 	sts Comm_Received_Byte_2, R16					;Store the received type in SRAM	
 	ldi R16, 0x03									;Set the counter to two
-	sts Comm_Received_Byte_Num, R16					;Store it					
+	sts Comm_Received_Byte_Num, R16					;Store it		
+				
 reti												;Return from interrupt
 
 
@@ -184,6 +198,12 @@ Comm_Received_Execute_Set:
 	cpi R16, Comm_Command_Stop				;Check if we received a Stop command
 	breq Comm_Received_Execute_Set_Stop		;
 
+	cpi R16, Comm_Command_Speed_H
+	breq Comm_Received_Execute_Speed_H
+
+	cpi R16, Comm_Command_Speed_L
+	breq Comm_Received_Execute_Speed_L
+
 	;Insert error handling here
 
 	reti									;Do nothing if it was not a legit code
@@ -201,12 +221,28 @@ Comm_Received_Execute_Set_Start_End:
 
 ;Stop
 Comm_Received_Execute_Set_Stop:
+	
+	ldi R16, 'S'
+	call USART_Transmit
 
 	ldi R16, 0x00							;Load in 0x00
 	out OCR2, R16							;And set the pwm duty cycle to nothing to stop the motor.
 
 	reti
 
+Comm_Received_Execute_Speed_H:
+	lds R16, Comm_Received_Byte_3
+	sts	Temp, R16 
+
+	reti
+
+Comm_Received_Execute_Speed_L:
+	lds R16, Temp
+	sts Speed_H, R16 
+	lds R16, Comm_Received_Byte_3
+	sts Speed_L, R16 
+
+	reti
 
 ;---------------------------------------------------------------------------------------------------------------------
 ;Execute GET's
