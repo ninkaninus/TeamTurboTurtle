@@ -26,13 +26,32 @@ Road_Reaction:
 		cpi		Type,		5
 		breq	Lille_Sving
 
-;Ligeud1:
-
+		/*
 		cpi		Length_H,		0
+		brne	Ligeud1
+
+		cpi		Length_L,		20
+		brsh	Ligeud1
+		
+		call	Gyro_Kontrol
+		cpi		R16,		3
+		
+		rjmp	Read_Map
+		
+Ligeud1:
+		*/
+		cpi		Length_H, 0
 		brne	Bare_Ligeud				;Hvis der er mere end 255 tilbage, så bare ligeud.
+		cpi		Length_L, Brake_Time
+		brsh	Bare_Ligeud
 
 		ldi		R16,	LOW(Periode_Lille_Sving)
-		ldi		R17,	High(Periode_Lille_Sving)
+		sts Speed_L, R16
+
+		ldi		R16,	High(Periode_Lille_Sving)
+		sts Speed_H, R16
+		
+		/*
 		mov		R18,	Length_L
 		mov		R19,	Length_H
 
@@ -54,6 +73,8 @@ Road_Reaction:
 
 		sts		Speed_L,	R18
 		sts		Speed_H,	R19
+
+		*/
 
 ret
 
@@ -99,11 +120,11 @@ Stor_Sving_Test:
 ret
 
 Ud_Af_Sving:
-
-		ldi		R16, LOW(Periode_Ligeud)	;Reference periode.
-		ldi		R17, HIGH(Periode_Ligeud)	;Reference periode.
+/*
+		ldi		R16, LOW(Periode_UdAfSving)	;Reference periode.
+		ldi		R17, HIGH(Periode_UdAfSving)	;Reference periode.
 		sts		Speed_L,	R16
 		sts		Speed_H,	R17
-
+*/
 ret
 

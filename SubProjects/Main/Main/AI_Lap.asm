@@ -12,7 +12,6 @@ AI_Lap:
 
 ;First round							Vi sætter der første stykke bane oveni, så vi ikke løber tør for bane.
 
-
 		mov		R16,		YL
 		mov		R17,		YH
 		ldi		YH,			HIGH(Map_Start)		
@@ -22,11 +21,11 @@ AI_Lap:
 		ld			R19,		Y+		;Length_H
 		ld			R20,		Y+		;Type
 		
-		cp			R20,		Type
-		breq		Same_Type_First_And_Last
-		
 		mov		YL,			R16
 		mov		YH,			R17
+
+		cp			R20,		Type
+		breq		Same_Type_First_And_Last
 
 		st		Y+,		Length_L
 		st		Y+,		Length_H
@@ -42,8 +41,8 @@ rjmp		Run_Time
 Same_Type_First_And_Last:
 
 		add		Length_L,	R18
-		adc		Length_h,	R19
-
+		adc		Length_H,	R19
+		
 		st		Y+,		Length_L
 		st		Y+,		Length_H
 		st		Y+,		Type

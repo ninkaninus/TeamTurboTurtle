@@ -131,23 +131,29 @@
   <SAME_TYPE><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Skift.asm</FILE><LINE>38</LINE></SAME_TYPE>
   <LILLE_V><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Skift.asm</FILE><LINE>28</LINE></LILLE_V>
   <LEFT_SKIFT><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Skift.asm</FILE><LINE>42</LINE></LEFT_SKIFT>
-  <STRAIGHT_SKIFT><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Skift.asm</FILE><LINE>58</LINE></STRAIGHT_SKIFT>
-  <RIGHT_SKIFT><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Skift.asm</FILE><LINE>71</LINE></RIGHT_SKIFT>
+  <STRAIGHT_SKIFT><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Skift.asm</FILE><LINE>56</LINE></STRAIGHT_SKIFT>
+  <RIGHT_SKIFT><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Skift.asm</FILE><LINE>69</LINE></RIGHT_SKIFT>
   <LILLE_H><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Skift.asm</FILE><LINE>33</LINE></LILLE_H>
   <Read_Map><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>1</LINE></Read_Map>
   <Road_Reaction><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>17</LINE></Road_Reaction>
-  <Lille_Sving><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>69</LINE></Lille_Sving>
-  <Stor_Sving><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>85</LINE></Stor_Sving>
-  <Bare_Ligeud><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>60</LINE></Bare_Ligeud>
-  <Lille_Sving_Test><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>76</LINE></Lille_Sving_Test>
-  <Ud_Af_Sving><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>101</LINE></Ud_Af_Sving>
-  <Stor_Sving_Test><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>92</LINE></Stor_Sving_Test>
+  <Lille_Sving><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>90</LINE></Lille_Sving>
+  <Stor_Sving><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>106</LINE></Stor_Sving>
+  <Bare_Ligeud><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>81</LINE></Bare_Ligeud>
+  <Lille_Sving_Test><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>97</LINE></Lille_Sving_Test>
+  <Ud_Af_Sving><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>122</LINE></Ud_Af_Sving>
+  <Stor_Sving_Test><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>113</LINE></Stor_Sving_Test>
   <AI_Lap><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm</FILE><LINE>1</LINE></AI_Lap>
-  <Mapping><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm</FILE><LINE>62</LINE></Mapping>
-  <Run_Time><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm</FILE><LINE>51</LINE></Run_Time>
-  <Same_Type_First_And_Last><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm</FILE><LINE>42</LINE></Same_Type_First_And_Last>
-  <Mapping_Speed><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Hall.asm</FILE><LINE>21</LINE></Mapping_Speed>
-  <Run_Speed><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Hall.asm</FILE><LINE>32</LINE></Run_Speed>
+  <Mapping><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm</FILE><LINE>61</LINE></Mapping>
+  <Run_Time><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm</FILE><LINE>50</LINE></Run_Time>
+  <Same_Type_First_And_Last><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm</FILE><LINE>41</LINE></Same_Type_First_And_Last>
+  <LED><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Hall.asm</FILE><LINE>39</LINE></LED>
+  <Mapping_Speed><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Hall.asm</FILE><LINE>22</LINE></Mapping_Speed>
+  <Run_Speed><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Hall.asm</FILE><LINE>33</LINE></Run_Speed>
+  <LED_Venstre_L><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Hall.asm</FILE><LINE>64</LINE></LED_Venstre_L>
+  <LED_Venstre_S><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Hall.asm</FILE><LINE>69</LINE></LED_Venstre_S>
+  <LED_Ligeud><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Hall.asm</FILE><LINE>74</LINE></LED_Ligeud>
+  <LED_Hoejre_S><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Hall.asm</FILE><LINE>79</LINE></LED_Hoejre_S>
+  <LED_Hoejre_L><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Hall.asm</FILE><LINE>84</LINE></LED_Hoejre_L>
   <Lap_Time_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>84</LINE></Lap_Time_End>
   <Comm_Send_LapTime><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>342</LINE></Comm_Send_LapTime>
   <Comm_Send_LapTicks><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>364</LINE></Comm_Send_LapTicks>
@@ -187,6 +193,6 @@
   <Braking_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>97</LINE></Braking_End>
   <Max_Brake><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>59</LINE></Max_Brake>
   <MaxGas><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>129</LINE></MaxGas>
-  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>61</LINE></Main>
+  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>60</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>

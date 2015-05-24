@@ -5,7 +5,7 @@ SKIFT_TEST:
 		ldi		R16,	0
 		adc		Length_H,	R16
 
-call	Gyro_Kontrol
+		call	Gyro_Kontrol
 
 		Cp		R16,		Type
 		breq	SAME_TYPE
@@ -44,8 +44,6 @@ LEFT_SKIFT:
 		cpi		Type,	1
 		breq	SAME_TYPE
 		
-
-
 		st		Y+,		Length_L
 		st		Y+,		Length_H
 		st		Y+,		Type

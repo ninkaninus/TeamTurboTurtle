@@ -69,7 +69,6 @@ Main:
 
 	clr		R16					
 	sts		SREG_1, R16				; clear SREG_1
-			
 
 	ldi R16, 100
 	out OCR2, R16
