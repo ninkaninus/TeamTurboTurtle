@@ -1,5 +1,5 @@
-.equ Diff_Max = 5760
-.equ ForgivenessZone = 4000
+.equ Diff_Max = 8192
+.equ ForgivenessZone = 4096
 
 Hastigheds_kontrol:
 		
@@ -7,8 +7,8 @@ Hastigheds_kontrol:
 		sbrc	R16, 7							; bit 7 is the delay enable 
 		rjmp	Braking
 
-		ldi		R16, low(18000) 
-		ldi		R17, high(18000)
+		lds		R16, Speed_L 
+		lds		R17, Speed_H
 		lds		R18, Pulse_Time_L
 		lds		R19, Pulse_Time_H
 
@@ -48,8 +48,6 @@ Hurtigere:
 		ror		R16	
 		lsr		R17
 		ror		R16
-		lsr		R17
-		ror		R16
 		
 		sts		Delay_Amount, R16
 		
@@ -67,7 +65,11 @@ Max_Brake:
 		
 		ret
 		
-Braking: 
+Braking:
+
+		clr R16
+		out OCR2, R16
+ 
 		lds		R0, Timer_1ms_L				
 		lds		R1, Timer_1ms_M				; Current time since startup in ms
 		lds		R2, Timer_1ms_H				 
@@ -88,6 +90,8 @@ Braking:
 		cp		R0, R6
 		brsh	Braking_End
 		
+
+
 		ret
 		
 Braking_End:
@@ -119,9 +123,6 @@ Langsommere:
 		
 		out		OCR2, R16
 		
-		ldi		R16, 'Q'
-		;call	USART_Transmit
-		;		USART_NewLine
 		ret
 		
 

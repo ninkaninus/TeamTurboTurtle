@@ -65,3 +65,8 @@
 .equ Time_Stamp_Braking_L = 0x0087
 
 .equ Pulse			= 0x0088
+
+.equ Speed_H = 0x0089
+.equ Speed_L = 0x008A
+
+.equ Temp = 0x008B

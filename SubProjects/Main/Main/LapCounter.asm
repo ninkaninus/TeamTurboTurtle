@@ -67,6 +67,11 @@ Lap_Time:
 	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
 	out		ACSR, R16					; Global interrupt register
 
+	ldi R16, HIGH(28000)
+	sts Speed_H, R16
+	ldi R16, LOW(28000)
+	sts Speed_L, R16
+
 	call Comm_Send_LapTime
 	call Comm_Send_LapTicks
 

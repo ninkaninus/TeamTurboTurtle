@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Fri May 22 21:05:24 2015
+AVRASM ver. 2.1.57  D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm Sun May 24 16:43:56 2015
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m32Adef.inc'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(4): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Interrupt_Mapping.asm'
@@ -7,16 +7,17 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(7): Including file 'D:\
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(8): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Math.asm'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(9): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\SRAM-Mapping.asm'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(10): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(11): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delays.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(12): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(13): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(14): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.inc'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(16): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(11): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(12): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delays.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(13): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Motor_Control.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(14): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\I2C.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(15): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.inc'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(16): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\MPU-6050.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(17): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(18): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm'
 D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(19): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm'
-D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Setup.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm'
+D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(21): Including file 'D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Setup.asm'
                  
                  ;.include "m32def.inc"
                  
@@ -839,22 +840,22 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  .include "Interrupt_Mapping.asm"
                  
                  .org 0x00
-000000 c31c      rjmp Init
+000000 c3c1      rjmp Init
                  ;External interrupt1
                  ;.org 0x04
                  ;jmp	Input_Capture
                  ;Timer1 Input Capture interrupt
                  .org	0x0C
-00000c 940c 01cc jmp	Input_Capture
+00000c 940c 00e5 jmp	Input_Capture
                  ;Timer0 CTC interrupt
                  .org 0x14
-000014 940c 01b1 jmp Timer0_Update
+000014 940c 0205 jmp Timer0_Update
                  ;USART received interrupt
                  .org 0x1A
-00001a 940c 0259 jmp Comm_Received
+00001a 940c 0271 jmp Comm_Received
                  ;Comparator interrupt
                  .org 0x24
-000024 940c 0213 jmp Lap_Time
+000024 940c 0220 jmp Lap_Time
                  
                  ;Library includes
                  .include "Macros.asm"
@@ -900,6 +901,18 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  	pop	@4
                  	pop	@5
                  	pop	@6	
+                 .ENDMACRO
+                 
+                 .MACRO Set_SREG_1 
+                 			lds		R16, SREG_1
+                 			sbr		R16, (1<<@0)					; set bit in R16 (performs a logical ORI instruction)
+                 			sts		SREG_1, R16
+                 .ENDMACRO
+                 
+                 .MACRO Clear_SREG_1 
+                 			lds		R16, SREG_1
+                 			cbr		R16, (1<<@0)					; clear bit in R16 (performs logical AND with complement of operand)
+                 			sts		SREG_1, R16
                  .ENDMACRO
                  .include "Math.asm"
                  
@@ -987,6 +1000,20 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  .equ Comm_Received_Byte_1 = 0x0081
                  .equ Comm_Received_Byte_2 = 0x0082
                  .equ Comm_Received_Byte_3 = 0x0083
+                 
+                 ;Delay stuff
+                 .equ Delay_Amount		  = 0x0084
+                 
+                 .equ Time_Stamp_Braking_H = 0x0085
+                 .equ Time_Stamp_Braking_M = 0x0086
+                 .equ Time_Stamp_Braking_L = 0x0087
+                 
+                 .equ Pulse			= 0x0088
+                 
+                 .equ Speed_H = 0x0089
+                 .equ Speed_L = 0x008A
+                 
+                 .equ Temp = 0x008B
                  .include "USART_Library.asm"
                  
                   ; Author: StjerneIdioten
@@ -1243,8 +1270,126 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
 0000e1 0f04      	add R16, R20
 0000e2 940e 0034 	call USART_Transmit
                  
-                 .include "Delays.asm"
+                 .include "WheelSpeed.asm"
 0000e4 9508      
+                 
+                 			
+                 
+                 			ldi		R16, 0x00
+                 			out		TCCR1A, R16
+                 			ldi		R16, 0b00000010			; Falling edge triggered, 1/1024 prescaling
+                 			out		TCCR1B, R16	
+                 
+                 			clr		R16
+                 			sts		Edge1_L, R16
+                 			sts		Edge1_H, R16
+                 
+                 			sts		Ticks_L, R16
+                 			sts		Ticks_H, R16
+                 
+                 			in		R16, TIMSK
+                 			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
+                 			out		TIMSK, R16				;Timer/interrupt masking register
+                 			
+                 .ENDMACRO
+                 
+                 Input_Capture:
+                 
+0000e5 920f
+0000e6 921f
+0000e7 922f
+0000e8 923f
+0000e9 930f
+0000ea b70f
+0000eb 930f      			Push_Register_5 R0, R1, R2, R3, R16
+                 			
+0000ec 9000 007b 			lds		R0, Ticks_L
+0000ee 9010 007c 			lds		R1, Ticks_H
+                 			
+0000f0 e001      			ldi		R16, 0x01
+0000f1 0e00      			add		R0, R16
+0000f2 e000      			ldi		R16, 0x00
+0000f3 1e10      			adc		R1, R16
+                 			
+0000f4 9200 007b 			sts		Ticks_L, R0
+0000f6 9210 007c 			sts		Ticks_H, R1	
+                 			
+0000f8 9100 0088 			lds		R16, Pulse
+0000fa 3001      			cpi		R16, 1
+0000fb f051      			breq	Edge1
+                 			
+0000fc 3004      			cpi		R16, 4
+0000fd f0b9      			breq	Edge2
+                 			
+0000fe 9503      			inc		R16
+0000ff 9300 0088 			sts		Pulse, R16
+                 			
+000101 c02f      			rjmp	WheelSpeed_End
+                 			
+000102 9100 007f 			lds		R16, SREG_1			
+000104 fd00      			sbrc	R16, 0							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
+000105 c00f      			rjmp	EDGE2
+                 			
+000106 9503      EDGE1:		inc		R16
+000107 9300 0088 			sts		Pulse, R16
+                 
+000109 b406      			in		R0, ICR1L
+00010a b417      			in		R1, ICR1H
+                 			
+00010b 9200 0077 			sts		Edge1_L, R0
+00010d 9210 0078 			sts		Edge1_H, R1
+                 
+00010f 9100 007f 			lds		R16, SREG_1
+000111 6001      			sbr		R16, 0b00000001					; set bit 0 in R16 (performs a logical ORI instruction)
+000112 9300 007f 			sts		SREG_1, R16
+                 			
+000114 c01c      			rjmp	WheelSpeed_End
+                 			
+000115 e001      EDGE2:		ldi		R16, 1
+000116 9300 0088 			sts		Pulse, R16
+                 
+000118 9000 0077 			lds		R0, Edge1_L
+00011a 9010 0078 			lds		R1, Edge1_H
+                 			
+00011c b426      			in		R2, ICR1L
+00011d b437      			in		R3, ICR1H
+                 			
+00011e 1820      			sub		R2, R0
+00011f 0831      			sbc		R3, R1
+                 			
+000120 e107      			ldi		R16, high(6000)
+000121 1630      			cp		R3, R16
+000122 f070      			brlo	WheelSpeed_End		
+                 			
+000123 9220 0079 			sts		Pulse_Time_L, R2
+000125 9230 007a 			sts		Pulse_Time_H, R3
+                 			
+000127 9100 007f 			lds		R16, SREG_1
+000129 7f0e      			cbr		R16, 0b00000001					; clear bit 0 in R16 (performs logical AND with complement of operand)
+00012a 9300 007f 			sts		SREG_1, R16
+                 			
+00012c e000      			ldi		R16, 0x00
+00012d bd0d      			out		TCNT1H, R16						; Temp = R16
+00012e bd0c      			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp	
+                 			
+00012f 940e 034e 			call	Hastigheds_kontrol
+                 			
+                 WheelSpeed_End:
+                 
+                 			;call AI_HALL_INTERRUPT
+                 						
+000131 910f
+000132 bf0f
+000133 910f
+000134 903f
+000135 902f
+000136 901f
+000137 900f      			Pop_Register_5 R16, R3, R2, R1, R0
+                 			
+000138 9518      			reti
+                 			
+                 .include "Delays.asm"
+                 
                  
                  ;Requires the Timer library made by Kristian! And the SRAM-Mapping.asm
                  ;These macros are intended for a micro running 16MHZ
@@ -1282,29 +1427,30 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  ; Formula for delay: x*1ms
                  
                  Delay_MS:
-0000e5 2e90      	mov R9, R16
-0000e6 9030 0070 	lds R3, Timer_1ms_L
-0000e8 9040 006f 	lds R4, Timer_1ms_M
-0000ea 9050 006e 	lds R5, Timer_1ms_H
+000139 2e90      	mov R9, R16
+00013a 9030 0070 	lds R3, Timer_1ms_L
+00013c 9040 006f 	lds R4, Timer_1ms_M
+00013e 9050 006e 	lds R5, Timer_1ms_H
                  
                  Delay_MS_Loop:
                  	
-0000ec 9478      	sei
-0000ed 9060 0070 	lds R6, Timer_1ms_L
-0000ef 9070 006f 	lds R7, Timer_1ms_M
-0000f1 9080 006e 	lds R8, Timer_1ms_H
+000140 9478      	sei
+000141 9060 0070 	lds R6, Timer_1ms_L
+000143 9070 006f 	lds R7, Timer_1ms_M
+000145 9080 006e 	lds R8, Timer_1ms_H
                  
-0000f3 94f8      	cli
-0000f4 1863      	sub R6, R3
-0000f5 0874      	sbc R7, R4
-0000f6 0885      	sbc R8, R5
+000147 94f8      	cli
+000148 1863      	sub R6, R3
+000149 0874      	sbc R7, R4
+00014a 0885      	sbc R8, R5
                  
-0000f7 1469      	cp R6, R9
+00014b 1469      	cp R6, R9
                  
-0000f8 f398      	brlo Delay_MS_Loop
-0000f9 9478      	sei
+00014c f398      	brlo Delay_MS_Loop
+00014d 9478      	sei
                  .include "Motor_Control.asm"
-0000fa 9508      
+00014e 9508      
+                 .EQU	BRAKE_PIN = PB0
                  
                  .MACRO Motor_Init
                  	in R16, DDRD							;Load in the current setup of the portb
@@ -1315,34 +1461,50 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  	out TCCR2, R16							;
                  .ENDMACRO
                  
+                 ; Use desired braking time in MS as argument
+                 .MACRO Brake_MS
+                 		
+                 .ENDMACRO
+                 
                  Motor_Set: 
-0000fb bd03      	out OCR2, R16							;Set the duty cycle of the motor
-0000fc 9508      ret
+00014f bd03      	out OCR2, R16							;Set the duty cycle of the motor
+000150 9508      ret
+                 
+                 .MACRO Brake_Init
+                 
+                 	in R16, DDRB							;Load in the current setup of the portc
+                 	ori R16, (1<<BRAKE_PIN)					;OR in the setup that we wish to have
+                 	out DDRB, R16							;Set brake pin as output
+                 	
+                 	cbi	PORTB, BRAKE_PIN					;Set brake to high state
+                 
+                 .ENDMACRO
                  
                  Motor_Set_Percentage:
-0000fd 3605      	cpi R16, 101							;Check if the number is within the percentage range of 100
-0000fe f460      	brsh Motor_Set_Percentage_End			;Branch if not
+000151 3605      	cpi R16, 101							;Check if the number is within the percentage range of 100
+000152 f460      	brsh Motor_Set_Percentage_End			;Branch if not
                  
-0000ff ef1f      	ldi R17, 255							;Using the formula (N*255)/100=N% of 255
-000100 9f01      	mul R16, R17							;Multiply the number by 255
+000153 ef1f      	ldi R17, 255							;Using the formula (N*255)/100=N% of 255
+000154 9f01      	mul R16, R17							;Multiply the number by 255
                  
-000101 2d00      	mov R16, R0								;The multiplication hardware leaves the result in R1:R0
-000102 2d11      	mov R17, R1								;
+000155 2d00      	mov R16, R0								;The multiplication hardware leaves the result in R1:R0
+000156 2d11      	mov R17, R1								;
                  
-000103 e624      	ldi R18, 100							;Load in the 100 to divide with
-000104 940e 0029 	call Div16_8							;Divide with 100, the rest is returned in R18
+000157 e624      	ldi R18, 100							;Load in the 100 to divide with
+000158 940e 0029 	call Div16_8							;Divide with 100, the rest is returned in R18
                  
-000106 3322      	cpi R18, 50								;Check to see if we should round of or down.
-000107 f008      	brlo Motor_Set_Percentage_Out			;R16 is actually the trunctuated value of the divison which is the same as rounding down.
-000108 9503      	inc R16									;Increment if we were rounding up
+00015a 3322      	cpi R18, 50								;Check to see if we should round of or down.
+00015b f008      	brlo Motor_Set_Percentage_Out			;R16 is actually the trunctuated value of the divison which is the same as rounding down.
+00015c 9503      	inc R16									;Increment if we were rounding up
                  
                  Motor_Set_Percentage_Out:
                  
-000109 940e 00fb 	call Motor_Set							;Set the duty cycle of the motor pwn as the % of 255
+00015d 940e 014f 	call Motor_Set							;Set the duty cycle of the motor pwn as the % of 255
                  
                  Motor_Set_Percentage_End:
+00015f 9508       ret
                  .include "I2C.asm"
-00010b 9508      
+                 
                  ;I2C communication library 
                  
                   .equ I2C_ACK = 0x01	;Value for ACK used with I2C_Read
@@ -1369,36 +1531,36 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  ;This function sends a start command
                  I2C_Start:
                  	;Send Start condition
-00010c ea04      	ldi r16, (1<<TWINT)|(1<<TWSTA)|(1<<TWEN) 
-00010d bf06      	out TWCR, r16
+000160 ea04      	ldi r16, (1<<TWINT)|(1<<TWSTA)|(1<<TWEN) 
+000161 bf06      	out TWCR, r16
                  
                  I2C_Start_Wait:	
                  	;Wait for the start condition transmit			
-00010e b706      	in r16,TWCR
-00010f ff07      	sbrs r16,TWINT
-000110 cffd      	rjmp I2C_Start_Wait
-000111 9508      ret
+000162 b706      	in r16,TWCR
+000163 ff07      	sbrs r16,TWINT
+000164 cffd      	rjmp I2C_Start_Wait
+000165 9508      ret
                  
                  
                  ;This function sends a stop command
                  I2C_Stop:
                  	;Send Stop condition
-000112 e904      	ldi r16, (1<<TWINT)|(1<<TWSTO)|(1<<TWEN) 
-000113 bf06      	out TWCR, r16
-000114 9508      ret
+000166 e904      	ldi r16, (1<<TWINT)|(1<<TWSTO)|(1<<TWEN) 
+000167 bf06      	out TWCR, r16
+000168 9508      ret
                  
                  
                  ;This function writes the data from R16, onto the I2C data line
                  I2C_Write_Call:
-000115 b903      	out TWDR, r16
-000116 e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
-000117 bf06      	out TWCR, r16
+000169 b903      	out TWDR, r16
+00016a e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
+00016b bf06      	out TWCR, r16
                  
                  I2C_Write_Call_Wait:
-000118 b706      	in r16,TWCR
-000119 ff07      	sbrs r16,TWINT
-00011a cffd      	rjmp I2C_Write_Call_Wait
-00011b 9508      ret
+00016c b706      	in r16,TWCR
+00016d ff07      	sbrs r16,TWINT
+00016e cffd      	rjmp I2C_Write_Call_Wait
+00016f 9508      ret
                  
                  ;This is an easy to use macro of the write function
                  .MACRO I2C_Write
@@ -1410,21 +1572,21 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  ;Remember to set R16 to either I2C_ACK or I2C_NACK before calling the function!
                  ;Failure to do so may result in unwanted behaviour.
                  I2C_Read_Call:
-00011c fd00      	sbrc r16,0
-00011d c002      	rjmp I2C_Read_Call_ACK
-00011e e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
-00011f c001      	rjmp I2C_Read_Call_Continue
+000170 fd00      	sbrc r16,0
+000171 c002      	rjmp I2C_Read_Call_ACK
+000172 e804      	ldi r16, (1<<TWINT) | (1<<TWEN)
+000173 c001      	rjmp I2C_Read_Call_Continue
                  I2C_Read_Call_ACK:
-000120 ec04      	ldi r16, (1<<TWINT) | (1<<TWEN) | (1<<TWEA)
+000174 ec04      	ldi r16, (1<<TWINT) | (1<<TWEN) | (1<<TWEA)
                  I2C_Read_Call_Continue:
-000121 bf06      	out TWCR, r16
+000175 bf06      	out TWCR, r16
                  I2C_Read_Call_Wait:
-000122 b706      	in r16,TWCR
-000123 ff07      	sbrs r16,TWINT
-000124 cffd      	rjmp I2C_Read_Call_Wait
+000176 b706      	in r16,TWCR
+000177 ff07      	sbrs r16,TWINT
+000178 cffd      	rjmp I2C_Read_Call_Wait
                  
-000125 b103      	in R16, TWDR
-000126 9508      ret
+000179 b103      	in R16, TWDR
+00017a 9508      ret
                  
                  ;Easy to use macro which takes I2C_Ack/I2C_Nack as argument.
                  .MACRO I2C_Read
@@ -1780,119 +1942,119 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  
                  ;Reads in the entire dataset supplied by the MPU6050 by doing a couple of burst reads. The values can be found at the SRAM addresses specified in SRAM-Mapping
                  MPU6050_Read_Dataset:
-000127 940e 010c 	call I2C_Start							;Send a start
-000129 ed00
-00012a 940e 0115 	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
-00012c e30b
-00012d 940e 0115 	I2C_Write MPU6050_RA_ACCEL_XOUT_H		;Write the address to begin reading from.
+00017b 940e 0160 	call I2C_Start							;Send a start
+00017d ed00
+00017e 940e 0169 	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
+000180 e30b
+000181 940e 0169 	I2C_Write MPU6050_RA_ACCEL_XOUT_H		;Write the address to begin reading from.
                  
-00012f 940e 010c 	call I2C_Start							;Send a repeated start
-000131 ed01
-000132 940e 0115 	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
+000183 940e 0160 	call I2C_Start							;Send a repeated start
+000185 ed01
+000186 940e 0169 	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
                  
-000134 e001
-000135 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-000137 9300 0060 	sts ACCEL_XOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
+000188 e001
+000189 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+00018b 9300 0060 	sts ACCEL_XOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
                  
-000139 e001
-00013a 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-00013c 9300 0061 	sts ACCEL_XOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
+00018d e001
+00018e 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+000190 9300 0061 	sts ACCEL_XOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
                  
-00013e e001
-00013f 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-000141 9300 0062 	sts ACCEL_YOUT_H, R16					;Store the ACCEL_YOUT_H in SRAM
+000192 e001
+000193 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+000195 9300 0062 	sts ACCEL_YOUT_H, R16					;Store the ACCEL_YOUT_H in SRAM
                  
-000143 e001
-000144 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-000146 9300 0063 	sts ACCEL_YOUT_L, R16					;Store the ACCEL_YOUT_L in SRAM
+000197 e001
+000198 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+00019a 9300 0063 	sts ACCEL_YOUT_L, R16					;Store the ACCEL_YOUT_L in SRAM
                  
-000148 e001
-000149 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-00014b 9300 0064 	sts ACCEL_ZOUT_H, R16					;Store the ACCEL_ZOUT_H in SRAM
+00019c e001
+00019d 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+00019f 9300 0064 	sts ACCEL_ZOUT_H, R16					;Store the ACCEL_ZOUT_H in SRAM
                  
-00014d e001
-00014e 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-000150 9300 0065 	sts ACCEL_ZOUT_L, R16					;Store the ACCEL_ZOUT_L in SRAM
+0001a1 e001
+0001a2 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+0001a4 9300 0065 	sts ACCEL_ZOUT_L, R16					;Store the ACCEL_ZOUT_L in SRAM
                  
-000152 e001
-000153 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-000155 9300 0066 	sts TEMP_OUT_H, R16						;Store the TEMP_OUT_H in SRAM
+0001a6 e001
+0001a7 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+0001a9 9300 0066 	sts TEMP_OUT_H, R16						;Store the TEMP_OUT_H in SRAM
                  
-000157 e001
-000158 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-00015a 9300 0067 	sts TEMP_OUT_L, R16						;Store the TEMP_OUT_L in SRAM
+0001ab e001
+0001ac 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+0001ae 9300 0067 	sts TEMP_OUT_L, R16						;Store the TEMP_OUT_L in SRAM
                  
-00015c e001
-00015d 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-00015f 9300 0068 	sts GYRO_XOUT_H, R16					;Store the GYRO_XOUT_H in SRAM
+0001b0 e001
+0001b1 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+0001b3 9300 0068 	sts GYRO_XOUT_H, R16					;Store the GYRO_XOUT_H in SRAM
                  
-000161 e001
-000162 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-000164 9300 0069 	sts GYRO_XOUT_L, R16					;Store the GYRO_XOUT_L in SRAM
+0001b5 e001
+0001b6 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+0001b8 9300 0069 	sts GYRO_XOUT_L, R16					;Store the GYRO_XOUT_L in SRAM
                  
-000166 e001
-000167 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-000169 9300 006a 	sts GYRO_YOUT_H, R16					;Store the GYRO_YOUT_H in SRAM
+0001ba e001
+0001bb 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+0001bd 9300 006a 	sts GYRO_YOUT_H, R16					;Store the GYRO_YOUT_H in SRAM
                  	
-00016b e001
-00016c 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-00016e 9300 006b 	sts GYRO_YOUT_L, R16					;Store the GYRO_YOUT_L in SRAM
+0001bf e001
+0001c0 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+0001c2 9300 006b 	sts GYRO_YOUT_L, R16					;Store the GYRO_YOUT_L in SRAM
                  	
-000170 e001
-000171 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-000173 9300 006c 	sts GYRO_ZOUT_H, R16					;Store the GYRO_ZOUT_H in SRAM
+0001c4 e001
+0001c5 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+0001c7 9300 006c 	sts GYRO_ZOUT_H, R16					;Store the GYRO_ZOUT_H in SRAM
                  	
-000175 e000
-000176 940e 011c 	I2C_Read I2C_Nack						;Reply with an NACK to indicate that we do not wish to read the next byte too
-000178 9300 006b 	sts GYRO_YOUT_L, R16					;Store the GYRO_YOUT_L in SRAM
+0001c9 e000
+0001ca 940e 0170 	I2C_Read I2C_Nack						;Reply with an NACK to indicate that we do not wish to read the next byte too
+0001cc 9300 006b 	sts GYRO_YOUT_L, R16					;Store the GYRO_YOUT_L in SRAM
                  
-00017a 940e 0112 	call I2C_Stop							;Send a stop
-00017c 9508      ret											;Return
+0001ce 940e 0166 	call I2C_Stop							;Send a stop
+0001d0 9508      ret											;Return
                  
                  MPU6050_Read_Accel_X:
-00017d 940e 010c 	call I2C_Start							;Send a start
-00017f ed00
-000180 940e 0115 	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
-000182 e30b
-000183 940e 0115 	I2C_Write MPU6050_RA_ACCEL_XOUT_H		;Write the address to begin reading from.
+0001d1 940e 0160 	call I2C_Start							;Send a start
+0001d3 ed00
+0001d4 940e 0169 	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
+0001d6 e30b
+0001d7 940e 0169 	I2C_Write MPU6050_RA_ACCEL_XOUT_H		;Write the address to begin reading from.
                  
-000185 940e 010c 	call I2C_Start							;Send a repeated start
-000187 ed01
-000188 940e 0115 	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
+0001d9 940e 0160 	call I2C_Start							;Send a repeated start
+0001db ed01
+0001dc 940e 0169 	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
                  
-00018a e001
-00018b 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-00018d 9300 0060 	sts ACCEL_XOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
+0001de e001
+0001df 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+0001e1 9300 0060 	sts ACCEL_XOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
                  
-00018f e000
-000190 940e 011c 	I2C_Read I2C_Nack						;Reply with an ACK to indicate that we wish to read the next byte too
-000192 9300 0061 	sts ACCEL_XOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
+0001e3 e000
+0001e4 940e 0170 	I2C_Read I2C_Nack						;Reply with an ACK to indicate that we wish to read the next byte too
+0001e6 9300 0061 	sts ACCEL_XOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
                  
-000194 940e 0112 	call I2C_Stop							;Send a stop
-000196 9508      ret											;Return
+0001e8 940e 0166 	call I2C_Stop							;Send a stop
+0001ea 9508      ret											;Return
                  
                  MPU6050_Read_Gyro_Z:
-000197 940e 010c 	call I2C_Start							;Send a start
-000199 ed00
-00019a 940e 0115 	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
-00019c e407
-00019d 940e 0115 	I2C_Write MPU6050_RA_GYRO_ZOUT_H		;Write the address to begin reading from.
+0001eb 940e 0160 	call I2C_Start							;Send a start
+0001ed ed00
+0001ee 940e 0169 	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
+0001f0 e407
+0001f1 940e 0169 	I2C_Write MPU6050_RA_GYRO_ZOUT_H		;Write the address to begin reading from.
                  
-00019f 940e 010c 	call I2C_Start							;Send a repeated start
-0001a1 ed01
-0001a2 940e 0115 	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
+0001f3 940e 0160 	call I2C_Start							;Send a repeated start
+0001f5 ed01
+0001f6 940e 0169 	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
                  
-0001a4 e001
-0001a5 940e 011c 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-0001a7 9300 006c 	sts GYRO_ZOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
+0001f8 e001
+0001f9 940e 0170 	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
+0001fb 9300 006c 	sts GYRO_ZOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
                  
-0001a9 e000
-0001aa 940e 011c 	I2C_Read I2C_Nack						;Reply with an ACK to indicate that we wish to read the next byte too
-0001ac 9300 006d 	sts GYRO_ZOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
+0001fd e000
+0001fe 940e 0170 	I2C_Read I2C_Nack						;Reply with an ACK to indicate that we wish to read the next byte too
+000200 9300 006d 	sts GYRO_ZOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
                  
-0001ae 940e 0112 	call I2C_Stop							;Send a stop
+000202 940e 0166 	call I2C_Stop							;Send a stop
                  .include "Time.asm"
-0001b0 9508      
+000204 9508      
                  
                  ; Initialize timer0 to generate an output compare interrupt every 1[ms]
                  .MACRO Time_Init
@@ -1917,167 +2079,36 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  ; Timer subroutines
                  
                  Timer0_Update:
-0001b1 930f      			push	R16
-0001b2 b70f      			in		R16, SREG
-0001b3 930f      			push	R16
+000205 930f      			push	R16
+000206 b70f      			in		R16, SREG
+000207 930f      			push	R16
                  			
-0001b4 e001      			ldi		R16, 0x01
-0001b5 9000 0070 			lds		R0, Timer_1ms_L			
-0001b7 0e00      			add		R0, R16						;Advance time by 1ms whenever timer0 has compare match
-0001b8 9200 0070 			sts		Timer_1ms_L, R0	
-0001ba f468      			brcc	Timer_Update_End
+000208 e001      			ldi		R16, 0x01
+000209 9000 0070 			lds		R0, Timer_1ms_L			
+00020b 0e00      			add		R0, R16						;Advance time by 1ms whenever timer0 has compare match
+00020c 9200 0070 			sts		Timer_1ms_L, R0	
+00020e f468      			brcc	Timer_Update_End
                  			
-0001bb e000      			ldi		R16, 0x00
-0001bc 9010 006f 			lds		R1, Timer_1ms_M				;24 bits = 16777 seconds = 4.6 hours... ish :D
-0001be 1e10      			adc		R1, R16
-0001bf 9210 006f 			sts		Timer_1ms_M, R1	
-0001c1 f430      			brcc	Timer_Update_End
+00020f e000      			ldi		R16, 0x00
+000210 9010 006f 			lds		R1, Timer_1ms_M				;24 bits = 16777 seconds = 4.6 hours... ish :D
+000212 1e10      			adc		R1, R16
+000213 9210 006f 			sts		Timer_1ms_M, R1	
+000215 f430      			brcc	Timer_Update_End
                  			
-0001c2 9020 006e 			lds		R2, Timer_1ms_H
-0001c4 1e20      			adc		R2, R16
-0001c5 9220 006e 			sts		Timer_1ms_H, R2
-0001c7 f400      			brcc	Timer_Update_End
+000216 9020 006e 			lds		R2, Timer_1ms_H
+000218 1e20      			adc		R2, R16
+000219 9220 006e 			sts		Timer_1ms_H, R2
+00021b f400      			brcc	Timer_Update_End
                  			
-                 Timer_Update_End:	
-                 		
-0001c8 910f      			pop		R16
-0001c9 bf0f      			out		SREG, R16
-0001ca 910f      			pop		R16
+                 Timer_Update_End:
+                 
+00021c 910f      			pop		R16
+00021d bf0f      			out		SREG, R16
+00021e 910f      			pop		R16
                  			
-0001cb 9518      			reti
+00021f 9518      			reti
                  			
                  
-                 .include "WheelSpeed.asm"
-                 
-                 .MACRO WheelSpeed_Init
-                 
-                 			
-                 
-                 			ldi		R16, 0x00
-                 			out		TCCR1A, R16
-                 			ldi		R16, 0b00000010			; Falling edge triggered, 1/1024 prescaling
-                 			out		TCCR1B, R16	
-                 
-                 			clr		R16
-                 			sts		Edge1_L, R16
-                 			sts		Edge1_H, R16
-                 
-                 			sts		Ticks_L, R16
-                 			sts		Ticks_H, R16
-                 
-                 			in		R16, TIMSK
-                 			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
-                 			out		TIMSK, R16				;Timer/interrupt masking register
-                 
-                 .ENDMACRO
-                 
-                 .MACRO WheelSpeed_Calc
-                 			lds		R18, Pulse_Time_L
-                 			sbr		R16, 0xFF
-                 			sbr		R17, 0xFF
-                 			call	Div16_8
-                 			sts		Wheel_speed_L, R16
-                 			sts		Wheel_speed_H, R17
-                 .ENDMACRO
-                 
-                 ; Use desired braking time in MS as argument
-                 .MACRO Brake_MS
-                 		in		R16, OCR0
-                 		push	R16
-                 		clr		R16
-                 		out		R16, OCR0
-                 		
-                 		sbi		PORTB, BRAKE
-                 		cli
-                 		ldi		R16, @0
-                 		call	Delay_MS
-                 		sei
-                 		cbi		PORTB, BRAKE
-                 		
-                 		pop		R16
-                 		out		OCR0, R16
-                 .ENDMACRO
-                 
-                 Input_Capture:
-                 
-0001cc 920f
-0001cd 921f
-0001ce 922f
-0001cf 923f
-0001d0 930f
-0001d1 b70f
-0001d2 930f      			Push_Register_5 R0, R1, R2, R3, R16
-                 			
-0001d3 9000 007b 			lds		R0, Ticks_L
-0001d5 9010 007c 			lds		R1, Ticks_H
-                 			
-0001d7 e001      			ldi		R16, 0x01
-0001d8 0e00      			add		R0, R16
-0001d9 e000      			ldi		R16, 0x00
-0001da 1e10      			adc		R1, R16
-                 			
-0001db 9200 007b 			sts		Ticks_L, R0
-0001dd 9210 007c 			sts		Ticks_H, R1			
-                 			
-0001df 9100 007f 			lds		R16, SREG_1			
-0001e1 fd00      			sbrc	R16, 0							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
-0001e2 c011      			rjmp	EDGE2
-                 			
-0001e3 b406      EDGE1:		in		R0, ICR1L
-0001e4 b417      			in		R1, ICR1H
-                 			
-0001e5 9200 0077 			sts		Edge1_L, R0
-0001e7 9210 0078 			sts		Edge1_H, R1
-                 
-0001e9 6001      			sbr		R16, 0b00000001					; set bit 0 in R16 (performs a logical ORI instruction)
-0001ea 9300 007f 			sts		SREG_1, R16
-                 			
-0001ec 910f
-0001ed bf0f
-0001ee 910f
-0001ef 903f
-0001f0 902f
-0001f1 901f
-0001f2 900f      			Pop_Register_5 R16, R3, R2, R1, R0
-                 			
-0001f3 9518      			reti
-                 			
-0001f4 9000 0077 EDGE2:		lds		R0, Edge1_L
-0001f6 9010 0078 			lds		R1, Edge1_H
-                 			
-0001f8 b426      			in		R2, ICR1L
-0001f9 b437      			in		R3, ICR1H
-                 			
-0001fa 1820      			sub		R2, R0
-0001fb 0831      			sbc		R3, R1
-                 			
-0001fc e00b      			ldi		R16, high(3000)
-0001fd 1630      			cp		R3, R16
-0001fe f060      			brlo	WheelSpeed_End		
-                 			
-0001ff 9100 007f 			lds		R16, SREG_1
-000201 7f0e      			cbr		R16, 0b00000001					; clear bit 0 in R16 (performs logical AND with complement of operand)
-000202 9300 007f 			sts		SREG_1, R16
-                 			
-000204 e000      			ldi		R16, 0x00
-000205 bd0d      			out		TCNT1H, R16						; Temp = R16
-000206 bd0c      			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp	
-                 			
-000207 9220 0079 			sts		Pulse_Time_L, R2
-000209 9230 007a 			sts		Pulse_Time_H, R3
-                 
-                 WheelSpeed_End:
-                 			
-00020b 910f
-00020c bf0f
-00020d 910f
-00020e 903f
-00020f 902f
-000210 901f
-000211 900f      			Pop_Register_5 R16, R3, R2, R1, R0
-                 			
-000212 9518      			reti
-                 			
                  .include "LapCounter.asm"
                  
                  
@@ -2104,72 +2135,81 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  
                  Lap_Time:	
                  
-000213 920f
-000214 921f
-000215 922f
-000216 923f
-000217 924f
-000218 925f
-000219 930f
-00021a b70f
-00021b 930f      	Push_Register_7 R0, R1, R2, R3, R4, R5, R16
+000220 920f
+000221 921f
+000222 922f
+000223 923f
+000224 924f
+000225 925f
+000226 930f
+000227 b70f
+000228 930f      	Push_Register_7 R0, R1, R2, R3, R4, R5, R16
                  
-00021c 9000 0070 	lds		R0, Timer_1ms_L				
-00021e 9010 006f 	lds		R1, Timer_1ms_M				; Current time since startup in ms
-000220 9020 006e 	lds		R2, Timer_1ms_H				 
+000229 9000 0070 	lds		R0, Timer_1ms_L				
+00022b 9010 006f 	lds		R1, Timer_1ms_M				; Current time since startup in ms
+00022d 9020 006e 	lds		R2, Timer_1ms_H				 
                  			
-000222 9030 0073 	lds		R3, Time_Stamp_L			
-000224 9040 0072 	lds		R4, Time_Stamp_M			; Time stamp at start of lap
-000226 9050 0071 	lds		R5, Time_Stamp_H
+00022f 9030 0073 	lds		R3, Time_Stamp_L			
+000231 9040 0072 	lds		R4, Time_Stamp_M			; Time stamp at start of lap
+000233 9050 0071 	lds		R5, Time_Stamp_H
                  			
-000228 9200 0073 	sts		Time_Stamp_L, R0			
-00022a 9210 0072 	sts		Time_Stamp_M, R1			; New time stamp for next lap
-00022c 9220 0071 	sts		Time_Stamp_H, R2	
+000235 9200 0073 	sts		Time_Stamp_L, R0			
+000237 9210 0072 	sts		Time_Stamp_M, R1			; New time stamp for next lap
+000239 9220 0071 	sts		Time_Stamp_H, R2	
                  			
-00022e 1803      	sub		R0, R3						
-00022f 0814      	sbc		R1, R4						; Difference between current time and last time stamp
-000230 0825      	sbc		R2, R5
+00023b 1803      	sub		R0, R3						
+00023c 0814      	sbc		R1, R4						; Difference between current time and last time stamp
+00023d 0825      	sbc		R2, R5
                  		
-000231 e002      	ldi R16, 2		
-000232 1610      	cp R1, R16
-000233 f0d8      	brlo Lap_Time_End
+00023e e002      	ldi R16, 2		
+00023f 1610      	cp R1, R16
+000240 f130      	brlo Lap_Time_End
                  	
-000234 9200 0074 	sts		Lap_time_L, R0				
-000236 9210 0075 	sts		Lap_time_M, R1				; Latest lap time
-000238 9220 0076 	sts		Lap_time_H, R2			
+000241 9200 0074 	sts		Lap_time_L, R0				
+000243 9210 0075 	sts		Lap_time_M, R1				; Latest lap time
+000245 9220 0076 	sts		Lap_time_H, R2			
                  	
-00023a 9000 007b 	lds		R0, Ticks_L
-00023c 9010 007c 	lds		R1, Ticks_H
+000247 9000 007b 	lds		R0, Ticks_L
+000249 9010 007c 	lds		R1, Ticks_H
                  	
-00023e 9200 007d 	sts		Ticks_Lap_L, R0
-000240 9210 007e 	sts		Ticks_Lap_H, R1
+00024b 9200 007d 	sts		Ticks_Lap_L, R0
+00024d 9210 007e 	sts		Ticks_Lap_H, R1
                  	
-000242 e000      	ldi		R16, 0x00
-000243 9300 007b 	sts		Ticks_L, R16
-000245 9300 007c 	sts		Ticks_H, R16
+00024f e000      	ldi		R16, 0x00
+000250 9300 007b 	sts		Ticks_L, R16
+000252 9300 007c 	sts		Ticks_H, R16
                  	
-000247 e400      	ldi		R16, 0x40					; Disable Comparator interrupt
-000248 b908      	out		ACSR, R16					; Global interrupt register
+000254 e400      	ldi		R16, 0x40					; Disable Comparator interrupt
+000255 b908      	out		ACSR, R16					; Global interrupt register
+                 	
+000256 9100 007f
+000258 6004
+000259 9300 007f 	Set_SREG_1 	2
                  			
-000249 e508      	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
-00024a b908      	out		ACSR, R16					; Global interrupt register
+00025b e508      	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
+00025c b908      	out		ACSR, R16					; Global interrupt register
                  
-00024b 940e 02f3 	call Comm_Send_LapTime
-00024d 940e 0308 	call Comm_Send_LapTicks
+00025d e60d      	ldi R16, HIGH(28000)
+00025e 9300 0089 	sts Speed_H, R16
+000260 e600      	ldi R16, LOW(28000)
+000261 9300 008a 	sts Speed_L, R16
+                 
+000263 940e 0324 	call Comm_Send_LapTime
+000265 940e 0339 	call Comm_Send_LapTicks
                  
                  Lap_Time_End:
                  
-00024f 910f
-000250 bf0f
-000251 910f
-000252 905f
-000253 904f
-000254 903f
-000255 902f
-000256 901f
-000257 900f      	Pop_Register_7 R16, R5, R4, R3, R2, R1, R0
+000267 910f
+000268 bf0f
+000269 910f
+00026a 905f
+00026b 904f
+00026c 903f
+00026d 902f
+00026e 901f
+00026f 900f      	Pop_Register_7 R16, R5, R4, R3, R2, R1, R0
                  
-000258 9518      			reti			
+000270 9518      			reti			
                  .include "Communication_Protocol.asm"
                  
                  	ldi R16, 0x01							;Initialize the counter as being the first byte
@@ -2188,6 +2228,9 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  ;Define Set Commands
                  .equ Comm_Command_Start = 0x10				;Start the car at a specific % of motor speed
                  .equ Comm_Command_Stop = 0x11				;Stop the car
+                 
+                 .equ Comm_Command_Speed_H = 0x12
+                 .equ Comm_Command_Speed_L = 0x13
                  
                  ;Define Get Commands
                  .equ Comm_Command_Xaccel_H = 0xA1
@@ -2212,17 +2255,17 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  ;---------------------------------------------------------------------------------------------------------------------
                  Comm_Received:
                  
-000259 9100 0080 	lds R16, Comm_Received_Byte_Num			;What byte # did we receive
+000271 9100 0080 	lds R16, Comm_Received_Byte_Num			;What byte # did we receive
                  
-00025b 3001      	cpi R16, 0x01							;If it was the first
-00025c f019      	breq Comm_Received_Type					;Set the type
+000273 3001      	cpi R16, 0x01							;If it was the first
+000274 f019      	breq Comm_Received_Type					;Set the type
                  
-00025d 3002      	cpi R16, 0x02							;If it was the second
-00025e f069      	breq Comm_Received_Command				;Set the command
+000275 3002      	cpi R16, 0x02							;If it was the second
+000276 f069      	breq Comm_Received_Command				;Set the command
                  
                  	;Working under the assumption that if it was not the first or second byte, then it must be the third.
                  
-00025f c02c      	rjmp Comm_Received_Execute				;Go to the execution of the received telegram
+000277 c030      	rjmp Comm_Received_Execute				;Go to the execution of the received telegram
                  
                  
                  ;---------------------------------------------------------------------------------------------------------------------
@@ -2230,91 +2273,102 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  ;---------------------------------------------------------------------------------------------------------------------
                  Comm_Received_Type:
                  	
-000260 b10c      	in R16, UDR	
+000278 b10c      	in R16, UDR	
                  				
                  Comm_Received_Type_Set_Check:				;Check if we received a set type
-000261 3505      	cpi R16, Comm_Type_Set					;Check for set type
-000262 f019      	breq Comm_Received_Type_Valid			;Branch to the next check if not the case
+000279 3505      	cpi R16, Comm_Type_Set					;Check for set type
+00027a f019      	breq Comm_Received_Type_Valid			;Branch to the next check if not the case
                  
                  Comm_Received_Type_Get_Check:				;Check if we received a get type
-000263 3a0a      	cpi R16, Comm_Type_Get					;Check for get type
-000264 f009      	breq Comm_Received_Type_Valid			;Branch to the reset since we did not received a valid type
+00027b 3a0a      	cpi R16, Comm_Type_Get					;Check for get type
+00027c f009      	breq Comm_Received_Type_Valid			;Branch to the reset since we did not received a valid type
                  
                  Comm_Received_Type_Reset:					;Branch here if it was not a valid type
-000265 9518      	reti									;Does nothing else than return since the byte counter is already at one
+00027d 9518      	reti									;Does nothing else than return since the byte counter is already at one
                  
                  Comm_Received_Type_Valid:
-000266 9300 0081 	sts Comm_Received_Byte_1, R16			;Store the received type in SRAM	
-000268 e002      	ldi R16, 0x02							;Set the counter to two
-000269 9300 0080 	sts Comm_Received_Byte_Num, R16			;Store it					
-00026b 9518      reti										;Return from interrupt
+00027e 9300 0081 	sts Comm_Received_Byte_1, R16			;Store the received type in SRAM	
+000280 e002      	ldi R16, 0x02							;Set the counter to two
+000281 9300 0080 	sts Comm_Received_Byte_Num, R16			;Store it					
+000283 9518      reti										;Return from interrupt
                  
                  ;---------------------------------------------------------------------------------------------------------------------
                  ;Received a command
                  ;---------------------------------------------------------------------------------------------------------------------
                  Comm_Received_Command:
                  
-00026c 9100 0081 	lds R16, Comm_Received_Byte_1
+000284 9100 0081 	lds R16, Comm_Received_Byte_1
                  
                  Comm_Received_Command_Type_Set_Check:				;Check if we received a set type
-00026e 3505      	cpi R16, Comm_Type_Set							;Check for set type
-00026f f031      	breq Comm_Received_Command_Type_Set				;Branch to the next check if not the case
+000286 3505      	cpi R16, Comm_Type_Set							;Check for set type
+000287 f031      	breq Comm_Received_Command_Type_Set				;Branch to the next check if not the case
                  
                  Comm_Received_Command_Type_Get_Check:				;Check if we received a get type
-000270 3a0a      	cpi R16, Comm_Type_Get							;Check for get type
-000271 f059      	breq Comm_Received_Command_Type_Get				;Branch to the reset since we did not received a valid type
+000288 3a0a      	cpi R16, Comm_Type_Get							;Check for get type
+000289 f079      	breq Comm_Received_Command_Type_Get				;Branch to the reset since we did not received a valid type
                  
                  Comm_Received_Command_Failure:						;This should never actually be called, since this is only possible if something else is tangling with the specific SRAM address inbetween bytes
-000272 e403      	ldi R16, 'C'											;But in the case that this happens
-000273 940e 0034 	call USART_Transmit								;The program will be stuck in the interrupt and spam
-000275 cffc      	rjmp Comm_Received_Command_Failure				;'C' over the USART
+00028a e403      	ldi R16, 'C'											;But in the case that this happens
+00028b 940e 0034 	call USART_Transmit								;The program will be stuck in the interrupt and spam
+00028d cffc      	rjmp Comm_Received_Command_Failure				;'C' over the USART
                  
                  ;---------------------------------------------------------------------------------------------------------------------
                  ;Check for matching set commands
                  ;---------------------------------------------------------------------------------------------------------------------
                  Comm_Received_Command_Type_Set:
-000276 b10c      	in R16, UDR	
+00028e b10c      	in R16, UDR	
                  
                  ;Start			
                  Comm_Received_Command_Start_Check:					;Check if we received a start command
-000277 3100      	cpi R16, Comm_Command_Start						;Check for start command
-000278 f069      	breq Comm_Received_Command_Valid		;Branch to the next check if not the case
+00028f 3100      	cpi R16, Comm_Command_Start						;Check for start command
+000290 f089      	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
                  
                  ;Stop
                  Comm_Received_Command_Stop_Check:					;Check if we received a stop command
-000279 3101      	cpi R16, Comm_Command_Stop						;Check for stop command
-00027a f059      	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
+000291 3101      	cpi R16, Comm_Command_Stop						;Check for stop command
+000292 f079      	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
+                 
+                 ;Speed_H
+                 Comm_Received_Command_Speed_H_Check:				;Check if we received a stop command
+000293 3102      	cpi R16, Comm_Command_Speed_H					;Check for stop command
+000294 f069      	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
+                 
+                 ;Speed_L
+                 Comm_Received_Command_Speed_L_Check:				;Check if we received a stop command
+000295 3103      	cpi R16, Comm_Command_Speed_L					;Check for stop command
+000296 f059      	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
                  
                  ;Invalid
-00027b 940c 0282 	jmp Comm_Received_Command_Reset					;If we did not in fact receive a valid set command, then reset
+000297 940c 029e 	jmp Comm_Received_Command_Reset					;If we did not in fact receive a valid set command, then reset
                  
                  ;---------------------------------------------------------------------------------------------------------------------
                  ;Check for matching get commands
                  ;---------------------------------------------------------------------------------------------------------------------
                  Comm_Received_Command_Type_Get:
-00027d b10c      	in R16, UDR	
+000299 b10c      	in R16, UDR	
                  
                  ;Laptime
                  Comm_Received_Command_Data_Check:					;Check if we received a LapTime command
-00027e 3a0b      	cpi R16, Comm_Command_Data						;Check for LapTime command
-00027f f031      	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
+00029a 3a0b      	cpi R16, Comm_Command_Data						;Check for LapTime command
+00029b f031      	breq Comm_Received_Command_Valid				;Branch to the next check if not the case
                  
                  ;Invalid
-000280 940c 0282 	jmp Comm_Received_Command_Reset					;If we did not in fact receive a valid set command, then reset
+00029c 940c 029e 	jmp Comm_Received_Command_Reset					;If we did not in fact receive a valid set command, then reset
                  
                  ;---------------------------------------------------------------------------------------------------------------------
                  ;Command handling
                  ;---------------------------------------------------------------------------------------------------------------------
                  Comm_Received_Command_Reset:
-000282 e001      	ldi R16, 0x01									;Reset the byte counter since we received an invalid command after a valid type									
-000283 9300 0080 	sts Comm_Received_Byte_Num, R16					;
-000285 9518      	reti											;Return
+00029e e001      	ldi R16, 0x01									;Reset the byte counter since we received an invalid command after a valid type									
+00029f 9300 0080 	sts Comm_Received_Byte_Num, R16					;
+0002a1 9518      	reti											;Return
                  
                  Comm_Received_Command_Valid:						
-000286 9300 0082 	sts Comm_Received_Byte_2, R16					;Store the received type in SRAM	
-000288 e003      	ldi R16, 0x03									;Set the counter to two
-000289 9300 0080 	sts Comm_Received_Byte_Num, R16					;Store it					
-00028b 9518      reti												;Return from interrupt
+0002a2 9300 0082 	sts Comm_Received_Byte_2, R16					;Store the received type in SRAM	
+0002a4 e003      	ldi R16, 0x03									;Set the counter to two
+0002a5 9300 0080 	sts Comm_Received_Byte_Num, R16					;Store it		
+                 				
+0002a7 9518      reti												;Return from interrupt
                  
                  
                  ;---------------------------------------------------------------------------------------------------------------------
@@ -2322,64 +2376,86 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  ;---------------------------------------------------------------------------------------------------------------------
                  Comm_Received_Execute:
                  
-00028c b10c      	in r16, UDR								;Read in the received parameter
-00028d 9300 0083 	sts Comm_Received_Byte_3, R16			;Store it in SRAM
+0002a8 b10c      	in r16, UDR								;Read in the received parameter
+0002a9 9300 0083 	sts Comm_Received_Byte_3, R16			;Store it in SRAM
                  	
-00028f e001      	ldi R16, 0x01							;Reset the counter
-000290 9300 0080 	sts Comm_Received_Byte_Num, R16			;Store it in SRAM
+0002ab e001      	ldi R16, 0x01							;Reset the counter
+0002ac 9300 0080 	sts Comm_Received_Byte_Num, R16			;Store it in SRAM
                  
                  ;---------------------------------------------------------------------------------------------------------------------
                  ;Execute Types
                  ;---------------------------------------------------------------------------------------------------------------------
                  
-000292 9100 0081 	lds R16, Comm_Received_Byte_1			;Load in the first(Type) byte
+0002ae 9100 0081 	lds R16, Comm_Received_Byte_1			;Load in the first(Type) byte
                  
                  	;SET
-000294 3505      	cpi R16, Comm_Type_Set					;Check if we received a SET and branch if it was
-000295 f019      	breq Comm_Received_Execute_Set			;
+0002b0 3505      	cpi R16, Comm_Type_Set					;Check if we received a SET and branch if it was
+0002b1 f019      	breq Comm_Received_Execute_Set			;
                  
                  	;GET
-000296 3a0a      	cpi R16, Comm_Type_Get					;Check if we received a GET and branch if it was
-000297 f081      	breq Comm_Received_Execute_Get			;
+0002b2 3a0a      	cpi R16, Comm_Type_Get					;Check if we received a GET and branch if it was
+0002b3 f129      	breq Comm_Received_Execute_Get			;
                  
-000298 9518      	reti
+0002b4 9518      	reti
                  ;---------------------------------------------------------------------------------------------------------------------
                  ;Execute SET's
                  ;---------------------------------------------------------------------------------------------------------------------
                  
                  Comm_Received_Execute_Set:
                  
-000299 9100 0082 	lds R16, Comm_Received_Byte_2			;Load in the second(Command) byte
+0002b5 9100 0082 	lds R16, Comm_Received_Byte_2			;Load in the second(Command) byte
                  
-00029b 3100      	cpi R16, Comm_Command_Start				;Check if we received a Start command
-00029c f019      	breq Comm_Received_Execute_Set_Start	;
+0002b7 3100      	cpi R16, Comm_Command_Start				;Check if we received a Start command
+0002b8 f039      	breq Comm_Received_Execute_Set_Start	;
                  
-00029d 3101      	cpi R16, Comm_Command_Stop				;Check if we received a Stop command
-00029e f031      	breq Comm_Received_Execute_Set_Stop		;
+0002b9 3101      	cpi R16, Comm_Command_Stop				;Check if we received a Stop command
+0002ba f051      	breq Comm_Received_Execute_Set_Stop		;
+                 
+0002bb 3102      	cpi R16, Comm_Command_Speed_H
+0002bc f071      	breq Comm_Received_Execute_Speed_H
+                 
+0002bd 3103      	cpi R16, Comm_Command_Speed_L
+0002be f089      	breq Comm_Received_Execute_Speed_L
                  
                  	;Insert error handling here
                  
-00029f 9518      	reti									;Do nothing if it was not a legit code
+0002bf 9518      	reti									;Do nothing if it was not a legit code
                  
                  ;Start
                  Comm_Received_Execute_Set_Start:
                  
-0002a0 9100 0083 	lds R16, Comm_Received_Byte_3			;Load in the third(Parameter) byte
+0002c0 9100 0083 	lds R16, Comm_Received_Byte_3			;Load in the third(Parameter) byte
                  
-0002a2 940e 00fd 	call Motor_Set_Percentage
+0002c2 940e 0151 	call Motor_Set_Percentage
                  
                  Comm_Received_Execute_Set_Start_End:
                  
-0002a4 9518      	reti									;Return from interrupt
+0002c4 9518      	reti									;Return from interrupt
                  
                  ;Stop
                  Comm_Received_Execute_Set_Stop:
+                 	
+0002c5 e503      	ldi R16, 'S'
+0002c6 940e 0034 	call USART_Transmit
                  
-0002a5 e000      	ldi R16, 0x00							;Load in 0x00
-0002a6 bd03      	out OCR2, R16							;And set the pwm duty cycle to nothing to stop the motor.
+0002c8 e000      	ldi R16, 0x00							;Load in 0x00
+0002c9 bd03      	out OCR2, R16							;And set the pwm duty cycle to nothing to stop the motor.
                  
-0002a7 9518      	reti
+0002ca 9518      	reti
                  
+                 Comm_Received_Execute_Speed_H:
+0002cb 9100 0083 	lds R16, Comm_Received_Byte_3
+0002cd 9300 008b 	sts	Temp, R16 
+                 
+0002cf 9518      	reti
+                 
+                 Comm_Received_Execute_Speed_L:
+0002d0 9100 008b 	lds R16, Temp
+0002d2 9300 0089 	sts Speed_H, R16 
+0002d4 9100 0083 	lds R16, Comm_Received_Byte_3
+0002d6 9300 008a 	sts Speed_L, R16 
+                 
+0002d8 9518      	reti
                  
                  ;---------------------------------------------------------------------------------------------------------------------
                  ;Execute GET's
@@ -2387,89 +2463,89 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  
                  Comm_Received_Execute_Get:	
                  
-0002a8 9100 0082 	lds R16, Comm_Received_Byte_2			;Load in the second(Command) byte
+0002d9 9100 0082 	lds R16, Comm_Received_Byte_2			;Load in the second(Command) byte
                  
-0002aa 3a0b      	cpi R16, Comm_Command_Data		
-0002ab f009      	breq Comm_Received_Execute_Get_Data		
+0002db 3a0b      	cpi R16, Comm_Command_Data		
+0002dc f009      	breq Comm_Received_Execute_Get_Data		
                  
                  	;Insert error handling here
                  
-0002ac 9518      	reti									;Do nothing if it was not a legit code
+0002dd 9518      	reti									;Do nothing if it was not a legit code
                  
                  Comm_Received_Execute_Get_Data:
-0002ad 940e 02de 	call Comm_Received_Execute_Get_Ticks
+0002de 940e 030f 	call Comm_Received_Execute_Get_Ticks
                  	;call Comm_Received_Execute_Get_Zgyro
                  	;call Comm_Received_Execute_Get_Xaccel
-0002af 9518      	reti
+0002e0 9518      	reti
                  
                  Comm_Received_Execute_Get_Xaccel:
                  
-0002b0 940e 017d 	call MPU6050_Read_Accel_X
+0002e1 940e 01d1 	call MPU6050_Read_Accel_X
                  
-0002b2 eb0b      	ldi R16, 0xBB
-0002b3 940e 0034 	call USART_Transmit
+0002e3 eb0b      	ldi R16, 0xBB
+0002e4 940e 0034 	call USART_Transmit
                  
-0002b5 ea01      	ldi R16, Comm_Command_Xaccel_H
-0002b6 940e 0034 	call USART_Transmit
+0002e6 ea01      	ldi R16, Comm_Command_Xaccel_H
+0002e7 940e 0034 	call USART_Transmit
                  
-0002b8 9100 0060 	lds R16, ACCEL_XOUT_H
-0002ba 940e 0034 	call USART_Transmit
+0002e9 9100 0060 	lds R16, ACCEL_XOUT_H
+0002eb 940e 0034 	call USART_Transmit
                  	
-0002bc eb0b      	ldi R16, 0xBB
-0002bd 940e 0034 	call USART_Transmit
+0002ed eb0b      	ldi R16, 0xBB
+0002ee 940e 0034 	call USART_Transmit
                  
-0002bf ea02      	ldi R16, Comm_Command_Xaccel_L
-0002c0 940e 0034 	call USART_Transmit
+0002f0 ea02      	ldi R16, Comm_Command_Xaccel_L
+0002f1 940e 0034 	call USART_Transmit
                  
-0002c2 9100 0061 	lds R16, ACCEL_XOUT_L
-0002c4 940e 0034 	call USART_Transmit
+0002f3 9100 0061 	lds R16, ACCEL_XOUT_L
+0002f5 940e 0034 	call USART_Transmit
                  
-0002c6 9508      	ret
+0002f7 9508      	ret
                  
                  Comm_Received_Execute_Get_Zgyro:
-0002c7 940e 0197 	call MPU6050_Read_Gyro_Z
+0002f8 940e 01eb 	call MPU6050_Read_Gyro_Z
                  
-0002c9 eb0b      	ldi R16, 0xBB
-0002ca 940e 0034 	call USART_Transmit
+0002fa eb0b      	ldi R16, 0xBB
+0002fb 940e 0034 	call USART_Transmit
                  
-0002cc ea03      	ldi R16, Comm_Command_Zgyro_H
-0002cd 940e 0034 	call USART_Transmit
+0002fd ea03      	ldi R16, Comm_Command_Zgyro_H
+0002fe 940e 0034 	call USART_Transmit
                  
-0002cf 9100 006c 	lds R16, GYRO_ZOUT_H
-0002d1 940e 0034 	call USART_Transmit
+000300 9100 006c 	lds R16, GYRO_ZOUT_H
+000302 940e 0034 	call USART_Transmit
                  	
-0002d3 eb0b      	ldi R16, 0xBB
-0002d4 940e 0034 	call USART_Transmit
+000304 eb0b      	ldi R16, 0xBB
+000305 940e 0034 	call USART_Transmit
                  
-0002d6 ea04      	ldi R16, Comm_Command_Zgyro_L
-0002d7 940e 0034 	call USART_Transmit
+000307 ea04      	ldi R16, Comm_Command_Zgyro_L
+000308 940e 0034 	call USART_Transmit
                  
-0002d9 9100 006d 	lds R16, GYRO_ZOUT_L
-0002db 940e 0034 	call USART_Transmit
+00030a 9100 006d 	lds R16, GYRO_ZOUT_L
+00030c 940e 0034 	call USART_Transmit
                  
-0002dd 9508      	ret
+00030e 9508      	ret
                  
                  Comm_Received_Execute_Get_Ticks:
                  
-0002de eb0b      	ldi R16, 0xBB
-0002df 940e 0034 	call USART_Transmit
+00030f eb0b      	ldi R16, 0xBB
+000310 940e 0034 	call USART_Transmit
                  
-0002e1 ea05      	ldi R16, Comm_Command_Ticks_H
-0002e2 940e 0034 	call USART_Transmit
+000312 ea05      	ldi R16, Comm_Command_Ticks_H
+000313 940e 0034 	call USART_Transmit
                  
-0002e4 9100 007c 	lds R16, Ticks_H
-0002e6 940e 0034 	call USART_Transmit
+000315 9100 007c 	lds R16, Ticks_H
+000317 940e 0034 	call USART_Transmit
                  	
-0002e8 eb0b      	ldi R16, 0xBB
-0002e9 940e 0034 	call USART_Transmit
+000319 eb0b      	ldi R16, 0xBB
+00031a 940e 0034 	call USART_Transmit
                  
-0002eb ea06      	ldi R16, Comm_Command_Ticks_L
-0002ec 940e 0034 	call USART_Transmit
+00031c ea06      	ldi R16, Comm_Command_Ticks_L
+00031d 940e 0034 	call USART_Transmit
                  
-0002ee 9100 007b 	lds R16, Ticks_L
-0002f0 940e 0034 	call USART_Transmit
+00031f 9100 007b 	lds R16, Ticks_L
+000321 940e 0034 	call USART_Transmit
                  
-0002f2 9508      	ret
+000323 9508      	ret
                  
                  ;---------------------------------------------------------------------------------------------------------------------
                  ;Send
@@ -2477,48 +2553,189 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  
                  ;LapTime
                  Comm_Send_LapTime:
-0002f3 eb0b      	ldi R16, 0xBB
-0002f4 940e 0034 	call USART_Transmit
+000324 eb0b      	ldi R16, 0xBB
+000325 940e 0034 	call USART_Transmit
                  
-0002f6 ea07      	ldi R16, Comm_Command_LapTime_H
-0002f7 940e 0034 	call USART_Transmit
+000327 ea07      	ldi R16, Comm_Command_LapTime_H
+000328 940e 0034 	call USART_Transmit
                  
-0002f9 9100 0075 	lds R16, Lap_time_M
-0002fb 940e 0034 	call USART_Transmit
+00032a 9100 0075 	lds R16, Lap_time_M
+00032c 940e 0034 	call USART_Transmit
                  	
-0002fd eb0b      	ldi R16, 0xBB
-0002fe 940e 0034 	call USART_Transmit
+00032e eb0b      	ldi R16, 0xBB
+00032f 940e 0034 	call USART_Transmit
                  
-000300 ea08      	ldi R16, Comm_Command_LapTime_L
-000301 940e 0034 	call USART_Transmit
+000331 ea08      	ldi R16, Comm_Command_LapTime_L
+000332 940e 0034 	call USART_Transmit
                  
-000303 9100 0074 	lds R16, Lap_time_L
-000305 940e 0034 	call USART_Transmit
+000334 9100 0074 	lds R16, Lap_time_L
+000336 940e 0034 	call USART_Transmit
                  
-000307 9508      	ret
+000338 9508      	ret
                  
                  ;Lap ticks
                  Comm_Send_LapTicks:
-000308 eb0b      	ldi R16, 0xBB
-000309 940e 0034 	call USART_Transmit
+000339 eb0b      	ldi R16, 0xBB
+00033a 940e 0034 	call USART_Transmit
                  
-00030b ea09      	ldi R16, Comm_Command_LapTicks_H
-00030c 940e 0034 	call USART_Transmit
+00033c ea09      	ldi R16, Comm_Command_LapTicks_H
+00033d 940e 0034 	call USART_Transmit
                  
-00030e 9100 007e 	lds R16, Ticks_Lap_H
-000310 940e 0034 	call USART_Transmit
+00033f 9100 007e 	lds R16, Ticks_Lap_H
+000341 940e 0034 	call USART_Transmit
                  	
-000312 eb0b      	ldi R16, 0xBB
-000313 940e 0034 	call USART_Transmit
+000343 eb0b      	ldi R16, 0xBB
+000344 940e 0034 	call USART_Transmit
                  
-000315 ea0a      	ldi R16, Comm_Command_LapTicks_L
-000316 940e 0034 	call USART_Transmit
+000346 ea0a      	ldi R16, Comm_Command_LapTicks_L
+000347 940e 0034 	call USART_Transmit
                  
-000318 9100 007d 	lds R16, Ticks_Lap_L
-00031a 940e 0034 	call USART_Transmit
+000349 9100 007d 	lds R16, Ticks_Lap_L
+00034b 940e 0034 	call USART_Transmit
                  
+00034d 9508      	ret
+                 .include "Speed.asm"
+                 
+                 .equ ForgivenessZone = 4096
+                 
+                 Hastigheds_kontrol:
+                 		
+00034e 9100 007f 		lds		R16, SREG_1			
+000350 fd07      		sbrc	R16, 7							; bit 7 is the delay enable 
+000351 c03c      		rjmp	Braking
+                 
+000352 9100 008a 		lds		R16, Speed_L 
+000354 9110 0089 		lds		R17, Speed_H
+000356 9120 0079 		lds		R18, Pulse_Time_L
+000358 9130 007a 		lds		R19, Pulse_Time_H
+                 
+00035a 1b02      		sub		R16, R18						; R16 = Ønsket pulstid, R17 = Sidst målte pulstid
+00035b 0b13      		sbc		R17, R19
+                 		
+00035c b70f      		in		R16, SREG
+00035d fd02      		sbrc	R16, 2
+00035e c04e      		rjmp	Langsommere
+                 		
+                 Hurtigere:		
+                 		
+00035f 9000 0070 		lds		R0, Timer_1ms_L
+000361 9010 006f 		lds		R1, Timer_1ms_M
+000363 9020 006e 		lds		R2, Timer_1ms_H
+                 		
+000365 9200 0087 		sts		Time_Stamp_Braking_L, R0
+000367 9210 0086 		sts		Time_Stamp_Braking_M, R1
+000369 9220 0085 		sts		Time_Stamp_Braking_H, R2
+                 		
+00036b e040      		ldi		R20, 0
+00036c bd43      		out		OCR2, R20
+                 		
+00036d 3110      		cpi		R17, high(ForgivenessZone)
+00036e f1b8      		brlo	Braking_End
+                 		
+00036f 3110      		cpi		R17, high(Diff_Max - ForgivenessZone)
+000370 f498      		brsh	Max_Brake
+                 		
+000371 9516      		lsr		R17
+000372 9507      		ror		R16
+000373 9516      		lsr		R17
+000374 9507      		ror		R16				; divider med 64
+000375 9516      		lsr		R17
+000376 9507      		ror		R16	
+000377 9516      		lsr		R17
+000378 9507      		ror		R16	
+000379 9516      		lsr		R17
+00037a 9507      		ror		R16
+                 		
+00037b 9300 0084 		sts		Delay_Amount, R16
+                 		
+00037d 9ac0      		sbi		PORTB, PB0
+00037e 9100 007f
+000380 6800
+000381 9300 007f 		Set_SREG_1 7
+                 		
+000383 9508      		ret
+                 
+                 Max_Brake:		
+000384 ef4f      		ldi		R20, 255
+000385 9310 0084 		sts		Delay_Amount, R17
+                 		
+000387 9ac0      		sbi		PORTB, PB0
+000388 9100 007f
+00038a 6800
+00038b 9300 007f 		Set_SREG_1 7
+                 		
+00038d 9508      		ret
+                 		
+                 Braking:
+                 
+00038e 2700      		clr R16
+00038f bd03      		out OCR2, R16
+                  
+000390 9000 0070 		lds		R0, Timer_1ms_L				
+000392 9010 006f 		lds		R1, Timer_1ms_M				; Current time since startup in ms
+000394 9020 006e 		lds		R2, Timer_1ms_H				 
+                 				
+000396 9030 0087 		lds		R3, Time_Stamp_Braking_L			
+000398 9040 0086 		lds		R4, Time_Stamp_Braking_M			; Time stamp at start of lap
+00039a 9050 0085 		lds		R5, Time_Stamp_Braking_H
+                 							
+00039c 1803      		sub		R0, R3						
+00039d 0814      		sbc		R1, R4						; Difference between current time and last time stamp
+00039e 0825      		sbc		R2, R5
+                 		
+00039f 9060 0084 		lds		R6, Delay_Amount
+                 
+0003a1 2011      		tst		R1
+0003a2 f419      		brne	Braking_End
+                 		
+0003a3 1406      		cp		R0, R6
+0003a4 f408      		brsh	Braking_End
+                 		
+                 
+                 
+0003a5 9508      		ret
+                 		
+                 Braking_End:
+0003a6 98c0      		cbi		PORTB, PB0
+0003a7 9100 007f
+0003a9 770f
+0003aa 9300 007f 		Clear_SREG_1 7
+                 		
+0003ac 9508      		ret
+                 
+                 Langsommere:
+0003ad 5001      		subi	R16, 1
+0003ae 4010      		sbci	R17, 0
+0003af 9500      		com		R16
+0003b0 9510      		com		R17
+                 			
+0003b1 3210      		cpi		R17, high(Diff_Max)
+0003b2 f460      		brsh	MaxGas
+                 				
+0003b3 9516      		lsr		R17
+0003b4 9507      		ror		R16
+0003b5 9516      		lsr		R17
+0003b6 9507      		ror		R16				; divider med 32
+0003b7 9516      		lsr		R17
+0003b8 9507      		ror		R16	
+0003b9 9516      		lsr		R17
+0003ba 9507      		ror		R16	
+0003bb 9516      		lsr		R17
+0003bc 9507      		ror		R16
+                 	
+                 		
+0003bd bd03      		out		OCR2, R16
+                 		
+0003be 9508      		ret
+                 		
+                 
+                 MaxGas: 
+0003bf ef4f      		ldi		R20, 255
+0003c0 bd43      		out		OCR2, R20
+                 		
+0003c1 9508      		ret
                  .include "Setup.asm"
-00031c 9508      
+                 
                  	;Initialize the stack
                  	LDI	R16, low(RAMEND)
                      OUT	SPL, R16
@@ -2528,6 +2745,7 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  	USART_Init 0b00000000,0b01100111	;Initialize the USART module with 9600 baud @ 16MHz clock
                  	Comm_Init							;Intialize the communication protocol
                  	Motor_Init							;Initialize the motor pwm
+                 	Brake_Init							;Initialize the brake pin
                  	I2C_Init 0x00,0x12					;Initialize the TWI module with Prescaler 4 and TWBR 12
                  	Time_Init							;Initialize the timer associated with timekeeping
                  	WheelSpeed_Init						;Initialize the wheel speed sensor
@@ -2535,403 +2753,436 @@ D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm(20): Including file 'D:
                  	MPU6050_Init						;Initialize the MPU6050 3 times to make sure it writes the values(We should make some kind of check instead)
                  	MPU6050_Init						;
                  	MPU6050_Init						;
+                 	
                  
                  	;Global interrupt
                  	
                  .ENDMACRO
                  
                  Init:
-00031d e50f
-00031e bf0d
-00031f e008
-000320 bf0e
-000321 e607
-000322 e010
-000323 bd10
-000324 b909
-000325 e908
-000326 b90a
-000327 e806
-000328 bd00
-000329 e001
-00032a 9300 0080
-00032c 2700
-00032d 9300 0081
-00032f 9300 0082
-000331 9300 0083
-000333 b301
-000334 6800
-000335 bb01
-000336 e609
-000337 bd05
-000338 e000
-000339 b901
-00033a e102
-00033b b900
-00033c e004
-00033d bf06
-00033e 0000
-00033f e00b
-000340 bf03
-000341 e000
-000342 bf02
-000343 ef09
-000344 bf0c
-000345 2700
-000346 9300 0070
-000348 9300 006f
-00034a 9300 006e
-00034c b709
-00034d 6002
-00034e bf09
-00034f e000
-000350 bd0f
-000351 e002
-000352 bd0e
-000353 2700
-000354 9300 0077
-000356 9300 0078
-000358 9300 007b
-00035a 9300 007c
-00035c b709
-00035d 6200
-00035e bf09
-00035f 2700
-000360 9300 0073
-000362 9300 0072
-000364 9300 0071
-000366 9300 0074
-000368 9300 0075
-00036a 9300 0076
-00036c b108
-00036d 6408
-00036e b908
-00036f b700
-000370 7f07
-000371 bf00
-000372 98bb
-000373 940e 010c
-000375 ed00
-000376 940e 0115
-000378 e109
-000379 940e 0115
-00037b e007
-00037c 940e 0115
-00037e e000
-00037f 940e 0115
-000381 e008
-000382 940e 0115
-000384 e008
-000385 940e 0115
-000387 e000
-000388 940e 0115
-00038a e000
-00038b 940e 0115
-00038d e000
-00038e 940e 0115
-000390 e000
-000391 940e 0115
-000393 e000
-000394 940e 0115
-000396 e000
-000397 940e 0115
-000399 e000
-00039a 940e 0115
-00039c e000
-00039d 940e 0115
-00039f e000
-0003a0 940e 0115
-0003a2 e000
-0003a3 940e 0115
-0003a5 e000
-0003a6 940e 0115
-0003a8 e000
-0003a9 940e 0115
-0003ab e000
-0003ac 940e 0115
-0003ae e000
-0003af 940e 0115
-0003b1 e000
-0003b2 940e 0115
-0003b4 e000
-0003b5 940e 0115
-0003b7 e000
-0003b8 940e 0115
-0003ba e000
-0003bb 940e 0115
-0003bd e000
-0003be 940e 0115
-0003c0 e000
-0003c1 940e 0115
-0003c3 e000
-0003c4 940e 0115
-0003c6 e000
-0003c7 940e 0115
-0003c9 e000
-0003ca 940e 0115
-0003cc e000
-0003cd 940e 0115
-0003cf e000
-0003d0 940e 0115
-0003d2 940e 010c
-0003d4 ed00
-0003d5 940e 0115
-0003d7 e307
-0003d8 940e 0115
-0003da e000
-0003db 940e 0115
-0003dd e000
-0003de 940e 0115
-0003e0 940e 010c
-0003e2 ed00
-0003e3 940e 0115
-0003e5 e603
-0003e6 940e 0115
-0003e8 e000
-0003e9 940e 0115
-0003eb e000
-0003ec 940e 0115
-0003ee e000
-0003ef 940e 0115
-0003f1 e000
-0003f2 940e 0115
-0003f4 e000
-0003f5 940e 0115
-0003f7 e000
-0003f8 940e 0115
-0003fa e000
-0003fb 940e 0115
-0003fd e000
-0003fe 940e 0115
-000400 e002
-000401 940e 0115
-000403 e000
-000404 940e 0115
-000406 940e 010c
-000408 ed00
-000409 940e 0115
-00040b e704
-00040c 940e 0115
-00040e e000
-00040f 940e 0115
-000411 940e 0112
-000413 940e 010c
-000415 ed00
-000416 940e 0115
-000418 e109
-000419 940e 0115
-00041b e007
-00041c 940e 0115
-00041e e000
-00041f 940e 0115
-000421 e008
-000422 940e 0115
-000424 e008
-000425 940e 0115
+0003c2 e50f
+0003c3 bf0d
+0003c4 e008
+0003c5 bf0e
+0003c6 e607
+0003c7 e010
+0003c8 bd10
+0003c9 b909
+0003ca e908
+0003cb b90a
+0003cc e806
+0003cd bd00
+0003ce e001
+0003cf 9300 0080
+0003d1 2700
+0003d2 9300 0081
+0003d4 9300 0082
+0003d6 9300 0083
+0003d8 b301
+0003d9 6800
+0003da bb01
+0003db e609
+0003dc bd05
+0003dd b307
+0003de 6001
+0003df bb07
+0003e0 98c0
+0003e1 e000
+0003e2 b901
+0003e3 e102
+0003e4 b900
+0003e5 e004
+0003e6 bf06
+0003e7 0000
+0003e8 e00b
+0003e9 bf03
+0003ea e000
+0003eb bf02
+0003ec ef09
+0003ed bf0c
+0003ee 2700
+0003ef 9300 0070
+0003f1 9300 006f
+0003f3 9300 006e
+0003f5 b709
+0003f6 6002
+0003f7 bf09
+0003f8 e000
+0003f9 bd0f
+0003fa e002
+0003fb bd0e
+0003fc 2700
+0003fd 9300 0077
+0003ff 9300 0078
+000401 9300 007b
+000403 9300 007c
+000405 b709
+000406 6200
+000407 bf09
+000408 2700
+000409 9300 0073
+00040b 9300 0072
+00040d 9300 0071
+00040f 9300 0074
+000411 9300 0075
+000413 9300 0076
+000415 b108
+000416 6408
+000417 b908
+000418 b700
+000419 7f07
+00041a bf00
+00041b 98bb
+00041c 940e 0160
+00041e ed00
+00041f 940e 0169
+000421 e109
+000422 940e 0169
+000424 e007
+000425 940e 0169
 000427 e000
-000428 940e 0115
-00042a e000
-00042b 940e 0115
-00042d e000
-00042e 940e 0115
+000428 940e 0169
+00042a e008
+00042b 940e 0169
+00042d e008
+00042e 940e 0169
 000430 e000
-000431 940e 0115
+000431 940e 0169
 000433 e000
-000434 940e 0115
+000434 940e 0169
 000436 e000
-000437 940e 0115
+000437 940e 0169
 000439 e000
-00043a 940e 0115
+00043a 940e 0169
 00043c e000
-00043d 940e 0115
+00043d 940e 0169
 00043f e000
-000440 940e 0115
+000440 940e 0169
 000442 e000
-000443 940e 0115
+000443 940e 0169
 000445 e000
-000446 940e 0115
+000446 940e 0169
 000448 e000
-000449 940e 0115
+000449 940e 0169
 00044b e000
-00044c 940e 0115
+00044c 940e 0169
 00044e e000
-00044f 940e 0115
+00044f 940e 0169
 000451 e000
-000452 940e 0115
+000452 940e 0169
 000454 e000
-000455 940e 0115
+000455 940e 0169
 000457 e000
-000458 940e 0115
+000458 940e 0169
 00045a e000
-00045b 940e 0115
+00045b 940e 0169
 00045d e000
-00045e 940e 0115
+00045e 940e 0169
 000460 e000
-000461 940e 0115
+000461 940e 0169
 000463 e000
-000464 940e 0115
+000464 940e 0169
 000466 e000
-000467 940e 0115
+000467 940e 0169
 000469 e000
-00046a 940e 0115
+00046a 940e 0169
 00046c e000
-00046d 940e 0115
+00046d 940e 0169
 00046f e000
-000470 940e 0115
-000472 940e 010c
-000474 ed00
-000475 940e 0115
-000477 e307
-000478 940e 0115
-00047a e000
-00047b 940e 0115
-00047d e000
-00047e 940e 0115
-000480 940e 010c
-000482 ed00
-000483 940e 0115
-000485 e603
-000486 940e 0115
-000488 e000
-000489 940e 0115
-00048b e000
-00048c 940e 0115
-00048e e000
-00048f 940e 0115
+000470 940e 0169
+000472 e000
+000473 940e 0169
+000475 e000
+000476 940e 0169
+000478 e000
+000479 940e 0169
+00047b 940e 0160
+00047d ed00
+00047e 940e 0169
+000480 e307
+000481 940e 0169
+000483 e000
+000484 940e 0169
+000486 e000
+000487 940e 0169
+000489 940e 0160
+00048b ed00
+00048c 940e 0169
+00048e e603
+00048f 940e 0169
 000491 e000
-000492 940e 0115
+000492 940e 0169
 000494 e000
-000495 940e 0115
+000495 940e 0169
 000497 e000
-000498 940e 0115
+000498 940e 0169
 00049a e000
-00049b 940e 0115
+00049b 940e 0169
 00049d e000
-00049e 940e 0115
-0004a0 e002
-0004a1 940e 0115
+00049e 940e 0169
+0004a0 e000
+0004a1 940e 0169
 0004a3 e000
-0004a4 940e 0115
-0004a6 940e 010c
-0004a8 ed00
-0004a9 940e 0115
-0004ab e704
-0004ac 940e 0115
-0004ae e000
-0004af 940e 0115
-0004b1 940e 0112
-0004b3 940e 010c
-0004b5 ed00
-0004b6 940e 0115
-0004b8 e109
-0004b9 940e 0115
-0004bb e007
-0004bc 940e 0115
-0004be e000
-0004bf 940e 0115
-0004c1 e008
-0004c2 940e 0115
-0004c4 e008
-0004c5 940e 0115
+0004a4 940e 0169
+0004a6 e000
+0004a7 940e 0169
+0004a9 e002
+0004aa 940e 0169
+0004ac e000
+0004ad 940e 0169
+0004af 940e 0160
+0004b1 ed00
+0004b2 940e 0169
+0004b4 e704
+0004b5 940e 0169
+0004b7 e000
+0004b8 940e 0169
+0004ba 940e 0166
+0004bc 940e 0160
+0004be ed00
+0004bf 940e 0169
+0004c1 e109
+0004c2 940e 0169
+0004c4 e007
+0004c5 940e 0169
 0004c7 e000
-0004c8 940e 0115
-0004ca e000
-0004cb 940e 0115
-0004cd e000
-0004ce 940e 0115
+0004c8 940e 0169
+0004ca e008
+0004cb 940e 0169
+0004cd e008
+0004ce 940e 0169
 0004d0 e000
-0004d1 940e 0115
+0004d1 940e 0169
 0004d3 e000
-0004d4 940e 0115
+0004d4 940e 0169
 0004d6 e000
-0004d7 940e 0115
+0004d7 940e 0169
 0004d9 e000
-0004da 940e 0115
+0004da 940e 0169
 0004dc e000
-0004dd 940e 0115
+0004dd 940e 0169
 0004df e000
-0004e0 940e 0115
+0004e0 940e 0169
 0004e2 e000
-0004e3 940e 0115
+0004e3 940e 0169
 0004e5 e000
-0004e6 940e 0115
+0004e6 940e 0169
 0004e8 e000
-0004e9 940e 0115
+0004e9 940e 0169
 0004eb e000
-0004ec 940e 0115
+0004ec 940e 0169
 0004ee e000
-0004ef 940e 0115
+0004ef 940e 0169
 0004f1 e000
-0004f2 940e 0115
+0004f2 940e 0169
 0004f4 e000
-0004f5 940e 0115
+0004f5 940e 0169
 0004f7 e000
-0004f8 940e 0115
+0004f8 940e 0169
 0004fa e000
-0004fb 940e 0115
+0004fb 940e 0169
 0004fd e000
-0004fe 940e 0115
+0004fe 940e 0169
 000500 e000
-000501 940e 0115
+000501 940e 0169
 000503 e000
-000504 940e 0115
+000504 940e 0169
 000506 e000
-000507 940e 0115
+000507 940e 0169
 000509 e000
-00050a 940e 0115
+00050a 940e 0169
 00050c e000
-00050d 940e 0115
+00050d 940e 0169
 00050f e000
-000510 940e 0115
-000512 940e 010c
-000514 ed00
-000515 940e 0115
-000517 e307
-000518 940e 0115
-00051a e000
-00051b 940e 0115
-00051d e000
-00051e 940e 0115
-000520 940e 010c
-000522 ed00
-000523 940e 0115
-000525 e603
-000526 940e 0115
-000528 e000
-000529 940e 0115
-00052b e000
-00052c 940e 0115
-00052e e000
-00052f 940e 0115
+000510 940e 0169
+000512 e000
+000513 940e 0169
+000515 e000
+000516 940e 0169
+000518 e000
+000519 940e 0169
+00051b 940e 0160
+00051d ed00
+00051e 940e 0169
+000520 e307
+000521 940e 0169
+000523 e000
+000524 940e 0169
+000526 e000
+000527 940e 0169
+000529 940e 0160
+00052b ed00
+00052c 940e 0169
+00052e e603
+00052f 940e 0169
 000531 e000
-000532 940e 0115
+000532 940e 0169
 000534 e000
-000535 940e 0115
+000535 940e 0169
 000537 e000
-000538 940e 0115
+000538 940e 0169
 00053a e000
-00053b 940e 0115
+00053b 940e 0169
 00053d e000
-00053e 940e 0115
-000540 e002
-000541 940e 0115
+00053e 940e 0169
+000540 e000
+000541 940e 0169
 000543 e000
-000544 940e 0115
-000546 940e 010c
-000548 ed00
-000549 940e 0115
-00054b e704
-00054c 940e 0115
-00054e e000
-00054f 940e 0115
-000551 940e 0112 	Setup
-                 					
-000553 9478      	sei					;Enable global interrupt	
-000554 c000      	rjmp Main
+000544 940e 0169
+000546 e000
+000547 940e 0169
+000549 e002
+00054a 940e 0169
+00054c e000
+00054d 940e 0169
+00054f 940e 0160
+000551 ed00
+000552 940e 0169
+000554 e704
+000555 940e 0169
+000557 e000
+000558 940e 0169
+00055a 940e 0166
+00055c 940e 0160
+00055e ed00
+00055f 940e 0169
+000561 e109
+000562 940e 0169
+000564 e007
+000565 940e 0169
+000567 e000
+000568 940e 0169
+00056a e008
+00056b 940e 0169
+00056d e008
+00056e 940e 0169
+000570 e000
+000571 940e 0169
+000573 e000
+000574 940e 0169
+000576 e000
+000577 940e 0169
+000579 e000
+00057a 940e 0169
+00057c e000
+00057d 940e 0169
+00057f e000
+000580 940e 0169
+000582 e000
+000583 940e 0169
+000585 e000
+000586 940e 0169
+000588 e000
+000589 940e 0169
+00058b e000
+00058c 940e 0169
+00058e e000
+00058f 940e 0169
+000591 e000
+000592 940e 0169
+000594 e000
+000595 940e 0169
+000597 e000
+000598 940e 0169
+00059a e000
+00059b 940e 0169
+00059d e000
+00059e 940e 0169
+0005a0 e000
+0005a1 940e 0169
+0005a3 e000
+0005a4 940e 0169
+0005a6 e000
+0005a7 940e 0169
+0005a9 e000
+0005aa 940e 0169
+0005ac e000
+0005ad 940e 0169
+0005af e000
+0005b0 940e 0169
+0005b2 e000
+0005b3 940e 0169
+0005b5 e000
+0005b6 940e 0169
+0005b8 e000
+0005b9 940e 0169
+0005bb 940e 0160
+0005bd ed00
+0005be 940e 0169
+0005c0 e307
+0005c1 940e 0169
+0005c3 e000
+0005c4 940e 0169
+0005c6 e000
+0005c7 940e 0169
+0005c9 940e 0160
+0005cb ed00
+0005cc 940e 0169
+0005ce e603
+0005cf 940e 0169
+0005d1 e000
+0005d2 940e 0169
+0005d4 e000
+0005d5 940e 0169
+0005d7 e000
+0005d8 940e 0169
+0005da e000
+0005db 940e 0169
+0005dd e000
+0005de 940e 0169
+0005e0 e000
+0005e1 940e 0169
+0005e3 e000
+0005e4 940e 0169
+0005e6 e000
+0005e7 940e 0169
+0005e9 e002
+0005ea 940e 0169
+0005ec e000
+0005ed 940e 0169
+0005ef 940e 0160
+0005f1 ed00
+0005f2 940e 0169
+0005f4 e704
+0005f5 940e 0169
+0005f7 e000
+0005f8 940e 0169
+0005fa 940e 0166 	Setup
+                 	
+0005fc ef0a      			ldi		R16, 250
+0005fd 940e 0139 			call	Delay_MS
+0005ff ef0a      			ldi		R16, 250
+000600 940e 0139 			call	Delay_MS
+000602 ef0a      			ldi		R16, 250
+000603 940e 0139 			call	Delay_MS
+000605 ef0a      			ldi		R16, 250
+000606 940e 0139 			call	Delay_MS
+000608 ef0a      			ldi		R16, 250
+000609 940e 0139 			call	Delay_MS
+00060b ef0a      			ldi		R16, 250
+00060c 940e 0139 			call	Delay_MS
+00060e ef0a      			ldi		R16, 250
+00060f 940e 0139 			call	Delay_MS
+000611 ef0a      			ldi		R16, 250
+000612 940e 0139 			call	Delay_MS
+                 			
+000614 e001      			ldi R16, LOW(1)
+000615 9300 008a 			sts Speed_L, R16
+000617 e000      			ldi R16, HIGH(1)
+000618 9300 0089 			sts Speed_H, R16
                  
-                 Main:	
                  
-000555 cfff      	rjmp Main
+00061a 2700      	clr		R16					
+00061b 9300 007f 	sts		SREG_1, R16				; clear SREG_1
+                 			
+                 
+00061d e604      			ldi R16, 100
+00061e bd03      			out OCR2, R16
+00061f 9478      	sei					;Enable global interrupt	
+000620 c000      	rjmp Main
+                 
+000621 cfff      Main:	rjmp	Main
+                 			
 
 
 RESOURCE USE INFORMATION
@@ -2949,9 +3200,9 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega32A" register use summary:
-r0 :  22 r1 :  23 r2 :  15 r3 :  13 r4 :   6 r5 :   6 r6 :   3 r7 :   2 
+r0 :  26 r1 :  27 r2 :  18 r3 :  14 r4 :   8 r5 :   8 r6 :   5 r7 :   2 
 r8 :   2 r9 :   2 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16: 436 r17:  13 r18:  33 r19:  26 r20:  40 r21:   0 r22:   0 r23:   0 
+r16: 511 r17:  31 r18:  35 r19:  28 r20:  45 r21:   0 r22:   0 r23:   0 
 r24:   0 r25:   0 r26:  30 r27:  30 r28:   0 r29:   0 r30:   4 r31:   4 
 x  :   0 y  :   0 z  :   0 
 Registers used: 19 out of 35 (54.3%)
@@ -2959,29 +3210,29 @@ Registers used: 19 out of 35 (54.3%)
 "ATmega32A" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :  14 add   :  24 adiw  :   1 and   :   0 
 andi  :   1 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :  14 brcs  :   0 break :   0 breq  :  14 brge  :   0 brhc  :   0 
-brhs  :   0 brid  :   0 brie  :   0 brlo  :   4 brlt  :   0 brmi  :   0 
-brne  :   1 brpl  :   0 brsh  :   1 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  : 253 cbi   :   1 cbr   :   1 
-clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :  16 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   2 cp    :   3 cpc   :   0 
-cpi   :  17 cpse  :   0 dec   :  10 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :  21 inc   :  12 jmp   :   6 
-ld    :   0 ldd   :   0 ldi   : 270 lds   :  39 lpm   :   0 lsl   :   1 
-lsr   :   0 mov   :   5 movw  :   3 mul   :   1 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   1 or    :   0 ori   :   4 out   :  36 pop   :  22 
-push  :  16 rcall :   0 ret   :  22 reti  :  14 rjmp  :  16 rol   :   0 
-ror   :   0 sbc   :  15 sbci  :   2 sbi   :   0 sbic  :   0 sbis  :   2 
-sbiw  :   1 sbr   :   1 sbrc  :   2 sbrs  :   5 sec   :   0 seh   :   0 
+brcc  :  14 brcs  :   0 break :   0 breq  :  20 brge  :   0 brhc  :   0 
+brhs  :   0 brid  :   0 brie  :   0 brlo  :   5 brlt  :   0 brmi  :   0 
+brne  :   2 brpl  :   0 brsh  :   4 brtc  :   0 brts  :   0 brvc  :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  : 263 cbi   :   3 cbr   :   2 
+clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :  18 cls   :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   4 cp    :   4 cpc   :   0 
+cpi   :  26 cpse  :   0 dec   :  10 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :  23 inc   :  14 jmp   :   6 
+ld    :   0 ldd   :   0 ldi   : 288 lds   :  63 lpm   :   0 lsl   :   1 
+lsr   :  10 mov   :   5 movw  :   3 mul   :   1 muls  :   0 mulsu :   0 
+neg   :   0 nop   :   1 or    :   0 ori   :   5 out   :  41 pop   :  16 
+push  :  16 rcall :   0 ret   :  28 reti  :  15 rjmp  :  20 rol   :   0 
+ror   :  10 sbc   :  18 sbci  :   3 sbi   :   2 sbic  :   0 sbis  :   2 
+sbiw  :   1 sbr   :   4 sbrc  :   4 sbrs  :   5 sec   :   0 seh   :   0 
 sei   :   3 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
-sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  63 
-sub   :  14 subi  :   1 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 46 out of 113 (40.7%)
+sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  83 
+sub   :  16 subi  :   2 swap  :   0 tst   :   1 wdr   :   0 
+Instructions used: 50 out of 113 (44.2%)
 
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000aac   2674      0   2674   32768   8.2%
+[.cseg] 0x000000 0x000c44   3082      0   3082   32768   9.4%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
