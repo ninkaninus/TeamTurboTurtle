@@ -16,7 +16,6 @@
 .include "MPU-6050.asm"
 .include "Time.asm"
 .include "AI.asm"
-.include "WheelSpeed.asm"
 .include "LapCounter.asm"
 .include "Communication_Protocol.asm"
 .include "Speed.asm"
@@ -54,8 +53,8 @@ Init:
 	sts		SREG_1, R16				; clear SREG_1
 			
 
-			ldi R16, 100
-			out OCR2, R16
+	ldi R16, 100
+	out OCR2, R16
 	sei					;Enable global interrupt	
 	rjmp Main
 

@@ -1,7 +1,4 @@
 .MACRO WheelSpeed_Init
-
-			
-
 			ldi		R16, 0x00
 			out		TCCR1A, R16
 			ldi		R16, 0b00000010			; Falling edge triggered, 1/1024 prescaling
@@ -99,16 +96,9 @@ EDGE2:		ldi		R16, 1
 			
 WheelSpeed_End:
 
-
 			call AI_Hall		;Alt AI der har med ticks at gøre ligger her
 			
 			pop R17
-
-			
-WheelSpeed_End:
-
-			;call AI_HALL_INTERRUPT
-						
 
 			Pop_Register_5 R16, R3, R2, R1, R0
 			

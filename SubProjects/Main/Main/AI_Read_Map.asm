@@ -53,7 +53,7 @@ Road_Reaction:
 		brlo	Bare_Ligeud
 
 		sts		Speed_L,	R18
-		sts		Speed_H		R19
+		sts		Speed_H,	R19
 
 ret
 
@@ -62,7 +62,7 @@ Bare_Ligeud:
 		ldi		R16, LOW(Periode_Ligeud)	;Reference periode.
 		ldi		R17, HIGH(Periode_Ligeud)	;Reference periode.
 		sts		Speed_L,	R16
-		sts		Speed_H		R17
+		sts		Speed_H,	R17
 
 ret
 
@@ -75,13 +75,10 @@ Lille_Sving:
 
 Lille_Sving_Test:
 
-		ldi		R16,	Motor_Lille_Sving
-		out		OCR2,	R16				;Slå til for reference motor output
-
 		ldi		R16, LOW(Periode_Lille_Sving)	;Reference periode.
 		ldi		R17, HIGH(Periode_Lille_Sving)	;Reference periode.
 		sts		Speed_L,	R16
-		sts		Speed_H		R17
+		sts		Speed_H,	R17
 
 ret
 
@@ -97,7 +94,7 @@ Stor_Sving_Test:
 		ldi		R16, LOW(Periode_Stort_Sving)	;Reference periode.
 		ldi		R17, HIGH(Periode_Stort_Sving)	;Reference periode.
 		sts		Speed_L,	R16
-		sts		Speed_H		R17
+		sts		Speed_H,	R17
 
 ret
 
@@ -106,7 +103,7 @@ Ud_Af_Sving:
 		ldi		R16, LOW(Periode_Ligeud)	;Reference periode.
 		ldi		R17, HIGH(Periode_Ligeud)	;Reference periode.
 		sts		Speed_L,	R16
-		sts		Speed_H		R17
+		sts		Speed_H,	R17
 
 ret
 

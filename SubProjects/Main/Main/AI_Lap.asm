@@ -39,7 +39,7 @@ AI_Lap:
 
 rjmp		Run_Time
 		
-Same_Type_First_And_Last
+Same_Type_First_And_Last:
 
 		add		Length_L,	R18
 		adc		Length_h,	R19

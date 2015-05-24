@@ -317,19 +317,4 @@ MPU6050_Read_Accel_X:
 	call I2C_Stop							;Send a stop
 ret											;Return
 
-MPU6050_Read_Gyro_Z:
-	call I2C_Start							;Send a start
-	I2C_Write MPU6050_ADDRESS_W				;Send the write address of the MPU6050
-	I2C_Write MPU6050_RA_GYRO_ZOUT_H		;Write the address to begin reading from.
 
-	call I2C_Start							;Send a repeated start
-	I2C_Write MPU6050_ADDRESS_R				;Send the read address of the MPU6050
-
-	I2C_Read I2C_Ack						;Reply with an ACK to indicate that we wish to read the next byte too
-	sts GYRO_ZOUT_H, R16					;Store the ACCEL_XOUT_H in SRAM
-
-	I2C_Read I2C_Nack						;Reply with an ACK to indicate that we wish to read the next byte too
-	sts GYRO_ZOUT_L, R16					;Store the ACCEL_XOUT_L in SRAM
-
-	call I2C_Stop							;Send a stop
-ret											;Return

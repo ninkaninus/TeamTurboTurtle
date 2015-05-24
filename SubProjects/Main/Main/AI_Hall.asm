@@ -11,23 +11,21 @@ AI_Hall:
 	
 ;Ellers preround
 
-		ldi		R16, LOW(Periode_Preround)	;Reference periode.
-		ldi		R17, HIGH(Periode_Preround)	;Reference periode.
+		ldi		R16, LOW(Periode_Mapping)	;Reference periode.
+		ldi		R17, HIGH(Periode_Mapping)	;Reference periode.
 		sts		Speed_L,	R16
-		sts		Speed_H		R17
+		sts		Speed_H,	R17
 
 ret
 
 Mapping_Speed:
 
 call	SKIFT_TEST
-
-		out		OCR2,	R16				;Slå til for reference motor output
 		
-		ldi		R16, LOW(Periode_Mapping	;Reference periode.
-		ldi		R17, HIGH(Periode_Mapping)	;Reference periode.
-		sts		Speed_L,	R16
-		sts		Speed_H		R17
+ldi		R16, LOW(Periode_Mapping)	;Reference periode.
+ldi		R17, HIGH(Periode_Mapping)	;Reference periode.
+sts		Speed_L,	R16
+sts		Speed_H,	R17
 
 ret
 

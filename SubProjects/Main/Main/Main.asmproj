@@ -67,7 +67,10 @@
     <Compile Include="AI_Lap.asm">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AI_Main.asm">
+    <Compile Include="AI_Read_Map.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AI_Skift.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Communication_Protocol.asm">

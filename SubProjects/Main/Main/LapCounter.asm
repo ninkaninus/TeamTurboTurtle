@@ -67,13 +67,11 @@ Lap_Time:
 	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
 	out		ACSR, R16					; Global interrupt register
 	
-call	AI_Lap			;Alt AI der har med rundeskift at gøre ligger her
-	
+	call	AI_Lap			;Alt AI der har med rundeskift at gøre ligger her
 	
 	lds		R16, SREG_1
 	sbr		R16, 0b00000100					; clear bit 0 in R16 (performs logical AND with complement of operand)
 	sts		SREG_1, R16
-			
 
 	ldi R16, HIGH(28000)
 	sts Speed_H, R16
