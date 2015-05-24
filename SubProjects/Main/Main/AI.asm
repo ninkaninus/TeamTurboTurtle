@@ -17,11 +17,12 @@
 .equ	Gyro_Stort_Sving=20				;Disse værdier skal justeres
 .equ	Gyro_Lille_Sving=75
 .equ	Periode_Ligeud=6000		;Periode når vi kører ligeud
+.equ	Periode_Kort_Ligeud=14000
 .equ	Periode_Stort_Sving=16500			;-- stort sving
 .equ	Periode_Lille_Sving=20000			;-- lille sving
 .equ	Periode_Mapping=25000	
-.equ	Periode_UdAfSving = 14000
-.equ	Brake_Time	= 128
+.equ	Periode_UdAfSving = 2000
+.equ	Brake_Time	= 70
 ;.equ	Motor_Ligeud=0			;Motor outpot som kan sættes som reference
 ;.equ	Motor_Ligeud_Min=20		;Motor outpot som kan sættes som reference
 ;.equ	Motor_Ligeud_Max=100			;Motor outpot som kan sættes som reference
@@ -39,7 +40,8 @@
 ;.equ	Motor_Too_Slow=250
 ;.equ	Periode_Too_Slow=8000
 ;.equ	Motor_Ud_Af_Sving=200
-.equ	Afstand_Ud_Af_Sving=20
+.equ	Afstand_Ud_Af_Sving=5
+.equ	Afstand_Kort_Lige=150
 
 ;Initialize først
 .MACRO AI_Init

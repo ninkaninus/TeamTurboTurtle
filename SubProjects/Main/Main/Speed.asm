@@ -1,7 +1,7 @@
 .equ Diff_Max = 8192
 .equ ForgivenessZone = 4096
 
-
+Hastigheds_kontrol:
 		
 		lds		R16, SREG_1			
 		sbrc	R16, 7							; bit 7 is the delay enable 
@@ -66,6 +66,7 @@ Max_Brake:
 		
 		ret
 
+Braking:
 
 		clr R16
 		out OCR2, R16

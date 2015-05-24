@@ -14,6 +14,17 @@ Read_Map:
 		ld			Length_H,		Y+
 		ld			Type,			Y+
 
+		cpi			Type,			3
+		brne		Road_Reaction
+		
+		cpi			Length_H,		0
+		brne		Road_Reaction
+
+		cpi			Length_L,	Afstand_Kort_Lige
+		brsh		Road_Reaction
+
+		ldi			Type,			6
+
 Road_Reaction:
 
 		cpi		Type,		1
@@ -25,6 +36,9 @@ Road_Reaction:
 		breq	Stor_Sving
 		cpi		Type,		5
 		breq	Lille_Sving
+
+		cpi		Type,		6
+		breq	Kort_Lige
 
 		/*
 		cpi		Length_H,		0
@@ -120,11 +134,51 @@ Stor_Sving_Test:
 ret
 
 Ud_Af_Sving:
-/*
+
 		ldi		R16, LOW(Periode_UdAfSving)	;Reference periode.
 		ldi		R17, HIGH(Periode_UdAfSving)	;Reference periode.
 		sts		Speed_L,	R16
 		sts		Speed_H,	R17
-*/
+
+ret
+
+Kort_Lige:
+
+		ldi		R16, LOW(Periode_Lille_Sving)	;Reference periode.
+		ldi		R17, HIGH(Periode_Lille_Sving)	;Reference periode.
+
+		mov		R18,		Length_L
+		mov		R19,		Length_H
+
+		lsl		R18
+		rol		R19
+		lsl		R18
+		rol		R19
+		lsl		R18
+		rol		R19
+		lsl		R18
+		rol		R19
+		lsl		R18
+		rol		R19
+		lsl		R18
+		rol		R19
+;		lsl		R18
+;		rol		R19
+
+;		inc		R19
+
+
+		sub		R16,		R18
+		sbc		R17,		R19
+
+
+
+
+		sts		Speed_L,	R16
+		sts		Speed_H,	R17
+
+		ldi		R16,		0b00111110
+		out		PORTA,		R16
+
 ret
 

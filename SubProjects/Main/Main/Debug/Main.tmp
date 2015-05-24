@@ -44,7 +44,7 @@
  </OUTPUT_FILES>
  <LABELS>
   <Init><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>24</LINE></Init>
-  <Input_Capture><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>22</LINE></Input_Capture>
+  <Input_Capture><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>24</LINE></Input_Capture>
   <Timer0_Update><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Time.asm</FILE><LINE>25</LINE></Timer0_Update>
   <Comm_Received><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>43</LINE></Comm_Received>
   <Lap_Time><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\LapCounter.asm</FILE><LINE>24</LINE></Lap_Time>
@@ -96,9 +96,9 @@
   <USART_Decimal_S8_Count_10_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>347</LINE></USART_Decimal_S8_Count_10_Loop>
   <USART_Decimal_S8_Count_1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>357</LINE></USART_Decimal_S8_Count_1>
   <USART_Decimal_S8_Count_1_Loop><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\USART_Library.asm</FILE><LINE>360</LINE></USART_Decimal_S8_Count_1_Loop>
-  <Edge1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>53</LINE></Edge1>
-  <Edge2><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>68</LINE></Edge2>
-  <WheelSpeed_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>97</LINE></WheelSpeed_End>
+  <Edge1><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>55</LINE></Edge1>
+  <Edge2><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>70</LINE></Edge2>
+  <WheelSpeed_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\WheelSpeed.asm</FILE><LINE>99</LINE></WheelSpeed_End>
   <Hastigheds_kontrol><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>4</LINE></Hastigheds_kontrol>
   <AI_Hall><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Hall.asm</FILE><LINE>1</LINE></AI_Hall>
   <Delay_MS><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Delays.asm</FILE><LINE>38</LINE></Delay_MS>
@@ -135,13 +135,14 @@
   <RIGHT_SKIFT><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Skift.asm</FILE><LINE>69</LINE></RIGHT_SKIFT>
   <LILLE_H><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Skift.asm</FILE><LINE>33</LINE></LILLE_H>
   <Read_Map><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>1</LINE></Read_Map>
-  <Road_Reaction><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>17</LINE></Road_Reaction>
-  <Lille_Sving><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>90</LINE></Lille_Sving>
-  <Stor_Sving><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>106</LINE></Stor_Sving>
-  <Bare_Ligeud><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>81</LINE></Bare_Ligeud>
-  <Lille_Sving_Test><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>97</LINE></Lille_Sving_Test>
-  <Ud_Af_Sving><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>122</LINE></Ud_Af_Sving>
-  <Stor_Sving_Test><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>113</LINE></Stor_Sving_Test>
+  <Road_Reaction><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>28</LINE></Road_Reaction>
+  <Lille_Sving><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>104</LINE></Lille_Sving>
+  <Stor_Sving><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>120</LINE></Stor_Sving>
+  <Kort_Lige><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>145</LINE></Kort_Lige>
+  <Bare_Ligeud><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>95</LINE></Bare_Ligeud>
+  <Lille_Sving_Test><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>111</LINE></Lille_Sving_Test>
+  <Ud_Af_Sving><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>136</LINE></Ud_Af_Sving>
+  <Stor_Sving_Test><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Read_Map.asm</FILE><LINE>127</LINE></Stor_Sving_Test>
   <AI_Lap><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm</FILE><LINE>1</LINE></AI_Lap>
   <Mapping><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm</FILE><LINE>61</LINE></Mapping>
   <Run_Time><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\AI_Lap.asm</FILE><LINE>50</LINE></Run_Time>
@@ -187,12 +188,12 @@
   <Comm_Received_Execute_Get_Ticks><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>315</LINE></Comm_Received_Execute_Get_Ticks>
   <Comm_Received_Execute_Get_Xaccel><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>268</LINE></Comm_Received_Execute_Get_Xaccel>
   <Comm_Received_Execute_Get_Zgyro><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Communication_Protocol.asm</FILE><LINE>292</LINE></Comm_Received_Execute_Get_Zgyro>
-  <Braking><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>68</LINE></Braking>
-  <Langsommere><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>103</LINE></Langsommere>
-  <Hurtigere><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>22</LINE></Hurtigere>
-  <Braking_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>97</LINE></Braking_End>
-  <Max_Brake><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>59</LINE></Max_Brake>
-  <MaxGas><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>129</LINE></MaxGas>
-  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>60</LINE></Main>
+  <Braking><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>69</LINE></Braking>
+  <Langsommere><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>102</LINE></Langsommere>
+  <Hurtigere><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>23</LINE></Hurtigere>
+  <Braking_End><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>96</LINE></Braking_End>
+  <Max_Brake><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>60</LINE></Max_Brake>
+  <MaxGas><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Speed.asm</FILE><LINE>127</LINE></MaxGas>
+  <Main><FILE>D:\Github\TeamTurboTurtle\SubProjects\Main\Main\Main.asm</FILE><LINE>54</LINE></Main>
  </LABELS>
 </ASSEMBLER_INFO>

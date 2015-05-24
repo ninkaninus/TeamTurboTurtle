@@ -51,28 +51,4 @@ Init:
 	sei					;Enable global interrupt	
 	rjmp Main
 	
-	
-	
-Main:	
-
-		
-
-	lds		R16, Pulse_Time_L
-	lds		R17, Pulse_Time_H
-	;call	USART_Decimal_16
-	;		USART_NewLine
-			
-			ldi R16, LOW(1)
-			sts Speed_L, R16
-			ldi R16, HIGH(1)
-			sts Speed_H, R16
-
-	clr		R16					
-	sts		SREG_1, R16				; clear SREG_1
-
-	ldi R16, 100
-	out OCR2, R16
-	sei					;Enable global interrupt	
-	rjmp Main
-
 Main:	rjmp	Main
