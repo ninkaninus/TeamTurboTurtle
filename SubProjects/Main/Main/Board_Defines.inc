@@ -5,4 +5,5 @@
  *   Author: StjerneIdioten
  */ 
 
- .equ	MOTOR = PD7	
+ .equ	MOTOR = PD7
+ .equ	BRAKE = PC5	

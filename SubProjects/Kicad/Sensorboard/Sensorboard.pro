@@ -1,4 +1,4 @@
-update=22-04-2015 00:20:36
+update=23-05-2015 13:28:52
 version=1
 last_client=kicad
 [pcbnew]
@@ -61,3 +61,4 @@ LibName29=contrib
 LibName30=valves
 LibName31=ToyRaceCar_V2_REV3
 LibName32=Breakout_Boards
+LibName33=Relay
