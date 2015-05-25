@@ -2,7 +2,51 @@
 
 \subsection{Generel struktur}
 
-\subsection{Protokol}
+\subsection{Kommunikations Protokol}
+I oplægget er der specificeret en kommunikationsprotokol som bilen skal overholde. Protokollen fungerer ved hjælp af telegrammer. I afsnittet "Beskrivelse af telegram" forklares der, hvad et telegram er. Og i afsnittet "Implementering" beskrives der, hvordan protokollen kodemæssigt er implementeret i microcontrolleren.
+
+\subsubsection{Beskrivelse af telegram}
+Protokollen er baseret på "telegrammer" bestående af 3 bytes der henholdsvis repræsenterer en type, kommando og et parameter.\\
+Af typer er der specificeret 3 forskellige:
+\begin{itemize}
+	\item SET - 0x55 - Bruges til at sætte en værdi i bilen
+	\item GET - 0xAA - Bruges til at hente en værdi fra bilen
+	\item REPLY - 0xBB - Bruges til når der returneres en værdi som svar på et get/set telegram
+\end{itemize}
+Det har ikke været nødvendigt at implementerer yderligere typer, så dette er også de eneste tre typer som implementeringen gør brug af.\\
+Af kommandoer er der fra oplæggets side sat et krav om to som bilen som minimum skal overholde, disse er som følger:
+\begin{itemize}
+	\item Start - 0x10 - Bruges til at starte bilen med en procentdel af maxspændingen ud 			fra parametret
+	\item Stop - 0x11 - Bruges til at stoppe bilen med
+\end{itemize}
+
+Ud over dette har vi specificeret yderligerer to set kommandoer:
+\begin{itemize}
+	\item Speed\_H - 0x12 - Bruges til at sætte de øverste 8 bit af en 16-bit værdi der essentielt bestemmer hvilken hastighed hastighedskontrollen forsøger at holde
+	\item Speed\_L - 0x13 - Bruges til at sætte de nederste 8 bit af en 16-bit værdi der essentielt bestemmer hvilken hastighed hastighedskontrollen forsøger at holde
+\end{itemize}
+
+Disse to kommandoer er essentielt en kommando, men skal sendes som to seperate kommandoer da et telegram kun kan bestå af en type, kommando og et parameter. De er blevet brugt meget til at teste hastighedskontrollen af og fastsætte max hastigheder rundt i forskellige sving.\\
+
+Fra oplæggets side er der ikke specificeret nogle get kommandoer, men vi har implementeret de følgende:
+\begin{itemize}
+	\item Xaccel\_H - 0xA1 - Returner de øverste 8 bit af den signerede 16-bit rå værdi fra acceleration af x-aksen på sensoren
+	\item Xaccel\_L - 0xA2 - Returner de nederste 8 bit af den signerede 16-bit rå værdi fra acceleration af x-aksen på sensoren
+	\item Zgyro\_H - 0xA3 - Returner de øverste 8 bit af den signerede 16-bit rå værdi af vinkelhastigheden om z-aksen på sensoren
+	\item Zgyro\_L - 0xA4 - Returner de nederste 8 bit af den signerede 16-bit rå værdi af vinkelhastigheden om z-aksen på sensoren
+	\item Ticks\_H - 0xA5 - Returner de øverste 8 bit af den 16-bit værdi der fortæller, hvor mange "ticks" bilen har kørt på daværende tidspunkt
+	\item Ticks\_L - 0xA6 - Returner de nederste 8 bit af den 16-bit værdi der fortæller, hvor mange "ticks" bilen har kørt på daværende tidspunkt
+	\item LapTime\_H - 0xA7 - Returner de øverste 8 bit af den 16-bit værdi der fortæller, hvor mange millisekunder banen tog at gennemfører
+	\item LapTime\_L - 0xA8 - Returner de nederste 8 bit af den 16-bit værdi der fortæller, hvor mange millisekunder banen tog at gennemfører
+	\item LapTicks\_H - 0xA9 - Returner de nederste 8 bit af den 16-bit værdi der fortæller, hvor mange "ticks" der har været på en omgang af banen
+	\item LapTicks\_L - 0xAA - Returner de nederste 8 bit af den 16-bit værdi der fortæller, hvor mange "ticks" der har været på en omgang af banen
+	\item Data - 0xAB - Bliver brugt til at få bilen til at returnerer flere data-værdier uden at skulle sende et get telegram for hver enkelt. Justeres ind alt efter hvad man gerne vil have tilbage.
+	
+\end{itemize}
+
+Til sidst i telegrammet sendes der altid et parameter med, også selvom en funktion ikke gør brug af et parameter.
+
+\subsubsection{Implementering}
 
 \subsection{Eksempler(sensor)}
 
