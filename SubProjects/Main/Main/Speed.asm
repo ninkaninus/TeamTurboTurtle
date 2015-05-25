@@ -7,6 +7,7 @@ Hastigheds_kontrol:
 		sbrc	R16, 7							; bit 7 is the delay enable 
 		rjmp	Braking
 
+
 		lds		R16, Speed_L 
 		lds		R17, Speed_H
 		lds		R18, Pulse_Time_L
@@ -64,7 +65,7 @@ Max_Brake:
 		Set_SREG_1 7
 		
 		ret
-		
+
 Braking:
 
 		clr R16
@@ -90,8 +91,6 @@ Braking:
 		cp		R0, R6
 		brsh	Braking_End
 		
-
-
 		ret
 		
 Braking_End:
@@ -101,6 +100,7 @@ Braking_End:
 		ret
 
 Langsommere:
+
 		subi	R16, 1
 		sbci	R17, 0
 		com		R16
@@ -119,12 +119,10 @@ Langsommere:
 		ror		R16	
 		lsr		R17
 		ror		R16
-	
 		
 		out		OCR2, R16
 		
 		ret
-		
 
 MaxGas: 
 		ldi		R20, 255

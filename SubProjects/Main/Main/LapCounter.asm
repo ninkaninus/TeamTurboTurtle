@@ -10,7 +10,7 @@
 	sts	Lap_time_H, R16
 
 	in R16, ACSR
-	ori R16, 0x48						;Initialize comparator with bandgap reference and enable interrupt
+	ori R16, (1<<ACBG)|(1<<ACIE)		;Initialize comparator with bandgap reference and enable interrupt
 	out ACSR, R16						;
 
 	in R16, SFIOR						;
@@ -24,7 +24,7 @@
 Lap_Time:	
 
 	Push_Register_7 R0, R1, R2, R3, R4, R5, R16
-
+	push	R17
 	lds		R0, Timer_1ms_L				
 	lds		R1, Timer_1ms_M				; Current time since startup in ms
 	lds		R2, Timer_1ms_H				 
@@ -66,6 +66,12 @@ Lap_Time:
 			
 	ldi		R16, 0b01011000				; Enable Comparator interrupt and clear comparator interrupt flag
 	out		ACSR, R16					; Global interrupt register
+	
+	call	AI_Lap			;Alt AI der har med rundeskift at gøre ligger her
+	
+	lds		R16, SREG_1
+	sbr		R16, 0b00000100					; clear bit 0 in R16 (performs logical AND with complement of operand)
+	sts		SREG_1, R16
 
 	ldi R16, HIGH(28000)
 	sts Speed_H, R16
@@ -77,6 +83,15 @@ Lap_Time:
 
 Lap_Time_End:
 
+	pop		R17
 	Pop_Register_7 R16, R5, R4, R3, R2, R1, R0
 
 			reti			
+
+
+
+
+
+
+
+

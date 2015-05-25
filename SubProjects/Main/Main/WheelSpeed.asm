@@ -1,7 +1,4 @@
 .MACRO WheelSpeed_Init
-
-			
-
 			ldi		R16, 0x00
 			out		TCCR1A, R16
 			ldi		R16, 0b00000010			; Falling edge triggered, 1/1024 prescaling
@@ -10,6 +7,8 @@
 			clr		R16
 			sts		Edge1_L, R16
 			sts		Edge1_H, R16
+			sts		Pulse_Time_L, R16
+			sts		Pulse_Time_H, R16
 
 			sts		Ticks_L, R16
 			sts		Ticks_H, R16
@@ -17,13 +16,15 @@
 			in		R16, TIMSK
 			ori		R16, (1<<TICIE1)		;Enable interrupt on output compare match for timer0
 			out		TIMSK, R16				;Timer/interrupt masking register
-			
+
 .ENDMACRO
+
+
 
 Input_Capture:
 
 			Push_Register_5 R0, R1, R2, R3, R16
-			
+			push	R17
 			lds		R0, Ticks_L
 			lds		R1, Ticks_H
 			
@@ -92,14 +93,15 @@ EDGE2:		ldi		R16, 1
 			ldi		R16, 0x00
 			out		TCNT1H, R16						; Temp = R16
 			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp	
-			
+
 			call	Hastigheds_kontrol
 			
 WheelSpeed_End:
 
-			;call AI_HALL_INTERRUPT
-						
+			call AI_Hall		;Alt AI der har med ticks at gøre ligger her
+			
+			pop R17
+
 			Pop_Register_5 R16, R3, R2, R1, R0
 			
 			reti
-			

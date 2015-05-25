@@ -64,9 +64,20 @@
 .equ Time_Stamp_Braking_M = 0x0086
 .equ Time_Stamp_Braking_L = 0x0087
 
-.equ Pulse			= 0x0088
+;AI Hastighed
+.equ AI_Check_Lap	= 0x0088
+.equ AI_Hastighed_out	= 0x0089
+.equ AI_Hastighed_set	= 0x008A
+.equ AI_Hastighed_D	= 0x008B
 
-.equ Speed_H = 0x0089
-.equ Speed_L = 0x008A
+.equ Pulse			= 0x008C
 
-.equ Temp = 0x008B
+.equ Speed_H = 0x008D
+.equ Speed_L = 0x008E
+
+.equ Temp = 0x008F
+
+;Mapping start -- Alt herefter skal holdes frit
+.equ Map_Start		= 0x00C8
+
+

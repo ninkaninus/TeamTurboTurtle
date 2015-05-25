@@ -254,3 +254,117 @@ USART_Decimal_16_Count_1_Loop:
 	call USART_Transmit
 
 ret
+
+;Expecs a 8 bit value in R16
+USART_Decimal_8:
+
+	mov R18, R16
+
+USART_Decimal_8_Count_100:
+	clr R20
+	ldi R17, 100
+USART_Decimal_8_Count_100_Loop:
+	inc R20
+	sub R18, R17
+	brcc USART_Decimal_8_Count_100_Loop
+	dec R20
+	add R18, R17
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+USART_Decimal_8_Count_10:
+	clr R20
+	ldi R17, 10
+USART_Decimal_8_Count_10_Loop:
+	inc R20
+	sub R18, R17
+	brcc USART_Decimal_8_Count_10_Loop
+	dec R20
+	add R18, R17
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+USART_Decimal_8_Count_1:
+	clr R20
+	ldi R17, 1
+USART_Decimal_8_Count_1_Loop:
+	inc R20
+	sub R18, R17
+	brcc USART_Decimal_8_Count_1_Loop
+	dec R20
+	add R18, R17
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+ret
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;Expecs a S8 bit value in R16
+USART_Decimal_S8:
+
+	mov R18, R16
+	sbrs	R18,	7
+	rjmp	USART_Decimal_S8_Count_100
+	
+	ldi		R16,	'-'
+call	USART_Transmit
+
+	dec		R18
+	com		R18
+
+USART_Decimal_S8_Count_100:
+	clr R20
+	ldi R17, 100
+USART_Decimal_S8_Count_100_Loop:
+	inc R20
+	sub R18, R17
+	brcc USART_Decimal_S8_Count_100_Loop
+	dec R20
+	add R18, R17
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+USART_Decimal_S8_Count_10:
+	clr R20
+	ldi R17, 10
+USART_Decimal_S8_Count_10_Loop:
+	inc R20
+	sub R18, R17
+	brcc USART_Decimal_S8_Count_10_Loop
+	dec R20
+	add R18, R17
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+USART_Decimal_S8_Count_1:
+	clr R20
+	ldi R17, 1
+USART_Decimal_S8_Count_1_Loop:
+	inc R20
+	sub R18, R17
+	brcc USART_Decimal_S8_Count_1_Loop
+	dec R20
+	add R18, R17
+	ldi R16, 0x30
+	add R16, R20
+	call USART_Transmit
+
+ret
