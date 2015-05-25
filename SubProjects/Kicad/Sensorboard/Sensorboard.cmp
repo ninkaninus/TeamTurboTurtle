@@ -1,4 +1,18 @@
-Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = 28-04-2015 13:53:36
+Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = 23-05-2015 15:02:37
+
+BeginCmp
+TimeStamp = /55614321;
+Reference = D1;
+ValeurCmp = D;
+IdModule  = Diodes_ThroughHole:Diode_DO-35_SOD27_Horizontal_RM10;
+EndCmp
+
+BeginCmp
+TimeStamp = /5561171A;
+Reference = K1;
+ValeurCmp = Omron_g5v1;
+IdModule  = Sensorboard:Omron-G5V1;
+EndCmp
 
 BeginCmp
 TimeStamp = /5536E349;
@@ -43,17 +57,24 @@ IdModule  = Pin_Headers:Pin_Header_Straight_1x04;
 EndCmp
 
 BeginCmp
-TimeStamp = /5538F827;
+TimeStamp = /55616D13;
 Reference = P7;
-ValeurCmp = CNY70;
-IdModule  = Sensorboard:KK254-4;
+ValeurCmp = CONN_01X02;
+IdModule  = Pin_Headers:Pin_Header_Angled_1x02;
 EndCmp
 
 BeginCmp
-TimeStamp = /553F7F60;
+TimeStamp = /55413F69;
 Reference = P8;
 ValeurCmp = SS495A;
 IdModule  = Pin_Headers:Pin_Header_Angled_1x03;
+EndCmp
+
+BeginCmp
+TimeStamp = /55608DB9;
+Reference = P9;
+ValeurCmp = CNY70;
+IdModule  = Pin_Headers:Pin_Header_Angled_1x04;
 EndCmp
 
 BeginCmp
@@ -68,6 +89,13 @@ TimeStamp = /553825E4;
 Reference = Q2;
 ValeurCmp = BSS138;
 IdModule  = Housings_SOT-23_SOT-143_TSOT-6:SOT-23_Handsoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55620FAF;
+Reference = Q3;
+ValeurCmp = Q_NMOS_GDS;
+IdModule  = Sensorboard:CASE369D;
 EndCmp
 
 BeginCmp
@@ -101,21 +129,21 @@ EndCmp
 BeginCmp
 TimeStamp = /553C6C67;
 Reference = R5;
-ValeurCmp = 22K;
+ValeurCmp = 20K;
 IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /553C6BF8;
 Reference = R6;
-ValeurCmp = 560R;
+ValeurCmp = 150R;
 IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /5540394A;
 Reference = R7;
-ValeurCmp = 5K;
+ValeurCmp = 6K8;
 IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
@@ -129,7 +157,7 @@ EndCmp
 BeginCmp
 TimeStamp = /55403A1C;
 Reference = R9;
-ValeurCmp = 6K;
+ValeurCmp = 6K8;
 IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
@@ -148,9 +176,23 @@ IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
+TimeStamp = /55606275;
+Reference = R12;
+ValeurCmp = 100R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /556062D6;
+Reference = R13;
+ValeurCmp = 1M;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
 TimeStamp = /553FE324;
 Reference = RV1;
-ValeurCmp = POT;
+ValeurCmp = 10K;
 IdModule  = Potentiometers:Potentiometer_Bourns_3006P_Angular_ScrewFront;
 EndCmp
 

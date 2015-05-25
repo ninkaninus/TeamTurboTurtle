@@ -1,70 +1,54 @@
-;Main.asm
+;.include "m32def.inc"
 
-;Interrupt vector mapping
-.org 0x00
-rjmp Init
-;Timer1 Input Capture interrupt
-.org	0x0C
-jmp	Input_Capture
-;Timer0 CTC interrupt
-.org 0x14
-jmp Timer0_Update
-;USART received interrupt
-.org 0x1A
-jmp Comm_Received
-;Comparator interrupt
-.org 0x24
-jmp Lap_Time
-
+;Mapping of all the interrupts, must be the first include!
+.include "Interrupt_Mapping.asm"
 
 ;Library includes
+.include "Macros.asm"
+.include "Math.asm"
 .include "SRAM-Mapping.asm"
+.include "USART_Library.asm"
+.include "WheelSpeed.asm"
 .include "Delays.asm"
 .include "Motor_Control.asm"
-.include "USART_Library.asm"
 .include "I2C.asm"
 .include "MPU-6050.inc"
 .include "MPU-6050.asm"
-.include "Timers.asm"
+.include "Time.asm"
+.include "AI.asm"
+.include "LapCounter.asm"
 .include "Communication_Protocol.asm"
-.include "Interrupts.asm"
+.include "Speed.asm"
+.include "Setup.asm"
 
 Init:
+	Setup
+	clr	R16
+	sts		SREG_1, R16
 	
-	;Initialize the stack
-	LDI	R16, low(RAMEND)
-    OUT	SPL, R16
-	LDI	R16, high(RAMEND)
-    OUT	SPH, R16			
+	sts		AI_Check_Lap,	R16
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
+			ldi		R16, 250
+			call	Delay_MS
 
-	USART_Init 0b00000000,0b01100111  ;9600 baud, 16MHz clock
-	Comm_Init
-	Motor_Init
-	I2C_Init 0x00,0x12	;Prescaler 4 and TWBR 12
-	Timer0_Init
-	MPU6050_Init
-	MPU6050_Init
-	MPU6050_Init
-
-	ldi R16, (0<<PB3)
-	out	DDRB, R16
-
-	ldi R16, 0x01
-	sts Program_Running, R16
-
-	Interrupts_Init ; Must be the last thing to be enabled!
-	rjmp	Main
-
-Main:
-	;Check if the program should be running
-	sei
-	cli
-	lds R16, Program_Running			
-	cpi R16, 0x01
-	brne Main
-
-
-	;Insert program code here
-	sei
-
-rjmp Main
+	ldi		R16, 100
+	out		OCR2, R16
+	clr		ZH
+					
+	sei					;Enable global interrupt	
+	rjmp Main
+	
+Main:	rjmp	Main
