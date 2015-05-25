@@ -1,4 +1,26 @@
-\contentsline {section}{\numberline {1}Hardware}{3}{section.1}
-\contentsline {subsection}{\numberline {1.1}Accellerometer}{3}{subsection.1.1}
-\contentsline {subsection}{\numberline {1.2}Lap sensor}{3}{subsection.1.2}
-\contentsline {subsection}{\numberline {1.3}Tachometer}{4}{subsection.1.3}
+\contentsline {section}{\numberline {1}Indledning}{4}{section.1}
+\contentsline {subsection}{\numberline {1.1}Kravspecifikation}{4}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Problemformulering}{4}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}Projektafgr\IeC {\ae }nsning}{4}{subsection.1.3}
+\contentsline {subsection}{\numberline {1.4}Tidsplan}{4}{subsection.1.4}
+\contentsline {section}{\numberline {2}Hardware}{5}{section.2}
+\contentsline {subsection}{\numberline {2.1}Accellerometer}{5}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Lap sensor}{5}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Tachometer}{6}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Bremse}{7}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}Elektromagnet}{8}{subsection.2.5}
+\contentsline {section}{\numberline {3}Software}{9}{section.3}
+\contentsline {subsection}{\numberline {3.1}Generel struktur}{9}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Protokol}{9}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Eksempler(sensor)}{9}{subsection.3.3}
+\contentsline {subsubsection}{\numberline {3.3.1}Tachometer}{9}{subsubsection.3.3.1}
+\contentsline {subsubsection}{\numberline {3.3.2}Lap sensor}{10}{subsubsection.3.3.2}
+\contentsline {subsection}{\numberline {3.4}Hastighedskontrol}{11}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}AI}{11}{subsection.3.5}
+\contentsline {subsection}{\numberline {3.6}GUI}{11}{subsection.3.6}
+\contentsline {section}{\numberline {4}Test/Resultater}{12}{section.4}
+\contentsline {section}{\numberline {5}Diskussion}{13}{section.5}
+\contentsline {subsection}{\numberline {5.1}Fejlkilder}{13}{subsection.5.1}
+\contentsline {section}{\numberline {6}Konklusion}{14}{section.6}
+\contentsline {section}{\numberline {7}Litteraturliste}{15}{section.7}
+\contentsline {section}{\numberline {8}Bilag}{15}{section.8}

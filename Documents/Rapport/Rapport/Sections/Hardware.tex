@@ -2,14 +2,6 @@
 
 \subsection{Accellerometer}
 
-\begin{figure}[h]
-	\hfill\begin{minipage}{.3\textwidth}\centering
-		\includegraphics[scale=0.2]{Billeder/mpu-6050.jpg}
-		\caption{MPU-6050\\Breakout Board}
-		\label{fig:MPU-6050-Breakout}
-	\end{minipage}
-\end{figure}
-
 \subsection{Lap sensor}
 
 Til at holde øje med når bilen krydsede målstregen, faldt valget på en CNY70 optisk sensor. Den består af en infrarød lysdiode og en phototransistor bygget ind i samme hus. Dioden sender hele tiden infrarødt lys ud gennem et lille vindue, og hvis der er en flade tæt på til at reflektere lyset, vil det blive opfanget af phototransistoren, der sidder ved siden af dioden bag et lysfilter. Mængden af lys der bliver reflekteret tilbage afhænger af afstanden til fladen og typen af materiale der er på overfladen - en hvidt malet streg vil for eksempel reflektere mere lys tilbage end en sort materet overflade.
@@ -59,6 +51,6 @@ Til at beregne spændingstærsklerne benyttes superposition til at finde spændi
 
 \subsection{Bremse}
 
-Til at bremse bilen
+For at bremse bilen kortsluttes motorterminalerne. En kortslutning bremser motoren ved at lade et magnetfelt der modsætter sig motorens bevægelse blive induceret i spolerne. Hvis kortslutningen ikke er til stede kan der ikke løbe nogen strøm og derfor heller ikke dannes noget modsatrettet magnetfelt. Selve kortslutningen bliver udført af 5 volts relæ der bliver styret af en MOSFET forbundet til et IO-ben på microcontrolleren. Se figur.. 
 
 \subsection{Elektromagnet}
