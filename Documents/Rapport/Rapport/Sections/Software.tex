@@ -8,14 +8,40 @@ Da vi gik i gang med at skrive kode valgte vi lige at bruge lidt tid på at sæt
 
 \begin{itemize}
 	\item Main filen skal være så "ren" som muligt dvs. at den skal bruges som et samlingspunkt for al koden og ikke som et 		sted, hvor der reelt kører kode.
-	\item Alle funktionaliteter skal skrives ind i separate asm filer som så includeres i Main filen.
+	\item Alle funktionaliteter skal skrives ind i separate asm filer som så inkluderes i Main filen.
 	\item Alle funktionaliteter indeholder en init macro i formatet "funktionalitet\_Init" som står for at initialiserer 			alt som funktionen skal bruge. 
-	\item Alle init macroer "kaldes" fra "setup.asm" som er det sidste include i main filen.
+	\item Alle init macroer "kaldes" fra "setup.asm" som er den sidste inkludering i main filen.
+	\item Alle labels og definitioner skal have prefix efter funktionaliteten. Så der ikke overstår brug af de samme labels 		på tværs af asm filer.
 	\item Alle interrupt vektorer defineres i en seperat "Interrupt\_Mapping.asm" fil, så det er nemt og overskueligt at 			holde styr på
 	\item Alle definitioner af SRAM adresser foretages i filen "SRAM\_Mapping.asm" så der altid er styr, hvad der er 				tildelt hvilke SRAM-adresser.
 \end{itemize}
 
+Ud fra disse definitioner er al kode mere eller mindre skrevet. Hvilket har gjort det meget læseligt og nemt at debugge.
+
 \subsubsection{Eksempler på udførsel}
+Figur \ref{fig:MainExample} viser et eksempel på, hvordan alle moduler er skrevet ud i individuelle asm-filer og inkluderet ind i main filen. Dette gør at det er nemt at slå et modul fra hvis man skal teste noget og holde styr på hvad der står hvor. Figur \ref{fig:SRAMExample} viser, hvordan alle SRAM-definitioner er skrevet ind i den samme asm-fil så der ikke er nogen der kommer til at definerer de samme adresser til forskellige ting. Dette ville nemlig være en svær fejl at opdage da compileren ikke vil smide en fejl på det. 
+
+\begin{figure}[h]
+	\centering
+  	\begin{minipage}{.5\textwidth}
+  		\centering
+  		\begin{minipage}{.85\textwidth}
+  			\centering	
+			\includegraphics[scale=0.2,width=\linewidth]{Billeder/main_example.PNG}
+			\caption{Viser hvordan alle moduler in individuelt inkluderet i main filen}
+			\label{fig:MainExample}
+		\end{minipage}
+	\end{minipage}%
+	\begin{minipage}{.5\textwidth}
+			\centering
+			\begin{minipage}{.85\textwidth}
+			\includegraphics[scale=0.1,width=\linewidth]{Billeder/SRAM_Example.PNG}
+			\caption{Viser hvordan alle SRAM adresser er defineret i den samme fil for at kunne holde styr på, hvad der er 					brugt.}
+			\label{fig:SRAMExample}
+			\end{minipage}
+	\end{minipage}
+\end{figure}
+
 
 \subsection{Underbyggende funktionaliteter}
 I dette afsnit beskrives nogle af de underbyggende funktionaliteter der er inkorporeret i softwaren. Dette er ting som ikke er programmerings mæssigt store nok til at de kræver et underafsnit for sig selv, men som alligevel har dannet grundlag for nogle af de andre funktioner i koden.
