@@ -186,10 +186,8 @@ Hastighedskontrollen er implementeret som en call-funktion, der bliver kaldt hve
 \paragraph{PWM}
 Det første der sker er at den ønskede og den målte hastighed læses ind fra SRAM'en og derefter findes forskellen mellem dem. For at afgøre om bilen kører for hurtigt eller for langsomt, kontrolleres fortegnet på den udregnede forskel - det kan gøres nemt ved at kigge på N-flaget i statusregistret. Hvis bilen kører for langsomt er forskellen negativ og for at kunne arbejde med det bruges tallets to-komplement. Hvis forskellen er større end en på forhånd bestemt størrelse så sættes OCR2 til 255 så duty cycle er på 100 procent. Hvis den er under læses forskellen direkte ind i OCR2. Eller det ville vi gøre, hvis hastigheden var en 8-bits værdi - vi gemmer hastigheden som en 16 bits størrelse så derfor er vi nødt til at dividere tallet ned så det passer i et 8 bits register. Så længe man bibeholder proportionaliteten gør det ikke noget at tallet bliver divideret ned. For at spare på cycles i en interruptrutine, der bliver kaldt forholdsvis ofte, divideres der kun med potenser af 2 - det kan laves nemmere ved at bruge logic shifts eller rotations (det svarer til at flytte kommaet, når man ganger eller dividerer med 10 i base-10 talsystemer). Ved at dividere tallet ned giver det også muligheden for nemt at sætte et maksimum på værdien, der kan læses ind i OCR2, når forskellen bliver brugt direkte. Hvis man eksempelvis sætter max-forskellen til 5760 så kan der højest læses 180 ind i OCR2, inden microcontrolleren regulerer med fuld kraft, idet $180 \cdot 32 = 5760$. Jo større tal man dividerer med, jo blødere reguleres motorkraften og jo større skal forskellen også være, for at der gives fuld kraft på motoren - vi fandt en udemærket balance med skaleringen på 32.\\
 
-\paragraph{Bremse}
-Bremsen fungerer efter samme princip, men den regulerer bare bremsen med en tid i millisekunder. Når forskellen bliver positiv læses der som standard 0 ind i OCR2 så duty cycle også bliver 0 - der sættes også en bit på en SRAM-addresse, som fortæller at bilen er igang med at bremse. Helt i starten af hastighedskontrollen checkes denne bit og hvis den er sat, springer program counteren til en anden funktion, der holder øje med hvor lang tid der har været bremset i. Funktionen fungerer meget på samme måde som den der holder øje med omgangstider - der sættes et time stamp lige når bremsen bliver sat til, og så holder microcontrolleren øje med om der forløbet nok tid til at den kan slå bremsen fra igen. Tiden bremsen er sat til i, bliver på samme måde som med PWM, når bilen kører for langsomt, ved at bruge hastighedsforskellen som direkte parameter. Den maksimale tid der bremses i med er 255 ms - det viste sig under tests at en bremsetid på mere end 255 ms ikke har ret meget effekt. Samtidig kan man genbruge 8 bits formatet fra tidligere. Bilen finder selv ud af om der er brug for at bremse mere efter de 255 ms er gået. Der er indbygget en lille buffer, så bremsen ikke bliver brugt lige så snart forskellen bliver positiv - op til en vis grænse er der en slags soft braking zone se figur \ref{fig:Forgiveness}, hvor OCR2 bare er sat til 0. 
 
-\begin{figure}[h]
+\begin{figure}[ht]
 
 	\centering
 		\includegraphics[scale=0.4]{Billeder/Braking.jpg}
@@ -199,7 +197,8 @@ Bremsen fungerer efter samme princip, men den regulerer bare bremsen med en tid 
 \end{figure}
 
 
-\begin{figure}[h]
+\begin{figure}[hpt]
+>>>>>>> Stashed changes
 
 	\centering
 		\includegraphics[scale=0.4]{Billeder/Speed.jpg}
@@ -207,4 +206,10 @@ Bremsen fungerer efter samme princip, men den regulerer bare bremsen med en tid 
 	\label{fig:Speed}
 	
 \end{figure}
+
+\paragraph{Bremse}
+Bremsen fungerer efter samme princip, men den regulerer bare bremsen med en tid i millisekunder. Når forskellen bliver positiv læses der som standard 0 ind i OCR2 så duty cycle også bliver 0 - der sættes også en bit på en SRAM-addresse, som fortæller at bilen er igang med at bremse. Helt i starten af hastighedskontrollen checkes denne bit og hvis den er sat, springer program counteren til en anden funktion, der holder øje med hvor lang tid der har været bremset i. Funktionen fungerer meget på samme måde som den der holder øje med omgangstider - der sættes et time stamp lige når bremsen bliver sat til, og så holder microcontrolleren øje med om der forløbet nok tid til at den kan slå bremsen fra igen. Tiden bremsen er sat til i, bliver på samme måde som med PWM, når bilen kører for langsomt, ved at bruge hastighedsforskellen som direkte parameter. Den maksimale tid der bremses i med er 255 ms - det viste sig under tests at en bremsetid på mere end 255 ms ikke har ret meget effekt. Samtidig kan man genbruge 8 bits formatet fra tidligere. Bilen finder selv ud af om der er brug for at bremse mere efter de 255 ms er gået. Der er indbygget en lille buffer, så bremsen ikke bliver brugt lige så snart forskellen bliver positiv - op til en vis grænse er der en slags soft braking zone se figur \ref{fig:Forgiveness}, hvor OCR2 bare er sat til 0. 
+
+
+
 
