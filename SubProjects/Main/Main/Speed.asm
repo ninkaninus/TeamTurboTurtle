@@ -4,7 +4,7 @@
 Hastigheds_kontrol:
 		
 		lds		R16, SREG_1			
-		sbrc	R16, 7							; bit 7 is the delay enable 
+		sbrc	R16, 7							; bit 7 is the brake enable 
 		rjmp	Braking
 
 
@@ -13,7 +13,7 @@ Hastigheds_kontrol:
 		lds		R18, Pulse_Time_L
 		lds		R19, Pulse_Time_H
 
-		sub		R16, R18						; R16 = Ønsket pulstid, R17 = Sidst målte pulstid
+		sub		R16, R18						; R16:R17 = Ønsket pulstid, R18:R19 = Sidst målte pulstid
 		sbc		R17, R19
 		
 		in		R16, SREG
@@ -36,7 +36,7 @@ Hurtigere:
 		cpi		R17, high(ForgivenessZone)
 		brlo	Braking_End
 		
-		cpi		R17, high(Diff_Max - ForgivenessZone)
+		cpi		R17, high(Diff_Max + ForgivenessZone)
 		brsh	Max_Brake
 		
 		lsr		R17
