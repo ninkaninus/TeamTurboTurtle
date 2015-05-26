@@ -1,5 +1,4 @@
 \section{AI}
-\label{sec:AI}
 
 \subsection{Indledning}
 Med de sensorer vi benytter i det her projekt, er det besluttet at den databehandling som microcontrolleren laver fungerer bedst som interrupt funktioner. På denne måde benytter vi at data bliver opdateret i interrupt funktioner, og derfor bliver behandlet med det samme.
@@ -33,7 +32,7 @@ I mapping round laver bilen et map af banen. For at mappe banen op, og benytte d
 
 Når der kommer et Hall-interrupt i mapping serien starter vi med at se hvilken banetype gyroen siger at vi befinder os på, se figur figur \ref{fig:Skift Flowchart}. Vi sammenligner så denne med den banetype vi befandt os på i det forrige Hall-interrupt. Hvis disse matcher, eller hvis denne kun viser en forskel på et lille eller et stort sving, så inkrementerer vi længden af det nuværende banestykke med én. Hvis ikke, så gemmer vi længden og typen af banestykket i rammene, skifter banestykke, og sætter længden til 1. På denne måde får vi så længden og typen af alle banestykker i rækkefølge, hvilket nemt kan bruges til at følge banen i de øvrige runder.
 \\
-Derefter benytter vi hastighedskontrollen, som bliver beskrevet her: HENVIS TIL AFSNIT.
+Derefter benytter vi hastighedskontrollen, som bliver beskrevet her: \ref{Hastighedskontrol}.
 \\\
 Når mapping runden er færdig skal Lap-interruptet gemme de nuværende værdier af afstanden og banetypen i rammene. 
 
@@ -43,4 +42,23 @@ Når bilen har lavet et map af banen skal den kører efter det. Dette gøres ved
 \\\
 Ved så at branche ud alt efter vores nuværende banetype kan vi så sætte den ønskede ``hastighed'', som så gives videre til hastigheds-kontrol funktionen.
 \\
-Der er to special tilfælde. På vej ud af et sving sættes ``hastigheden'' til det samme som på et lige banestykke, og på vej ind i et sving bremses der INDSÆT HVAD DER SKER HER NÅR VI ER FÆRDIGE MED DET.
+Der er to special tilfælde. På vej ud af et sving sættes ``hastigheden'' til det samme som på et lige banestykke, og på vej ind i et sving bremses der en fast afstand fra et sving, bestemt fra hvor lang tid der højst skal bremses fra fuld hastighed til den hastighed vi kører med i et sving.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
