@@ -1,7 +1,21 @@
 \section{Software}
 
 \subsection{Generel struktur}
-I dette afsnit beskrives der, hvordan koden er struktureret. Og hvilke fordele dette har givet os.
+I dette afsnit beskrives der, hvordan koden er struktureret og hvilke tanker der er blevet gjort omkring opsætningen af koden inden den blev skrevet.
+
+\subsubsection{Retningslinjer}
+Da vi gik i gang med at skrive kode valgte vi lige at bruge lidt tid på at sætte os ned og opsætte nogle retningslinjer for, hvordan kodes skulle skrives. Dette gjorde vi for at få en konsekvent og let læselig kode. Samtidig med at debugging af eventuelle fejl skulle være så nem som mulig. Følgende kriterier blev opsat:
+
+\begin{itemize}
+	\item Main filen skal være så "ren" som muligt dvs. at den skal bruges som et samlingspunkt for al koden og ikke som et 		sted, hvor der reelt kører kode.
+	\item Alle funktionaliteter skal skrives ind i separate asm filer som så includeres i Main filen.
+	\item Alle funktionaliteter indeholder en init macro i formatet "funktionalitet\_Init" som står for at initialiserer 			alt som funktionen skal bruge. 
+	\item Alle init macroer "kaldes" fra "setup.asm" som er det sidste include i main filen.
+	\item Alle interrupt vektorer defineres i en seperat "Interrupt\_Mapping.asm" fil, så det er nemt og overskueligt at 			holde styr på
+	\item Alle definitioner af SRAM adresser foretages i filen "SRAM\_Mapping.asm" så der altid er styr, hvad der er 				tildelt hvilke SRAM-adresser.
+\end{itemize}
+
+\subsubsection{Eksempler på udførsel}
 
 \subsection{Underbyggende funktionaliteter}
 I dette afsnit beskrives nogle af de underbyggende funktionaliteter der er inkorporeret i softwaren. Dette er ting som ikke er programmerings mæssigt store nok til at de kræver et underafsnit for sig selv, men som alligevel har dannet grundlag for nogle af de andre funktioner i koden.
