@@ -114,6 +114,9 @@ Eksekveringen bliver kørt når byte nummer 3, parametret, bliver modtaget. Her 
 	\label{fig:Comm_Eksekvering}
 	
 \end{figure}
+
+\subsection{Eksempler(sensor)}
+
 \subsubsection{Tachometer}
 
 Til at behandle signalet fra hall sensoren, benyttes input capture funktionen til Timer 1. Input capture funktionen har sit eget interrupt og fungerer ved automatisk at læse værdien af Timer 1's timer/counter registre (TCNT1A/TCNT1B) over i to input capture registre (ICR1L/ICR1H), når der kommer et interrupt. Input capture er den sekundære funktion til PD6, og sættes op i Timer 1's kontrol registre (TCCR1A/TCCR1B). Vi valgte at sætte den op med en prescaler på 1/8 og en falling edge interrupt trigger. Det giver en opdateringsfrekvens på 0.5 $\mu s$ og en maksimal tid på 32.5 ms inden timer/counter registrene overflower. Det er fint nok til at kunne rumme tiden imellem flere interrupts. I interruptrutinen beregnes tiden imellem 4 interrupts for at finde ud af hvor lang tid motoren er om at dreje en omgang (Der sidder tre poler på motoren, så 4 interrupts vil svare til en hel omgang for motoren). Denne tid kan så bruges som et udtryk for hastigheden, da de to ting er omvendt proportionale. Bilens reelle hastighed kan også beregnes, men på grund af proportionaliteten er det ligegyldigt, fra microcontrolleren's synspunkt, om man bruger det ene eller det andet - man skal bare huske at en høj hastighed vil give en lav tid og omvendt, når man skriver programmet, der skal bearbejde hastigheden. Jo færre cycles man bruger på at få noget brugbart ud i den anden ende jo bedre i næsten alle tilfælde, når der også skal laves andre ting sideløbende med input capture interruptet.\\
@@ -168,6 +171,7 @@ Bremsen fungerer efter samme princip, men den regulerer bare bremsen med en tid 
 	\label{fig:Forgiveness}
 	
 \end{figure}
+
 
 \begin{figure}[h]
 

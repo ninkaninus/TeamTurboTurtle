@@ -82,7 +82,7 @@ Når elektromagneten ikke er tændt vil alle de forskellige magnetiske felter v�
 
 Disse elektromagnet bliver brugt mange forskellige steder så som i industrien og på sygehuse. De bliver for eksempel brugt til sortering på forbrændings anlæg. De bliver også brugt i medicinalindustrien hvor de for eksempel bliver brugt til MRI (Magnetic resonance imaging), som er en maskine der bliver brugt til at skanne dit hoved.
  
-For at regne på en elektromagnet bliver designet valgt således at man regner magneten, som et stykke. Hvor vi så regner på den magnetiske energi i forhold til hvor langt de er væk for hinanden, dette kan nemmere ses hvis det bliver illustreret.
+For at regne på en elektromagnet bliver designet valgt således at man regner magneten, som et stykke. Hvor vi så regner på den magnetiske energi i forhold til hvor langt de er væk for hinanden, dette kan nemmere ses hvis det bliver illusteret i figur \ref{fig:elektromagnet}.
 
 \begin{figure}[h]
 
@@ -95,7 +95,7 @@ For at regne på en elektromagnet bliver designet valgt således at man regner m
 Ud fra amperes lov fås følgende
 
 
-$$H_j \cdot L+2*H_s*x = N \cdot I$$
+$$H_j \cdot L+2 \cdot H_s \cdot x = N \cdot I$$
 
 Hvor dette er gældende
 
@@ -106,14 +106,14 @@ Her er $B_j$ det magnetiske felt for kernen og $B_s$ er det magnetiske felt for 
 Da vi går ud fra at der ikke er nogen spredning bliver $B_j = B_s$ og derved får vi dette
 
 
-$$B_j(x) = \dfrac{\mu_0 \cdot I \cdot N}{(\dfrac{L}{K_m}+2 \cdot x}$$
+$$B_j(x) = \dfrac{\mu_0 \cdot I \cdot N}{(\dfrac{L}{K_m}+2 \cdot x)}$$
 
 Ud fra dette kan vi finde den magnetiske energi og derefter finde kraften ved $F_mag = -\dfrac{dU_B}{dx}$
 
 så får vi følgende udtryk som bruges til at beregne kraften af en U formet elektromagnet
 
 \begin{equation}
-F_mag = - \dfrac{B_j^2}{2*\mu_0} \cdot A_j
+F_{mag} = - \dfrac{B_j^2}{2*\mu_0} \cdot A_j
 \end{equation}
 Hvor vi går ud fra at fejlen $dfrac{L}{K_m}+2 \cdot x = 2 \cdot x$ hvis $K_m$ er meget stor og x er meget lille, som i de fleste tilfælde er rigtigt, da kernen af elektromagnet vil være lavet af jern og da kraften skal være så stor som mulig vil den også være så tæt på banen som mulig.
 
