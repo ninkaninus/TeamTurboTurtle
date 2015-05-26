@@ -25,7 +25,8 @@ I gruppen havde vi en MPU-6050 tilrådighed, som har 3 akset accelramometer, som
 	\label{fig:LogiLevelShifter}
 \end{figure}
 
-MPU-6050 breakout boardet fungerer kun med 3,3V, og der er derfor behov for en logic level shifter, som skal omsætte 3,3V I$^{\text{2}}$C til 5V I$^{\text{2}}$C
+MPU-6050 breakout boardet fungerer kun med 3,3V, og der er derfor behov for en logic level shifter, som skal omsætte 3,3V I$^{\text{2}}$C til 5V I$^{\text{2}}$C. I$^{\text{2}}$C fungere på den måde at linjerne altid er trukket til 5V eller 3,3V ved hjælp af pull up modstande, og når der så bliver sendt data så bliver linjen trukket til ground for et digitalet 1.
+På figur \ref{fig:LogiLevelShifter} kan man se de 2 5V pull up modtstande, de 2 3,3V pull up modstande og så de 2 MOSFET´s som får 3,3V 
 
 
 \subsection{Lap sensor}
@@ -52,8 +53,8 @@ Ud fra de første målinger, viste det sig at den lave del af signalet var meget
 \begin{figure}[h]
 
 	\centering
-		\includegraphics[scale=1]{Billeder/Schmitt.jpg}
-	\caption{Diagram over hele input stage fra hallsensoren(SS495A) til input i microcontrolleren på PD6}
+		\includegraphics[scale=0.3]{Billeder/Schmitt.jpg}
+	\caption{Diagram over schmitt trigger kredsløbet.}
 	\label{fig:Schmitt}
 	
 \end{figure}
@@ -121,8 +122,6 @@ så får vi følgende udtryk som bruges til at beregne kraften af en U formet el
 F_{mag} = - \dfrac{B_j^2}{2 \cdot \mu_0} \cdot A_j
 \end{equation}
 Hvor vi går ud fra at fejlen $\dfrac{L}{K_m}+2 \cdot x = 2 \cdot x$ hvis $K_m$ er meget stor og x er meget lille, som i de fleste tilfælde er rigtigt, da kernen af elektromagnet vil være lavet af jern og da kraften skal være så stor som mulig vil den også være så tæt på banen som mulig.
-
-Vi valgt ikke at gå videre med at bruge en elektromagnet da vi fandt en anden måde at bremse på, som ses i sektion \ref{sec:bremse}. Den ville også blive meget svært at få plads til elektromagneten da den ville blive forholdsvis stor hvis den skulle være effektiv nok. Vi gik ud fra det krav at være bil skulle veje, så lidt som mulig og så lavt et tyngdepunkt som muligt. 
 
 Vi valgt ikke at gå videre med at bruge en elektromagnet da vi fandt en anden måde at bremse på som der kan læses om i sektion \ref{sec:Bremse}. Det ville også blive meget svært at få plads til elektromagneten da den ville blive forholdsvis stor, hvis den skulle være effektiv nok. Uf fra den forudsætning at bilen skulle veje, så lidt som mulig og have det lavest mulige tyngdepunkt. 
 
