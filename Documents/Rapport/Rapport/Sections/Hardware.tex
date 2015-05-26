@@ -11,11 +11,15 @@
 \end{wrapfigure}
 
 Til projektet er der valgt at bruge en gyro til at bestemme hvilken type sving bilen er i. Til projektet var der mulighed for at få udleveret et analogt og et digitalt accelramometer.
-\\Det digitale var et LIS35DE som kan måle \textpm 2G eller \textpm 8G på 3 akser, og kan lave målinger op til 400 gange i sekundet.\ Det analoge var et MMA1270KEG med kun en akse, der kan måle op til +- 2,5G. Den akse det kan måle på ligger vinkelret på printet som chippen bliver placeret på.
+\\Det digitale var et LIS35DE som kan måle \textpm 2G eller \textpm 8G på 3 akser, og kan lave målinger op til 400 gange i sekundet.\ Det analoge var et MMA1270KEG med kun en akse, der kan måle op til \textpm 2,5G. Den akse det kan måle på ligger vinkelret på printet som chippen bliver placeret på.
 \linebreak
 
-I gruppen havde vi en MPU-6050 tilrådighed, som har 3 akset accelramometer, som sender 16bit data ud for hver akse, det er her muligt at sætte følsomheden til: \textpm 2G, 4G, 8G eller 16G. Men udover at have et accelramometer så har den også en 3 akset gyro, som vi i gruppen havde en ide om kunne gøre det nemmere at se forskel på om det er et stort sving eller  lille sving. I gruppen valgte vi at bruge MPU-6050 da det gav os mulighed for at bruge både gyro og accelramometer, sa vi ikke skulle lave noget om hvis vi ikke fik nogen ordentlige værdier fra gyroen.
+I gruppen havde vi en MPU-6050 tilrådighed, som har 3 akset accelramometer, som sender 16bit data ud for hver akse, det er her muligt at sætte følsomheden til: \textpm 2G, 4G, 8G eller 16G. Men udover at have et accelramometer så har den også en 3 akset gyro, som vi i gruppen havde en ide om kunne gøre det nemmere at se forskel på om det er et stort sving eller  lille sving. I gruppen valgte vi at bruge MPU-6050 da det gav os mulighed for at bruge både gyro og accelramometer, så vi ikke skulle lave noget om hvis vi ikke fik nogle brugbare værdier fra gyroen.
 \linebreak
+
+\subsubsection{Logic level shifter}
+
+MPU-6050 breakout boardet fungerer kun med 3,3V
 
 \begin{figure}[h]\centering
 	\includegraphics[scale=0.4]{Billeder/LogicLevelShifter.PNG}
