@@ -52,8 +52,8 @@ Ud fra de første målinger, viste det sig at den lave del af signalet var meget
 \begin{figure}[h]
 
 	\centering
-		\includegraphics[scale=1]{Billeder/Schmitt.jpg}
-	\caption{Diagram over hele input stage fra hallsensoren(SS495A) til input i microcontrolleren på PD6}
+		\includegraphics[scale=0.3]{Billeder/Schmitt.jpg}
+	\caption{Diagram over schmitt trigger kredsløbet.}
 	\label{fig:Schmitt}
 	
 \end{figure}
@@ -76,18 +76,17 @@ V_{TH} = \dfrac{R_{2}}{R_{2}+R_{1}||(R_{3}+R_{4})} \cdot 5V
 Til at beregne spændingstærsklerne skal man finde spændingen på det ikke-inverterende ben, når komparatoren er åben og når den er lukket. Så ender man med to ligninger med to ubekendte, hvis man fastsætter to af modstandene og spændingstærsklerne på forhånd. Modstandsværdierne blev dikteret af udvalget på komponentlageret, og ved hjælp af ligning \eqref{eq:Vtl} og \eqref{eq:Vth} designede vi spændingstærskler på henholdsvis 2.2 V og 2.8 V. 
 
 \subsection{Bremse}
-\label{sec:Bremse}
 
 For at bremse bilen kortsluttes motorterminalerne. En kortslutning bremser motoren ved at lade et magnetfelt, der modsætter sig motorens bevægelse, blive induceret i spolerne. Hvis kortslutningen ikke er til stede, kan der ikke løbe nogen strøm og derfor heller ikke dannes noget modsatrettet magnetfelt. Selve kortslutningen bliver udført af 5 volts relæ der bliver styret af en MOSFET forbundet til et IO-ben på microcontrolleren. Se figur.. 
 
 \subsection{Elektromagnet}
 I Dette projekt har valgt at se på en elektromaget for at se om det kunne svare sig at implementere en elektromagnet for at kunne bremse/holde bilen på plads
-En elektromagnet er en magnet som laver et magnetiskfelt ved at sende strøm igennem en spole. Der er flere forskellige måde man kan påvirker dette felt på for eksempel ved at sende en kraftigere strøm igennem spolen eller have flere vindinger på spolen. Du kan også ændre den styrke ved at tilføje en kerne til elektromagneten, Det denne kerne gør at den magnetiske felter nemmer, kan trænge igennem kernen end de kan i luft. Disse kerner bliver oftest lavet af jern.
+En elektromagnet er en spole med tilhørende kerne som laver et magnetiskfelt ved at sende strøm igennem en spole. Der er flere forskellige måde man kan påvirker dette felt på for eksempel ved at sende en kraftigere strøm igennem spolen eller have flere vindinger på spolen. Du kan også ændre den styrke ved at tilføje en kerne til elektromagneten, Det denne kerne gør at den magnetiske felter nemmer, kan trænge igennem kernen end de kan i luft. Disse kerner bliver oftest lavet af jern.
 Når elektromagneten ikke er tændt vil alle de forskellige magnetiske felter være spredt ud i alle retningen og når du så tilføjer en strøm vi de all sammen blive ensrettet og derved bliver elektromagneten stærkere.
 
-Disse elektromagnet bliver brugt mange forskellige steder så som i industrien og på sygehuse. De bliver for eksempel brugt til sortering på forbrændings anlæg. De bliver også brugt i medicinalindustrien hvor de for eksempel bliver brugt til MRI (Magnetic resonance imaging), som er en maskine der bliver brugt til at skanne dit hoved.
+Disse elektromagnet bliver brugt mange forskellige steder, så som i industrien, hvor de bliver brugt til løfte meget tunge magnetiske ting, som for eksemple biler.
  
-For at regne på en elektromagnet bliver designet valgt således at man regner magneten, som et stykke. Hvor vi så regner på den magnetiske energi i forhold til hvor langt de er væk for hinanden, dette kan nemmere ses hvis det bliver illustreret.
+For at regne på en elektromagnet bliver designet valgt således at man regner magneten, som et stykke. Hvor vi så regner på den magnetiske energi i forhold til hvor langt de er væk for hinanden, dette kan nemmere ses hvis det bliver illusteret i figur \ref{fig:elektromagnet}.
 
 \begin{figure}[h]
 
@@ -106,12 +105,12 @@ Hvor dette er gældende
 
 $$H_j = \dfrac{B_j}{\mu_0 \cdot K_m}, H_s = \dfrac{B_s}{\mu_0}$$
 
-Her er $B_j$ det magnetiske felt for kernen og $B_s$ er det magnetiske felt for det tommerum mellem banen og magneten.
+Her er $B_j$ det magnetiske felt for kernen og $B_s$ er det magnetiske felt for det tommerum mellem banen og magneten. $H_j$ og $H_s$ er de til hørende elektriskefelter. Til sidste har vi fejlen som i det enklte materiale $K_m$
 
 Da vi går ud fra at der ikke er nogen spredning bliver $B_j = B_s$ og derved får vi dette
 
 
-$$B_j(x) = \dfrac{\mu_0 \cdot I \cdot N}{(\dfrac{L}{K_m}+2 \cdot x}$$
+$$B_j(x) = \dfrac{\mu_0 \cdot I \cdot N}{(\dfrac{L}{K_m}+2 \cdot x)}$$
 
 Ud fra dette kan vi finde den magnetiske energi og derefter finde kraften ved $F_{mag} = -\dfrac{dU_B}{dx}$
 
@@ -119,25 +118,7 @@ så får vi følgende udtryk som bruges til at beregne kraften af en U formet el
 
 \begin{equation}
 F_{mag} = - \dfrac{B_j^2}{2 \cdot \mu_0} \cdot A_j
-
 \end{equation}
 Hvor vi går ud fra at fejlen $dfrac{L}{K_m}+2 \cdot x = 2 \cdot x$ hvis $K_m$ er meget stor og x er meget lille, som i de fleste tilfælde er rigtigt, da kernen af elektromagnet vil være lavet af jern og da kraften skal være så stor som mulig vil den også være så tæt på banen som mulig.
 
-Vi valgt ikke at gå videre med at bruge en elektromagnet da vi fandt en anden måde at bremse på som der kan læses om i sektion \ref{sec:Bremse}. Det ville også blive meget svært at få plads til elektromagneten da den ville blive forholdsvis stor, hvis den skulle være effektiv nok. Uf fra den forudsætning at bilen skulle veje, så lidt som mulig og have det lavest mulige tyngdepunkt. 
-
-\subsection{Print}
-Dette afsnit beskriver kort printet som der er blevet lavet til bilen. Vi har lavet det som et skjold der monteres ovenpå bilen i de headers som der allerede er på det print vi har fået udleveret. Figur \ref{fig:Schematic} viser hele det skematiske overblik over printet. Og figur \ref{fig:Print} viser det fremstillede print. Vi har designet det sådan at alle headers sidder så de ikke kommer i kambullage med karrosseriet på bilen.
-
-\begin{figure}[h]
-	\centering
-		\includegraphics[scale=0.8]{Billeder/Schematic.png}
-	\caption{Her ses hele schematic til det print der er blevet lavet til bilen. De individuelle dele er beskrevet i de 			relevante hardware afsnit}
-	\label{fig:Schematic}
-\end{figure}
-
-\begin{figure}[h!b]
-	\centering
-		\includegraphics[scale=0.04]{Billeder/Print-top.JPG}
-	\caption{Her ses det færdige print}
-	\label{fig:Print}
-\end{figure}
+Vi valgt ikke at gå videre med at bruge en elektromagnet da vi fandt en anden måde at bremse på ved at lave en kortslutning henover motoren ved hjælp af et relæ. Den ville også blive meget svært at få plads til elektromagneten da den ville blive forholdsvis stor hvis den skulle være effektiv nok. Vi gik ud fra det krav at være bil skulle veje, så lidt som mulig og så lavt et tyngdepunkt som muligt. 
