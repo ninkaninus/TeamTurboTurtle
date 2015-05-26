@@ -112,8 +112,39 @@ De fleste af kommandoerne består af to telegrammer da mange af værdierne som e
 Til sidst i telegrammet sendes der altid et parameter med, også selvom en funktion ikke gør brug af et parameter.
 
 \subsubsection{Implementering}
+Implementeringen kan deles op i to dele, en del der står for at behandle de modtagne bytes. Og en del der står for at eksekverer kommandoerne når et helt telegram er modtaget. 
 
-\subsection{Eksempler(sensor)}
+\paragraph{Modtagelse}
+\textit{Figur \ref{fig:Comm_Modtagelse} Beskriver modtagelsen som et flowchart.} \\
+
+Når USART modulet modtager en byte vil der blive kaldt et interrupt der springer til plads 0x1A, hvor kommandoen "jmp Comm\_Received" står. Dette er indgangen til modtagelsesdelen af implementeringen. \\
+Først indlæses værdien Byte\_Num fra SRAM. Den holder styr på, hvilken af de 3 bytes der er modtaget. Den første byte, altså typen, har værdien et. Ud fra denne værdi springer programmet så til håndteringen af en modtaget type, modtaget kommando eller en eksekvering af det modtagende telegram. Håndteringen af typer og kommandoer er den sammen. Den modtagende type/kommando holdes op mod de typer/kommandoer som microcontrolleren kender og hvis det er en kendt type/kommando så gemmes den i SRAM og Byte\_Num inkremeres med en. Hvis det derimod ikke er en kendt type/kommando så sættes Byte\_Numb til en og derved smides telegrammet væk, hvis ikke det er af en type som der er implementeret i microcontrolleren. Den første implementering af kommunikations protokollen indeholdt ikke dette check for om det var en godkendt type allerede i modtagelsen. Dette gjorde at hvis der på en eller anden måde fik sneget sig en byte ind imellem modtagelsen af type, kommando og parameter. Så ville microcontrolleren skulle modtage 3 bytes før fejlen bliver opdaget. Dette resulterede i at efterfølgende telegrammer ville være forskubbet med en byte og konsekvent ville fejle. Med den nuværende implementering vil microcontrolleren opdage fejlen med det samme og efterfølgende telegrammer vil blive opfanget korrekt. Grunden til reimplementeringen var at når man sendte telegrammer hurtigere end microcontrolleren kunne håndterer dem så begyndte dens rx-buffer at blive overskrevet og dette fik meget hurtigt ødelagt kommunikationen pga. forskubbede telegrammer. Den nuværende implementering lider ikke under dette og vil blot ikke svarer på en kommando ,hvis den oplever et overflow, men svarer efterfølgende igen når dens buffer ikke oplever et overflow længere. Dette gør protokollen meget mere solid.
+
+\begin{figure}[p]
+
+	\centering
+		\includegraphics[scale=0.8]{Billeder/Comm_Modtagelse.png}
+	\caption{Flowchart over kommunikations protokollen ved modtagelsen af en byte)}
+	\label{fig:Comm_Modtagelse}
+	
+\end{figure}
+
+\paragraph{Eksekvering} 
+\textit{Figur \ref{fig:Comm_Eksekvering} Beskriver eksekveringen som et flowchart.} \\
+Eksekveringen bliver kørt når byte nummer 3, parametret, bliver modtaget. Her bliver typen og kommandoen igen tjekket for at finde ud af, hvilken kommando der skal eksekveres. Hvis der af en eller anden grund er en fejl på de SRAM addresser der indeholder typen og kommandoen. Så vil microcontrolleren ikke genkende det gemte telegram og selv resette igen. Så kommunikationen kan fortsætte bagefter uden at den hænger eller forskyder telegrammerne. Efter eksekveringen af kommandoen er endt så vil Byte\_Num blive sat til en igen og det hele vil begynde forfra.
+
+\begin{figure}[p]
+
+	\centering
+		\includegraphics[scale=0.8]{Billeder/Comm_Eksekvering.png}
+	\caption{Flowchart over kommunikations protokollen ved eksekveringen af en byte)}
+	\label{fig:Comm_Eksekvering}
+	
+\end{figure}
+
+\subsection{Sensorer}
+
+I denne sektion vil der kort blive beskrevet, hvordan vores tachometer og lap sensor interfacer med microcontrolleren.
 
 \subsubsection{Tachometer}
 
@@ -152,14 +183,13 @@ I interruptrutinen til lap sensoren beregnes omgangstiden. Hver gang målstregen
 Det er også efter denne kontrol at man kan ændre på alle de parametre der kun skal ændres en gang når målstregen krydses. Inden man forlader interruptrutinen er det vigtigt at resette comparator interrupt flaget i ACSR. Hvis flaget er sat, når det globale interrupt bliver enablet efter rutinen, anser microcontrolleren det som om den har modtaget et nyt interrupt, og så vil den køre hele rutinen igen.
 
 \subsection{Hastighedskontrol}
+\label{sec:Hastighedskontrol}
 
 For at designe en hastighedskontrol, der selv regulerer PWM og bremser alt efter hvor langt den målte hastighed er fra den ønskede, valgte vi at designe en progressiv kontrol, hvorved jo større forskellen imellem den ønskede og målte hastighed er, jo kraftigere vil microcontrolleren forsøge at justere. Tanken er at bruge den forskel som et direkte input til OCR2 eller bremsen, således at jo tættere bilen kommer på den ønskede hastighed jo lavere bliver værdien i OCR2, og lige sådan omvendt. Det medfører at det er umuligt for bilen at stabilisere sig selv på den ønskede hastighed, men det gør ikke det store, da den ønskede hastighed er i forvejen en arbitrær værdi, som man skal eksperimentere sig lidt frem til. Det er både fordi det ikke kan vides på forhånd, hvilke hastigheder der er ideelle i alle situationer, men også fordi den værdi microcontrolleren justerer efter ikke er en rigtig hastighed men tiden pr. motoromdrejning. Hele forløbet kan følges på flow chartet på figur \ref{fig:Speed}\\
 Hastighedskontrollen er implementeret som en call-funktion, der bliver kaldt hver gang hastigheden bliver opdateret i input capture interruptrutinen. Det har den ulempe, at hvis bilen går i stå, af en eller anden grund, så der ikke kommer flere interrupts, så kan den ikke starte igen af sig selv, hvis værdien i OCR2 er 0. \\
-\paragraph{PWM}
+\subsubsection{PWM}
 Det første der sker er at den ønskede og den målte hastighed læses ind fra SRAM'en og derefter findes forskellen mellem dem. For at afgøre om bilen kører for hurtigt eller for langsomt, kontrolleres fortegnet på den udregnede forskel - det kan gøres nemt ved at kigge på N-flaget i statusregistret. Hvis bilen kører for langsomt er forskellen negativ og for at kunne arbejde med det bruges tallets to-komplement. Hvis forskellen er større end en på forhånd bestemt størrelse så sættes OCR2 til 255 så duty cycle er på 100 procent. Hvis den er under læses forskellen direkte ind i OCR2. Eller det ville vi gøre, hvis hastigheden var en 8-bits værdi - vi gemmer hastigheden som en 16 bits størrelse så derfor er vi nødt til at dividere tallet ned så det passer i et 8 bits register. Så længe man bibeholder proportionaliteten gør det ikke noget at tallet bliver divideret ned. For at spare på cycles i en interruptrutine, der bliver kaldt forholdsvis ofte, divideres der kun med potenser af 2 - det kan laves nemmere ved at bruge logic shifts eller rotations (det svarer til at flytte kommaet, når man ganger eller dividerer med 10 i base-10 talsystemer). Ved at dividere tallet ned giver det også muligheden for nemt at sætte et maksimum på værdien, der kan læses ind i OCR2, når forskellen bliver brugt direkte. Hvis man eksempelvis sætter max-forskellen til 5760 så kan der højest læses 180 ind i OCR2, inden microcontrolleren regulerer med fuld kraft, idet $180 \cdot 32 = 5760$. Jo større tal man dividerer med, jo blødere reguleres motorkraften og jo større skal forskellen også være, for at der gives fuld kraft på motoren - vi fandt en udemærket balance med skaleringen på 32.\\
 
-\paragraph{Bremse}
-Bremsen fungerer efter samme princip, men den regulerer bare bremsen med en tid i millisekunder. Når forskellen bliver positiv læses der som standard 0 ind i OCR2 så duty cycle også bliver 0 - der sættes også en bit på en SRAM-addresse, som fortæller at bilen er igang med at bremse. Helt i starten af hastighedskontrollen checkes denne bit og hvis den er sat, springer program counteren til en anden funktion, der holder øje med hvor lang tid der har været bremset i. Funktionen fungerer meget på samme måde som den der holder øje med omgangstider - der sættes et time stamp lige når bremsen bliver sat til, og så holder microcontrolleren øje med om der forløbet nok tid til at den kan slå bremsen fra igen. Tiden bremsen er sat til i, bliver på samme måde som med PWM, når bilen kører for langsomt, ved at bruge hastighedsforskellen som direkte parameter. Den maksimale tid der bremses i med er 255 ms - det viste sig under tests at en bremsetid på mere end 255 ms ikke har ret meget effekt. Samtidig kan man genbruge 8 bits formatet fra tidligere. Bilen finder selv ud af om der er brug for at bremse mere efter de 255 ms er gået. Der er indbygget en lille buffer, så bremsen ikke bliver brugt lige så snart forskellen bliver positiv - op til en vis grænse er der en slags soft braking zone se figur \ref{fig:Forgiveness}, hvor OCR2 bare er sat til 0. 
 
 \begin{figure}[h]
 
@@ -171,6 +201,9 @@ Bremsen fungerer efter samme princip, men den regulerer bare bremsen med en tid 
 
 \begin{figure}[h]
 
+
+\begin{figure}[hpt]
+
 	\centering
 		\includegraphics[scale=0.4]{Billeder/Speed.jpg}
 	\caption{Her ses flow chartet til hele hastighedskontrollen. Med buffer menes grænsen imellem soft braking zonen og området hvor forskellen bliver brugt direkte som delay.}
@@ -178,3 +211,6 @@ Bremsen fungerer efter samme princip, men den regulerer bare bremsen med en tid 
 	
 \end{figure}
 
+
+\subsubsection{Bremse}
+Bremsen fungerer efter samme princip, men den regulerer bare bremsen med en tid i millisekunder. Når forskellen bliver positiv læses der som standard 0 ind i OCR2 så duty cycle også bliver 0 - der sættes også en bit på en SRAM-addresse, som fortæller at bilen er igang med at bremse. Helt i starten af hastighedskontrollen checkes denne bit og hvis den er sat, springer program counteren til en anden funktion, der holder øje med hvor lang tid der har været bremset i. Funktionen fungerer meget på samme måde som den der holder øje med omgangstider - der sættes et time stamp lige når bremsen bliver sat til, og så holder microcontrolleren øje med om der forløbet nok tid til at den kan slå bremsen fra igen. Tiden bremsen er sat til i, bliver på samme måde som med PWM, når bilen kører for langsomt, ved at bruge hastighedsforskellen som direkte parameter. Den maksimale tid der bremses i med er 255 ms - det viste sig under tests at en bremsetid på mere end 255 ms ikke har ret meget effekt. Samtidig kan man genbruge 8 bits formatet fra tidligere. Bilen finder selv ud af om der er brug for at bremse mere efter de 255 ms er gået. Der er indbygget en lille buffer, så bremsen ikke bliver brugt lige så snart forskellen bliver positiv - op til en vis grænse er der en slags soft braking zone se figur \ref{fig:Forgiveness}, hvor OCR2 bare er sat til 0. 

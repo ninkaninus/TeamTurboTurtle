@@ -30,9 +30,9 @@ MPU-6050 breakout boardet fungerer kun med 3,3V
 
 \subsection{Lap sensor}
 
-Til at holde øje med når bilen krydsede målstregen, faldt valget på en CNY70 optisk sensor. Den består af en infrarød lysdiode og en phototransistor bygget ind i samme hus. Dioden sender hele tiden infrarødt lys ud gennem et lille vindue, og hvis der er en flade tæt på til at reflektere lyset, vil det blive opfanget af phototransistoren, der sidder ved siden af dioden bag et lysfilter. Mængden af lys der bliver reflekteret tilbage afhænger af afstanden til fladen og typen af materiale der er på overfladen - en hvidt malet streg vil for eksempel reflektere mere lys tilbage end en sort materet overflade.
+Til at holde øje med når bilen krydsede målstregen, faldt valget på en CNY70 optisk sensor. Den består af en infrarød lysdiode og en phototransistor bygget ind i samme hus. Dioden sender hele tiden infrarødt lys ud gennem et lille vindue, og hvis der er en flade tæt på til at reflektere lyset, vil det blive opfanget af phototransistoren, der sidder ved siden af dioden bag et lysfilter. Mængden af lys der bliver reflekteret tilbage afhænger af afstanden til fladen, og typen af materiale der er på overfladen - en hvidt malet streg vil for eksempel reflektere mere lys tilbage end en sort materet overflade.
 
-For at gøre signalet fra sensoren brugbart for microcontrolleren, ville vi bruge en komparator til at digitalisere outputtet. Oprindeligt var planen at bruge en LM311 komparator, men det viste sig at den interne komparator i microcontrolleren lige så nemt kunne bruges til det formål, og så ville der også skæres ned på antallet af eksterne komponenter og derved mindske pladsforbruget på vores print. En anden fordel ved at bruge den interne komparator, er at det bliver muligt at bruge den interne spændingsreference på 2.56 V som input til komparatoren. Så er det bare et spørgsmål om at dimensionere outputtet fra CNY70 sensoren med en modstand, så spændingen der kommer fra den sorte overflade på banen ligger under 2.56V og spændingen fra den hvide målstreg ligger over. Microcontrolleren aflæser komparatoren ved at se på outputtet fra den, og det kan sættes op så den sender et interrupt, når der kommer en rising eller falling edge eller når outputtet skifter tilstand. Med denne løsning bruges der kun tre eksterne komponenter - en modstand hver til henholdsvis lysdioden og phototransistoren samt CNY70 sensoren. Modstanden til lysdioden blev sat til 150 ohm, så der løber godt 30 mA i det kredsløb. For at opfylde spændingskravene til komparatoren blev der brugt en 22 kilo-ohms modstand - det gav en spænding på banen omkring 0.8 V og en spænding på målstregen på ca 4.5 V.
+For at gøre signalet fra sensoren brugbart for microcontrolleren, ville vi bruge en komparator til at digitalisere outputtet. Oprindeligt var planen at bruge en LM311 komparator, men det viste sig at den interne komparator i microcontrolleren, lige så nemt kunne bruges til det formål, og så ville der også skæres ned på antallet af eksterne komponenter og derved mindske pladsforbruget på vores print. En anden fordel ved at bruge den interne komparator, er at det bliver muligt at bruge den interne spændingsreference på 2.56 V som input til komparatoren. Så er det bare et spørgsmål om at dimensionere outputtet fra CNY70 sensoren med en modstand, så spændingen, der kommer fra den sorte overflade på banen, ligger under 2.56V, og spændingen fra den hvide målstreg ligger over. Microcontrolleren aflæser komparatoren ved at se på outputtet fra den, og det kan sættes op, så den sender et interrupt, når der kommer en rising eller falling edge, eller når outputtet skifter tilstand. Med denne løsning bruges der kun tre eksterne komponenter - en modstand hver til henholdsvis lysdioden og phototransistoren samt CNY70 sensoren. Modstanden til lysdioden blev sat til 150 ohm, så der løber godt 30 mA i det kredsløb. For at opfylde spændingskravene til komparatoren blev der brugt en 22 kilo-ohms modstand - det gav en spænding på banen omkring 0.8 V og en spænding på målstregen på ca 4.5 V.
 
 \subsection{Tachometer}
 
@@ -52,8 +52,8 @@ Ud fra de første målinger, viste det sig at den lave del af signalet var meget
 \begin{figure}[h]
 
 	\centering
-		\includegraphics[scale=0.3]{Billeder/Schmitt.jpg}
-	\caption{Diagram over schmitt trigger kredsløbet.}
+		\includegraphics[scale=1]{Billeder/Schmitt.jpg}
+	\caption{Diagram over hele input stage fra hallsensoren(SS495A) til input i microcontrolleren på PD6}
 	\label{fig:Schmitt}
 	
 \end{figure}
@@ -76,9 +76,9 @@ V_{TH} = \dfrac{R_{2}}{R_{2}+R_{1}||(R_{3}+R_{4})} \cdot 5V
 Til at beregne spændingstærsklerne skal man finde spændingen på det ikke-inverterende ben, når komparatoren er åben og når den er lukket. Så ender man med to ligninger med to ubekendte, hvis man fastsætter to af modstandene og spændingstærsklerne på forhånd. Modstandsværdierne blev dikteret af udvalget på komponentlageret, og ved hjælp af ligning \eqref{eq:Vtl} og \eqref{eq:Vth} designede vi spændingstærskler på henholdsvis 2.2 V og 2.8 V. 
 
 \subsection{Bremse}
-\label{sec:bremse}
+\label{sec:Bremse}
 
-For at bremse bilen kortsluttes motorterminalerne. En kortslutning bremser motoren ved at lade et magnetfelt, der modsætter sig motorens bevægelse, blive induceret i spolerne. Hvis kortslutningen ikke er til stede, kan der ikke løbe nogen strøm og derfor heller ikke dannes noget modsatrettet magnetfelt. Selve kortslutningen bliver udført af 5 volts relæ der bliver styret af en MOSFET forbundet til et IO-ben på microcontrolleren. Se figur.. 
+For at bremse bilen kortsluttes motorterminalerne. En kortslutning bremser motoren ved at lade et magnetfelt, der modsætter sig motorens bevægelse, blive induceret i spolerne. Hvis kortslutningen ikke er til stede, kan der ikke løbe nogen strøm og derfor heller ikke dannes noget modsatrettet magnetfelt. Selve kortslutningen bliver udført af 5 volts relæ der bliver styret af en MOSFET forbundet til et IO-ben på microcontrolleren. Se figur \ref{fig:Schematic}. 
 
 \subsection{Elektromagnet}
 I Dette projekt har valgt at se på en elektromaget for at se om det kunne svare sig at implementere en elektromagnet for at kunne bremse/holde bilen på plads
@@ -123,3 +123,22 @@ F_{mag} = - \dfrac{B_j^2}{2 \cdot \mu_0} \cdot A_j
 Hvor vi går ud fra at fejlen $\dfrac{L}{K_m}+2 \cdot x = 2 \cdot x$ hvis $K_m$ er meget stor og x er meget lille, som i de fleste tilfælde er rigtigt, da kernen af elektromagnet vil være lavet af jern og da kraften skal være så stor som mulig vil den også være så tæt på banen som mulig.
 
 Vi valgt ikke at gå videre med at bruge en elektromagnet da vi fandt en anden måde at bremse på, som ses i sektion \ref{sec:bremse}. Den ville også blive meget svært at få plads til elektromagneten da den ville blive forholdsvis stor hvis den skulle være effektiv nok. Vi gik ud fra det krav at være bil skulle veje, så lidt som mulig og så lavt et tyngdepunkt som muligt. 
+
+Vi valgt ikke at gå videre med at bruge en elektromagnet da vi fandt en anden måde at bremse på som der kan læses om i sektion \ref{sec:Bremse}. Det ville også blive meget svært at få plads til elektromagneten da den ville blive forholdsvis stor, hvis den skulle være effektiv nok. Uf fra den forudsætning at bilen skulle veje, så lidt som mulig og have det lavest mulige tyngdepunkt. 
+
+\subsection{Print}
+Dette afsnit beskriver kort printet som der er blevet lavet til bilen. Vi har lavet det som et skjold der monteres ovenpå bilen i de headers som der allerede er på det print vi har fået udleveret. Figur \ref{fig:Schematic} viser hele det skematiske overblik over printet. Og figur \ref{fig:Print} viser det fremstillede print. Vi har designet det sådan at alle headers sidder så de ikke kommer i kambullage med karrosseriet på bilen.
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[scale=0.8]{Billeder/Schematic.PNG}
+	\caption{Her ses hele schematic til det print der er blevet lavet til bilen. De individuelle dele er beskrevet i de 			relevante hardware afsnit}
+	\label{fig:Schematic}
+\end{figure}
+
+\begin{figure}[h!b]
+	\centering
+		\includegraphics[scale=0.04]{Billeder/Print-top.JPG}
+	\caption{Her ses det færdige print}
+	\label{fig:Print}
+\end{figure}
