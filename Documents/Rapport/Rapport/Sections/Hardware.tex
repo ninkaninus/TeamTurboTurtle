@@ -2,6 +2,28 @@
 
 \subsection{Accellerometer}
 
+\begin{wrapfigure}{r}{4cm}
+	\begin{minipage}{.3\textwidth}\centering
+		\includegraphics[scale=0.2]{Billeder/mpu-6050.jpg}
+		\caption{MPU-6050\\Breakout Board}
+		\label{fig:MPU-6050-Breakout}
+	\end{minipage}
+\end{wrapfigure}
+
+Til projektet er der valgt at bruge en gyro til at bestemme hvilken type sving bilen er i. Til projektet var der mulighed for at få udleveret et analogt og et digitalt accelramometer.
+\\Det digitale var et LIS35DE som kan måle \textpm 2G eller \textpm 8G på 3 akser, og kan lave målinger op til 400 gange i sekundet.\ Det analoge var et MMA1270KEG med kun en akse, der kan måle op til +- 2,5G. Den akse det kan måle på ligger vinkelret på printet som chippen bliver placeret på.
+\linebreak
+
+I gruppen havde vi en MPU-6050 tilrådighed, som har 3 akset accelramometer, som sender 16bit data ud for hver akse, det er her muligt at sætte følsomheden til: \textpm 2G, 4G, 8G eller 16G. Men udover at have et accelramometer så har den også en 3 akset gyro, som vi i gruppen havde en ide om kunne gøre det nemmere at se forskel på om det er et stort sving eller  lille sving. I gruppen valgte vi at bruge MPU-6050 da det gav os mulighed for at bruge både gyro og accelramometer, sa vi ikke skulle lave noget om hvis vi ikke fik nogen ordentlige værdier fra gyroen.
+\linebreak
+
+\begin{figure}[h]\centering
+	\includegraphics[scale=0.4]{Billeder/LogicLevelShifter.png}
+	\caption{Logic level shifter}
+	\label{fig:LogiLevelShifter}
+\end{figure}
+5v -> 3v3
+
 \subsection{Lap sensor}
 
 Til at holde øje med når bilen krydsede målstregen, faldt valget på en CNY70 optisk sensor. Den består af en infrarød lysdiode og en phototransistor bygget ind i samme hus. Dioden sender hele tiden infrarødt lys ud gennem et lille vindue, og hvis der er en flade tæt på til at reflektere lyset, vil det blive opfanget af phototransistoren, der sidder ved siden af dioden bag et lysfilter. Mængden af lys der bliver reflekteret tilbage afhænger af afstanden til fladen og typen af materiale der er på overfladen - en hvidt malet streg vil for eksempel reflektere mere lys tilbage end en sort materet overflade.
