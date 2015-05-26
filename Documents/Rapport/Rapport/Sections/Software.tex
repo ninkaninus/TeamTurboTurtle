@@ -7,7 +7,8 @@ I dette afsnit beskrives der, hvordan koden er struktureret. Og hvilke fordele d
 I dette afsnit beskrives nogle af de underbyggende funktionaliteter der er inkorporeret i softwaren. Dette er ting som ikke er programmerings mæssigt store nok til at de kræver et underafsnit for sig selv, men som alligevel har dannet grundlag for nogle af de andre funktioner i koden.
 
 \subsection{Kommunikations Protokol}
-I oplægget er der specificeret en kommunikationsprotokol som bilen skal overholde. Protokollen fungerer ved hjælp af telegrammer. I afsnittet "Beskrivelse af telegram" forklares der, hvad et telegram er. Og i afsnittet "Implementering" beskrives der, hvordan protokollen kodemæssigt er implementeret i microcontrolleren.
+I oplægget er der specificeret en kommunikationsprotokol som bilen skal overholde. Protokollen fungerer ved hjælp af telegrammer. I afsnittet "Beskrivelse af telegram" forklares der, hvad et telegram er. Og i afsnittet "Implementering" beskrives der, hvordan protokollen kodemæssigt er implementeret i microcontrolleren.\\
+Al kode der omhandler kommunikations protokollen ligger i .asm-filen "Communication\_Protocol.asm"
 
 \subsubsection{Beskrivelse af telegram}
 Protokollen er baseret på "telegrammer" bestående af 3 bytes der henholdsvis repræsenterer en type, kommando og et parameter.\\
@@ -56,21 +57,31 @@ Implementeringen kan deles op i to dele, en del der står for at behandle de mod
 
 \paragraph{Modtagelse}
 \textit{Figur \ref{fig:Comm_Modtagelse} Beskriver modtagelsen som et flowchart.} \\
+
 Når USART modulet modtager en byte vil der blive kaldt et interrupt der springer til plads 0x1A, hvor kommandoen "jmp Comm\_Received" står. Dette er indgangen til modtagelsesdelen af implementeringen. \\
 Først indlæses værdien Byte\_Num fra SRAM. Den holder styr på, hvilken af de 3 bytes der er modtaget. Den første byte, altså typen, har værdien et. Ud fra denne værdi springer programmet så til håndteringen af en modtaget type, modtaget kommando eller en eksekvering af det modtagende telegram. Håndteringen af typer og kommandoer er den sammen. Den modtagende type/kommando holdes op mod de typer/kommandoer som microcontrolleren kender og hvis det er en kendt type/kommando så gemmes den i SRAM og Byte\_Num inkremeres med en. Hvis det derimod ikke er en kendt type/kommando så sættes Byte\_Numb til en og derved smides telegrammet væk, hvis ikke det er af en type som der er implementeret i microcontrolleren. Den første implementering af kommunikations protokollen indeholdt ikke dette check for om det var en godkendt type allerede i modtagelsen. Dette gjorde at hvis der på en eller anden måde fik sneget sig en byte ind imellem modtagelsen af type, kommando og parameter. Så ville microcontrolleren skulle modtage 3 bytes før fejlen bliver opdaget. Dette resulterede i at efterfølgende telegrammer ville være forskubbet med en byte og konsekvent ville fejle. Med den nuværende implementering vil microcontrolleren opdage fejlen med det samme og efterfølgende telegrammer vil blive opfanget korrekt. Grunden til reimplementeringen var at når man sendte telegrammer hurtigere end microcontrolleren kunne håndterer dem så begyndte dens rx-buffer at blive overskrevet og dette fik meget hurtigt ødelagt kommunikationen pga. forskubbede telegrammer. Den nuværende implementering lider ikke under dette og vil blot ikke svarer på en kommando ,hvis den oplever et overflow, men svarer efterfølgende igen når dens buffer ikke oplever et overflow længere. Dette gør protokollen meget mere solid.
 
-\begin{figure}[h]
+\begin{figure}[p]
 
 	\centering
-		\includegraphics[scale=0.65]{Billeder/Comm_Modtagelse.png}
+		\includegraphics[scale=0.8]{Billeder/Comm_Modtagelse.png}
 	\caption{Flowchart over kommunikations protokollen ved modtagelsen af en byte)}
 	\label{fig:Comm_Modtagelse}
 	
 \end{figure}
 
-\paragraph{Eksekvering}
+\paragraph{Eksekvering} 
+\textit{Figur \ref{fig:Comm_Eksekvering} Beskriver eksekveringen som et flowchart.} \\
+Eksekveringen bliver kørt når byte nummer 3, parametret, bliver modtaget. Her bliver typen og kommandoen igen tjekket for at finde ud af, hvilken kommando der skal eksekveres. Hvis der af en eller anden grund er en fejl på de SRAM addresser der indeholder typen og kommandoen. Så vil microcontrolleren ikke genkende det gemte telegram og selv resette igen. Så kommunikationen kan fortsætte bagefter uden at den hænger eller forskyder telegrammerne. Efter eksekveringen af kommandoen er endt så vil Byte\_Num blive sat til en igen og det hele vil begynde forfra.
 
-Al kode der omhandler kommunikations protokollen ligger i .asm-filen "Communication\_Protocol.asm"
+\begin{figure}[p]
+
+	\centering
+		\includegraphics[scale=0.8]{Billeder/Comm_Eksekvering.png}
+	\caption{Flowchart over kommunikations protokollen ved eksekveringen af en byte)}
+	\label{fig:Comm_Eksekvering}
+	
+\end{figure}
 
 \subsection{Eksempler(sensor)}
 
