@@ -73,3 +73,45 @@ Modstandsværdierne blev dikteret af udvalget på komponentlageret, og ved hjæl
 For at bremse bilen kortsluttes motorterminalerne. En kortslutning bremser motoren ved at lade et magnetfelt der modsætter sig motorens bevægelse blive induceret i spolerne. Hvis kortslutningen ikke er til stede kan der ikke løbe nogen strøm og derfor heller ikke dannes noget modsatrettet magnetfelt. Selve kortslutningen bliver udført af 5 volts relæ der bliver styret af en MOSFET forbundet til et IO-ben på microcontrolleren. Se figur.. 
 
 \subsection{Elektromagnet}
+I Dette projekt har valgt at se på en elektromaget for at se om det kunne svare sig at implementere en elektromagnet for at kunne bremse/holde bilen på plads
+En elektromagnet er en magnet som laver et magnetiskfelt ved at sende strøm igennem en spole. Der er flere forskellige måde man kan påvirker dette felt på for eksempel ved at sende en kraftigere strøm igennem spolen eller have flere vindinger på spolen. Du kan også ændre den styrke ved at tilføje en kerne til elektromagneten, Det denne kerne gør at den magnetiske felter nemmer, kan trænge igennem kernen end de kan i luft. Disse kerner bliver oftest lavet af jern.
+Når elektromagneten ikke er tændt vil alle de forskellige magnetiske felter være spredt ud i alle retningen og når du så tilføjer en strøm vi de all sammen blive ensrettet og derved bliver elektromagneten stærkere.
+
+Disse elektromagnet bliver brugt mange forskellige steder så som i industrien og på sygehuse. De bliver for eksempel brugt til sortering på forbrændings anlæg. De bliver også brugt i medicinalindustrien hvor de for eksempel bliver brugt til MRI (Magnetic resonance imaging), som er en maskine der bliver brugt til at skanne dit hoved.
+ 
+For at regne på en elektromagnet bliver designet valgt således at man regner magneten, som et stykke. Hvor vi så regner på den magnetiske energi i forhold til hvor langt de er væk for hinanden, dette kan nemmere ses hvis det bliver illustreret.
+
+\begin{figure}[h]
+
+	\centering
+		\includegraphics[scale=0.8]{Billeder/elektromagnet.jpg}
+	\caption{Her ses en illustration af en U-formet elektromagnet med N antal vindinger.}
+	\label{fig:elektromagnet}
+\end{figure}
+
+Ud fra amperes lov fås følgende
+
+
+$$H_j \cdot L+2*H_s*x = N \cdot I$$
+
+Hvor dette er gældende
+
+$$H_j = \dfrac{B_j}{\mu_0 \cdot K_m}, H_s = \dfrac{B_s}{\mu_0}$$
+
+Her er $B_j$ det magnetiske felt for kernen og $B_s$ er det magnetiske felt for det tommerum mellem banen og magneten.
+
+Da vi går ud fra at der ikke er nogen spredning bliver $B_j = B_s$ og derved får vi dette
+
+
+$$B_j(x) = \dfrac{\mu_0 \cdot I \cdot N}{(\dfrac{L}{K_m}+2 \cdot x}$$
+
+Ud fra dette kan vi finde den magnetiske energi og derefter finde kraften ved $F_mag = -\dfrac{dU_B}{dx}$
+
+så får vi følgende udtryk som bruges til at beregne kraften af en U formet elektromagnet
+
+\begin{equation}
+F_mag = - \dfrac{B_j^2}{2*\mu_0} \cdot A_j
+\end{equation}
+Hvor vi går ud fra at fejlen $dfrac{L}{K_m}+2 \cdot x = 2 \cdot x$ hvis $K_m$ er meget stor og x er meget lille, som i de fleste tilfælde er rigtigt, da kernen af elektromagnet vil være lavet af jern og da kraften skal være så stor som mulig vil den også være så tæt på banen som mulig.
+
+Vi valgt ikke at gå videre med at bruge en elektromagnet da vi fandt en anden måde at bremse på ved at lave en kortslutning henover motoren ved hjælp af et relæ. Den ville også blive meget svært at få plads til elektromagneten da den ville blive forholdsvis stor hvis den skulle være effektiv nok. Vi gik ud fra det krav at være bil skulle veje, så lidt som mulig og så lavt et tyngdepunkt som muligt. 
