@@ -32,19 +32,15 @@ Vi lavede også en række tests, hvor vi brugte bluetooth modulet til at sende d
 	
 \end{figure}
 
-\pagebreak
-
 \subsection{Mapping-test}
-
-Til at fintune gyro-værdierne for sving og afprøve om baneelementerne blev mappet korrekt, fastmonterede vi fem LED'er, vi kunne tænde individuelt så, det var muligt at se direkte, om microcontrolleren reagerede, som vi ville have den til (se figur \ref{fig:Udrykning}). 
-
 \begin{wrapfigure}{l}{6cm}
 	\begin{minipage}{.3\textwidth}
 	\centering
-		\includegraphics[scale=0.04]{Billeder/Debug-lys.JPG}
+		\includegraphics[scale=0.02]{Billeder/Debug-lys.JPG}
 	\caption{Her ses vores debugging-LED'er monteret på bilen.}
 	\label{fig:Udrykning}
 	\end{minipage}
 \end{wrapfigure}
+Til at fintune gyro-værdierne for sving og afprøve om baneelementerne blev mappet korrekt, fastmonterede vi fem LED'er, vi kunne tænde individuelt så, det var muligt at se direkte, om microcontrolleren reagerede, som vi ville have den til (se figur \ref{fig:Udrykning}).
 
 Hver LED fik sit eget IO-ben, og så \\ blev de tændt alt efter hvilken værdi, gyroen sendte tilbage, således at de røde LED'er repræsenterede yderbanesving, de gule: inderbanesving og den grønne: ligeud. På den måde kunne man nemt se, hvordan bilen tolkede banen under mappingrunden, og om værdierne blev gemt rigtigt i SRAM-hukommelsen.	Eksempelvis havde vi et problem, hvor microcontrolleren gemte det sidste baneelement på den forkerte RAM-addresse - det var nemt at se fordi, den lige i det tilfælde, konsekvent troede at der var et lige baneelement et sted på banen, hvor der var et sving. Derudover kunne LED'erne bruges til at teste andre funktionaliteter, som for eksempel hvornår bremserne blev slået til, hvornår der blev givet fuld gas osv.
