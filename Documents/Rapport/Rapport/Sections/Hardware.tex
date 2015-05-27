@@ -51,15 +51,6 @@ Til at måle omdrejningshastigheden på bilen, samt at opfylde kravet om en elek
 
 Ud fra de første målinger, viste det sig at den lave del af signalet, var meget støjfyldt og svær at behandle, så vi valgte at skære den del af signalet fra med et offset på forstærkeren se figur \ref{fig:Signal1}. Offsettet blev styret af et potentiometer, der blev brugt som en slags justerbar referencespænding.
 
-\begin{figure}[h]
-
-	\centering
-		\includegraphics[scale=0.3]{Billeder/Schmitt.jpg}
-	\caption{Diagram over schmitt trigger kredsløbet.}
-	\label{fig:Schmitt}
-	
-\end{figure}
-
 For at digitalisere signalet, så microcontrolleren kunne behandle det, blev der brugt en komparator - denne gang som en schmitt trigger for at formindske fejl. Det var ikke nødvendigt at designe spændingstærsklerne på schmitt triggeren så præcist. De skulle bare ligge relativt langt fra hinanden, så eventuel støj ikke kunne få den til at skifte tilstand utilsigtet. Ud fra  målinger med oscilloskop viste det sig, at et spænd på over 0.5 V var rigeligt til at forhindre støj i at få schmitt triggeren til at skifte tilstand.
 
 \begin{equation}
@@ -75,7 +66,7 @@ V_{TH} = \dfrac{R_{2}}{R_{2}+R_{1}||(R_{3}+R_{4})} \cdot 5V
 
 
 
-Til at beregne spændingstærsklerne skal man finde spændingen på det ikke-inverterende ben, når komparatoren er åben, og når den er lukket. Så ender man med to ligninger med to ubekendte, hvis man fastsætter to af modstandene og spændingstærsklerne på forhånd. Modstandsværdierne blev dikteret af udvalget på komponentlageret, og ved hjælp af ligning \eqref{eq:Vtl} og \eqref{eq:Vth} designede vi spændingstærskler på henholdsvis 2.2 V og 2.8 V. 
+Til at beregne spændingstærsklerne skal man finde spændingen på det ikke-inverterende ben, når komparatoren er åben, og når den er lukket. Så ender man med to ligninger med to ubekendte, hvis man fastsætter to af modstandene og spændingstærsklerne på forhånd. Modstandsværdierne blev dikteret af udvalget på komponentlageret, og ved hjælp af ligning \eqref{eq:Vtl} og \eqref{eq:Vth} designede vi spændingstærskler på henholdsvis 2.2 V og 2.8 V. De to ligninger er udledt fra Hall sensor input stage på figur \ref{fig:Schematic}.
 
 \subsection{Bremse}
 \label{sec:Bremse}
