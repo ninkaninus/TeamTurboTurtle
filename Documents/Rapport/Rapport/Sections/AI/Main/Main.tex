@@ -1,11 +1,12 @@
 \section{AI}
-
+\label{sec:AI}
+Dette afsnit omhandler den "kunstige intelligens" vi har implementeret i bilen til at kunne kortlægge banen og derefter kører efter det. Indledningen giver en hurtig introduktion til grundessensen i AI'en. Under runder er de tre forskellige runde stadier som vi har implementeret beskrevet.
 
 \subsection{Indledning}
 Med de sensorer vi benytter i det her projekt, er det besluttet at den databehandling, som microcontrolleren laver fungerer bedst som interrupt funktioner. På denne måde benytter vi, at data bliver opdateret i interrupt funktioner, og derfor bliver behandlet med det samme.
 \\
 
-Det vigtigste interrupt er Hall-interruptet, se figur \ref{fig:Hall Flowchart}. Denne sker hver gang, hjulet er kørt en tolvtedel rundt, og giver derfor en afstand. Da der måles hvor lang tid, der går mellem to af disse, fås derfor også en periode, som benyttes som en psuodo hastighed. Det er i dette interrupt at det meste af koden ligger.
+Det vigtigste interrupt er Hall-interruptet, se figur \ref{fig:Hall Flowchart}. Denne sker hver gang, hjulet er kørt en tolvtedel rundt, og giver derfor en afstand. Da der måles hvor lang tid, der går mellem to af disse, fås derfor også en periode, som benyttes som en pseudo hastighed. Det er i dette interrupt at det meste af koden ligger.
 \\
 
 Det andet interrupt er Lap-interruptet, se figur \ref{fig:Lap Flowchart}. Denne skifter mellem bane omgangene, og laver de beregninger, der skal, ske når vi går fra mapping runden til den første runde, samt resetter det map vi laver.
