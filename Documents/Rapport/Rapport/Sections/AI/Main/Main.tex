@@ -1,11 +1,11 @@
 \section{AI}
-Dette afsnit omhandler den "kunstige intelligens" vi har implementeret i bilen til at kunne kortlægge banen og derefter kører efter det. Indledningen giver en hurtig introduktion til grundessensen i AI'en. Under runder er de tre forskellige runde stadier som vi har implementeret beskrevet.
+
 
 \subsection{Indledning}
 Med de sensorer vi benytter i det her projekt, er det besluttet at den databehandling, som microcontrolleren laver fungerer bedst som interrupt funktioner. På denne måde benytter vi, at data bliver opdateret i interrupt funktioner, og derfor bliver behandlet med det samme.
 \\
 
-Det vigtigste interrupt er Hall-interruptet, se figur \ref{fig:Hall Flowchart}. Denne sker hver gang, hjulet er kørt en tolvtedel rundt, og giver derfor en afstand. Da der måles hvor lang tid, der går mellem disse, to fås derfor også en periode, som så benyttes som en psuodo hastighed. Det er i dette interrupt, at det meste af koden ligger.
+Det vigtigste interrupt er Hall-interruptet, se figur \ref{fig:Hall Flowchart}. Denne sker hver gang, hjulet er kørt en tolvtedel rundt, og giver derfor en afstand. Da der måles hvor lang tid, der går mellem to af disse, fås derfor også en periode, som benyttes som en psuodo hastighed. Det er i dette interrupt at det meste af koden ligger.
 \\
 
 Det andet interrupt er Lap-interruptet, se figur \ref{fig:Lap Flowchart}. Denne skifter mellem bane omgangene, og laver de beregninger, der skal, ske når vi går fra mapping runden til den første runde, samt resetter det map vi laver.
@@ -19,7 +19,7 @@ Da bilen først skal mappe banen op, og derefter køre efter dette map, er der t
 
 \begin{itemize}
 \item Preround: Bilen er sat ned på banen, og venter på at ramme målstregen.
-\item Mapping: Bilen er ved at sætte et kort, eller et ``map'' op af banen.
+\item Mapping round: Bilen er ved at sætte et kort, eller et ``map'' op af banen.
 \item Run time: Bilen er ved at køre efter det målte map.
 \end{itemize}
 
@@ -27,11 +27,10 @@ Da bilen først skal mappe banen op, og derefter køre efter dette map, er der t
 I preround kører bilen blot med jævn hastighed, indtil den rammer målstregen. Der er ikke nogen grund til, at den skulle gøre noget, før dette sker, og det eneste relevante interrupt er lap sensoren, som i dette tilfælde blot tæller lap counteren op til 1.
 
 \subsubsection{Mapping round}
-I mapping round laver bilen et map af banen. For at mappe banen op, og benytte dette map til at optimerer bilens omgangstid, benyttes to sensorer. Den ene giver vinkelhastigheden rundt om Z-aksen, hvilket benyttes til at bestemme, om bilen befinder sig på et lige stykke bane, eller i et sving. Den anden er en hall sensor, som laver et interrupt, når den måler en vis værdi, hvilket sker tolv gange på en hjulomdrejning, hvilket giver en afstand samt en ``hastighed''.
+I mapping round laver bilen et map af banen. For at mappe banen op, og benytte dette map til at optimerer bilens omgangstid, benyttes to sensorer. Den ene giver vinkelhastigheden rundt om Z-aksen, hvilket benyttes til at bestemme, om bilen befinder sig på et lige stykke bane, eller i et sving. Den anden er en hall sensor, som laver et interrupt, når den måler en vis værdi, hvilket sker tolv gange på en hjulomdrejning, hvilket giver en afstand samt en ``hastighed''. 
 \\\
 
-
-Når der kommer et Hall-interrupt i mapping serien, starter vi med at se hvilken banetype, gyroen siger, at vi befinder os på, se figur figur \ref{fig:Skift Flowchart}. Vi sammenligner så denne med den banetype, vi befandt os på i det forrige Hall-interrupt. Hvis disse matcher, eller hvis denne kun viser en forskel på et lille eller et stort sving, så inkrementerer vi længden af det nuværende banestykke med én. Hvis ikke, så gemmer vi længden og typen af banestykket i rammene, skifter banestykke, og sætter længden til 1. På denne måde får vi så længden og typen af alle banestykker i rækkefølge, hvilket nemt kan bruges til at følge banen i de øvrige runder.
+Ved så at benytte Hall-funktionen, se afsnit \ref{Hall-funktion}, bestemmer vi hvor lang hver banestykke er, før der kommer et baneskift, som vi undersøger med Skift-funktionen, se afsnit \ref{Skift funktion}
 \\
 Derefter benytter vi hastighedskontrollen, som bliver beskrevet i afsnit \ref{sec:Hastighedskontrol}.
 \\
