@@ -1,0 +1,26 @@
+\BOOKMARK [1][-]{section.1}{Resum\351}{}% 1
+\BOOKMARK [1][-]{section.2}{Indledning}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Projektformulering}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Opbygning af rapporten}{section.2}% 4
+\BOOKMARK [1][-]{section.3}{Beskrivelse af de elektriske komponenter anvendt i kredsl\370bet}{}% 5
+\BOOKMARK [2][-]{subsection.3.1}{Komparator - generelt om operationsforst\346rkere}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.2}{LED}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.3}{MOSFET}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.4}{Fototransistor}{section.3}% 9
+\BOOKMARK [1][-]{section.4}{Elektronik til blyantspidser}{}% 10
+\BOOKMARK [2][-]{subsection.4.1}{Diagram over det elektriske kredsl\370b}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.2}{Overvejelser og beslutninger i elektrisk kredsl\370b}{section.4}% 12
+\BOOKMARK [1][-]{section.5}{Teoretisk beskrivelse G-kodes opbygning}{}% 13
+\BOOKMARK [2][-]{subsection.5.1}{Fordele og begr\346nsninger ved G-kode}{section.5}% 14
+\BOOKMARK [1][-]{section.6}{Program til konvertering af billede til G-kode}{}% 15
+\BOOKMARK [2][-]{subsection.6.1}{Opbygning af Mathematica kode}{section.6}% 16
+\BOOKMARK [3][-]{subsubsection.6.1.1}{Konvertering af billede til G-kode}{subsection.6.1}% 17
+\BOOKMARK [3][-]{subsubsection.6.1.2}{Konvertering af logo til G-kode}{subsection.6.1}% 18
+\BOOKMARK [2][-]{subsection.6.2}{Overvejelser og valg i forbindelse med koden}{section.6}% 19
+\BOOKMARK [2][-]{subsection.6.3}{Illustrationer robotten kan tegne med G-koden}{section.6}% 20
+\BOOKMARK [1][-]{section.7}{Fejl og usikkerheder ved robot og blyantspidser}{}% 21
+\BOOKMARK [2][-]{subsection.7.1}{Test af eventuelle fejl}{section.7}% 22
+\BOOKMARK [1][-]{section.8}{Resultat af tegning}{}% 23
+\BOOKMARK [1][-]{section.9}{Konklusion}{}% 24
+\BOOKMARK [1][-]{section.10}{Kildeliste}{}% 25
+\BOOKMARK [1][-]{section.11}{Indhold af DVD}{}% 26

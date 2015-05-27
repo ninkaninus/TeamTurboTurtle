@@ -301,20 +301,6 @@ USART_Decimal_8_Count_1_Loop:
 
 ret
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ;Expecs a S8 bit value in R16
 USART_Decimal_S8:
 

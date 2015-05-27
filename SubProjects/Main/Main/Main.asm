@@ -44,6 +44,7 @@ Init:
 			ldi		R16, 250
 			call	Delay_MS
 
+	cli
 	ldi		R16, 100
 	out		OCR2, R16
 	clr		ZH

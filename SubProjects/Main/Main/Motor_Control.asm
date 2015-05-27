@@ -10,15 +10,6 @@
 	out TCCR2, R16							;
 .ENDMACRO
 
-; Use desired braking time in MS as argument
-.MACRO Brake_MS
-		
-.ENDMACRO
-
-Motor_Set: 
-	out OCR2, R16							;Set the duty cycle of the motor
-ret
-
 .MACRO Brake_Init
 
 	in R16, DDRB							;Load in the current setup of the portc
@@ -28,6 +19,11 @@ ret
 	cbi	PORTB, BRAKE_PIN					;Set brake to high state
 
 .ENDMACRO
+
+Motor_Set: 
+	out OCR2, R16							;Set the duty cycle of the motor
+ret
+
 
 Motor_Set_Percentage:
 	cpi R16, 101							;Check if the number is within the percentage range of 100

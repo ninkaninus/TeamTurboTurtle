@@ -1,0 +1,954 @@
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.11.10)  12 NOV 2014 13:35
+entering extended mode
+**Forside.tex
+("C:\Users\Ninka\Dropbox\Robtek 1\Latex\Raport\Forside\Forside.tex"
+LaTeX2e <2011/06/27>
+Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
+abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
+croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, ga
+lician, german, german-x-2013-05-26, greek, gujarati, hindi, hungarian, iceland
+ic, indonesian, interlingua, irish, italian, kannada, kurmanji, latin, latvian,
+ lithuanian, malayalam, marathi, mongolian, mongolianlmc, monogreek, ngerman, n
+german-x-2013-05-26, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
+ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
+an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
+ishmax, welsh, loaded.
+! Undefined control sequence.
+l.1 \definecolor
+                {ColorH1}{rgb}{0.212,0.373,0.569}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1 \definecolor{C
+                  olorH1}{rgb}{0.212,0.373,0.569}
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+Missing character: There is no C in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no H in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no g in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 3 in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 3 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no 6 in font nullfont!
+Missing character: There is no 9 in font nullfont!
+! Undefined control sequence.
+l.2 \definecolor
+                {ColorH2}{rgb}{0.141,0.197,0.376}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no C in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no H in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no g in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 4 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 9 in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 3 in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 6 in font nullfont!
+! Undefined control sequence.
+l.3 \definecolor
+                {ColorH234}{rgb}{0.310,0.506,0.741}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no C in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no H in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no 3 in font nullfont!
+Missing character: There is no 4 in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no g in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 3 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 6 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 4 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+! Undefined control sequence.
+l.4 \definecolor
+                {ColorOthers}{rgb}{0.141,0.247,0.376}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no C in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no O in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no s in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no g in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 4 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no 4 in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 3 in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 6 in font nullfont!
+! Undefined control sequence.
+l.5 \definecolor
+                {White}{rgb}{1, 1, 1}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no W in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no g in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 1 in font nullfont!
+! Undefined control sequence.
+l.6 \definecolor
+                {Gray}{rgb}{0.5, 0.5, 0.5}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no G in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no y in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no g in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 5 in font nullfont!
+
+Overfull \hbox (20.0pt too wide) in paragraph at lines 1--7
+[]
+ []
+
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.10 \begin{center}
+                           % Centrerer teksten
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (20.0pt too wide) in paragraph at lines 10--10
+[] 
+ []
+
+! Undefined control sequence.
+l.11   \Huge
+            
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.12   \color
+             {ColorH2}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no C in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no H in font nullfont!
+Missing character: There is no 2 in font nullfont!
+
+Overfull \hbox (21.27751pt too wide) in paragraph at lines 12--13
+ \OT1/cmr/bx/it/10 Teg- 
+ []
+
+
+Overfull \hbox (20.98315pt too wide) in paragraph at lines 12--13
+ \OT1/cmr/bx/it/10 ner- 
+ []
+
+
+Overfull \hbox (21.3692pt too wide) in paragraph at lines 12--13
+ \OT1/cmr/bx/it/10 obot 
+ []
+
+! Undefined control sequence.
+<recently read> \huge 
+                      
+l.14   \huge
+            
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+Overfull \hbox (33.51357pt too wide) in paragraph at lines 15--15
+ []\OT1/cmr/bx/it/10 GSR1: 
+ []
+
+
+Overfull \hbox (36.73016pt too wide) in paragraph at lines 15--15
+ \OT1/cmr/bx/it/10 Gruppe 
+ []
+
+
+Overfull \hbox (7.22769pt too wide) in paragraph at lines 15--15
+ \OT1/cmr/bx/it/10 1 
+ []
+
+! Undefined control sequence.
+l.17   \color
+             {Gray}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no G in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no y in font nullfont!
+
+! LaTeX Error: The font size command \normalsize is not defined:
+               there is probably something wrong with the class file.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.18   \normalsize
+                  
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Overfull \hbox (19.06934pt too wide) in paragraph at lines 17--19
+ \OT1/cmr/bx/n/10 Ud- 
+ []
+
+
+Overfull \hbox (22.20125pt too wide) in paragraph at lines 17--19
+ \OT1/cmr/bx/n/10 dan- 
+ []
+
+
+Overfull \hbox (24.66098pt too wide) in paragraph at lines 17--19
+ \OT1/cmr/bx/n/10 nelse 
+ []
+
+
+Overfull \hbox (11.49994pt too wide) in paragraph at lines 17--19
+ \OT1/cmr/bx/n/10 og 
+ []
+
+
+Overfull \hbox (46.87059pt too wide) in paragraph at lines 17--19
+ \OT1/cmr/bx/n/10 semester: 
+ []
+
+! Undefined control sequence.
+<recently read> \Large 
+                       
+l.20   \Large
+             
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.21   \color
+             {ColorOthers}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+Overfull \hbox (61.77885pt too wide) in paragraph at lines 21--22
+ []\OT1/cmr/bx/n/10 ColorOthers 
+ []
+
+
+Overfull \hbox (24.41647pt too wide) in paragraph at lines 21--22
+ \OT1/cmr/m/it/10 Robot 
+ []
+
+
+Overfull \hbox (18.14432pt too wide) in paragraph at lines 21--22
+ \OT1/cmr/m/it/10 Sys- 
+ []
+
+
+Overfull \hbox (20.18875pt too wide) in paragraph at lines 21--22
+ \OT1/cmr/m/it/10 tems 
+ []
+
+
+Overfull \hbox (15.98323pt too wide) in paragraph at lines 21--22
+ \OT1/cmr/m/it/10 En- 
+ []
+
+
+Overfull \hbox (11.24435pt too wide) in paragraph at lines 21--22
+ \OT1/cmr/m/it/10 gi- 
+ []
+
+
+Overfull \hbox (22.10536pt too wide) in paragraph at lines 21--22
+ \OT1/cmr/m/it/10 neer- 
+ []
+
+
+Overfull \hbox (13.2888pt too wide) in paragraph at lines 21--22
+ \OT1/cmr/m/it/10 ing 
+ []
+
+
+Overfull \hbox (3.57774pt too wide) in paragraph at lines 21--22
+ \OT1/cmr/m/it/10 - 
+ []
+
+
+Overfull \hbox (8.17773pt too wide) in paragraph at lines 21--22
+ \OT1/cmr/m/it/10 1. 
+ []
+
+
+Overfull \hbox (38.77054pt too wide) in paragraph at lines 21--22
+ \OT1/cmr/m/it/10 semester 
+ []
+
+! Undefined control sequence.
+l.24   \color
+             {Gray}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: The font size command \normalsize is not defined:
+               there is probably something wrong with the class file.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.25   \normalsize
+                  
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Overfull \hbox (21.76393pt too wide) in paragraph at lines 24--26
+ []\OT1/cmr/m/n/10 Gray 
+ []
+
+
+Overfull \hbox (24.63179pt too wide) in paragraph at lines 24--26
+ \OT1/cmr/bx/n/10 Dato 
+ []
+
+
+Overfull \hbox (13.99994pt too wide) in paragraph at lines 24--26
+ \OT1/cmr/bx/n/10 for 
+ []
+
+
+Overfull \hbox (27.15262pt too wide) in paragraph at lines 24--26
+ \OT1/cmr/bx/n/10 aflev- 
+ []
+
+
+Overfull \hbox (13.84023pt too wide) in paragraph at lines 24--26
+ \OT1/cmr/bx/n/10 er- 
+ []
+
+
+Overfull \hbox (18.52768pt too wide) in paragraph at lines 24--26
+ \OT1/cmr/bx/n/10 ing: 
+ []
+
+! Undefined control sequence.
+<recently read> \Large 
+                       
+l.27   \Large
+             
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.28   \color
+             {ColorOthers}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+Overfull \hbox (61.77885pt too wide) in paragraph at lines 28--29
+ []\OT1/cmr/bx/n/10 ColorOthers 
+ []
+
+
+Overfull \hbox (13.28882pt too wide) in paragraph at lines 28--29
+ \OT1/cmr/m/it/10 12. 
+ []
+
+
+Overfull \hbox (15.72765pt too wide) in paragraph at lines 28--29
+ \OT1/cmr/m/it/10 De- 
+ []
+
+
+Overfull \hbox (20.44427pt too wide) in paragraph at lines 28--29
+ \OT1/cmr/m/it/10 cem- 
+ []
+
+
+Overfull \hbox (12.90543pt too wide) in paragraph at lines 28--29
+ \OT1/cmr/m/it/10 ber 
+ []
+
+
+Overfull \hbox (21.7999pt too wide) in paragraph at lines 28--29
+ \OT1/cmr/m/it/10 2014 
+ []
+
+! Undefined control sequence.
+l.31   \color
+             {Gray}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: The font size command \normalsize is not defined:
+               there is probably something wrong with the class file.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.32   \normalsize
+                  
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Overfull \hbox (21.76393pt too wide) in paragraph at lines 31--33
+ []\OT1/cmr/m/n/10 Gray 
+ []
+
+
+Overfull \hbox (16.8402pt too wide) in paragraph at lines 31--33
+ \OT1/cmr/bx/n/10 Ve- 
+ []
+
+
+Overfull \hbox (31.5693pt too wide) in paragraph at lines 31--33
+ \OT1/cmr/bx/n/10 jleder: 
+ []
+
+! Undefined control sequence.
+<recently read> \Large 
+                       
+l.34   \Large
+             
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.35   \color
+             {ColorOthers}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+Overfull \hbox (61.77885pt too wide) in paragraph at lines 35--36
+ []\OT1/cmr/bx/n/10 ColorOthers 
+ []
+
+
+Overfull \hbox (13.93878pt too wide) in paragraph at lines 35--36
+ \OT1/cmr/m/it/10 Jo- 
+ []
+
+
+Overfull \hbox (15.84436pt too wide) in paragraph at lines 35--36
+ \OT1/cmr/m/it/10 han 
+ []
+
+
+Overfull \hbox (21.7221pt too wide) in paragraph at lines 35--36
+ \OT1/cmr/m/it/10 Sund 
+ []
+
+
+Overfull \hbox (35.53355pt too wide) in paragraph at lines 35--36
+ \OT1/cmr/m/it/10 Laursen 
+ []
+
+! Undefined control sequence.
+l.38   \color
+             {Gray}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: The font size command \normalsize is not defined:
+               there is probably something wrong with the class file.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.39   \normalsize
+                  
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Overfull \hbox (21.76393pt too wide) in paragraph at lines 38--40
+ []\OT1/cmr/m/n/10 Gray 
+ []
+
+
+Overfull \hbox (38.53453pt too wide) in paragraph at lines 38--40
+ \OT1/cmr/bx/n/10 Gruppe 
+ []
+
+
+Overfull \hbox (43.12479pt too wide) in paragraph at lines 38--40
+ \OT1/cmr/bx/n/10 medlem- 
+ []
+
+
+Overfull \hbox (22.78462pt too wide) in paragraph at lines 38--40
+ \OT1/cmr/bx/n/10 mer: 
+ []
+
+! Undefined control sequence.
+<recently read> \Large 
+                       
+l.41   \Large
+             
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.42   \color
+             {ColorOthers}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no Ã in font cmti10!
+Missing character: There is no ¥ in font cmti10!
+Missing character: There is no Ã in font cmti10!
+Missing character: There is no ¸ in font cmti10!
+
+Overfull \hbox (61.77885pt too wide) in paragraph at lines 42--44
+ []\OT1/cmr/bx/n/10 ColorOthers 
+ []
+
+
+Overfull \hbox (16.37767pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 Ka- 
+ []
+
+
+Overfull \hbox (20.82762pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 trine 
+ []
+
+
+Overfull \hbox (26.47206pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 Maria 
+ []
+
+
+Overfull \hbox (35.03311pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 Nielsen, 
+ []
+
+
+Overfull \hbox (16.37766pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 An- 
+ []
+
+
+Overfull \hbox (22.10538pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 dreas 
+ []
+
+
+Overfull \hbox (14.4499pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 Es- 
+ []
+
+
+Overfull \hbox (30.79422pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 persen, 
+ []
+
+
+Overfull \hbox (20.32764pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 Laus 
+ []
+
+
+Overfull \hbox (23.51094pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 Skov- 
+ []
+
+
+Overfull \hbox (13.41655pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 grd 
+ []
+
+
+Overfull \hbox (31.31648pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 Bigum, 
+ []
+
+
+Overfull \hbox (26.70537pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 Oliver 
+ []
+
+
+Overfull \hbox (16.37766pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 An- 
+ []
+
+
+Overfull \hbox (22.10538pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 dreas 
+ []
+
+
+Overfull \hbox (36.94975pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 Krzesin- 
+ []
+
+
+Overfull \hbox (14.82213pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 ski, 
+ []
+
+
+Overfull \hbox (28.38869pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 Mikkel 
+ []
+
+
+Overfull \hbox (25.96094pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 Horn- 
+ []
+
+
+Overfull \hbox (22.10541pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 strup 
+ []
+
+
+Overfull \hbox (9.19992pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 og 
+ []
+
+
+Overfull \hbox (35.03314pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 William 
+ []
+
+
+Overfull \hbox (44.47748pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 Bergmann 
+ []
+
+
+Overfull \hbox (14.83322pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 Br- 
+ []
+
+
+Overfull \hbox (11.88321pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 re- 
+ []
+
+
+Overfull \hbox (15.07816pt too wide) in paragraph at lines 42--44
+ \OT1/cmr/m/it/10 sen 
+ []
+
+
+! LaTeX Error: Environment figure undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.46   \begin{figure}
+                     [ht]
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+! Undefined control sequence.
+l.48 	\includegraphics
+                      [scale=0.50]{Billeder/SDU-logo.pdf}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: \begin{center} on input line 10 ended by \end{figure}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.49   \end{figure}
+                   
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: The font size command \normalsize is not defined:
+               there is probably something wrong with the class file.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.51   \normalsize
+                  
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Overfull \hbox (14.72226pt too wide) in paragraph at lines 46--52
+ []\OT1/cmr/m/n/10 [ht] 
+ []
+
+
+Overfull \hbox (114.52802pt too wide) in paragraph at lines 46--52
+ \OT1/cmr/m/n/10 [scale=0.50]Billeder/SDU- 
+ []
+
+
+Overfull \hbox (35.00012pt too wide) in paragraph at lines 46--52
+ \OT1/cmr/m/n/10 logo.pdf 
+ []
+
+
+Overfull \hbox (33.66673pt too wide) in paragraph at lines 46--52
+ \OT1/cmr/m/sl/10 Teknisk 
+ []
+
+
+Overfull \hbox (27.63896pt too wide) in paragraph at lines 46--52
+ \OT1/cmr/m/sl/10 Fakul- 
+ []
+
+
+Overfull \hbox (12.43985pt too wide) in paragraph at lines 46--52
+ \OT1/cmr/m/sl/10 tet 
+ []
+
+
+Overfull \hbox (44.80565pt too wide) in paragraph at lines 53--53
+ []\OT1/cmr/m/sl/10 University 
+ []
+
+
+Overfull \hbox (8.05559pt too wide) in paragraph at lines 53--53
+ \OT1/cmr/m/sl/10 of 
+ []
+
+
+Overfull \hbox (28.88896pt too wide) in paragraph at lines 53--53
+ \OT1/cmr/m/sl/10 South- 
+ []
+
+
+Overfull \hbox (13.91669pt too wide) in paragraph at lines 53--53
+ \OT1/cmr/m/sl/10 ern 
+ []
+
+
+Overfull \hbox (20.97224pt too wide) in paragraph at lines 53--53
+ \OT1/cmr/m/sl/10 Den- 
+ []
+
+
+Overfull \hbox (23.13435pt too wide) in paragraph at lines 53--53
+ \OT1/cmr/m/sl/10 mark 
+ []
+
+)
+! Emergency stop.
+<*> Forside.tex
+               
+*** (job aborted, no legal \end found)
+
+ 
+Here is how much of TeX's memory you used:
+ 20 strings out of 493921
+ 361 string characters out of 3144875
+ 52031 words of memory out of 3000000
+ 3409 multiletter control sequences out of 15000+200000
+ 5006 words of font info for 18 fonts, out of 3000000 for 9000
+ 841 hyphenation exceptions out of 8191
+ 15i,1n,14p,130b,149s stack positions out of 5000i,500n,10000p,200000b,50000s
+!  ==> Fatal error occurred, no output PDF file produced!
