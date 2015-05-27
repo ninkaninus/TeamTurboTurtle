@@ -50,6 +50,15 @@ Til at måle omdrejningshastigheden på bilen, samt at opfylde kravet om en elek
 
 Ud fra de første målinger, viste det sig at den lave del af signalet, var meget støjfyldt og svær at behandle, så vi valgte at skære den del af signalet fra med et offset på forstærkeren se figur \ref{fig:Signal1}. Offsettet blev styret af et potentiometer, der blev brugt som en slags justerbar referencespænding.
 
+\begin{figure}[h]
+
+	\centering
+		\includegraphics[scale=0.3]{Billeder/Schmitt.jpg}
+	\caption{Diagram over schmitt trigger kredsløbet.}
+	\label{fig:Schmitt}
+	
+\end{figure}
+
 For at digitalisere signalet, så microcontrolleren kunne behandle det, blev der brugt en komparator - denne gang som en schmitt trigger for at formindske fejl. Det var ikke nødvendigt at designe spændingstærsklerne på schmitt triggeren så præcist. De skulle bare ligge relativt langt fra hinanden, så eventuel støj ikke kunne få den til at skifte tilstand utilsigtet. Ud fra  målinger med oscilloskop viste det sig, at et spænd på over 0.5 V var rigeligt til at forhindre støj i at få schmitt triggeren til at skifte tilstand.
 
 \begin{equation}
@@ -65,7 +74,7 @@ V_{TH} = \dfrac{R_{2}}{R_{2}+R_{1}||(R_{3}+R_{4})} \cdot 5V
 
 
 
-Til at beregne spændingstærsklerne skal man finde spændingen på det ikke-inverterende ben, når komparatoren er åben, og når den er lukket. Så ender man med to ligninger med to ubekendte, hvis man fastsætter to af modstandene og spændingstærsklerne på forhånd. Modstandsværdierne blev dikteret af udvalget på komponentlageret, og ved hjælp af ligning \eqref{eq:Vtl} og \eqref{eq:Vth} designede vi spændingstærskler på henholdsvis 2.2 V og 2.8 V. Ligninger er udledt fra Hall sensor input stage i figur \ref{fig:Schematic}.
+Til at beregne spændingstærsklerne skal man finde spændingen på det ikke-inverterende ben, når komparatoren er åben, og når den er lukket. Så ender man med to ligninger med to ubekendte, hvis man fastsætter to af modstandene og spændingstærsklerne på forhånd. Modstandsværdierne blev dikteret af udvalget på komponentlageret, og ved hjælp af ligning \eqref{eq:Vtl} og \eqref{eq:Vth} designede vi spændingstærskler på henholdsvis 2.2 V og 2.8 V. 
 
 \subsection{Bremse}
 \label{sec:Bremse}
@@ -79,15 +88,8 @@ Når elektromagneten ikke er tændt vil alle de forskellige magnetiske felter v�
 
 Disse elektromagnet bliver brugt mange forskellige steder, så som i industrien, hvor de bliver brugt til løfte meget tunge magnetiske ting, som for eksemple biler.
  
-For at regne på en elektromagnet bliver designet valgt således, at man regner magneten, som et stykke. Hvor vi så regner på den magnetiske energi i forhold til, hvor langt de er væk for hinanden, dette kan nemmere ses, hvis det bliver illustreret i figur \ref{fig:elektromagnet}.
+For at regne på en elektromagnet bliver designet valgt således, at man regner magneten, som et stykke. Hvor vi så regner på den magnetiske energi i forhold til, hvor langt de er væk for hinanden. Den vil være U-formet med en strøm I og N antal vindinger, samt en længde L igennem elektromagneten og banen.
 
-\begin{figure}[h]
-
-	\centering
-		\includegraphics[scale=0.8]{Billeder/elektromagnet.jpg}
-	\caption{Her ses en illustration af en U-formet elektromagnet med N antal vindinger.}
-	\label{fig:elektromagnet}
-\end{figure}
 
 Ud fra amperes lov fås følgende
 
@@ -98,7 +100,7 @@ Hvor dette er gældende
 
 $$H_j = \dfrac{B_j}{\mu_0 \cdot K_m}, H_s = \dfrac{B_s}{\mu_0}$$
 
-Her er $B_j$ det magnetiske felt for kernen, og $B_s$ er det magnetiske felt for det tommerum mellem banen og magneten. $H_j$ og $H_s$ er de til hørende elektriskefelter. Til sidste har vi fejlen som i det enklte materiale $K_m$
+Her er $B_j$ det magnetiske felt for kernen, og $B_s$ er det magnetiske felt for det tommerum mellem banen og magneten. $H_j$ og $H_s$ er de til hørende H-felter. Til sidste har vi fejlen som i det enklte materiale $K_m$
 
 Da vi går ud fra at der ikke er nogen spredning bliver $B_j = B_s$ og derved får vi dette
 
@@ -114,7 +116,7 @@ F_{mag} = - \dfrac{B_j^2}{2 \cdot \mu_0} \cdot A_j
 \end{equation}
 Hvor vi går ud fra at fejlen $\dfrac{L}{K_m}+2 \cdot x = 2 \cdot x$ hvis $K_m$ er meget stor, og x er meget lille, som i de fleste tilfælde er rigtigt, da kernen af elektromagnet vil være lavet af jern og da kraften skal være så stor som mulig, vil den også være så tæt på banen som mulig.
 
-Vi valgt ikke at gå videre med at bruge en elektromagnet, da vi fandt en anden måde at bremse på som der kan læses om i sektion \ref{sec:Bremse}. Det ville også blive meget svært at få plads til elektromagneten, da den ville blive forholdsvis stor, hvis den skulle være effektiv nok. Uf fra den forudsætning at bilen skulle veje, så lidt som mulig og have det lavest mulige tyngdepunkt. 
+Vi valgt ikke at gå videre med at bruge en elektromagnet, da vi fandt en anden måde at bremse på som der kan læses om i sektion \ref{sec:Bremse}. Vi kunne se rent visuelt at det ville være svært at implentere elektromagneten, da den ville blive forholdsvis stor, hvis den skulle være effektiv nok. Uf fra den forudsætning at bilen skulle veje, så lidt som mulig og have det lavest mulige tyngdepunkt. 
 
 \subsection{Print}
 Dette afsnit beskriver kort printet som der er blevet lavet til bilen. Vi har lavet det som et skjold der monteres ovenpå bilen i de headers som der allerede er på det print vi har fået udleveret. Figur \ref{fig:Schematic} viser hele det skematiske overblik over printet. Og figur \ref{fig:Print} viser det fremstillede print. Vi har designet det sådan at alle headers sidder så de ikke kommer i kambullage med karrosseriet på bilen.
