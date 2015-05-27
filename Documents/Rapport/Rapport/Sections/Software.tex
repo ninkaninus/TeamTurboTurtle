@@ -7,7 +7,7 @@ I dette afsnit beskrives der, hvordan koden er struktureret, og hvilke tanker de
 \subsubsection{Retningslinjer}
 Da vi gik i gang med at skrive kode, valgte vi lige at bruge lidt tid på at sætte os ned og opsætte nogle retningslinjer for, hvordan kodes skulle skrives. Dette gjorde vi for at få en konsekvent og let læselig kode. Samtidig med at debugging af eventuelle fejl skulle være så nem som mulig. Følgende kriterier blev opsat:
 
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep,topsep=0ex]
 	\item Main filen skal være så "ren" som muligt dvs. at den skal bruges som et samlingspunkt for al koden og ikke som et 		sted, hvor der reelt kører kode.
 	\item Alle funktionaliteter skal skrives ind i separate asm filer, som så inkluderes i Main filen.
 	\item Alle funktionaliteter indeholder en init macro i formatet "funktionalitet\_Init", som står for at initialiserer 			alt som funktionen skal bruge. 
@@ -72,20 +72,20 @@ I oplægget er der specificeret en kommunikationsprotokol, som bilen skal overho
 \subsubsection{Beskrivelse af telegram}
 Protokollen er baseret på "telegrammer" bestående af 3 bytes der henholdsvis repræsenterer en type, kommando og et parameter.\\
 Af typer er der specificeret 3 forskellige:
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep,topsep=0ex]
 	\item SET - 0x55 - Bruges til at sætte en værdi i bilen
 	\item GET - 0xAA - Bruges til at hente en værdi fra bilen
 	\item REPLY - 0xBB - Bruges til når der returneres en værdi, som svar på et get/set telegram
 \end{itemize}
 Det har ikke været nødvendigt at implementerer yderligere typer, så dette er også de eneste tre typer, som implementeringen gør brug af.\\
 Af kommandoer er der fra oplæggets side sat et krav om to som bilen som minimum skal overholde, disse er som følger:
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep,topsep=0ex]
 	\item Start - 0x10 - Bruges til at starte bilen med en procentdel af maxspændingen ud 			fra parametret
 	\item Stop - 0x11 - Bruges til at stoppe bilen med
 \end{itemize}
 
 Ud over dette har vi specificeret yderligerer to set kommandoer:
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep,topsep=0ex]
 	\item Speed\_H - 0x12 - Bruges til at sætte de øverste 8 bit af en 16-bit værdi, der essentielt bestemmer hvilken hastighed, hastighedskontrollen forsøger at holde
 	\item Speed\_L - 0x13 - Bruges til at sætte de nederste 8 bit af en 16-bit værdi, der essentielt bestemmer hvilken hastighed, hastighedskontrollen forsøger at holde
 \end{itemize}
@@ -93,7 +93,7 @@ Ud over dette har vi specificeret yderligerer to set kommandoer:
 Disse to kommandoer er essentielt en kommando, men skal sendes som to seperate kommandoer, da et telegram kun kan bestå af en type, kommando og et parameter. De er blevet brugt meget til at teste hastighedskontrollen af og fastsætte max hastigheder rundt i forskellige sving.\\
 
 Fra oplæggets side er der ikke specificeret nogle get kommandoer, men vi har implementeret de følgende:
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep,topsep=0ex]
 	\item Xaccel\_H - 0xA1 - Returner de øverste 8 bit af den signerede 16-bit rå værdi fra acceleration af x-aksen på sensoren
 	\item Xaccel\_L - 0xA2 - Returner de nederste 8 bit af den signerede 16-bit rå værdi fra acceleration af x-aksen på sensoren
 	\item Zgyro\_H - 0xA3 - Returner de øverste 8 bit af den signerede 16-bit rå værdi af vinkelhastigheden om z-aksen på sensoren
@@ -142,11 +142,7 @@ Eksekveringen bliver kørt når byte nummer 3, parametret, bliver modtaget. Her 
 	
 \end{figure}
 
-\subsection{Sensorer}
-
-I denne sektion vil der kort blive beskrevet, hvordan vores tachometer og lap sensor interfacer med microcontrolleren.
-
-\subsubsection{Tachometer}
+\subsection{Tachometer}
 
 Til at behandle signalet fra hall sensoren, benyttes input capture funktionen til Timer 1. Input capture funktionen har sit eget interrupt og fungerer ved automatisk at læse værdien af Timer 1's timer/counter registre (TCNT1A/TCNT1B) over i to input capture registre (ICR1L/ICR1H), når der kommer et interrupt. Input capture er den sekundære funktion til PD6, og sættes op i Timer 1's kontrol registre (TCCR1A/TCCR1B). Vi valgte at sætte den op med en prescaler på 1/8 og en falling edge interrupt trigger. Det giver en opdateringsfrekvens på 0.5 $\mu s$ og en maksimal tid på 32.5 ms, inden timer/counter registrene overflower. Det er fint nok, til at kunne rumme tiden imellem flere interrupts. I interruptrutinen beregnes tiden imellem 4 interrupts for at finde ud af, hvor lang tid motoren er om at dreje en omgang (Der sidder tre poler på motoren, så 4 interrupts vil svare til en hel omgang for motoren). Denne tid kan så bruges som et udtryk for hastigheden, da de to ting er omvendt proportionale. Bilens reelle hastighed kan også beregnes, men på grund af proportionaliteten er det ligegyldigt fra microcontrolleren's synspunkt, om man bruger det ene eller det andet - man skal bare huske at en høj hastighed, vil give en lav tid og omvendt, når man skriver programmet, der skal bearbejde hastigheden. Jo færre cycles man bruger på at få noget brugbart ud i den anden ende jo bedre i næsten alle tilfælde, når der også skal laves andre ting sideløbende med input capture interruptet.\\
 For at beregne tiden skal der holdes styr på pulserne - der skal bruges en tid fra den første puls og en tid fra den sidste puls. Det letteste er at tælle en variabel op, hver gang der modtages et interrupt således at, når variablen er 1 så læser man den første tid, og når variablen er 4 så læses den sidste tid. Derefter trækkes de to tider fra hinanden for at finde forskellen. Alle værdier og variable gemmes i SRAM-hukommelsen på tildelte addresser, indtil de skal bruges igen.\\
@@ -154,7 +150,7 @@ For at beregne tiden skal der holdes styr på pulserne - der skal bruges en tid 
 Det viste sig, at hall sensoren gav mange udslag, når bilen holdt stille, og en af polerne var lige på grænsen til at passere sensoren. Vi antager, at det er, fordi feltet er meget ustabilt i grænseområdet. 
 
 
-\subsubsection{Lap sensor}
+\subsection{Lap sensor}
 
 For at initialisere microcontrolleren's komparator skal den sættes op i dens eget status register (ACSR) og i Special Function IO Registret (SFIOR). Man kan vælge flere forskellige inputs til komparatoren - PB2(AIN1) og PB3(AIN0) er henholdsvis ikke-inverterende og inverterende inputs som standard. Alternativt kan hele PORTA bruges til det inverterende og den interne bandgap reference på 2.56 V til det ikke-inverterende.  ACME bit'en i SFIOR enabler ADC multiplexeren, så den styrer hvilket ben på PORTA, der bliver brugt. ACBG bit'en enabler bandgap referencen.
 
