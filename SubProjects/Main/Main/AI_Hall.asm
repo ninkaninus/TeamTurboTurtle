@@ -1,6 +1,10 @@
 AI_Hall:
 
-	;call LED
+	lds		R17,	SREG_1
+;	sbrs	R17,	6
+;	rjmp	VENT_SVING
+	
+	call LED
 
 	lds		R17,	AI_Check_Lap
 	
@@ -54,39 +58,62 @@ LED:
 
 	ret
 
-	.equ LED_Stort_Hoejre = 0b00100000
-	.equ LED_Stort_Venstre = 0b00000010
-	.equ LED_Lille_Hoejre = 0b00010000
-	.equ LED_Lille_Venstre = 0b00000100
+	.equ LED_Stort_Venstre = 0b00100000
+	.equ LED_Stort_Hoejre = 0b00000010
+	.equ LED_Lille_Venstre = 0b00010000
+	.equ LED_Lille_Hoejre = 0b00000100
 	.equ LED_Lige = 0b00001000
 	.equ LED_Alle = 0b00111110
 
 LED_Venstre_L:
 	ldi R16, LED_Lille_Venstre
 	out PORTA, R16
+
 	ret 
 
 LED_Venstre_S:
 	ldi R16, LED_Stort_Venstre
 	out PORTA, R16
+
 	ret 
 
 LED_Ligeud:
 	ldi R16, LED_Lige
 	out PORTA, R16
+
 	ret 
 
 LED_Hoejre_S:
 	ldi R16, LED_Stort_Hoejre
 	out PORTA, R16
+
 	ret 	
 
 LED_Hoejre_L:
 	ldi R16, LED_Lille_Hoejre
 	out PORTA, R16
+
 	ret 
 
+VENT_SVING:
 
+		ldi		Length_L,	10
+
+call	Gyro_Kontrol
+		cpi		R16,		3
+		breq VENT_SVING_DONE
+
+		ld			Length_L,		Y+
+		ld			Length_H,		Y+
+		ld			Type,			Y+
+
+		CLEAR_SREG_1	6
+		
+		rjmp AI_Hall
+
+VENT_SVING_DONE:
+
+ret
 
 
 

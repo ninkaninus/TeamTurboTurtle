@@ -14,15 +14,15 @@
 .include "AI_Hall.asm"
 
 ;Konstanter
-.equ	Gyro_Stort_Sving=20				;Disse værdier skal justeres
-.equ	Gyro_Lille_Sving=75
-.equ	Periode_Ligeud=6000		;Periode når vi kører ligeud
+.equ	Gyro_Stort_Sving=40				;Disse værdier skal justeres
+.equ	Gyro_Lille_Sving=85
+.equ	Periode_Ligeud=1		;Periode når vi kører ligeud
 .equ	Periode_Kort_Ligeud=12000
-.equ	Periode_Stort_Sving=15000			;-- stort sving
+.equ	Periode_Stort_Sving=17000			;-- stort sving
 .equ	Periode_Lille_Sving=19000			;-- lille sving
-.equ	Periode_Mapping=25000	
+.equ	Periode_Mapping=22000	
 .equ	Periode_UdAfSving = 2000
-.equ	Brake_Time	= 60
+.equ	Brake_Time	= 100
 ;.equ	Motor_Ligeud=0			;Motor outpot som kan sættes som reference
 ;.equ	Motor_Ligeud_Min=20		;Motor outpot som kan sættes som reference
 ;.equ	Motor_Ligeud_Max=100			;Motor outpot som kan sættes som reference

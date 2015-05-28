@@ -96,11 +96,11 @@ EDGE2:		ldi		R16, 1
 			out		TCNT1H, R16						; Temp = R16
 			out		TCNT1L, R16						; TCNT1L = R16 & TCNT1H = Temp	
 
-			call	Hastigheds_kontrol
+					call	Hastigheds_kontrol
 			
 WheelSpeed_End:
 
-			;call AI_Hall		;Alt AI der har med ticks at gøre ligger her
+			call AI_Hall		;Alt AI der har med ticks at gøre ligger her
 			
 			pop	R18
 			pop R17

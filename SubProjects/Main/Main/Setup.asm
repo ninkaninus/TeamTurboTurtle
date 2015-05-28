@@ -17,4 +17,6 @@
 	MPU6050_Init						;
 	MPU6050_Init						;
 	AI_Init
+	clr		R16
+	sts		SREG_1, R16
 .ENDMACRO

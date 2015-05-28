@@ -50,18 +50,26 @@ Init:
 	sei					;Enable global interrupt	
 	rjmp Main
 	
-Main: 	ldi		R16, 85
+Main: 	
+		cli
+		ldi		R16, 85
 		call	Delay_MS
 		
 		cli
-		call	Cylon7
+		;call	Cylon_Original
 		sei
 		
-		call	MPU6050_Read_Gyro_Z
-		lds		R16, GYRO_ZOUT_L
-		lds		R17, GYRO_ZOUT_H
-		call	USART_Decimal_S16
+		nop
+		nop
+		nop
+		
+		cli
+		;call	MPU6050_Read_Gyro_Z
+		lds		R16, Speed_L
+		lds		R17, Speed_H
+		call	USART_Decimal_16
 				USART_NewLine
-
+		
+		sei
 		
 		rjmp	Main
