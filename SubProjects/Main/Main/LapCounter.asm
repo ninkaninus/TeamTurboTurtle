@@ -75,10 +75,6 @@ Lap_Time:
 	sbr		R16, 0b00000100					; clear bit 0 in R16 (performs logical AND with complement of operand)
 	sts		SREG_1, R16
 
-	ldi R16, HIGH(28000)
-	sts Speed_H, R16
-	ldi R16, LOW(28000)
-	sts Speed_L, R16
 
 	;call Comm_Send_LapTime
 	;call Comm_Send_LapTicks

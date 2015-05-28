@@ -64,7 +64,7 @@ Hurtigere:
 
 Max_Brake:		
 		ldi		R20, 255
-		sts		Delay_Amount, R17
+		sts		Delay_Amount, R20
 		
 		sbi		PORTB, PB0
 		Set_SREG_1 7			; bremse bit

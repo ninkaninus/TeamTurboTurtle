@@ -54,7 +54,7 @@ Main: 	ldi		R16, 85
 		call	Delay_MS
 		
 		cli
-		call	Cylon2
+		call	Cylon7
 		sei
 		
 		call	MPU6050_Read_Gyro_Z

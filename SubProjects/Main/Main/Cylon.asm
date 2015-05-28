@@ -115,3 +115,94 @@ Cylon4:
 	ret	
 
 ;------------------------------------------------------------------------------------
+
+Cylon5:
+	clc
+	in		R16, PORTA
+	cpi		R16, 0b00001000
+	
+	in 		R17, SREG						; Cylon scanner that rotates LED's to the left
+	sbrc	R17, 1
+	sec
+	
+	ror		R16
+	out		PORTA, R16
+	
+	ret			
+
+;---------------------------------------------------------------------------------------
+
+Cylon6:
+	clc
+	in		R16, PORTA
+	cpi		R16, 0b00010000
+	
+	in 		R17, SREG						; Cylon scanner that rotates LED's to the left
+	sbrc	R17, 1
+	sec
+	
+	rol		R16
+	out		PORTA, R16
+	
+	ret			
+	
+;-----------------------------------------------------------------------------------------------
+
+Cylon7:
+
+	clr		R16
+	mov		R12, R16
+	
+	in		R16, PORTA
+	cpi		R16, 0b10000000
+	breq	Swimmer_Reset
+	
+	andi	R16, 0b00001111
+	in		R17, PORTA
+	andi	R17, 0b01111000
+		
+	lsr		R16
+	lsl		R17
+		
+	or		R12, R16
+	or		R12, R17
+	out		PORTA, R12
+	
+	ret
+	
+Swimmer_Reset:
+
+	ldi		R16, 0b00001000
+	out		PORTA, R16
+	
+	ret
+;--------------------------------------------------------------------------------------
+
+Cylon8:
+
+	clr		R16
+	mov		R12, R16
+	
+	in		R16, PORTA
+	cpi		R16, 0b00001000
+	breq	Swimmer_Reset1
+	
+	andi	R16, 0b00001111
+	in		R17, PORTA
+	andi	R17, 0b01111000
+		
+	lsl		R16
+	lsr		R17
+		
+	or		R12, R16
+	or		R12, R17
+	out		PORTA, R12
+	
+	ret
+	
+Swimmer_Reset1:
+
+	ldi		R16, 0b01000001
+	out		PORTA, R16
+	
+	ret
