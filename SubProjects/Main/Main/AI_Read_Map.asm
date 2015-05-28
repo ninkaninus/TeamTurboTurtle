@@ -40,20 +40,20 @@ Road_Reaction:
 		cpi		Type,		6
 		breq	Kort_Lige
 
-		/*
-		cpi		Length_H,		0
-		brne	Ligeud1
+		
+;		cpi		Length_H,		0
+;		brne	Ligeud1
 
-		cpi		Length_L,		20
-		brsh	Ligeud1
+;		cpi		Length_L,		20
+;		brsh	Ligeud1
 		
-		call	Gyro_Kontrol
-		cpi		R16,		3
+;		call	Gyro_Kontrol
+;		cpi		R16,		3
 		
-		rjmp	Read_Map
+;		rjmp	Read_Map
 		
 Ligeud1:
-		*/
+		
 		cpi		Length_H, 0
 		brne	Bare_Ligeud				;Hvis der er mere end 255 tilbage, så bare ligeud.
 		cpi		Length_L, Brake_Time
@@ -65,30 +65,30 @@ Ligeud1:
 		ldi		R16,	High(Periode_Lille_Sving)
 		sts Speed_H, R16
 		
-		/*
-		mov		R18,	Length_L
-		mov		R19,	Length_H
-
-		lsl		R18
-		rol		R19
-		lsl		R18
-		rol		R19
-
-		sub		R17,	R19
-		sbc		R16,	R18
-
-		ldi		R18,	Pulse_Time_L	;Reference periode.
-		ldi		R19,	Pulse_Time_H
 		
-		cp		R19,	R17
-		brlo	Bare_Ligeud
-		cp		R18,	R16
-		brlo	Bare_Ligeud
+;		mov		R18,	Length_L
+;		mov		R19,	Length_H
 
-		sts		Speed_L,	R18
-		sts		Speed_H,	R19
+;		lsl		R18
+;		rol		R19
+;		lsl		R18
+;		rol		R19
 
-		*/
+;		sub		R17,	R19
+;		sbc		R16,	R18
+
+;		ldi		R18,	Pulse_Time_L	;Reference periode.
+;		ldi		R19,	Pulse_Time_H
+		
+;		cp		R19,	R17
+;		brlo	Bare_Ligeud
+;		cp		R18,	R16
+;		brlo	Bare_Ligeud
+
+;		sts		Speed_L,	R18
+;		sts		Speed_H,	R19
+
+		
 
 ret
 
@@ -172,13 +172,8 @@ Kort_Lige:
 		sbc		R17,		R19
 
 
-
-
 		sts		Speed_L,	R16
 		sts		Speed_H,	R17
-
-		ldi		R16,		0b00111110
-		out		PORTA,		R16
 
 ret
 

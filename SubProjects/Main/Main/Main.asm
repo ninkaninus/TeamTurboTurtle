@@ -1,4 +1,4 @@
-;.include "m32def.inc"
+.include "m32def.inc"
 
 ;Mapping of all the interrupts, must be the first include!
 .include "Interrupt_Mapping.asm"
@@ -19,6 +19,7 @@
 .include "LapCounter.asm"
 .include "Communication_Protocol.asm"
 .include "Speed.asm"
+.include "Cylon.asm"
 .include "Setup.asm"
 
 Init:
@@ -31,25 +32,36 @@ Init:
 			call	Delay_MS
 			ldi		R16, 250
 			call	Delay_MS
-			ldi		R16, 250
-			call	Delay_MS
-			ldi		R16, 250
-			call	Delay_MS
-			ldi		R16, 250
-			call	Delay_MS
-			ldi		R16, 250
-			call	Delay_MS
-			ldi		R16, 250
-			call	Delay_MS
-			ldi		R16, 250
-			call	Delay_MS
+
+	ldi		R16, high(Periode_Mapping)
+	sts		Speed_H, R16
+	ldi		R16, low(Periode_Mapping)
+	sts		Speed_L, R16
 
 	cli
 	ldi		R16, 100
 	out		OCR2, R16
-	clr		ZH
+	
+	ldi		R16, 0xFF
+	out		DDRA, R16
+	
+	sbi		PORTA, 3
 					
 	sei					;Enable global interrupt	
 	rjmp Main
 	
-Main:	rjmp	Main
+Main: 	ldi		R16, 85
+		call	Delay_MS
+		
+		cli
+		call	Cylon2
+		sei
+		
+		call	MPU6050_Read_Gyro_Z
+		lds		R16, GYRO_ZOUT_L
+		lds		R17, GYRO_ZOUT_H
+		call	USART_Decimal_S16
+				USART_NewLine
+
+		
+		rjmp	Main

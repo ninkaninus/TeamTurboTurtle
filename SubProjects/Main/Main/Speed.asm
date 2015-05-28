@@ -1,6 +1,6 @@
 .equ Diff_Max = 8192
 .equ ForgivenessZone = 4096
-
+.equ Voldsom = 12288
 Hastigheds_kontrol:
 		
 		lds		R16, SREG_1			
@@ -34,26 +34,31 @@ Hurtigere:
 		out		OCR2, R20
 		
 		cpi		R17, high(ForgivenessZone)
-		brlo	Braking_End
-		
-		cpi		R17, high(Diff_Max + ForgivenessZone)
+		in		R18, SREG
+		sbrc	R18, 0					; brlo Braking_End
+		rjmp	Braking_End
+			
+		cpi		R17, high(Diff_Max-ForgivenessZone)
 		brsh	Max_Brake
 		
 		lsr		R17
 		ror		R16
 		lsr		R17
-		ror		R16				; divider med 64
+		ror		R16				; divider med 32
 		lsr		R17
 		ror		R16	
 		lsr		R17
 		ror		R16	
+		lsr		R17
+		ror		R16
 		lsr		R17
 		ror		R16
 		
 		sts		Delay_Amount, R16
 		
 		sbi		PORTB, PB0
-		Set_SREG_1 7
+		Set_SREG_1 7			; bremse bit
+		Set_SREG_1 6			; reset bit til banetype
 		
 		ret
 
@@ -62,7 +67,8 @@ Max_Brake:
 		sts		Delay_Amount, R17
 		
 		sbi		PORTB, PB0
-		Set_SREG_1 7
+		Set_SREG_1 7			; bremse bit
+		Set_SREG_1 6			; reset bit til banetype
 		
 		ret
 

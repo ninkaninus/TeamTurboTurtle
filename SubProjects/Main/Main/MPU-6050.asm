@@ -18,7 +18,7 @@
 	I2C_Write 0x00
 
 	;MPU6050_RA_GYRO_CONFIG, Disable gyro self tests, scale of 500 degrees/s
-	I2C_Write 0b00001000
+	I2C_Write 0b00000000
 
 	;MPU6050_RA_ACCEL_CONFIG ,Disable accel self tests, scale of +-16g, no DHPF
 	I2C_Write 0b00001000

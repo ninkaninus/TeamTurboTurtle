@@ -1,6 +1,6 @@
 AI_Hall:
 
-	call LED
+	;call LED
 
 	lds		R17,	AI_Check_Lap
 	
