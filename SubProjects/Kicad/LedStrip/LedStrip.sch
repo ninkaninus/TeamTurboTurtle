@@ -314,7 +314,7 @@ U 1 1 5566393C
 P 1000 1350
 F 0 "P1" H 1000 1450 50  0000 C CNN
 F 1 "CONN_01X01" V 1100 1350 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 1000 1350 60  0001 C CNN
+F 2 "Wire_Pads:SolderWirePad_single_0-8mmDrill" H 1000 1350 60  0001 C CNN
 F 3 "" H 1000 1350 60  0000 C CNN
 	1    1000 1350
 	-1   0    0    1   
@@ -325,7 +325,7 @@ U 1 1 55663A83
 P 1000 1950
 F 0 "P2" H 1000 2050 50  0000 C CNN
 F 1 "CONN_01X01" V 1100 1950 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 1000 1950 60  0001 C CNN
+F 2 "Wire_Pads:SolderWirePad_single_0-8mmDrill" H 1000 1950 60  0001 C CNN
 F 3 "" H 1000 1950 60  0000 C CNN
 	1    1000 1950
 	-1   0    0    1   
@@ -336,7 +336,7 @@ U 1 1 55663D53
 P 1000 2550
 F 0 "P3" H 1000 2650 50  0000 C CNN
 F 1 "CONN_01X01" V 1100 2550 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 1000 2550 60  0001 C CNN
+F 2 "Wire_Pads:SolderWirePad_single_0-8mmDrill" H 1000 2550 60  0001 C CNN
 F 3 "" H 1000 2550 60  0000 C CNN
 	1    1000 2550
 	-1   0    0    1   
@@ -347,7 +347,7 @@ U 1 1 55663DA0
 P 1000 3150
 F 0 "P4" H 1000 3250 50  0000 C CNN
 F 1 "CONN_01X01" V 1100 3150 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 1000 3150 60  0001 C CNN
+F 2 "Wire_Pads:SolderWirePad_single_0-8mmDrill" H 1000 3150 60  0001 C CNN
 F 3 "" H 1000 3150 60  0000 C CNN
 	1    1000 3150
 	-1   0    0    1   
@@ -358,7 +358,7 @@ U 1 1 55664087
 P 1000 3750
 F 0 "P5" H 1000 3850 50  0000 C CNN
 F 1 "CONN_01X01" V 1100 3750 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 1000 3750 60  0001 C CNN
+F 2 "Wire_Pads:SolderWirePad_single_0-8mmDrill" H 1000 3750 60  0001 C CNN
 F 3 "" H 1000 3750 60  0000 C CNN
 	1    1000 3750
 	-1   0    0    1   
@@ -369,7 +369,7 @@ U 1 1 55664206
 P 1000 4350
 F 0 "P6" H 1000 4450 50  0000 C CNN
 F 1 "CONN_01X01" V 1100 4350 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 1000 4350 60  0001 C CNN
+F 2 "Wire_Pads:SolderWirePad_single_0-8mmDrill" H 1000 4350 60  0001 C CNN
 F 3 "" H 1000 4350 60  0000 C CNN
 	1    1000 4350
 	-1   0    0    1   
@@ -380,7 +380,7 @@ U 1 1 5566424C
 P 1000 4950
 F 0 "P7" H 1000 5050 50  0000 C CNN
 F 1 "CONN_01X01" V 1100 4950 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 1000 4950 60  0001 C CNN
+F 2 "Wire_Pads:SolderWirePad_single_0-8mmDrill" H 1000 4950 60  0001 C CNN
 F 3 "" H 1000 4950 60  0000 C CNN
 	1    1000 4950
 	-1   0    0    1   
@@ -391,7 +391,7 @@ U 1 1 55664437
 P 1000 5550
 F 0 "P8" H 1000 5650 50  0000 C CNN
 F 1 "CONN_01X01" V 1100 5550 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 1000 5550 60  0001 C CNN
+F 2 "Wire_Pads:SolderWirePad_single_0-8mmDrill" H 1000 5550 60  0001 C CNN
 F 3 "" H 1000 5550 60  0000 C CNN
 	1    1000 5550
 	-1   0    0    1   
