@@ -77,6 +77,25 @@
 
 .equ Temp = 0x008F
 
+;AI Hastighedsværdier
+.equ Periode_Kort_Ligeud_H = 0x0090
+.equ Periode_Kort_Ligeud_L = 0x0091
+
+.equ Periode_Stort_Sving_H = 0x0092
+.equ Periode_Stort_Sving_L = 0x0093
+
+.equ Periode_Lille_Sving_H = 0x0094
+.equ Periode_Lille_Sving_L = 0x0095
+
+.equ Periode_Mapping_H = 0x0096
+.equ Periode_Mapping_L = 0x0097
+
+.equ Periode_Ligeud_H = 0x0098
+.equ Periode_Ligeud_L = 0x0099
+
+.equ Periode_UdAfSving_H = 0x009A
+.equ Periode_UdAfSving_L = 0x009B
+
 ;Mapping start -- Alt herefter skal holdes frit
 .equ Map_Start		= 0x00C8
 

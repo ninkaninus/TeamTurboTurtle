@@ -75,7 +75,12 @@ Lap_Time:
 	sbr		R16, 0b00000100					; clear bit 0 in R16 (performs logical AND with complement of operand)
 	sts		SREG_1, R16
 
-
+	call	Speed_Increase
+	
+	lds		R16, Speed_L
+	lds		R17, Speed_H
+	call	USART_Decimal_16
+			USART_NewLine
 	;call Comm_Send_LapTime
 	;call Comm_Send_LapTicks
 

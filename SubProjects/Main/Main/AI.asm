@@ -18,8 +18,8 @@
 .equ	Gyro_Lille_Sving=85
 .equ	Periode_Ligeud=1		;Periode når vi kører ligeud
 .equ	Periode_Kort_Ligeud=12000
-.equ	Periode_Stort_Sving=17000			;-- stort sving
-.equ	Periode_Lille_Sving=19000			;-- lille sving
+.equ	Periode_Stort_Sving=16000			;-- stort sving
+.equ	Periode_Lille_Sving=18000			;-- lille sving
 .equ	Periode_Mapping=22000	
 .equ	Periode_UdAfSving = 2000
 .equ	Brake_Time	= 100
@@ -53,13 +53,58 @@
 		ldi		Length_H,	0
 		ldi		R17,		0
 		sts		AI_Check_Lap,	R17
-
+		
+		ldi		R16, high(Periode_Stort_Sving)
+		sts		Periode_Stort_Sving_H, R16
+		ldi		R16, low(Periode_Stort_Sving)
+		sts		Periode_Stort_Sving_L, R16
+		
+		ldi		R16, high(Periode_Lille_Sving)
+		sts		Periode_Lille_Sving_H, R16
+		ldi		R16, low(Periode_Lille_Sving)
+		sts		Periode_Lille_Sving_L, R16
+		
+		ldi		R16, high(Periode_Mapping)
+		sts		Periode_Mapping_H, R16
+		ldi		R16, low(Periode_Mapping)
+		sts 	Periode_Mapping_L, R16
+		
+		ldi		R16, high(Periode_Kort_Ligeud)
+		sts		Periode_Kort_Ligeud_H, R16
+		ldi		R16, low(Periode_Kort_Ligeud)
+		sts		Periode_Kort_Ligeud_L, R16
+		
 		ldi R16, 0b00111110
 		out DDRA, R16
 
 .ENDMACRO
 
+Speed_Increase:
 
+		lds		R10, AI_Check_Lap
+		ldi		R16, 250
+		
+		mul		R10, R16
+
+		lds		R16, Periode_Stort_Sving_L
+		lds		R17, Periode_Stort_Sving_H
+		
+		sub		R16, R0
+		sbc		R17, R1
+		
+		sts		Periode_Stort_Sving_L, R16
+		sts		Periode_Stort_Sving_H, R17
+		
+		lds		R16, Periode_Lille_Sving_L
+		lds		R17, Periode_Lille_Sving_H
+		
+		sub		R16, R0
+		sbc		R17, R1
+
+		sts		Periode_Stort_Sving_L, R16
+		sts		Periode_Stort_Sving_H, R17
+		
+ret
 
 
 

@@ -59,10 +59,10 @@ Ligeud1:
 		cpi		Length_L, Brake_Time
 		brsh	Bare_Ligeud
 
-		ldi		R16,	LOW(Periode_Lille_Sving)
+		lds		R16,	Periode_Lille_Sving_L
 		sts Speed_L, R16
 
-		ldi		R16,	High(Periode_Lille_Sving)
+		lds		R16,	Periode_Lille_Sving_H
 		sts Speed_H, R16
 		
 		
@@ -94,8 +94,8 @@ ret
 
 Bare_Ligeud:
 		
-		ldi		R16, LOW(Periode_Ligeud)	;Reference periode.
-		ldi		R17, HIGH(Periode_Ligeud)	;Reference periode.
+		lds		R16, Periode_Ligeud_L	;Reference periode.
+		lds		R17, Periode_Ligeud_H	;Reference periode.
 		sts		Speed_L,	R16
 		sts		Speed_H,	R17
 
@@ -110,8 +110,8 @@ Lille_Sving:
 
 Lille_Sving_Test:
 
-		ldi		R16, LOW(Periode_Lille_Sving)	;Reference periode.
-		ldi		R17, HIGH(Periode_Lille_Sving)	;Reference periode.
+		lds		R16, Periode_Lille_Sving_L	;Reference periode.
+		lds		R17, Periode_Lille_Sving_H	;Reference periode.
 		sts		Speed_L,	R16
 		sts		Speed_H,	R17
 
@@ -126,8 +126,8 @@ Stor_Sving:
 
 Stor_Sving_Test:
 
-		ldi		R16, LOW(Periode_Stort_Sving)	;Reference periode.
-		ldi		R17, HIGH(Periode_Stort_Sving)	;Reference periode.
+		lds		R16, Periode_Stort_Sving_L	;Reference periode.
+		lds		R17, Periode_Stort_Sving_H	;Reference periode.
 		sts		Speed_L,	R16
 		sts		Speed_H,	R17
 
@@ -135,8 +135,8 @@ ret
 
 Ud_Af_Sving:
 
-		ldi		R16, LOW(Periode_UdAfSving)	;Reference periode.
-		ldi		R17, HIGH(Periode_UdAfSving)	;Reference periode.
+		lds		R16, Periode_UdAfSving_L	;Reference periode.
+		lds		R17, Periode_UdAfSving_H	;Reference periode.
 		sts		Speed_L,	R16
 		sts		Speed_H,	R17
 
@@ -144,8 +144,8 @@ ret
 
 Kort_Lige:
 
-		ldi		R16, LOW(Periode_Lille_Sving)	;Reference periode.
-		ldi		R17, HIGH(Periode_Lille_Sving)	;Reference periode.
+		lds		R16, Periode_Lille_Sving_L	;Reference periode.
+		lds		R17, Periode_Lille_Sving_H	;Reference periode.
 
 		mov		R18,		Length_L
 		mov		R19,		Length_H
@@ -156,7 +156,7 @@ Kort_Lige:
 		rol		R19
 		lsl		R18
 		rol		R19
-		lsl		R18
+		lsl		R18							;Hvad med at bruge MUL i stedet?
 		rol		R19
 		lsl		R18
 		rol		R19

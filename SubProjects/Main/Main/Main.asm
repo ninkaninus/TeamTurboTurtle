@@ -65,10 +65,7 @@ Main:
 		
 		cli
 		;call	MPU6050_Read_Gyro_Z
-		lds		R16, Speed_L
-		lds		R17, Speed_H
-		call	USART_Decimal_16
-				USART_NewLine
+		
 		
 		sei
 		

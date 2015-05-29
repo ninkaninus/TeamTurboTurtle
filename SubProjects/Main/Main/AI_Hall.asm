@@ -16,8 +16,8 @@ AI_Hall:
 	
 ;Ellers preround
 
-		ldi		R16, LOW(Periode_Mapping)	;Reference periode.
-		ldi		R17, HIGH(Periode_Mapping)	;Reference periode.
+		lds		R16, Periode_Mapping_L	;Reference periode.
+		lds		R17, Periode_Mapping_H	;Reference periode.
 		sts		Speed_L,	R16
 		sts		Speed_H,	R17
 
@@ -27,8 +27,8 @@ Mapping_Speed:
 
 call	SKIFT_TEST
 
-ldi		R16, LOW(Periode_Mapping)	;Reference periode.
-ldi		R17, HIGH(Periode_Mapping)	;Reference periode.
+lds		R16, Periode_Mapping_L	;Reference periode.
+lds		R17, Periode_Mapping_H	;Reference periode.
 sts		Speed_L,	R16
 sts		Speed_H,	R17
 
