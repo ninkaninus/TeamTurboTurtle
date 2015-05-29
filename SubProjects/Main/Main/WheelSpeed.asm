@@ -49,11 +49,7 @@ Input_Capture:
 			sts		Pulse, R16
 			
 			rjmp	WheelSpeed_End
-			
-			lds		R16, SREG_1			
-			sbrc	R16, 0							; bit 0 represents the current edge that's being measured - 0 = EDGE1, 1 = EDGE2
-			rjmp	EDGE2
-			
+						
 EDGE1:		inc		R16
 			sts		Pulse, R16
 

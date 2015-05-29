@@ -74,6 +74,16 @@
 		ldi		R16, low(Periode_Kort_Ligeud)
 		sts		Periode_Kort_Ligeud_L, R16
 		
+		ldi		R16, low(Periode_Ligeud)
+		sts		Periode_Ligeud_L,R16
+		ldi		R16, high(Periode_Ligeud)
+		sts		Periode_Ligeud_H,R16
+		
+		ldi		R16, low(Periode_UdAfSving)
+		sts		Periode_UdAfSving_L,R16
+		ldi		R16, high(Periode_UdAfSving)
+		sts		Periode_UdAfSving_H,R16
+		
 		ldi R16, 0b00111110
 		out DDRA, R16
 

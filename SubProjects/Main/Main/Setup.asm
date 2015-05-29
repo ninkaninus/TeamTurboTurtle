@@ -20,3 +20,14 @@
 	clr		R16
 	sts		SREG_1, R16
 .ENDMACRO
+
+.MACRO Setup_Start	
+	Time_Init							;Initialize the timer associated with timekeeping
+	WheelSpeed_Init						;Initialize the wheel speed sensor
+	LapCounter_Init						;Initialize the lap counter
+	AI_Init
+	clr		R16
+	sts		SREG_1, R16
+.ENDMACRO
+
+

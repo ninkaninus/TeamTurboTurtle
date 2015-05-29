@@ -7,11 +7,11 @@ Hastigheds_kontrol:
 		sbrc	R16, 7							; bit 7 is the brake enable 
 		rjmp	Braking
 		
+		lds		R16, Speed_L 
+		lds		R17, Speed_H		
 		lds		R18, Pulse_Time_L
 		lds		R19, Pulse_Time_H
 
-		lds		R16, Speed_L 
-		lds		R17, Speed_H
 
 		sub		R16, R18						; R16:R17 = Ønsket pulstid, R18:R19 = Sidst målte pulstid
 		sbc		R17, R19

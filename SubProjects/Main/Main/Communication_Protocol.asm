@@ -211,9 +211,15 @@ Comm_Received_Execute_Set:
 ;Start
 Comm_Received_Execute_Set_Start:
 
+	cbi	PORTB, PB0
+
 	lds R16, Comm_Received_Byte_3			;Load in the third(Parameter) byte
 
+	Setup_Start
+
 	call Motor_Set_Percentage
+	
+	Set_SREG_1 	2
 
 Comm_Received_Execute_Set_Start_End:
 
@@ -221,12 +227,11 @@ Comm_Received_Execute_Set_Start_End:
 
 ;Stop
 Comm_Received_Execute_Set_Stop:
-	
-	ldi R16, 'S'
-	call USART_Transmit
 
 	ldi R16, 0x00							;Load in 0x00
 	out OCR2, R16							;And set the pwm duty cycle to nothing to stop the motor.
+	
+	sbi	PORTB, PB0
 
 	reti
 
