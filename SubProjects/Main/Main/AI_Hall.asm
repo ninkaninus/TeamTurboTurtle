@@ -67,31 +67,31 @@ LED:
 
 LED_Venstre_L:
 	ldi R16, LED_Lille_Venstre
-	out PORTA, R16
+	;out PORTA, R16
 
 	ret 
 
 LED_Venstre_S:
 	ldi R16, LED_Stort_Venstre
-	out PORTA, R16
+	;out PORTA, R16
 
 	ret 
 
 LED_Ligeud:
 	ldi R16, LED_Lige
-	out PORTA, R16
+	;out PORTA, R16
 
 	ret 
 
 LED_Hoejre_S:
 	ldi R16, LED_Stort_Hoejre
-	out PORTA, R16
+	;out PORTA, R16
 
 	ret 	
 
 LED_Hoejre_L:
 	ldi R16, LED_Lille_Hoejre
-	out PORTA, R16
+	;out PORTA, R16
 
 	ret 
 

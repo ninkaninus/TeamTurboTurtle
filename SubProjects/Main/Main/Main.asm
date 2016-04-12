@@ -56,7 +56,7 @@ Main:
 		call	Delay_MS
 		
 		cli
-		;call	Cylon_Original
+		call	Cylon_Original
 		sei
 		
 		nop

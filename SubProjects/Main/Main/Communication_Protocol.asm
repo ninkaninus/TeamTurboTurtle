@@ -215,7 +215,7 @@ Comm_Received_Execute_Set_Start:
 
 	lds R16, Comm_Received_Byte_3			;Load in the third(Parameter) byte
 
-	Setup_Start
+	;Setup_Start
 
 	call Motor_Set_Percentage
 	
